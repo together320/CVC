@@ -1,0 +1,195 @@
+﻿@model  IEnumerable<CVC.ViewModels.MachineTerminalMapping>
+
+
+<style>
+    .error {
+        color: red;
+    }
+</style>
+
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="divMachineTerminalMapping">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="myLargeModalLabel">Machine - Terminal Mapping</h4>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+
+                    <div class="dataTable-wrapper" style="width:100%; margin:0 auto;">
+
+
+                        <table class="displays table-striped table-bordered dt-responsive nowrap cell-border" id="dtMachineTerminalMapping" cellspacing="0" width="100%" border="1" cellpadding="0" style="border-collapse:collapse;" bordercolor="#e7eaec">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th align="left">
+                                        <label>Terminal Name</label>
+                                    </th>
+                                    <th align="left">
+                                        <label>Mac Address</label>
+                                    </th>
+                                    <th align="left">
+                                        <label>Terminal Type</label>
+                                    </th>
+
+                                    <th align="left">
+                                        <label>Select</label>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.TerminalName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.MacAddress)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.TerminalType)
+
+                                    </td>
+                                    <td>
+                                        @if (@item.IsDisableWrite == true)
+                                        {
+                                            <input type="checkbox" class="clsWriteDisable" id="chkIsWriteDisable" checked="@item.IsDisableWrite" value="@item.TerminalId" disabled="@item.IsDisableWrite" />
+
+                                        }
+                                        else
+                                        { <input type="checkbox" class="@(item.IsWrite==true?"clsWrite":"")" id="chkSelect" checked="@item.IsSelected" value="@item.TerminalId" />
+                                          <label>@(item.IsWrite == true ? "Read / Write" : "Read")</label>
+                        
+
+                                        }
+
+                                    </td>
+
+                                    @*<td>
+            <input disabled="@item.IsDisableWrite" type="checkbox" id="chkSelect" value="@item.TerminalId" />
+        </td>*@
+
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnSaveTerminalMachineMapping">Save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#dtMachineTerminalMapping').DataTable({
+            responsive: {
+                details: {
+                    type: 'column'
+                }
+            },
+
+            "language": {
+                "lengthMenu": "_MENU_ records per page",
+            },
+
+        });
+
+    });
+
+    $('#btnSaveTerminalMachineMapping').click(function () {
+        // $('body').on('click', '#btnSaveTerminalMachineMapping', function (event) {
+
+   //     $("#divMachineTerminalMapping").modal('hide');
+        //var IsWriteArray = [];
+        //var IsReadArray = [];
+        var selectedItemList = [];
+
+        //var checkedIsWriteItemcollection = $('#dtMachineTerminalMapping').DataTable().$("#chkIsWrite:checked", { "page": "all" });
+        //checkedIsWriteItemcollection.each(function (index, elem) {
+
+        //    IsWriteArray.push($(elem).val());
+        //});
+
+        //var checkedIsReadItemcollection = $('#dtMachineTerminalMapping').DataTable().$("#chkIsRead:checked", { "page": "all" });
+        //checkedIsReadItemcollection.each(function (index, elem) {
+
+        //    IsReadArray.push($(elem).val());
+        //});
+
+
+        var checkedSelectedItemcollection = $('#dtMachineTerminalMapping').DataTable().$("#chkSelect:checked", { "page": "all" });
+        checkedSelectedItemcollection.each(function (index, elem) {
+
+            selectedItemList.push($(elem).val());
+        });
+        if (selectedItemList.length > 0) {
+            SaveMachineTerminalMapping(selectedItemList);
+
+        }
+        else {
+            alert("Please select atleast one record");
+        }
+    });
+
+    function SaveMachineTerminalMapping(selectedItemList) {
+        $.ajax({
+            url: "/terminaltab/SaveMachineTerminalMapping",
+            data: { "MachineId": $("#hdnMachineId").val(), "SelectedItemList": selectedItemList },
+            type: 'POST',
+            // async: true,
+            success: function (response) {
+                alert(response.message);
+                if (response.status == true) {
+                   $("#divMachineTerminalMapping").modal('hide');
+                    getMachineTerminalMappedData();
+
+                }
+                //else {
+                //    alert("Error while saving data");
+                //}
+
+            },
+            error: function (x, y, z) {
+                alert("Error while saving data");
+            }
+        });
+
+    }
+
+    $('#dtMachineTerminalMapping').on('click', '.clsWrite', function () {
+        debugger;
+        var checked = $(this).prop('checked');
+        var machineTerminalMappingDataTable = $('#dtMachineTerminalMapping').dataTable();
+
+        $('input', machineTerminalMappingDataTable.fnGetNodes()).each(function () {
+            var isDisabled = $('.clsWrite', machineTerminalMappingDataTable.fnGetNodes()).prop('disabled');
+
+            if (checked == true) {
+                if (isDisabled == false) {
+                    $('.clsWrite', machineTerminalMappingDataTable.fnGetNodes()).prop('checked', false);
+                }
+            }
+            else {
+                if (isDisabled == false) {
+                    $('.clsWrite', machineTerminalMappingDataTable.fnGetNodes()).prop('checked', false);
+                }
+            }
+        });
+        $(this).prop('checked', checked);
+    });
+
+</script>

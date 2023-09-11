@@ -1,0 +1,147 @@
+﻿
+@{
+    Layout = null;
+}
+
+<div class="modal fade" id="modal-primary">
+    <div class="modal-dialog">
+        <div class="modal-content bg-primary">
+            <div class="modal-header">
+                <h4 class="modal-title">Primary Modal</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>One fine body&hellip;</p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-light">Save changes</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="modal-info">
+    <div class="modal-dialog">
+        <div class="modal-content bg-info">
+            <div class="modal-header">
+                <h4 class="modal-title" id="infoModalTitle" style="color:#d9534f">Alert</h4>
+                @*<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>*@
+            </div>
+            <div class="modal-body" >
+                <p id="infoModalBody">One fine body&hellip;</p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-danger" id="btnInfoOk" data-dismiss="modal">Ok</button>
+                <button type="button" class="btn btn-danger pull-right" style="display:none" id="btnInfoCancel">Cancel</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="modal-warning">
+    <div class="modal-dialog">
+        <div class="modal-content bg-warning">
+            <div class="modal-header">
+                <h4 class="modal-title" id="warningModalTitle">Warning</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" >
+                <p id="warningModalBody">One fine body&hellip;</p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-dark">Save changes</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="modal-success">
+    <div class="modal-dialog">
+        <div class="modal-content bg-success">
+            <div class="modal-header">
+                <h4 class="modal-title">Success</h4>
+               
+            </div>
+            <div class="modal-body">
+                <p id="successModalBody"></p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<div class="modal fade" id="modal-danger">
+    <div class="modal-dialog">
+        <div class="modal-content bg-danger">
+            <div class="modal-header">
+                <h4 class="modal-title">Error</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="dangerModalBody">One fine body&hellip;</p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-light">Save changes</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<script type="text/javascript">
+    $("#btnInfoOk").click(function () {
+        debugger;
+        if (autoAcceptUntrustedCertificatesForOpcUaClient) {
+            opcUaClientCertificateType = "TrustedIssuer";
+            connectToOpcUaClient(machineIdForOpcUaClient, opcUaClientCertificateType);
+        }
+        else {
+            if (redirectUrlAfterLogin != "") {
+                // setTimeout(function () {
+                window.location.href = Q.resolveUrl(redirectUrlAfterLogin);
+                // }, 3000);
+            }
+        }
+    });
+
+    $("#btnInfoCancel").click(function () {
+        if (autoAcceptRejectCertificatesForOpcUaClient) {
+            debugger;
+            opcUaClientCertificateType = "Rejected";
+            connectToOpcUaClient(machineIdForOpcUaClient, opcUaClientCertificateType);
+        }
+
+        else {
+           if (redirectUrlAfterLogin != "")
+            {
+                // setTimeout(function () {
+                window.location.href = Q.resolveUrl(redirectUrlAfterLogin);
+                // }, 3000);
+            }
+        }
+
+    });
+
+</script>

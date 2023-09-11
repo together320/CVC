@@ -1,0 +1,900 @@
+﻿@model CVC.Modules.Machine.RenderViewFieldsPageModel
+
+@{
+    Layout = null;
+}
+
+<style>
+
+    .button {
+        width: 68px;
+        height: 38px;
+        border: 2px solid #c9302c;
+        /*background-image: -webkit-linear-gradient(top, #999, #d0d0d0 80% );
+        background-image: -moz-linear-gradient(top, #999, #d0d0d0 80% );
+        background-image: -ms-linear-gradient(top, #999, #d0d0d0 80% );
+        background-image: -o-linear-gradient(top, #999, #d0d0d0 80% );
+        background-image: linear-gradient(top, #999, #d0d0d0 80% );
+        -moz-border-radius: 100px;*/
+        /*-webkit-border-radius: 100px;
+        border-radius: 360px;*/
+        /*box-shadow: inset rgba(0,0,0,0.2) 0px 5px 6px;*/
+        /*left: 50%;
+        top: 50%;*/
+        position: relative;
+    }
+
+    .butt {
+        position: absolute;
+        width: 54px;
+        height: 26px;
+        left: 50%;
+        top: 50%;
+        cursor: pointer;
+        font-family: "Lucida Sans";
+        font-weight: bold;
+        border: 0;
+        font-size: 0;
+        color: #fff;
+        /*text-shadow: 0px 1px 0px #fff;*/
+        text-align: center;
+        /*padding-top: 11px;*/
+        /*-moz-border-radius: 100px;
+        -webkit-border-radius: 100px;
+        border-radius: 360px;*/
+        /*background-image: -webkit-linear-gradient(top, #ca0808, #ca0808 70%, #ca0808 100% );
+        background-image: -moz-linear-gradient(top, #ca0808, #ca0808 70%, #ca0808 100% );
+        background-image: -ms-linear-gradient(top, #ca0808, #ca0808 70%, #ca0808 100%);
+        background-image: -o-linear-gradient(top, #ca0808, #ca0808 70%, #ca0808 100%);
+        background-image: linear-gradient(top, #eee, #bbb 70%, #9f9f9f 100% );
+        background-position: 0 6px;*/
+        background-color: #c9302c;
+        /*background-repeat: no-repeat;*/
+        /*box-shadow: rgba(0,0,0,.4) 0 3px 6px;*/
+        transition: all .1s ease-in;
+        transform: translate(-50%,-50%);
+    }
+
+        .butt:hover {
+            /*background-position: 0 0px;
+            -webkit-box-shadow: rgba(0,0,0,.4) 0 3px 8px;
+            -moz-box-shadow: rgba(0,0,0,.4) 0 3px 8px;
+            box-shadow: rgba(0,0,0,.4) 0 3px 8px;*/
+        }
+
+        .butt.on {
+            width: 50px;
+            height: 23px;
+            margin: 0;
+            background-color: #26B99A;
+        }
+
+    .button.on {
+        border-color: #26B99A;
+    }
+</style>
+@if (Model.ViewId > 0)
+{
+
+
+    <div class="">
+        <div class="box" style="border-top:0 !important;">
+
+
+            <div class="box-body">
+
+
+                @if (Model.IsMachineSettings == true)
+                {
+
+                    <div class="well well-sm sprecipediv" style="background-color:#02c0ce" ViewStateMode="false">
+
+                        <div class="col-sm-4">
+                            <form class="form-horizontal">
+                                <div class="form-group">
+                                    <label for="txtRecipeName" ViewStateMode="false" class="col-sm-6 control-label"><font color="white">Recipe Name :</font></label>
+                                    <div class="col-sm-6">
+                                        <b><label style="width:200px;"><input type="text"  ViewStateMode="false" style="margin-top:6px;margin-left:-18px; background-color:#02c0ce;color:white;font-weight:normal;font-size:16px; border:none;width:200px" class="form-control" id="txtRecipeName" disabled value="@Model.RecipeName" /></label></b>
+                                    </div>
+                                    <input id="hdnRecipeId" type="hidden" ViewStateMode="false"  value="@Model.RecipeId" />
+
+                                    <input id="hdnModuleId" type="hidden" ViewStateMode="false" value="@Model.ModuleId" />
+
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="pull-right">
+
+                                <button style="font-size:16px" ViewStateMode="false" class="btn btn-primary btn-rounded waves-light waves-effect" id="btnSelectRecipe" onclick="RecipeConirmationMsg('Do you want to select Recipe?','SelectRecipe');">Select Recipe</button>
+                                @if (!string.IsNullOrEmpty(Model.RecipeId))
+                                {
+                                    <button ViewStateMode="false" style="font-size:16px" class="btn btn-success btn-rounded waves-light waves-effect" onclick="RecipeConirmationMsg('Do you want to update Recipe?','UpdateRecipe');">Update Recipe</button>
+                                }
+                                <button  ViewStateMode="false" style="font-size:16px" class="btn btn-warning btn-rounded waves-light waves-effect" id="btnSaveRecipe" onclick="RecipeConirmationMsg('Do you want to save Recipe?','SaveRecipe');">Save Recipe</button>
+                            </div>
+                        </div>
+                        <hr />
+                    </div>
+
+                    <div id="myModal" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" ViewStateMode="false" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title">Recipe</h4>
+                                </div>
+                                <div class="modal-body">
+                                    @*<div class="container">*@
+                                    <div class="row clearfix">
+                                        <div class="col-md-12 column">
+                                            <div id="GridDiv" class="s-MachineRecipeGrid s-MachineCustomization-MachineRecipeGrid s-DataGrid require-layout route-handler responsive-height" style="height: auto;"><div class="grid-title"><div class="title-text">Machine Recipe</div></div><div class="grid-toolbar s-Toolbar clearfix"><div class="s-QuickSearchBar"><span class="quick-search-icon"><i></i></span><input type="text" class="s-QuickSearchInput" title="enter the text to search for..." placeholder="search..."></div><div class="tool-buttons"><div class="buttons-outer"><div class="buttons-inner"><div class="tool-button add-button"><div class="button-outer"><span class="button-inner">New Machine Recipe</span></div></div><div class="tool-button refresh-button no-text" title="Refresh"><div class="button-outer"><span class="button-inner"></span></div></div><div class="tool-button column-picker-button no-text" title="Column Picker"><div class="button-outer"><span class="button-inner"></span></div></div></div></div></div></div><div class="grid-container slickgrid_256532 ui-widget" style="overflow: hidden; outline: 0px; position: relative; height: auto;"><div tabindex="0" hidefocus="" style="position:fixed;width:0;height:0;top:0;left:0;outline:0;"></div><div class="slick-pane slick-pane-header slick-pane-left tabIndex=" 0'="" style="width: 100%;"><div class="ui-state-default slick-header slick-header-left"><div class="slick-header-columns slick-header-columns-left ui-sortable" style="left: -1000px; width: 2432px;" unselectable="on"><div class="ui-state-default slick-header-column slick-header-sortable ui-sortable-handle" id="slickgrid_256532MachineRecipeId" title="" style="width: 59px;"><span class="slick-column-name">ID</span><span class="slick-sort-indicator"></span><div class="slick-resizable-handle"></div></div><div class="ui-state-default slick-header-column slick-header-sortable ui-sortable-handle" id="slickgrid_256532MachineId" title="" style="width: 59px;"><span class="slick-column-name">Machine Id</span><span class="slick-sort-indicator"></span><div class="slick-resizable-handle"></div></div><div class="ui-state-default slick-header-column slick-header-sortable ui-sortable-handle" id="slickgrid_256532RecipeSettingsId" title="" style="width: 59px;"><span class="slick-column-name">Recipe Settings Id</span><span class="slick-sort-indicator"></span><div class="slick-resizable-handle"></div></div><div class="ui-state-default slick-header-column slick-header-sortable ui-sortable-handle" id="slickgrid_256532RecipeName" title="" style="width: 144px;"><span class="slick-column-name">Recipe Name</span><span class="slick-sort-indicator"></span><div class="slick-resizable-handle"></div></div><div class="ui-state-default slick-header-column slick-header-sortable ui-sortable-handle" id="slickgrid_256532Description" title="" style="width: 144px;"><span class="slick-column-name">Description</span><span class="slick-sort-indicator"></span><div class="slick-resizable-handle"></div></div><div class="ui-state-default slick-header-column slick-header-sortable ui-sortable-handle" id="slickgrid_256532StatusStatusName" title="" style="width: 244px;"><span class="slick-column-name">Status Status Name</span><span class="slick-sort-indicator"></span><div class="slick-resizable-handle"></div></div><div class="ui-state-default slick-header-column slick-header-sortable ui-sortable-handle" id="slickgrid_256532CreatedByEmployeeId" title="" style="width: 244px;"><span class="slick-column-name">Created By Employee Id</span><span class="slick-sort-indicator"></span><div class="slick-resizable-handle"></div></div><div class="ui-state-default slick-header-column slick-header-sortable ui-sortable-handle" id="slickgrid_256532CreatedDate" title="" style="width: 79px;"><span class="slick-column-name">Created Date</span><span class="slick-sort-indicator"></span><div class="slick-resizable-handle"></div></div><div class="ui-state-default slick-header-column slick-header-sortable ui-sortable-handle" id="slickgrid_256532UpdatedByEmployeeId" title="" style="width: 244px;"><span class="slick-column-name">Updated By Employee Id</span><span class="slick-sort-indicator"></span><div class="slick-resizable-handle"></div></div><div class="ui-state-default slick-header-column slick-header-sortable ui-sortable-handle" id="slickgrid_256532UpdatedDate" title="" style="width: 79px;"><span class="slick-column-name">Updated Date</span><span class="slick-sort-indicator"></span><div class="slick-resizable-handle"></div></div></div></div></div><div class="slick-pane slick-pane-header slick-pane-right" tabindex="0" style="display: none;"><div class="ui-state-default slick-header slick-header-right"><div class="slick-header-columns slick-header-columns-right ui-sortable" style="left: -1000px; width: 0px;" unselectable="on"></div></div></div><div class="slick-pane slick-pane-top slick-pane-left" tabindex="0" style="top: 32px; height: 32px; width: 100%; position: relative;"><div class="ui-state-default slick-headerrow" style="display: none; width: 100%;"><div style="display: block; height: 1px; position: absolute; top: 0px; left: 0px; width: 1415px;"></div><div class="slick-headerrow-columns slick-headerrow-columns-left" style="width: 1415px;"></div></div><div class="ui-state-default slick-top-panel-scroller" style="display: none;"><div class="slick-top-panel" style="width:10000px"></div></div><div class="slick-viewport slick-viewport-top slick-viewport-left" tabindex="0" hidefocus="" style="overflow: auto; height: 32px; width: 100%;"><div class="grid-canvas grid-canvas-top grid-canvas-left" tabindex="0" hidefocus="" style="height: 15px; width: 1415px;"></div></div><div class="ui-state-default slick-footerrow" style="display: none; width: 100%;"><div style="display: block; height: 1px; position: absolute; top: 0px; left: 0px; width: 1415px;"></div><div class="slick-footerrow-columns slick-footerrow-columns-left" style="width: 1415px;"><div class="ui-state-default slick-footerrow-column l0 r0 align-right"></div><div class="ui-state-default slick-footerrow-column l1 r1"></div><div class="ui-state-default slick-footerrow-column l2 r2"></div><div class="ui-state-default slick-footerrow-column l3 r3"></div><div class="ui-state-default slick-footerrow-column l4 r4"></div><div class="ui-state-default slick-footerrow-column l5 r5"></div><div class="ui-state-default slick-footerrow-column l6 r6"></div><div class="ui-state-default slick-footerrow-column l7 r7"></div><div class="ui-state-default slick-footerrow-column l8 r8"></div><div class="ui-state-default slick-footerrow-column l9 r9"></div></div></div></div><div class="slick-pane slick-pane-top slick-pane-right" tabindex="0" style="display: none;"><div class="ui-state-default slick-headerrow" style="display: none;"><div style="display: block; height: 1px; position: absolute; top: 0px; left: 0px; width: 1415px;"></div><div class="slick-headerrow-columns slick-headerrow-columns-right"></div></div><div class="ui-state-default slick-top-panel-scroller" style="display: none;"><div class="slick-top-panel" style="width:10000px"></div></div><div class="slick-viewport slick-viewport-top slick-viewport-right" tabindex="0" hidefocus="" style="overflow: auto; height: 32px;"><div class="grid-canvas grid-canvas-top grid-canvas-right" tabindex="0" hidefocus="" style="height: 15px;"></div></div><div class="ui-state-default slick-footerrow" style="display: none;"><div style="display: block; height: 1px; position: absolute; top: 0px; left: 0px; width: 1415px;"></div><div class="slick-footerrow-columns slick-footerrow-columns-right"></div></div></div><div class="slick-pane slick-pane-bottom slick-pane-left" tabindex="0" style="display: none;"><div class="slick-viewport slick-viewport-bottom slick-viewport-left" tabindex="0" hidefocus="" style="overflow: auto;"><div class="grid-canvas grid-canvas-bottom grid-canvas-left" tabindex="0" hidefocus=""></div></div></div><div class="slick-pane slick-pane-bottom slick-pane-right" tabindex="0" style="display: none;"><div class="slick-viewport slick-viewport-bottom slick-viewport-right" tabindex="0" hidefocus="" style="overflow: auto;"><div class="grid-canvas grid-canvas-bottom grid-canvas-right" tabindex="0" hidefocus=""></div></div></div><div tabindex="0" hidefocus="" style="position:fixed;width:0;height:0;top:0;left:0;outline:0;"></div></div><div class="s-SlickPager slick-pg"><div class="slick-pg-in"><div class="slick-pg-grp"><select class="slick-pg-size" name="rp">undefined<option value="20">20&nbsp;&nbsp;</option><option value="100" selected="selected">100&nbsp;&nbsp;</option><option value="500">500&nbsp;&nbsp;</option><option value="2500">2500&nbsp;&nbsp;</option></select></div><div class="slick-pg-sep"></div><div class="slick-pg-grp"><div class="slick-pg-first slick-pg-btn"><span class="slick-pg-btn-span"></span></div><div class="slick-pg-prev slick-pg-btn"><span class="slick-pg-btn-span"></span></div></div><div class="slick-pg-sep"></div><div class="slick-pg-grp"><span class="slick-pg-control">&nbsp;Page&nbsp;<input class="slick-pg-current" type="text" size="4" value="1"> / <span class="slick-pg-total">1</span></span></div><div class="slick-pg-sep"></div><div class="slick-pg-grp"><div class="slick-pg-next slick-pg-btn"><span class="slick-pg-btn-span"></span></div><div class="slick-pg-last slick-pg-btn"><span class="slick-pg-btn-span"></span></div></div><div class="slick-pg-sep"></div><div class="slick-pg-grp"><div class="slick-pg-reload slick-pg-btn"><span class="slick-pg-btn-span"></span></div></div><div class="slick-pg-sep"></div><div class="slick-pg-grp"><span class="slick-pg-stat">No records</span></div></div></div></div>
+                                        </div>
+                                    </div>
+
+                                    @*</div>*@
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default pull-left" ViewStateMode="false" data-dismiss="modal">Close</button>
+                                    <a id="add_row" class="btn btn-default pull-left">Add Row</a><a id='delete_row' class="pull-right btn btn-default">Delete Row</a>
+                                    @*<button type="button" class="btn btn-primary">Save changes</button>*@
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div>
+
+                }
+
+
+                <div class="row">
+
+                    <div class="col-lg-12">
+
+                        @*@if (Model.IsLabelRoll == true)
+                            {
+                                if (new CVC.Modules.Common.Dashboard.DashboardCommon().GetBatchForLebelRoll() != null)
+                                {
+
+                                <div id="GridDiv"></div>
+
+                                }
+                            }*@
+
+
+                        @foreach (var ViewId in Model.LstViewId)
+                        {
+
+                            <form class="form-horizontal">
+
+
+                                @if (ViewId == Model.LabelRollViewId)
+                                {
+
+
+                                }
+                                else
+                                {
+                                    var Display = "none";
+
+                                    if (ViewId == Model.MachineSettingsViewId)
+                                    {
+                                        Display = "block";
+                                    }
+
+                                    <div class="box-body spdiv" id="spdiv-@ViewId" style="display:@Display" ViewStateMode="false">
+                                        @{var index = 0; var GroupList = Model.ViewFieldList.Where(vf => vf.ViewsId == ViewId).GroupBy(x => index++ / 4).ToList();}
+                                        @foreach (var item in GroupList)
+                                        {
+                                            <div class="form-group">
+                                                @foreach (var subitem in item)
+                                                {
+                                                    <label for="@subitem.MachineParameterId"  ViewStateMode="false" class="col-sm-1 control-label tablabel">@subitem.ParameterName @subitem.UnitName</label>
+
+                                                    <div class="col-sm-2">
+                                                        @if (subitem.IsModify == false)
+
+                                                        {
+                                                            <div class="text-center" ViewStateMode="false">
+                                                                <h5 id="sph5-@subitem.ViewFieldId">
+                                                                    @if (subitem.DateTypeId == 2 || subitem.DateTypeId == 3 || subitem.DateTypeId == 4 || subitem.DateTypeId == 7)
+                                                                    {
+                                                                        if (subitem.Value == "1")
+                                                                        {<text>ON</text> }
+                                                                    else
+                                                                    { <text>OFF</text>}
+                                                            }
+                                                            else
+                                                            {@subitem.Value}
+                                                                </h5>
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            if (subitem.DateTypeId == 2)
+                                                            { <div id="SpDivBitMomentary-@subitem.ViewFieldId" ViewStateMode="false" class="button @(subitem.Value=="1"? "on": "")">
+                                                       
+                                                                    <button type="button" class="butt @(subitem.Value=="1"? "on": "")" oldvalue="@subitem.Value" RoleNames="@subitem.RoleNames" @if (subitem.IsDisabled) { <text> disabled </text> } @if (subitem.Type == 49) { <text> btn="btn" </text> } onmouseup="BitMomentaryUp('@subitem.MachineParameterId',this,'@subitem.ParameterName','@subitem.IsAuthorisedRole','@subitem.IsPopUpRequired','@subitem.IsCommentRequired','@subitem.IsAuthenticationRequired','@subitem.ViewFieldId','@subitem.WriteToPLCIPCMachineParameterId','@subitem.Value','0')" onmousedown="BitMomentaryDown('@subitem.MachineParameterId',this,'@subitem.ParameterName','@subitem.IsAuthorisedRole','@subitem.IsPopUpRequired','@subitem.IsCommentRequired','@subitem.IsAuthenticationRequired','@subitem.ViewFieldId','@subitem.WriteToPLCIPCMachineParameterId','@subitem.Value','1')" id="spanchr-@subitem.ViewFieldId"></button>
+
+                                                                    @*<a class="butt @(subitem.Value=="1"? "on": "")" oldvalue="@subitem.Value" RoleNames="@subitem.RoleNames" @if (subitem.IsDisabled) { <text> disabled </text> } @if (subitem.Type == 49) { <text> btn="btn" </text> } onmouseup="BitMomentaryUp('@subitem.MachineParameterId',this,'@subitem.ParameterName','@subitem.IsAuthorisedRole','@subitem.IsPopUpRequired','@subitem.IsCommentRequired','@subitem.IsAuthenticationRequired','@subitem.ViewFieldId','@subitem.WriteToPLCIPCMachineParameterId','@subitem.Value','0')" onmousedown="BitMomentaryDown('@subitem.MachineParameterId',this,'@subitem.ParameterName','@subitem.IsAuthorisedRole','@subitem.IsPopUpRequired','@subitem.IsCommentRequired','@subitem.IsAuthenticationRequired','@subitem.ViewFieldId','@subitem.WriteToPLCIPCMachineParameterId','@subitem.Value','1')" id="spanchr-@subitem.ViewFieldId"></a>*@
+                                                                </div>
+                                                            }
+                                                            else if (subitem.DateTypeId == 3 || subitem.DateTypeId == 4 || subitem.DateTypeId == 7)
+                                                            {
+                                                                <input oldvalue="@subitem.Value" RoleNames="@subitem.RoleNames" ViewStateMode="false" type="checkbox" @if (subitem.IsDisabled) { <text> disabled </text> } @if (subitem.Type == 49) { <text> btn="btn" </text> } onchange="ChangeParamter('@subitem.MachineParameterId',this,'@subitem.ParameterName','@subitem.IsAuthorisedRole','@subitem.IsPopUpRequired','@subitem.IsCommentRequired','@subitem.IsAuthenticationRequired','@subitem.ViewFieldId','@subitem.WriteToPLCIPCMachineParameterId','@subitem.Value','')" id="spchk-@subitem.ViewFieldId" @if (subitem.Value == "1" || subitem.Value == "True") { <text> checked </text> } data-toggle="toggle" data-on="ON" data-off="OFF" data-onstyle="success" data-offstyle="danger">
+                                                            }
+                                                            else if (subitem.DateTypeId == 1 || subitem.DateTypeId == 5 || subitem.DateTypeId == 6 || subitem.DateTypeId == 8 || subitem.DateTypeId == 9 || subitem.DateTypeId == 10)
+                                                            {
+                                                                decimal min = 0; decimal max = 65536; if (subitem.DateTypeId == 6) { min = -65536; }
+
+                                                                if (subitem.AllowDecimalPoint)
+                                                                {
+                                                                    if (subitem.Min != 0) { min = subitem.Min; }
+                                                                    if (subitem.Max != 0) { max = subitem.Max; }
+                                                                }
+                                                                else
+                                                                {
+                                                                    if (subitem.Min != 0)
+                                                                    {
+                                                                        var RemoveDecimalFromMinValue = String.Format("{0:N0}", subitem.Min);
+                                                                        min = Convert.ToDecimal(RemoveDecimalFromMinValue);
+                                                                    }
+                                                                    if (subitem.Max != 0)
+                                                                    {
+                                                                        var RemoveDecimalFromMaxValue = String.Format("{0:N0}", subitem.Max);
+                                                                        max = Convert.ToDecimal(RemoveDecimalFromMaxValue);
+
+                                                                    }
+                                                                }
+
+
+                                                                <div class="input-group">
+                                                                    <span class="input-group-btn">
+                                                                        <button id="spminusbtn-@subitem.ViewFieldId" ViewStateMode="false" oldvalue="@subitem.Value" RoleNames="@subitem.RoleNames" @if (subitem.IsDisabled) { <text> disabled </text> } type="button" class="btn btn-default btn-number" onclick="return btnnumberclick(this);" data-type="minus" data-field="@subitem.MachineParameterId" IsAuthorisedRole="@subitem.IsAuthorisedRole" IsPopUpRequired="@subitem.IsPopUpRequired" IsCommentRequired="@subitem.IsCommentRequired" IsAuthenticationRequired="@subitem.IsAuthenticationRequired">
+                                                                            <span class="fa fa-2x fa-minus" style="color:red;"></span>
+                                                                        </button>
+                                                                    </span>
+
+                                                                    <input ViewStateMode="false" RoleNames="@subitem.RoleNames" @if (subitem.AllowDecimalPoint) { <text> AllowDecimalPoint </text>  } else { { <text> AllowMinusPoint </text> } }
+                                                                           @*@if (subitem.AllowDecimalPoint) { <text> AllowMinusPoint </text> }*@
+                                                                           @if (subitem.IsDisabled) { <text> disabled </text> } @if (min != 0 && max != 65536) { <text> data-toggle="tooltip" title="Min:@min Max:@max" </text> }
+                                                                           type="text" maxlength="5" onchange="ChangeParamter('@subitem.MachineParameterId',this,'@subitem.ParameterName','@subitem.IsAuthorisedRole','@subitem.IsPopUpRequired','@subitem.IsCommentRequired','@subitem.IsAuthenticationRequired','@subitem.ViewFieldId','@subitem.WriteToPLCIPCMachineParameterId','@subitem.Value','')"
+                                                                           id="sptxt-@subitem.ViewFieldId" apply="keyboard" name="@subitem.MachineParameterId"
+                                                                           style="border: 1px solid #ccc; text-align: center;height: 43px;" autocomplete="off"
+                                                                           class="form-control input-number" onkeypress="return event.charCode >= 48"
+                                                                           oldvalue="@subitem.Value" value="@subitem.Value" min="@min" max="@max">
+
+                                                                    <span class="input-group-btn">
+                                                                        <button ViewStateMode="false" id="spplusbtn-@subitem.ViewFieldId" oldvalue="@subitem.Value" RoleNames="@subitem.RoleNames" @if (subitem.IsDisabled) { <text> disabled </text> } type="button" class="btn btn-default btn-number" onclick="return btnnumberclick(this);" data-type="plus" data-field="@subitem.MachineParameterId">
+                                                                            <span class="fa fa-2x fa-plus" style="color:green;"></span>
+                                                                        </button>
+                                                                    </span>
+                                                                </div>
+                                                            }
+                                                        }
+                                                    </div>
+                                                }
+                                            </div>
+                                        }
+                                    </div>
+
+                                }
+                            </form>
+
+
+                        }
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script>
+    var BtnPlusMinusObject = "";
+    var CurrentTextBoxValue_RenderViewField = "";
+    var InputText_RenderViewField = "";
+    var ChangedValue_RenderViewField = 0;
+    var IsPlusMinusClick = false;
+    var IsCheckBox_RenderViewField = false;
+    var IsTextBox_RenderViewField = false;
+    var IsExecuteChangeParmeter = true;
+    var SettingsPanelInputType = "";
+    var SettingsPanelOldValue = "";
+    var BitMomentaryInterval = "";
+    var SettingsPanelDefaultValue = "";
+
+    function RecipeConirmationMsg(text,actiontype) {
+        $(".swal-modal").attr("style", "display:inline-block");
+
+        swal({
+            title: "Are You Sure?",
+            text: text,
+            icon: "warning",
+            buttons: [
+                'No, cancel it!',
+                'Yes, I am sure!'
+            ],
+            dangerMode: true,
+        }).then(function (isConfirm) {
+
+            if (isConfirm) {
+
+                if (actiontype == "SaveRecipe") {
+                    SaveRecipe();
+                }
+                if (actiontype == "UpdateRecipe") {
+                    UpdateRecipe();
+                }
+                if (actiontype == "SelectRecipe") {
+                    SelectRecipe();
+                }
+
+            }
+
+        });
+
+    }
+
+
+    function SelectRecipe() {
+        var dlg = new CVC.Machine.MachineRecipeDialog();
+
+        //changes done by Vinayak On 21.07.2018
+
+        @*$.ajax({
+            url: Q.resolveUrl('/MachineRecipe/Test/?moduleId=' + @Model.ModuleId),
+            async: false
+        });*@
+
+        $.ajax({
+           url: Q.resolveUrl('/TechnicalSettingsMachine/SessionModuleId/?Mid=' + @Model.ModuleId),
+
+            //  url: Q.resolveUrl('/AlarmMachine/SessionModuleId/?Mid=' + @Model.ModuleId),
+            async: true
+        });
+
+        //dlg.load(moduleId || {}, function () {
+        //    // if we didn't reach here, probably there is no order with specified ID in url
+        //    dlg.element.removeClass('hidden').appendTo('#DialogDiv');
+        //    dlg.arrange();
+        //});
+       // myDialogAsPanel.dialogOpen();
+        //Ended By Vinayak On 21.07.2018
+
+        dlg.dialogTitle = 'Select Recipe';
+        dlg.dialogOpen();
+       // dlg.element.bind('dialogclose', () => alert('test dialog close'));
+    }
+
+    function UpdateRecipe() {
+        var receid = $("#hdnRecipeId").val();
+
+        //var receid = 88;
+
+
+        var myDialogAsPanel = new CVC.MachineCustomization.MachineRecipeDialog();
+        myDialogAsPanel.load(receid || {}, function () {
+            // if we didn't reach here, probably there is no order with specified ID in url
+            myDialogAsPanel.element.removeClass('hidden').appendTo('#DialogDiv');
+            myDialogAsPanel.arrange();
+        });
+        myDialogAsPanel.dialogOpen();
+    }
+
+    function SaveRecipe() {
+
+        //var dlg = new CVC.Machine.MachineRecipeForm();
+        //dlg.dialogTitle = 'Select Recipe';
+        //dlg.dialogOpen();
+
+        $.ajax({
+       url: Q.resolveUrl('/TechnicalSettingsMachine/SessionModuleId/?Mid=' + @Model.ModuleId),
+
+           // url: Q.resolveUrl('/AlarmMachine/SessionModuleId/?Mid=' + @Model.ModuleId),
+            async: true
+        });
+
+         // first create a new dialog
+        var myDialogAsPanel = new CVC.MachineCustomization.MachineRecipeDialog();
+        myDialogAsPanel.dialogTitle = 'Create Recipe';
+        myDialogAsPanel.dialogOpen();
+
+        // load a new entity if url doesn't contain an ID, or load order with ID specified in page URL
+        // here we use done event in second parameter, to be sure operation succeeded before showing the panel
+        @*myDialogAsPanel.load(@Html.Raw(1) || {}, function() {
+            // if we didn't reach here, probably there is no order with specified ID in url
+            myDialogAsPanel.element.removeClass('hidden').appendTo('#DialogDiv');
+            myDialogAsPanel.arrange();
+        });*@
+
+        //if ($("#txtRecipeName").val() == "") {
+        //    Q.alert("Please enter Recipe Name");
+        //    return;
+        //}
+
+        //var machine = { "ViewId": 1, "Recipe": $("#txtRecipeName").val() };
+        //jQuery.support.cors = true;
+        //$.ajax({
+        //    url: Q.resolveUrl('~/api/Batch/SaveMachineRecipe'),
+        //    data: machine,
+        //    type: 'POST',
+        //    dataType: 'json',
+        //    success: function (data) {
+        //        Q.notifySuccess("Recipe Saved Successfully");
+        //    },
+        //    error: function (x, y, z) {
+        //        alert(x + '\n' + y + '\n' + z);
+        //    }
+        //});
+    }
+
+
+    function ChangeParamter(paraId, obj, name, IsAuthorisedRole, IsPopUpRequired, IsCommentRequired, IsAuthenticationRequired, ViewFieldId, GetWriteToPLCIPCMachineParameterId, OldValue, DefaultValue)
+    {
+        if (IsToggleClick == true) {
+
+            SettingsPanelDefaultValue = DefaultValue;
+            var SettingPanelParamValue = $(obj).attr("oldvalue");
+            OldValue = SettingPanelParamValue;
+
+            if (IsExecuteChangeParmeter == false) {
+                IsExecuteChangeParmeter = true;
+                return false;
+            }
+            else {
+                IsExecuteChangeParmeter = true;
+            }
+            var InputType = $(obj).attr('type');
+            if (InputType == undefined) {
+                InputType = "Anchor";
+            }
+            SettingsPanelInputType = InputType;
+            SettingsPanelOldValue = OldValue;
+
+            RequestPanel = "Settings Panel";
+            paraId1 = paraId;
+            name1 = name;
+            ViewFieldId1 = ViewFieldId;
+            obj1 = obj;
+            WriteToPLCIPCMachineParameterId = GetWriteToPLCIPCMachineParameterId;
+
+            if (IsPopUpRequired == "True" || IsCommentRequired == "True" || IsAuthenticationRequired == "True") {
+
+                if (IsAuthenticationRequired == "True" && IsAuthorisedRole == "False") {
+                    swal("You are not authorise person");
+                    if (InputType == "checkbox") {
+                        var Id = $(obj).prop("id");
+                        if ($(obj).prop("checked")) {
+
+                            IsExecuteChangeParmeter = false;
+                            $('#' + Id).bootstrapToggle('off')
+
+                            return false;
+                        }
+                        else {
+                            $("#CommentModal").modal('hide');
+                            IsExecuteChangeParmeter = false;
+                            $('#' + Id).bootstrapToggle('on')
+
+                            return false;
+                        }
+                    }
+                    return false;
+
+                }
+
+                if (IsPopUpRequired == "True") {
+
+                    SettingsPanelConirmationMsg("Are you Sure?", name, IsCommentRequired, IsAuthenticationRequired, InputType);
+
+                }
+                else {
+                    ClearControls_CommentAuthenticationModal();
+                    if (IsCommentRequired == "True" && IsAuthenticationRequired == "True") {
+                        $("#lbl_RoleNamesCommentAuthenticationtModal").text($(obj).attr('RoleNames'))
+                        $("#divComment_CommentAuthenticationtModal").hide();
+                        return $("#Comment_AuthenticationtModal").modal('show');
+                    }
+
+                    if (IsCommentRequired == "True") {
+                        $("#divComment_CommentModal").hide();
+                        return $("#CommentModal").modal('show');
+                    }
+                    if (IsAuthenticationRequired == "True") {
+                        $("#lbl_RoleNamesAuthenticationtModal").text($(obj).attr('RoleNames'))
+                        return $("#AuthenticationtModal").modal('show');
+
+                    }
+                }
+
+            }
+            else {
+                SendSettingsPanelValue(paraId, obj, name, false, -2);
+            }
+        }
+    }
+
+    function SendSettingsPanelValue(paraId, obj, name, CallPanel, AuthenticationId) {
+        CancelAjaxRequest = true;
+
+        // flag = 3;
+        var changeVal = $(obj).val();
+        if ($(obj).is("input[type=checkbox]")) {
+            if ($(obj).attr('btn')) { // In Case Of Button Hard Code as 1
+                changeVal = "1";
+            }
+            else {
+                if ($(obj).prop("checked")) {
+                    changeVal = "1";
+
+
+                }
+                else {
+                    changeVal = "0";
+
+                }
+            }
+        }
+        else {
+            if (IsPlusMinusClick == true) {
+                InputText_RenderViewField.val(ChangedValue_RenderViewField);
+                IsPlusMinusClick = false;
+            }
+            changeVal = $(obj).val();
+        }
+
+        // By vinayak to check multiple minus sign
+
+        //if (!$(obj).is("input[type=checkbox]")) {
+
+        //    var str = "v-y"
+        //    alert(str);
+        //    alert(str.indexOf("-").length);
+        //    console.log(str.indexOf("-").length);
+        //    if (str.indexOf("-").length > 0)
+        //        {
+        //        alert('error');
+        //    }
+        //}
+
+        if ($(obj).val() != $(obj).attr("oldvalue") || $(obj).is("input[type=checkbox]")) {
+
+          //  var machine = { "ParamterId": paraId, "Value": changeVal };
+            var parameter = "";
+            if (AuthenticationId == -1 || AuthenticationId == -2) {
+                parameter = {
+                    "DefaultValue": SettingsPanelDefaultValue,
+                    "InputType": SettingsPanelInputType,
+                    "OldValue": SettingsPanelOldValue,
+                    "RequestPanel": RequestPanel,
+                    "ParamterId": paraId, "Value": changeVal, "Comments": AuthenticationId == -1 ? "IsPopUpRequired" : "", "WriteToPLCIPCMachineParameterId": WriteToPLCIPCMachineParameterId
+                };
+            }
+            else {
+                parameter = {
+                    "DefaultValue": SettingsPanelDefaultValue,
+                    "InputType": SettingsPanelInputType,
+                    "OldValue": SettingsPanelOldValue,
+                    "RequestPanel": RequestPanel,
+                    "ParamterId": paraId, "Value": changeVal, "AuthenticationId": AuthenticationId == 0 ? null : AuthenticationId,
+                    "PickListValueId": CallPanel == true ? $("#ddlPickList_CommentModal :selected").val() : $("#ddlPickList_CommentAuthenticationtModal :selected").val(), "ModuleId": $("#hdnModuleId").val(), "Comments": CallPanel == true ? $("#txtComment_CommentModal").val() : $("#txtComment_CommentAuthenticationtModal").val(), "WriteToPLCIPCMachineParameterId": WriteToPLCIPCMachineParameterId
+                };
+            }
+            jQuery.support.cors = true;
+            $.ajax({
+                url: Q.resolveUrl('/RenderViewFieldsMachine/ChangeParameter'),
+                data: parameter,
+                type: 'POST',
+                success: function (data) {
+                    $(obj).attr("oldvalue", $(obj).val());
+                    CancelAjaxRequest = false;
+                    //  Q.notifySuccess(name + " Changed Successfully");
+                    //  flag = 0;
+                },
+                error: function (x, y, z) {
+                    alert(x + '\n' + y + '\n' + z);
+                    CancelAjaxRequest = false;
+                }
+            });
+        }
+    }
+
+    function SettingsPanelConirmationMsg(title, text, IsCommentRequired, IsAuthenticationRequired, InputType) {
+
+        swal({
+            title: title,
+            text: text,
+            icon: "warning",
+            buttons: [
+                'No, cancel it!',
+                'Yes, I am sure!'
+            ],
+            dangerMode: true,
+        }).then(function (isConfirm) {
+            if (isConfirm) {
+
+                if (IsCommentRequired == "True" && IsAuthenticationRequired == "True") {
+                    $("#divComment_CommentAuthenticationtModal").hide();
+                    return $("#Comment_AuthenticationtModal").modal('show');
+                }
+                if (IsCommentRequired == "True") {
+                    $("#divComment_CommentModal").hide();
+                    return $("#CommentModal").modal('show');
+                }
+                if (IsAuthenticationRequired == "True") {
+                    return $("#AuthenticationtModal").modal('show');
+
+                }
+
+                SendSettingsPanelValue(paraId1, obj1, name1, false,-1);
+
+            }
+            else {
+
+                if (InputType == "checkbox") {
+                    var Id = $(obj1).prop("id");
+                    if ($(obj1).prop("checked")) {
+                        $("#CommentModal").modal('hide');
+                        IsExecuteChangeParmeter = false;
+                        $('#' + Id).bootstrapToggle('off')
+
+                        return false;
+                    }
+                    else {
+                        $("#CommentModal").modal('hide');
+                        IsExecuteChangeParmeter = false;
+                        $('#' + Id).bootstrapToggle('on')
+
+                        return false;
+                    }
+                }
+                else if (InputType == "text")
+                {
+                    if (IsPlusMinusClick == false) {
+                        var Id = $(obj1).prop("id");
+                        var OldValue = $(obj1).attr("oldvalue");
+                        $('#' + Id).val(OldValue)
+                    }
+
+                }
+            }
+
+        });
+
+    }
+
+    $(document).ready(function () {
+    
+       // $("input:text").focus(function () { $(this).select(); });
+
+
+        $('[data-toggle="tooltip"]').tooltip();
+
+
+        if ($("#GridDiv").length > 0) {
+                // Commented  on 19 Oct 2018 11.27 am start region
+          //  if ("#CVC_Batch_LabelRollGrid" == undefined) {
+               // var LabelRollGrid = new CVC.Batch.LabelRollGrid($('#GridDiv'), {}).init();
+              //  Q.initFullHeightGridPage($('#GridDiv'));
+           // }
+           //  Commented  on 19 Oct 2018 11.27 am end region
+        }
+
+    //    $('[data-toggle="toggle"]').bootstrapToggle();
+
+        $('[apply="keyboard"]').each(function () {
+            var keypara = [
+                '7 8 9',
+                '4 5 6',
+                '1 2 3',
+                '{bksp} 0 ',
+                '{a} {c}'
+            ];
+            if ($(this).attr("AllowDecimalPoint") != undefined) {
+                keypara = [               
+                    '7 8 9',
+                    '4 5 6',
+                    '1 2 3',
+                    '{bksp} . 0 ',
+                    '{a} {c}'
+                ];
+            }
+
+            if ($(this).attr("AllowMinusPoint") != undefined) {
+                keypara = [
+                    '7 8 9',
+                    '4 5 6',
+                    '1 2 3',
+                    '{bksp} 0 ',
+                    '{a} {c}'
+                ];
+            }
+
+
+
+            $(this).keyboard({
+                layout: 'custom',
+                customLayout: {                  
+                    'normal': keypara
+                },
+                maxLength: 8,
+               /* position: {
+                    //of: $(window), // null = attach to input/textarea; use $(sel) to attach elsewhere
+                    my: 'top top+25',
+                    at: 'top top+25',
+                    at2: 'top top+25' // used when "usePreview" is false
+                },*/
+                // Prevent keys not in the displayed keyboard from being typed in
+                restrictInput: true,
+                usePreview: true,
+                // include lower case characters (added v1.25.7)
+                //restrictInclude: 'a b c d e f',
+                // don't use combos or A+E could become a ligature
+                useCombos: false,
+                // activate the "validate" callback function
+                acceptValid: true,
+                validate: function (keyboard, value, isClosing) {
+                    // only make valid if input is 6 characters in length
+                    var min = $(keyboard)[0].el.min;
+                    var max = $(keyboard)[0].el.max;
+                    if (parseFloat(value) > parseFloat(max)) {
+                        //Q.alert("Value Cannot be greater than " + max);
+                        return false;
+                    }
+                    if (parseFloat(value) < parseFloat(min)) {
+                        //Q.alert("Value Cannot be less than " + min);
+                        return false;
+                    }
+
+                    return true;
+                }
+            });
+        });
+    });
+
+    function BitMomentaryUp(paraId, obj, name, IsAuthorisedRole, IsPopUpRequired, IsCommentRequired, IsAuthenticationRequired, ViewFieldId, GetWriteToPLCIPCMachineParameterId, OldValue,DefaultValue)
+    {
+      
+        $("#SpDivBitMomentary-" + ViewFieldId).removeClass("on");
+        $("#spanchr-" + ViewFieldId).removeClass("on");
+       // $("#spanchr-" + ViewFieldId).val("OFF");
+        clearInterval(BitMomentaryInterval);
+        ChangeParamter(paraId, obj, name, IsAuthorisedRole, IsPopUpRequired, IsCommentRequired, IsAuthenticationRequired, ViewFieldId, GetWriteToPLCIPCMachineParameterId, OldValue, DefaultValue);
+    }
+
+    function BitMomentaryDown(paraId, obj, name, IsAuthorisedRole, IsPopUpRequired, IsCommentRequired, IsAuthenticationRequired, ViewFieldId, GetWriteToPLCIPCMachineParameterId, OldValue, DefaultValue)
+    {
+      
+        $("#SpDivBitMomentary-" + ViewFieldId).addClass("on");
+        $("#spanchr-" + ViewFieldId).addClass("on");
+      //  $("#spanchr-" + ViewFieldId).val("ON");
+
+        BitMomentaryInterval = setInterval(ChangeParamter(paraId, obj, name, IsAuthorisedRole, IsPopUpRequired, IsCommentRequired, IsAuthenticationRequired, ViewFieldId, GetWriteToPLCIPCMachineParameterId, OldValue, DefaultValue), 1000);
+    }
+
+
+</script>
+
+<script type="text/javascript">
+    //Additional button for increment decrement
+
+    function btnnumberclick1(obj) {
+
+        return false;
+    }
+
+    function btnnumberclick(obj) {
+        //  flag = 3;
+
+        BtnPlusMinusObject = obj;
+
+
+        fieldName = $(obj).attr('data-field');
+        type = $(obj).attr('data-type');
+
+        var input = $("input[name='" + fieldName + "']");
+        InputText_RenderViewField = input;
+        var currentVal = parseInt(input.val());
+        CurrentTextBoxValue_RenderViewField = currentVal;
+        if (!isNaN(currentVal)) {
+            if (type == 'minus') {
+
+                if (currentVal > input.attr('min')) {
+                    // input.val(currentVal - 1).change();
+                    ChangedValue_RenderViewField = currentVal - 1;
+                    IsPlusMinusClick = true;
+                    input.val(currentVal).change();
+                }
+                if (parseInt(input.val()) == input.attr('min')) {
+                    $(obj).attr('disabled', true);
+                }
+
+            } else if (type == 'plus') {
+
+                if (currentVal < input.attr('max')) {
+                    // input.val(currentVal + 1).change();
+                    ChangedValue_RenderViewField = currentVal + 1;
+                    IsPlusMinusClick = true;
+                    input.val(currentVal).change();
+
+
+
+                }
+                if (parseInt(input.val()) == input.attr('max')) {
+                    $(obj).attr('disabled', true);
+                }
+
+            }
+        } else {
+            input.val(0);
+        }
+        return false;
+    }
+
+
+    $(document).ready(function () {
+        $('.input-number').focusin(function () {
+            $(this).data('oldValue', $(this).val());
+        });
+        $('.input-number').change(function () {
+
+
+
+            minValue = parseInt($(this).attr('min'));
+            maxValue = parseInt($(this).attr('max'));
+            valueCurrent = parseInt($(this).val());
+            //alert(valueCurrent);
+
+            if (isNaN(valueCurrent) == true) {
+                $(this).val(0);
+                valueCurrent = 0;
+                var contentPanelId = jQuery(this).attr("id");
+                $("#" + contentPanelId).change();
+            }
+
+
+            name = $(this).attr('name');
+            if (valueCurrent >= minValue) {
+                $(".btn-number[data-type='minus'][data-field='" + name + "']").removeAttr('disabled')
+            } else {
+                //alert('Sorry, the minimum value was reached');
+                //$(this).val($(this).data('oldValue'));
+                //return false;
+                var valueCurrentNew = $(this).val();
+                //$(this).val(parseInt(valueCurrentNew.substring(0, valueCurrentNew.length - (valueCurrentNew.length - 4))));
+                $(this).val(maxValue);
+            }
+            if (valueCurrent <= maxValue) {
+                $(".btn-number[data-type='plus'][data-field='" + name + "']").removeAttr('disabled')
+            } else {
+                //alert('Sorry, the maximum value was reached');
+                //$(this).val($(this).data('oldValue'));
+                //return false;
+                //var valueCurrentNew = $(this).val();
+                //$(this).val(parseInt(valueCurrentNew.substring(0, valueCurrentNew.length - (valueCurrentNew.length - 4))));
+                $(this).val(maxValue);
+            }
+
+
+        });
+
+
+        //$(".input-number").keydown(function (e) {
+
+        //    // Allow: backspace, delete, tab, escape, enter and .
+        //    if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
+        //        // Allow: Ctrl+A
+        //        (e.keyCode == 65 && e.ctrlKey === true) ||
+        //        // Allow: home, end, left, right
+        //        (e.keyCode >= 35 && e.keyCode <= 39)) {
+        //        // let it happen, don't do anything
+        //        return;
+        //    }
+        //    // Ensure that it is a number and stop the keypress
+        //    if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+        //        e.preventDefault();
+        //    }
+        //});
+    });
+</script>

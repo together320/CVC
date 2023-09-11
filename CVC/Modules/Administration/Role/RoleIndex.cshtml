@@ -1,0 +1,32 @@
+﻿
+@{
+    ViewData["Title"] = Serenity.LocalText.Get("Db.Administration.Role.EntityPlural");
+}
+
+@*<section class="content-header"  style="padding-top:0px;">
+        <h1>
+            Role
+            <small></small>
+        </h1>
+        <ol class="breadcrumb" style="top: 0px;">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Administration</a></li>
+            <li class="active">Role </li>
+        </ol>
+    </section>*@
+
+@*<section class="content">
+
+    </section>*@
+
+<div id="GridDiv"></div>
+<input type="hidden" id="hdnRoleImportAccess" />
+<script type="text/javascript">
+    $("#hdnRoleImportAccess").val('@ViewBag.IsModifyPermission')
+
+    jQuery(function () {
+        new CVC.Administration.RoleGrid($('#GridDiv'), {}).init();
+
+        Q.initFullHeightGridPage($('#GridDiv'));
+    });
+</script>
+

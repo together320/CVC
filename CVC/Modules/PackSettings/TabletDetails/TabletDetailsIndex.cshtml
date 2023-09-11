@@ -1,0 +1,17 @@
+﻿@{
+    ViewData["Title"] = Serenity.LocalText.Get("Db.PackSettings.TabletDetails.EntityPlural");
+}
+
+<div id="GridDiv"></div>
+<input type="hidden" id="hdnTabletDetailsImportAccess" />
+
+
+<script type="text/javascript">
+    $("#hdnTabletDetailsImportAccess").val('@ViewBag.IsModifyPermission')
+
+    jQuery(function () {
+        new CVC.PackSettings.TabletDetailsGrid($('#GridDiv'), {}).init();
+
+        Q.initFullHeightGridPage($('#GridDiv'));
+    });
+</script>

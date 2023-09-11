@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = Serenity.LocalText.Get("Db.ExternalApplicationInterface.MachineCommunication.EntityPlural");
+}
+
+<div id="GridDiv"></div>
+<input type="hidden" id="hdnMachineCommunicationImportAccess" />
+
+
+<script type="text/javascript">
+    $("#hdnMachineCommunicationImportAccess").val('@ViewBag.IsModifyPermission')
+
+    jQuery(function () {
+        new CVC.ExternalApplicationInterface.MachineCommunicationGrid($('#GridDiv'), {}).init();
+
+        Q.initFullHeightGridPage($('#GridDiv'));
+    });
+
+    //$(document).ready(function () {
+    //    //alert('dfg');
+    //    //protocolchange();
+    //    $('input[name=ProtocolTypeId]').change(function () {
+    //        alert('dfg');
+    //    });
+
+    //    $(document).ajaxComplete(function () {
+    //        $(".log").text("Triggered ajaxComplete handler.");
+    //    });
+    //});
+
+    //function protocolchange() {
+    //    if ($('input[name=ProtocolTypeId]').length) {
+    //        if ($('input[name=ProtocolTypeId]').val() == "4") {
+    //            $(".MDBPath").show();
+    //        }
+    //        else {
+    //            $(".MDBPath").hide();
+    //        }
+    //    }
+    //}
+
+
+</script>
+
+@Html.Partial("~/Views/PartialViews/Message_PartialView.cshtml")

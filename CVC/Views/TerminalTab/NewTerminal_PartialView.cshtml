@@ -1,0 +1,83 @@
+﻿
+@model CVC.ViewModels.TerminalMappingVM
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="newTerminalModalPopUp">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="myLargeModalLabel">New Terminal</h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="machine-tab-links">
+                    <a href="">General</a>
+                    <a href="">Status</a>
+                </div>
+                <form class="edit-machine-form">
+
+                    <div class="edit-machine-title">
+                        <h6>General</h6>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="TerminalTypeName"><label style="color:red">*</label>Terminal Type Name</label>
+                                @Html.TextBoxFor(m => Model.AddEditTermial.TerminalName, new {@class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="Description"><label style="color:red">*</label>Description</label>
+                                @Html.TextAreaFor(m => Model.AddEditTermial.MacAddress, new { @class = "form-control" })
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="IsRead"><label style="color:red">*</label>Is Read</label>
+                                @Html.TextAreaFor(m => Model.AddEditTermial.SerialNumber, new { @class = "form-control" })
+
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="IsWrite"><label style="color:red">*</label>Is Write</label>
+                                @Html.TextAreaFor(m => Model.AddEditTermial.MacAddress, new { @class = "form-control" })
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="edit-machine-title">
+                        <h6>Status</h6>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="Status"><label style="color:red">*</label>Status</label>
+                                <select id="ddlStatus" class="form-control">
+                                    <option value="1">Active</option>
+                                    <option value="2">In-Active</option>
+
+                                </select>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="SaveTerminalType();" class="btn btn-primary" id="btnSaveTerminalType">Save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

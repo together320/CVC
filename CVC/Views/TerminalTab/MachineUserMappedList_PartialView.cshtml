@@ -1,0 +1,58 @@
+﻿@model  IEnumerable<CVC.ViewModels.MachineUserMapping>
+<table class="displays table-striped table-bordered dt-responsive nowrap cell-border" id="dtMachineUserMapped" cellspacing="0" width="100%" border="1" cellpadding="0" style="border-collapse:collapse;" bordercolor="#e7eaec">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th align="left">
+                <label>User Name</label>
+            </th>
+            <th align="left">
+                <label>Role</label>
+            </th>
+            <th align="left">
+                <label>Status</label>
+            </th>
+
+           
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+
+            <tr>
+                <td>@item.Id</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Role)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#dtMachineUserMapped').DataTable({
+            responsive: {
+                details: {
+                    type: 'column'
+                }
+            },
+
+            "language": {
+                "lengthMenu": "_MENU_ records per page",
+            },
+
+        });
+
+    });
+</script>

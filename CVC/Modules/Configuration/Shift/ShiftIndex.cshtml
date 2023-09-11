@@ -1,0 +1,17 @@
+﻿@{
+    ViewData["Title"] = Serenity.LocalText.Get("Db.Configuration.Shift.EntityPlural");
+}
+
+<div id="GridDiv"></div>
+<input type="hidden" id="hdnShiftImportAccess" />
+
+
+<script type="text/javascript">
+        $("#hdnShiftImportAccess").val('@ViewBag.IsModifyPermission')
+
+    jQuery(function () {
+        new CVC.Configuration.ShiftGrid($('#GridDiv'), {}).init();
+
+        Q.initFullHeightGridPage($('#GridDiv'));
+    });
+</script>

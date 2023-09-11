@@ -1,0 +1,96 @@
+﻿@model  CVC.ViewModels.ModuleAccessViewModel
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<h2>Module Access</h2>
+<div class="row">
+    <div class="form-group col-sm-4">
+        <label for="recipient-name" class="control-label">
+            <sup class="mandatory-lable"></sup>
+            Parent Role:
+        </label>
+
+        @Html.DropDownListFor(m => Model.RoleId, new SelectList(ViewBag.RoleList, "RoleId", "RoleName"), "-- Select --", new { @id = "ddlRole", @class = "form-control js-example-basic-single" })
+
+    </div>
+</div>
+
+<div class="row" style="padding-top:20px" id="divModuleButton">
+    <div class="form-group col-sm-4">
+        <button type="button" id="btnAddModule" class="btn btn-primary" data-toggle="modal">Module Access</button>
+    </div>
+</div>
+
+<div class="table-sec" style="margin-top:10px" id="divModuleAccess">
+
+    @{Html.RenderPartial("ModuleAccessList_Partial");}
+</div>
+
+<div id="divModuleList">
+
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <button type="button" id="btnRole" class="btn btn-primary">Role</button>
+        <button type="button" id="btnView" class="btn btn-primary">View</button>
+        <button type="button" id="btnViewField" class="btn btn-primary">View Field</button>
+
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+    $("#btnAddModule").click(function () {
+        GetAllModules()
+    });
+
+    function GetAllModules() {
+        $.ajax({
+            url: "/NAdministration/RoleAccess/GetAllModule",
+            type: 'POST',
+            data: { "RoleId":@Model.RoleId  },
+            success: function (response) {
+
+                $("#divModuleList").html(response);
+                $("#divModuleListModal").modal('show');
+            },
+            error: function (x, y, z) {
+                console.log(x + '\n' + y + '\n' + z);
+            }
+        });
+
+    }
+    $(document).ready(function () {
+
+        $('.js-example-basic-single').select2();
+        var url = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        if (url == "RoleId=0")
+        {
+            $("#divModuleButton").attr("style", "display:none");
+        }
+
+    });
+
+    $("#ddlRole").change(function () {
+        var roleId = $("#ddlRole").val();
+        if (roleId!="")
+        window.location.href = "/NAdministration/RoleAccess/ModuleAccessList?RoleId=" + roleId;
+    })
+
+    $("#btnRole").click(function () {
+        window.location.href = "/NAdministration/RoleAccess";
+    });
+
+    $("#btnView").click(function () {
+        window.location.href = "/NAdministration/RoleAccess/ViewAccessList?RoleId=0&ModuleId=0";
+    });
+
+    $("#btnViewField").click(function () {
+        window.location.href = "/NAdministration/RoleAccess/ViewFieldAccessList?RoleId=0&ViewsId=0&ModuleId=0";
+        });
+
+</script>

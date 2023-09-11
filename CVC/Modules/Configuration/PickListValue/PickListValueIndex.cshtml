@@ -1,0 +1,18 @@
+﻿@{
+    ViewData["Title"] = Serenity.LocalText.Get("Db.Configuration.PickListValue.EntityPlural");
+}
+
+<div id="GridDiv"></div>
+
+<input type="hidden" id="hdnPickListValueImportAccess" />
+
+
+<script type="text/javascript">
+    $("#hdnPickListValueImportAccess").val('@ViewBag.IsModifyPermission')
+
+    jQuery(function () {
+        new CVC.Configuration.PickListValueGrid($('#GridDiv'), {}).init();
+
+        Q.initFullHeightGridPage($('#GridDiv'));
+    });
+</script>

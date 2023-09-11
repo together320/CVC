@@ -1,0 +1,360 @@
+﻿@model  CVC.ViewModels.OPCUaClientAddressSpace
+@using Newtonsoft.Json.Serialization;
+
+<head>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
+
+        .container {
+            margin: 150px auto;
+        }
+
+        .treegrid-indent {
+            width: 0px;
+            height: 16px;
+            display: inline-block;
+            position: relative;
+        }
+
+        .treegrid-expander {
+            width: auto;
+            height: 16px;
+            display: inline-block;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .glyphicon {
+            color: #02c0ce
+        }
+
+        .haedAdd h2 {
+            color: #02c0ce
+        }
+
+        table.dataTable.no-footer {
+            border-bottom: none
+        }
+
+        .table-bordered > tbody > tr > td, .table-bordered > tbody > tr > th,
+        .table-bordered > tfoot > tr > td, .table-bordered > tfoot > tr > th,
+        .table-bordered > thead > tr > td {
+            border: none
+        }
+
+        #tree-table.table-bordered {
+            border: none
+        }
+
+        table.dataTable.nowrap th {
+            border-left: 0
+        }
+
+            table.dataTable.nowrap th:first-child {
+                border-left: 1px solid #ddd;
+            }
+
+        .select2-container {
+            width: 100%;
+        }
+
+        .table-bordered > tbody > tr > td,
+        .table-bordered > tbody > tr > th,
+        .table-bordered > tfoot > tr > td,
+        .table-bordered > tfoot > tr > th,
+        .table-bordered > thead > tr > td {
+            outline: none;
+        }
+
+        #tree-table td span.treegrid-expander {
+            height: 22px;
+            border: #ddd 1px solid;
+            padding: 2px 4px;
+            width: 22px;
+        }
+
+        .dropdown-menu > li > a:focus, .dropdown-menu > li > a:hover {
+            background-color: #02acb9;
+            outline: none;
+        }
+
+        #tree-table_wrapper {
+            margin-top: 12px;
+        }
+
+        .nav-tabs > li.active > a {
+            border-top: 3px solid #f3565d !important
+        }
+    </style>
+</head>
+
+<div class="grid-title"><div class="title-text">Address Space</div></div>
+
+<table id="tree-table" class="displays table-striped table-bordered dt-responsive nowrap cell-border" width="100%" cellspacing="0">
+
+    <thead>
+        <tr>
+            <th width="50%">Display Name</th>
+            <th width="20%" style="width:20%">Select Record</th>
+            <th width="30%" style="width:30%">Machine Parameter</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.LstNodeDetails)
+        {
+
+            <tr level="0" id="@item.UniqueId" data-id="@item.UniqueId" data-parent="0" data-level="1" nodeId="@item.NodeId">
+                <td data-column="name" onclick="getChildNode($(this))">
+                    @if (item.HasChildElement)
+                    {
+                        <span class="treegrid-expander glyphicon glyphicon-plus"></span>
+                    }
+                    @item.DisplayName
+                </td>
+                <td><input class="" type="checkbox" uniqueId="@item.UniqueId"  @(item.isChecked?"checked":"")  @(item.isChecked?"disabled":"")  onchange="nodeChange($(this))" id="chkbox" nodeId="@item.NodeId" displayName="@item.DisplayName" isRead="@item.isRead" isWrite="@item.isWrite" /></td>
+                <td>
+                    @Html.DropDownListFor(m =>item.machineParameterId, new SelectList(Model.machineParameterList, "MachineParameterId", "ParameterName"), "-- Select --", new {@id="ddl-"+item.UniqueId, @class = "machineParameter", onchange="machineParameterChange($(this))",nodeId=item.NodeId, @disabled="disabled"})
+                </td>
+            </tr>
+
+        }
+
+    </tbody>
+
+</table>
+
+
+<script type="text/javascript">
+    var machineParameterList = [];
+    var nodeArray = [];
+    var machineParameterArray = [];
+    $(document).ready(function () {
+        debugger;
+        machineParameterList = @Html.Raw(Json.Encode(@Model.machineParameterList));
+
+        $("#lblAccessRestriction").text('@Model.AccessRestrictions');
+        $("#lblDisplayName").text('@Model.DisplayName');
+        $("#lblBrowseName").text('@Model.BrowseName');
+        $("#lblDescription").text('@Model.Description');
+        $("#lblNodeId").text(@Model.NodeId);
+        $("#lblAccessRestriction").text(@Model.AccessRestrictions);
+        $("#lblHandle").text('@Model.Handle');
+        $("#lblNodeClass").text('@Model.NodeClass');
+        $("#lblReferences").text('@Model.References');
+        $("#lblRolePermissions").text('@Model.RolePermissions');
+        $("#lblUserRolePermissions").text('@Model.UserRolePermissions');
+
+        $('#tree-table').DataTable({
+            responsive: {
+                details: {
+                    type: 'column'
+                }
+            },
+
+            "language": {
+                "lengthMenu": "_MENU_ records per page",
+            },
+
+        });
+
+    });
+
+    function getChildNode(tdElement) {
+        debugger;
+        $('.loader').removeClass('hidden');
+
+        var element = $(tdElement).closest('tr');
+        var nodeId = $(element).attr("nodeId");
+        var id = $(element).attr("id");
+        var uniqueId = $(element).attr("data-id");
+        var children = $("table").find("[data-parent=" + uniqueId + "]");
+
+        var _span = $(element).find('span.treegrid-expander');
+        var spanLevel = parseInt($(element).attr("level")) + 1;
+
+        var dynamicWidth = spanLevel * 25;
+        if (_span.hasClass('glyphicon-plus')) {
+            _span.removeClass('glyphicon-plus');
+            _span.addClass('glyphicon-minus');
+        } else {
+            _span.removeClass('glyphicon-minus');
+            _span.addClass('glyphicon-plus');
+        }
+       // $(element).siblings().find('span.treegrid-expander').removeClass('glyphicon-minus').addClass('glyphicon-plus');
+        // $(element).siblings().f
+
+
+        var length=$("table").find("[data-parent=" + uniqueId + "]").length;
+        if (length == 0) {
+
+             //var getClass = $("#i" + id).attr('class');
+            //if (getClass == "indicator glyphicon glyphicon-plus-sign") {
+            //    $("#i" + id).removeClass(getClass);
+            //    $("#i" + id).addClass("indicator glyphicon glyphicon-minus-sign");
+            //}
+            //else {
+            //    $("#i" + id).removeClass(getClass);
+            //    $("#i" + id).addClass("indicator glyphicon glyphicon-plus-sign");
+            //}
+
+
+            $.ajax({
+                url: '/OpcUaClient/GetChildNode',
+                data: {
+                    "machineId": machineId, "nodeId": nodeId
+                },
+                type: 'GET',
+                async: true,
+                success: function (data) {
+                    debugger;
+                    var machineParameterDropdown = '<select class="machineParameter">';
+                    machineParameterDropdown += '<option value="-1">--Select--</option > ';
+
+                    $(machineParameterList).each(function (index, item) {
+                        machineParameterDropdown += '<option value=' + item.MachineParameterId + '>' + item.ParameterName+'</option > ';
+                    });
+                    machineParameterDropdown += '</select >';
+
+                    $(data.LstNodeDetails).each(function (i, item) {
+                       
+                        var new_tr = '<tr level=' + spanLevel + ' id ="' + item.UniqueId + '" data-id=' + item.UniqueId + ' data-parent=' + uniqueId + ' data-level="1" nodeId = ' + item.NodeId + '> <td onclick="getChildNode($(this))">' + (item.HasChildElement ? '<span style="margin-left:' + dynamicWidth + 'px" class="treegrid-expander glyphicon glyphicon-plus" ></span> ' : '<span style="padding-left:' + dynamicWidth + 'px" ></span>') + item.DisplayName + '</td> <td><input ' + (item.isChecked ? "checked" : "") + '  ' + (item.isChecked ? "disabled" : "") + ' type="checkbox" uniqueId=' + item.UniqueId + ' nodeId = ' + item.NodeId + ' displayName = ' + item.DisplayName + ' isRead = ' + item.isRead +' isWrite='+item.isWrite+' onchange = "nodeChange($(this))" ></input></td > <td>' + machineParameterDropdown+'</td></tr > ';
+
+                        $(new_tr).insertAfter("#" + id);
+                        var machineParameterDropdpdown = $("#" + item.UniqueId).find("select.machineParameter");
+                        $(machineParameterDropdpdown).attr("id", 'ddl-' + item.UniqueId).attr("nodeId", item.NodeId).attr("onchange", "machineParameterChange($(this))").val(item.machineParameterId).attr("disabled","disabled");
+                        if (item.isChecked) {
+                            $(machineParameterDropdpdown).attr("disabled", "disabled");
+                        }
+                        // $(machineParameterDropdpdown)[0].setAttribute("onchange", "foo()");
+                        });
+                        $("#lblDisplayName").text(data.DisplayName);
+                        $("#lblBrowseName").text(data.BrowseName);
+                        $("#lblDescription").text(data.Description);
+                        $("#lblNodeId").text(data.NodeId);
+                        $("#lblAccessRestriction").text(data.AccessRestrictions)
+                        //$("#lblDataLock").text(data.DataLock)
+                        $("#lblHandle").text(data.Handle);
+                    debugger;
+                       $("#lblNodeClass").text(data.NodeClass==1?"Object":"Variable");
+                      $("#lblReferences").text(data.References);
+                      $("#lblRolePermissions").text(data.RolePermissions);
+                       $("#lblUserRolePermissions").text(data.UserRolePermissions);
+
+                        reInitializeSelect2();
+                        $('.loader').addClass('hidden');
+
+
+                },
+                error: function (x, y, z) {
+                }
+            });
+        }
+        else {
+            if (children.length) {
+                children.toggleClass('hide');
+            }
+            $('.loader').addClass('hidden');
+
+           // let currentLevel = $(element).attr("level");
+           // $(element).siblings().attr('tr[level!=' + currentLevel + ']').addClass('hide');
+        }
+    }
+
+    function nodeChange(element) {
+        debugger;
+        var nodeId = element.attr("nodeId");
+        var displayName = element.attr("displayName");
+        var uniqueId = element.attr("uniqueId");
+        var isRead = element.attr("isRead");
+        var isWrite = element.attr("isWrite");
+
+        if (element.prop("checked") == true) {
+            debugger;
+            $("#ddl-" + uniqueId).removeAttr("disabled");
+
+            nodeArray.push({ "nodeId": nodeId, "displayName": displayName, "dataTypeId": 1, "isRead": isRead, "isWrite": isWrite });
+        }
+        else {
+            $("#ddl-" + uniqueId).attr("disabled","disabled");
+
+            // var index = nodeArray.indexOf(nodeId);
+            var index = findInNodeArray(nodeId);
+
+            if (index > -1) {
+                nodeArray.splice(index, 1);
+            }
+
+            var machineParameterIndex = findInMachineParameterArray(nodeId);
+
+            if (machineParameterIndex > -1) {
+                machineParameterArray.splice(machineParameterIndex, 1);
+            }
+
+
+        }
+    }
+
+    function machineParameterChange(element) {
+        debugger;
+        var nodeId = element.attr("nodeId");
+        var machineParameterId = element.val();
+        var data = element.select2('data');
+        var parameterName = "";
+        if (data) {
+            parameterName=data.text;
+        }
+        if (machineParameterId != "--Select--" && machineParameterId != "-1" && machineParameterId!="")
+        {
+            var index = findInMachineParameterArray(nodeId);
+
+        if (index > -1) {
+            machineParameterArray.splice(index, 1);
+            machineParameterArray.push({
+                "NodeId": nodeId, "MachineParameterId": machineParameterId, "ParameterName": parameterName
+            });
+        }
+        else {
+            machineParameterArray.push({
+                "NodeId": nodeId, "MachineParameterId": machineParameterId, "ParameterName": parameterName
+            });
+        }  
+       }
+    }
+
+    function findInNodeArray(nodeId) {
+        debugger;
+        for (var i = 0; i < nodeArray.length; i++) {
+            var data = nodeArray[i];
+            if (data.nodeId == nodeId) {
+                debugger;
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    function findInMachineParameterArray(nodeId) {
+        debugger;
+        for (var i = 0; i < machineParameterArray.length; i++) {
+            var data = machineParameterArray[i];
+            if (data.NodeId == nodeId) {
+                debugger;
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    function reInitializeSelect2() {
+        $('.machineParameter').select2('destroy');
+        $('.machineParameter').select2();     
+    }
+
+
+</script>
+
+<script src="~/Scripts/tree-view.js"></script>
+
+
+

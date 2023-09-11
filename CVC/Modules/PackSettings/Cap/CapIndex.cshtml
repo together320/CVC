@@ -1,0 +1,18 @@
+﻿@{
+    ViewData["Title"] = Serenity.LocalText.Get("Db.PackSettings.Cap.EntityPlural");
+}
+
+<div id="GridDiv"></div>
+<input type="hidden" id="hdnCapImportAccess" />
+
+
+<script type="text/javascript">
+    $("#hdnCapImportAccess").val('@ViewBag.IsModifyPermission')
+
+    jQuery(function () {
+        new CVC.PackSettings.CapGrid($('#GridDiv'), {}).init();
+
+        Q.initFullHeightGridPage($('#GridDiv'));
+    });
+
+</script>

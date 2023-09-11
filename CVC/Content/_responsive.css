@@ -1,0 +1,316 @@
+
+// #########################################################################################
+// Responsive
+// ############
+
+@media (max-width: 1680px){
+.pt4 {left: 10%; }
+.pt3 {top: 83%; left: 23%; }
+.pt1 {left: 70%; }
+.pt8 {left: 91%; }
+
+
+}
+
+@media (max-width: 1600px){
+.container1 {width: 1170px; }
+.homeLinks ul li a {height: 55px; line-height: 55px; font-size: 16px; padding: 0 47px;
+	&:hover{padding-left: 40px; padding-right: 54px;}
+}
+
+
+
+}
+
+@media ( max-width:1400px ){
+  .videoInfo .overLay .infoBox h2 { font-size: 48px;}
+  .videoInfo .overLay .infoBox h2 span { font-size: 32px;}
+  .videoInfo .overLay .infoBox p { font-size: 16px;}
+  .videoInfo .overLay .infoBox a { margin-top: 30px; height: 70px; line-height: 65px;}
+  .videoInfo .overLay .infoBox a img { padding: 0 20px 0 0; }
+  article.newsWrp { -moz-column-width: 20em; -webkit-column-width: 20em; -moz-column-gap: 1em; -webkit-column-gap: 1em; }
+  header .head .menuItem ul li a {padding: 15px 10px; }
+.pt a {width: 40px; height: 40px; line-height: 40px; border-radius: 50%; font-size: 18px; }
+.pt4 {left: 4%; }
+.pt5 {left: 22%; }
+.pt6 {top: 11%; }
+.pt1 {left: 74%; top: 54%; }
+.pt8 {left: 89%; top: 12%; }
+.pt .ptText {top: 5px; left: 31px; height: 30px; line-height: 30px; padding-left: 15px; border-radius: 3px; }
+.homeLinks ul li a {height: 45px; line-height: 45px;}
+.homeLinks ul li a img {margin-right: 7px; max-width: 20px; max-height: 20px; }
+.pt8 .ptText {left: initial; right: 31px; }
+
+
+
+
+}
+
+@media all and (max-width: 1200px) {
+	.container1 {width: 955px; }
+	.navbar-brand {padding: 10px 5px;height: 40px;}
+	header .head .menuItem ul li a {font-size: 12px;padding: 15px 8px;}
+	header .head .logo{padding: 0;}
+	.navbar-nav{margin-top: 10px; margin-left: 25px;}
+
+	.videoInfo .overLay .infoBox h2 {font-size: 34px;}
+	.videoInfo .overLay .infoBox h2 span { font-size: 32px;}
+	.videoInfo .overLay .infoBox p { font-size: 14px;}
+
+	.videoInfo .overLay .infoBox a {margin-top: 30px; height: auto; line-height: 0; font-size: 16px;padding: 5px 35px 5px 20px;}
+	.videoInfo .overLay .infoBox a img{padding: 0 10px 0 0;}
+
+	// .advList{margin-left: 85px;}
+	// .swiper-container{margin-left: 85px;}
+	.enquiry {min-height: 0 !important;
+		h2{margin:0;font-size: 24px !important;}
+		.enquiryForm input {margin-top: 0; font-size: 14px ; height: 45px !important; }
+		.btnSubmit {padding: 0 !important; 
+			input{height: 45px !important; padding: 0 !important; font-size: 14px !important; } 
+		}
+	}
+.navbar-brand img { width: 100px; }
+.navbar-nav{margin: 0 0;}
+.videoInfo .overLay .infoBox h2 {font-size: 44px; }
+.allLink .menuItem ul li a {padding: 20px 20px; }
+.siteHeading {font-size: 32px;}
+.contactPage .contactDetail .address h3, .contactPage .contactDetail .mobile h3, .contactPage .contactDetail .email h3 {font-size: 16px; margin-left: 10px;}
+.contactPage .contactDetail .address p {font-size: 16px; }
+.contactPage .contactDetail .mobile p {font-size: 16px; }
+.contactPage .contactDetail .email p {font-size: 16px;}
+.enquiryForm input, .enquiryForm select {font-size: 16px;}
+.contactPage .serviceTabs .nav li a, .contactPage .serviceTabs .nav-tabs li a {font-size: 18px;line-height: 20px;}
+.contactPage .serviceTabs .nav li, .contactPage .serviceTabs .nav-tabs li {width: 140px;}
+.enquiryForm textarea {font-size: 16px; }
+.pt2 {left: 29%; }
+.pt8 {left: 94%; }
+.homeLinks ul li a {font-size: 14px; padding: 0 37px; 
+	&:hover{padding-left: 30px;padding-right: 43px;}
+}
+
+}
+
+@media all and (max-width: 1024px) {
+header .head .menuItem ul li a {padding: 10px 5px;}
+.navbar-brand img {width: 80px; }
+.videoInfo .overLay .infoBox h2 {font-size: 38px; }
+.videoInfo .overLay .infoBox h2 span {font-size: 28px; } 
+.siteHeading {font-size: 30px;}
+.aboutDetail img { margin: 15px;}
+.homeVideoBox { background: url('../img/homeAnimation.jpg') #000 no-repeat center center fixed; }
+// #bgvid { display: none; }
+
+
+}
+
+@media all and (max-width: 990px) {
+.mainContainer{padding-right: 15px; padding-left: 15px;}
+.container1 {width: 750px; }
+.videoInfo .overLay {clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%); }
+.videoInfo .overLay .infoBox p { padding-right:0px; text-align: justify;}
+.videoInfo .overLay .infoBox { padding-top: 100px;position: relative; -webkit-transform: none; -moz-transform: none; -ms-transform: none; -o-transform: none; transform: none; } 
+.swiper-container{margin-left: 0px;}
+header .head .menuItem {display: inline; }
+header .head .menuItem ul li a {padding: 10px 5px; }
+header .head .socialIcon img {padding: 10px 2px; }
+.advantage .advList ul li {font-size: 16px;}
+footer .enquiry .btnSubmit {margin: 20px 15px; }
+.videoInfo .overLay .infoBox h2 {font-size: 34px; }
+.videoInfo .overLay .infoBox h2 span {font-size: 26px; }
+.siteHeading {font-size: 28px; }
+.allLink .menuItem ul li a {padding: 20px 3px; }
+.head .col-md-2 {float: left;}
+.head .col-md-8 {float: left;}
+.videoInfo {height: calc(100vh - 200px);}
+
+
+
+
+
+
+}
+
+
+@media all and (max-width: 768px) {
+.container1 {width: 100%; }
+.videoInfo .overLay .infoBox h2 {font-size: 32px; }
+.videoInfo .overLay .infoBox h2 span {font-size: 30px; }
+.swiper-container {margin: 0 auto; }
+.advantage .advList ul li {font-size: 16px;}
+.centerBtn .downLoadBtn h2 {font-size: 20px; }
+.centerBtn .downLoadBtn img {width: 55px; }
+.heading h3{font-size: 22px;}
+.enquiry h2 {margin: 0;font-size: 20px;}
+footer .enquiry {padding: 40px 0 20px; }
+.headsection {text-align: center; margin-bottom: 15px; } 
+.inputBox {margin: 10px; }
+.videoInfo .overLay .infoBox h2 {font-size: 28px; }
+.videoInfo .overLay .infoBox h2 span {font-size: 22px; }
+.aboutDetail p { font-size: 14px;}
+.aboutDetail img {float: none; margin: 0 auto; width: 100%; }
+.siteHeading {font-size: 24px; }
+.videoInfo .overLay .infoBox a img {width: 50px; }
+.careerInfo p {font-size: 14px;}
+.careerInfo .panel .panel-body .jobRight ul li {font-size: 14px; }
+.careerInfo {padding: 20px 0;}
+.careerInfo .panel .panel-heading a {font-size: 16px; }
+.careerInfo .panel .panel-body .jobLeft {font-size: 14px; }
+.careerInfo .panel .panel-body .applyOnline {font-size: 14px; }
+.enquiryForm input, .enquiryForm select {font-size: 16px;}
+.enquiryForm input[type="submit"] {font-size: 16px; }
+.contactPage .serviceTabs .nav li a, .contactPage .serviceTabs .nav-tabs li a {font-size: 16px;}
+.feedback .feedbackForm input, .feedback .feedbackForm select {height: 45px; padding: 6px 12px; font-size: 16px; }
+.feedback .feedbackForm textarea{font-size: 16px;}
+header .head .menuItem ul li a {padding: 10px 2px; }
+.newsDPage .newsDetail p {font-size: 14px; }
+.newsDPage .siteHeading { font-size: 30px; }
+.homeVideoBox1 {display: none;}
+.mobileHome {display: block;}
+.homeLinks {position: static; bottom: 0; width: 100%; }
+.homeLinks ul li {float: left; background: #ef4636; width: 100%; }
+header .head .logo {display: none; } 
+.allLink .menuItem ul li a {padding: 10px 5px; }
+.filterImg {position: absolute; top: 0; left: -35px; } 
+.allLink {width: 200px;}
+.allLink .menuItem {display: block; width: 220px;text-align: left; position: fixed;top: 40%; z-index: 99; background: #fff;right: -220px; } 
+.allLink .menuItem ul li a:hover {text-decoration: none !important; color: #ef4636;border-bottom: 4px solid transparent !important;  }
+.allLink .menuItem ul li a:active {color: #ef4636;border: 4px solid transparent !important; }
+.allLink .menuItem ul li {display: block;width: 100%; }
+.allLink .menuItem1 {right: 0;}
+
+
+}
+@media all and (max-width: 767px) {
+.container1 {width: 100%; }
+.navbar-default .navbar-toggle {border-color: transparent; }
+.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus { background-color: transparent;}
+header .head .menuItem ul li {text-align: left;display: block; } 
+header .head .menuCenter {text-align: left; } 
+.navbar-nav {margin-top: 0px; margin-left: 0; }
+.navbar-default .navbar-collapse, .navbar-default .navbar-form {border-color: $org; }
+header .head .socialIcon {float: left; }
+header .head .menuItem ul li {width: 100%; } 
+header .head .menuItem ul li a {padding: 5px 15px;width: 100%;font-size: 14px;border: 2px solid transparent !important;}
+header .head .menuItem ul li a:hover {border-bottom: none;background: $org; color:#fff;}
+header .head .menuItem ul li .active {border-bottom:none; }
+.navbar-default .navbar-toggle .icon-bar {background-color: $org; }
+.navbar-default .navbar-toggle:hover .icon-bar {background-color: #000; }
+	footer .fotterBox {padding-top: 15px; font-size: 14px; }
+	footer .menuItem ul li a {font-size: 12px; padding: 10px 5px; }
+	footer .fotterBox .cpy a {font-size: 12px;}
+	footer .fotterBox .designBy p {font-size: 12px;}
+.newsDPage .siteHeading { font-size: 28px; }
+.logoMobile {display: block; } 
+header .head .menuCenter {text-align: left;display: block; }
+.socialIconBar {position: static; }
+.menuItemHeader {width:100%!important;position: static;} 
+.mainContainer .filterImg {display:block;}
+.nav-clicks{position: relative!important;}
+
+}
+
+
+@media all and (max-width: 640px) {
+	.videoInfo .overLay .infoBox h2 {font-size: 30px; }
+	.videoInfo .overLay .infoBox h2 span {font-size: 28px; }
+	.videoInfo .overLay .infoBox p {line-height: 25px; }
+	.videoInfo .overLay .infoBox h2 {font-size: 26px; }
+	.videoInfo .overLay .infoBox h2 span {font-size: 20px; }
+	.siteHeading {font-size: 22px; }
+.centerBtn .downLoadBtn h2 {font-size: 16px; }
+.careerInfo .panel .panel-heading a {font-size: 14px; }
+.enquiryForm input, .enquiryForm select {font-size: 14px; }
+.enquiryForm input[type="submit"] {line-height: 20px; font-size: 14px; }
+.careerInfo .panel .panel-body .jobRight {padding-left: 20px; }
+.contactPage .serviceTabs .nav li a, .contactPage .serviceTabs .nav-tabs li a {font-size: 14px;}
+.contactPage .serviceTabs .nav li, .contactPage .serviceTabs .nav-tabs li {width: auto; }
+.contactPage .contactDetail {padding: 0 0 15px 20px; }
+.contactPage .serviceTabs .serviceUl .address {padding: 10px 10px 10px 20px;}
+.enquiryForm textarea {font-size: 16px; }
+.newsDPage .siteHeading { font-size: 26px; }
+.newsDPage .newsDetail h2 {font-size: 22px;}
+.newsDPage .newsDetail p {line-height: 25px;}
+.videoInfo .overLay .infoBox a {margin-bottom: 30px; }
+.advantage .advList ul li {font-size: 14px;padding: 5px 0; }
+footer .menuItem ul li a {font-size: 10px; padding: 6px 2px; }
+
+
+
+}
+
+@media all and (max-width: 480px) {
+	.videoInfo .overLay .infoBox h2 {font-size: 24px; }
+	.videoInfo .overLay .infoBox h2 span {font-size: 22px; }
+	.videoInfo .overLay .infoBox p {line-height: 22px; }
+	.videoInfo .overLay .infoBox p {padding-right: 0px;}
+	.enquiry h2 {margin: 0;font-size: 18px;}
+	.videoInfo .overLay .infoBox h2 {font-size: 24px; }
+	.videoInfo .overLay .infoBox h2 span {font-size: 18px; }
+	.siteHeading {font-size: 20px; }
+.careerInfo .panel .panel-body .jobLeft b span {display: none;float: right; }
+.careerInfo .panel .panel-body .jobRight {padding-left: 0; float: left; width: auto; }
+.careerInfo .panel .panel-heading a {padding: 15px 15px;font-size: 14px;}
+.careerInfo .panel .panel-body { font-size: 14px;}
+.careerInfo .panel .panel-body .applyOnline {padding: 5px 40px; }
+.contactPage .serviceTabs .nav li, .contactPage .serviceTabs .nav-tabs li {width: 150px; padding: 10px;}
+.contactPage .contactDetail .address h3, .contactPage .contactDetail .mobile h3, .contactPage .contactDetail .email h3 {font-size: 14px;}
+.contactPage .contactDetail .address p {font-size: 14px; }
+.contactPage .contactDetail .mobile p {font-size: 14px; }
+.contactPage .serviceTabs .serviceUl .address h3 { font-size: 16px;}
+.contactPage .serviceTabs .serviceUl .address p {font-size: 14px; }
+.enquiryForm p {font-size: 14px;}
+.enquiryForm textarea {font-size: 14px; }
+.feedback .feedbackForm input, .feedback .feedbackForm select {height: 35px;font-size: 14px; }
+.contactPage .contactDetail .email p {font-size: 14px; }
+.feedback .feedbackForm textarea {font-size: 14px; }
+.feedback .feedbackForm input[type="submit"] {line-height: 20px;font-size: 16px;}
+.enquiry h2 {margin: 0; font-size: 22px !important; }
+.enquiry .enquiryForm input {height: 35px !important; }
+.enquiry .btnSubmit input {height: 35px !important; }
+footer .enquiry {padding: 30px 0 20px; }
+.newsDPage .siteHeading { font-size: 24px;padding: 20px 0; }
+.newsDPage .newsDetail h2 {font-size: 20px;}
+.allLink .menuItem ul li {display: block; }
+.allLink .menuItem ul li a {padding: 10px 20px; }
+.videoInfo .overLay .infoBox a {margin-bottom: 30px;width: 100%; }
+.heading h3 {font-size: 20px; }
+.centerBtn .downLoadBtn h2 {font-size: 12px; }
+.centerBtn .downLoadBtn img {width: 45px; }
+footer .fotterBox .designBy p {font-size: 12px; }
+footer .menuItem { position: relative;}
+.centerBtn .downLoadBtn {margin: 35px auto;padding: 5px;}
+.advantage .heading { margin-top: 25px; margin-bottom: 25px; }
+.closeBtn {top: 70px; right: 25px;}
+.videoInfo .overLay .infoBox a img {width: 40px; }
+.videoInfo {height: 100%; } 
+.closeBtn img {width: 30px; }
+.closeBtn {top: 60px !important; right: 25px !important;} 
+
+}
+
+
+
+@media all and (max-width: 320px) {
+.videoInfo .overLay .infoBox p {padding-right: 10px;}
+.videoInfo .overLay .infoBox h2 {font-size: 20px; }
+.videoInfo .overLay .infoBox h2 span {font-size: 14px; }
+.siteHeading {font-size: 16px; }
+.aboutPage {margin: 30px 0; }
+.aboutDetail p {line-height: 25px;}
+.allLink {margin-top: 20px;}
+.videoInfo .overLay .infoBox a {margin-bottom: 40px;}
+.videoInfo .overLay .infoBox a img {width: 40px; }
+.newsDPage .siteHeading { font-size: 20px; }
+.newsDPage .newsDetail h2 {margin: 25px 0 0px 0;font-size: 18px;}
+footer .fotterBox .cpy a {font-size: 11px;line-height: 20px;}
+footer .fotterBox .designBy p {font-size: 11px; line-height: 20px;}
+footer .menuItem ul li a {font-size: 12px; padding: 10px 3px; }
+.videoInfo {width: 100%; height: 100%; background-size: cover; position: relative; }
+ .aboutPage {margin: 20px 0; }
+.allLink .menuItem ul li a {padding: 3px 20px;width: 100%; }
+.innerMenu a {padding: 3px 15px !important; width: 100%; }
+.videoInfo .overLay .infoBox {top: 40%; }
+.navbar-brand img {width: 70px; padding-top: 5px; }
+.videoInfo .overLay .infoBox {padding-top: 50px !important; position: relative; }
+
+ }

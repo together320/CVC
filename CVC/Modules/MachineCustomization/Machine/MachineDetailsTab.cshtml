@@ -1,0 +1,476 @@
+﻿@model CVC.ViewModels.MachineDetails
+
+@{
+    Layout = null;
+}
+
+@if (Model != null)
+{
+    @*<div class="grid-title">
+        <div class="title-text">Browse and Upload View</div>
+        <ul class="breadcrumb-list">
+            <li><a href="@ViewBag.PreviousPageUrl">@ViewBag.FormName</a></li>
+            <li><a href="">Browse and Upload View</a></li>
+        </ul>
+    </div>*@
+    <div id="divMachineDetailsDisplay" style="display:none; margin-bottom: 50px">
+        <div class="flex-layout">
+            <div class="s-DialogContent">
+                <div class="s-Form">
+                    <div class="fieldset ui-widget ui-widget-content ui-corner-all">
+                        <div id="PropertyGrid" class="s-PropertyGrid">
+                            <div class="category-links">
+                                <a class="category-link" tabindex="-1" href="#Category4">Status</a><span class="separator">|</span>
+                            @if (Model.IsRealTime) {
+                                <a class="category-link" tabindex="-1" href="#Category3">PLC</a><span class="separator">|</span>
+                                <a class="category-link" tabindex="-1" href="#Category2">For Realtime Machine</a><span class="separator">|</span>
+                            }
+                                <a class="category-link" tabindex="-1" href="#Category1">General</a>
+                            </div>
+                            <div class="categories">
+                                <div class="category first-category" id="category-general">
+                                    <div class="category-title"><a class="category-anchor" name="Category1">General</a></div>
+                                    <div class="field MachineId" style="display: none">
+                                        <input type="text" id="MachineId" value="@Model.MachineId"/>
+                                    </div>
+                                    <div class="field MachineName">
+                                        <label class="caption" title="Machine Name" style="width: 190px;">Entity Name</label>
+                                        <input type="text" class="editor flexify s-StringEditor" id="MachineName" maxlength="50" disabled="disabled" value="@Model.MachineName">
+                                    </div>
+                                    <div class="field IsRealTime col-sm-6">
+                                        <label class="caption" title="Is Realtime" style="width: 190px;">Is Realtime</label>
+                                    @if (Model.IsRealTime) {
+                                        <input type="checkbox" class="editor s-BooleanEditor" id="IsRealTime" disabled="disabled" checked>
+                                    } else { 
+                                        <input type="checkbox" class="editor s-BooleanEditor" id="IsRealTime" disabled="disabled">
+                                    }
+                                    </div>
+                                    <div class="field TableId col-sm-6">
+                                        <label class="caption" title="Table Name" style="width: 190px;">Table Name</label>
+                                        <input type="text" class="editor flexify s-StringEditor" id="TableId" disabled="disabled" value="@Model.TableName">
+                                    </div>
+                                    <div class="field MachineLineId" style="display: none;">
+                                        <label class="caption" title="Machine Line Id">Entity Line Id</label>
+                                        <input type="text" class="editor flexify s-IntegerEditor integerQ" id="MachineLineId">
+                                    </div>
+                                </div>
+                            @if (Model.IsRealTime) {
+                            <div class="category" id="category-realtime">
+                                <div class="category-title"><a class="category-anchor" name="Category2">For Realtime Machine</a></div>
+                                <div class="field AccessIpAddress col-sm-6">
+                                    <label class="caption" title="Access Ip Address" style="width: 190px;">Access Ip Address</label>
+                                    <input type="text" class="editor flexify s-StringEditor" id="AccessIpAddress" maxlength="50" disabled="disabled" value="@Model.AccessIPAddress">
+                                </div>
+                                <div class="field MachineSequence col-sm-6">
+                                    <label class="caption" title="Machine Sequence" style="width: 190px;">Entity Sequence</label>
+                                    <input type="text" class="editor flexify s-IntegerEditor integerQ" id="MachineSequence" disabled="disabled" value="@Model.MachineSequence">
+                                </div>
+                                <div class="field MachineImage col-sm-6">
+                                    <label class="caption" title="Machine Image" style="width: 190px;">Entity Image</label>
+                                    <input type="text" class="editor flexify s-StringEditor" id="MachineImage" disabled="disabled">
+                                </div>
+                                <div class="field Description col-sm-6">
+                                    <label class="caption" title="Description" style="width: 190px;">Description</label>
+                                    <input type="text" class="editor flexify s-StringEditor" id="Description" maxlength="100" disabled="disabled" value="@Model.Description">
+                                </div>
+                                <div class="field ModelNumber col-sm-6">
+                                    <label class="caption" title="Model Number" style="width: 190px;">Model Number</label>
+                                    <input type="text" class="editor flexify s-StringEditor" id="ModelNumber" maxlength="50" disabled="disabled" value="@Model.ModelNumber">
+                                </div>
+                                <div class="field SerialNumber col-sm-6">
+                                    <label class="caption" title="Serial Number" style="width: 190px;">Serial Number</label>
+                                    <input type="text" class="editor flexify s-StringEditor" id="SerialNumber" maxlength="50" disabled="disabled" value="@Model.SerialNumber">
+                                </div>
+                                <div class="field Make col-sm-6">
+                                    <label class="caption" title="Make" style="width: 190px;">Make</label>
+                                    <input type="text" class="editor flexify s-StringEditor" id="Make" maxlength="50" disabled="disabled" value="@Model.Make">
+                                </div>
+                                <div class="field Year col-sm-6">
+                                    <label class="caption" title="Year" style="width: 190px;">Year</label>
+                                    <input type="text" class="editor flexify s-IntegerEditor integerQ" id="Year" disabled="disabled" value="@Model.Year">
+                                </div>
+                                <div class="field col-sm-6">
+                                    <label class="caption" title="Timer For Alarm (In Seconds)" style="width: 190px;">Timer For Alarm(In Seconds)</label>
+                                    <input type="text" class="editor flexify s-IntegerEditor integerQ" id="TimerForAlarm" disabled="disabled" value="@Model.TimerForAlarm">
+                                </div>
+                            </div>
+                                <div class="category" id="category-plc">
+                                    <div class="category-title"><a class="category-anchor" name="Category3">PLC</a></div>
+                                    <div class="field PlcMake col-sm-6">
+                                        <label class="caption" title="Plc Make" style="width: 190px;">Plc Make</label>
+                                        <input type = "text" class="editor flexify s-StringEditor" id="PlcMake" maxlength="50" disabled="disabled" value="@Model.PlcMake">
+                                    </div>
+                                    <div class="field PlcModelNumber col-sm-6">
+                                        <label class="caption" title="Plc Model Number" style="width: 190px;">Plc Model Number</label>
+                                        <input type = "text" class="editor flexify s-StringEditor" id="PlcModelNumber" maxlength="50" disabled="disabled" value="@Model.PlcModelNumber">
+                                    </div>
+                                    <div class="field PlcSerialNumber col-sm-6">
+                                        <label class="caption" title="Plc Serial Number" style="width: 190px;">Plc Serial Number</label>
+                                        <input type = "text" class="editor flexify s-StringEditor" id="PlcSerialNumber" maxlength="50" disabled="disabled" value="@Model.PlcSerialNumber">
+                                    </div>
+                                    <div class="field PlcAddress col-sm-6">
+                                        <label class="caption" title="Plc Address" style="width: 190px;">Plc Address</label>
+                                        <input type = "text" class="editor flexify s-StringEditor" id="PlcAddress" maxlength="50" disabled="disabled" value="@Model.PLCAddress">
+                                    </div>
+                                </div>
+                            }
+                                <div class="category" id="category-status">
+                                    <div class="category-title"><a class="category-anchor" name="Category4">Status</a></div>
+                                    <div class="field StatusId">
+                                        <label class="caption" title="Status" style="width: 190px;">Status</label>
+                                        @if (Model.StatusId == 1)
+                                        {
+                                    <input type="text" class="editor flexify s-StringEditor" id="StatusId" disabled="disabled" value="Active">
+                                        }
+                                        else {  // Model.StatusId == 2 
+                                    <input type="text" class="editor flexify s-StringEditor" id="StatusId" disabled="disabled" value="In-Active">
+                                        }
+
+                                    </div>
+                                    
+                                    <div class="field CreatedBy" style="display: none;">
+                                        <label class="caption" title="Created By">Created By</label>
+                                        <input type = "text" class="editor flexify s-IntegerEditor integerQ" id="CreatedBy">
+                                    </div>
+                                    <div class="field CreatedDate" style="display: none;">
+                                        <label class="caption" title="Created Date">Created Date</label>
+                                        <input type = "text" class="editor flexify s-DateEditor dateQ hasDatepicker customValidate" id="CreatedDate">
+                                    </div>
+                                    <div class="field UpdatedBy" style="display: none;">
+                                        <label class="caption" title="Updated By">Updated By</label>
+                                        <input type = "text" class="editor flexify s-IntegerEditor integerQ" id="UpdatedBy">
+                                    </div>
+                                    <div class="field UpdatedDate" style="display: none;">
+                                        <label class="caption" title="Updated Date">Updated Date</label>
+                                        <input type = "text" class="editor flexify s-DateEditor dateQ hasDatepicker customValidate" id="UpdatedDate">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+                <!-- Custom Tabs -->
+            <div class="nav-tabs-custom" id="tabs">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href = "#tabMachineDetails" data-toggle="tab">Entity Details</a></li>
+                @if (Model.IsMenuAccessForMachineCommunication)
+                {
+                    <li><a href = "#tabMachineCommunication" data-toggle="tab">Machine Communication</a></li>
+                }
+                @if(Model.IsMenuAccessForMachineParameter)
+                {
+                    <li><a href = "#tabMachineParameter" data-toggle="tab">Entity Field</a></li>
+                }
+                @if(Model.IsMenuAccessForIpcParameter)
+                {
+                    <li><a href = "#tabIpcParameter" data-toggle="tab">IPC Parameter</a></li>
+                }
+                @if(Model.IsMenuAccessForAlarm)
+                {
+                    <li><a href = "#tabAlarm" data-toggle="tab">Alarm</a></li>
+                }
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active form-horizontal" id="tabMachineDetails">
+                        <div class="tab-content" style="display: none">
+                            @*<div class="container">*@
+                            <div role = "tabpanel" class="tab-pane active jnr" id="first">
+                                @*<div class="tab-panel-top">
+                                    <h6>Edit Machine (<label id="lblMachineName"></label>)</h6>
+                                </div>*@
+                                @*<div class="row BtnUpdateRow" style="padding-left:15px">
+                                    <button type="button" id="btnUpdateMachineDetails" class="tool-button save-and-close-button">Update</button>
+                                </div>*@
+                                <div id = "CVC_ExternalApplicationInterface_MachineCommunicationDialog15_Toolbar" class="s-DialogToolbar s-Toolbar clearfix">
+                                    <div class="tool-buttons">
+                                        <div class="buttons-outer">
+                                            <div class="buttons-inner">
+                                                <div class="tool-button save-and-close-button" id="btnUpdateMachineDetails">
+                                                    <div class="button-outer">
+                                                        <span class="button-inner">Update</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="machine-tab-links">
+                                    <a href = "" > General </a >
+                                    <a href="">PLC</a>
+                                </div>
+                                <form class="edit-machine-form myform">
+                                    <div class="edit-machine-title">
+                                        <h6>General</h6>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="txtMachineSequence"><label style = "color:red" > *</label > Machine Name</label>
+                                                <input type = "hidden" class="form-control" id="hdnMachineId" disabled="disabled" value="@Model.MachineId" />
+                                                <input type = "text" class="form-control" id="txtMachineName" disabled="disabled" value="@Model.MachineName" />
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="txtMachineSequence"><label style = "color:red" > *</label > Machine Sequence</label>
+                                                <input type = "hidden" class="form-control" id="hdnMachineId" />
+                                                <input type = "text" onkeypress="return isNumber(event)" class="form-control" id="txtMachineSequence" disabled="disabled" value="@Model.MachineSequence" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="txtAccessIp"><label style = "color:red" > *</label > Access Ip Address</label>
+                                                <input type = "text" class="form-control" id="txtAccessIp" disabled="disabled" value="@Model.AccessIPAddress" />
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="txtDescription">Description</label>
+                                                <input type = "text" class="form-control" id="txtDescription" disabled="disabled" value="@Model.Description" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="txtModelNumber">Model Number</label>
+                                                <input type = "text" class="form-control" id="txtModelNumber" disabled="disabled" value="@Model.ModelNumber" />
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="txtSerialNumber">Serial Number</label>
+                                                <input type = "text" class="form-control" id="txtSerialNumber" disabled="disabled" value="@Model.SerialNumber" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="txtMake">Make</label>
+                                                <input type = "text" class="form-control" id="txtMake" disabled="disabled" value="@Model.Make" />
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="txtYear">Year</label>
+                                                <input type = "text" class="form-control" onkeypress="return isNumber(event)" id="txtYear" disabled="disabled" value="@Model.Year" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                    </div>
+                                    <div class="edit-machine-title">
+                                        <h6>PLC</h6>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="txtPLCMake"><label style = "color:red" > *</label> Plc Make</label>
+                                                <input type = "text" class="form-control" id="txtPLCMake" disabled="disabled" value="@Model.PlcMake" />
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="txtPLCModelNumber">Plc Model Number</label>
+                                                <input type = "text" class="form-control" id="txtPLCModelNumber" disabled="disabled" value="@Model.PlcModelNumber" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="txtPLCSerialNumber">Plc Serial Number</label>
+                                                <input type = "text" class="form-control" id="txtPLCSerialNumber" disabled="disabled" value="@Model.PlcSerialNumber" />
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="txtPLCAddress">Plc Address</label>
+                                                <input type = "text" class="form-control" id="txtPLCAddress" disabled="disabled" value="@Model.PLCAddress" />
+                                            </div>
+                                        </div>
+                                        <div class="edit-machine-title">
+                                            <h6>Status</h6>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label for="txtPLCSerialNumber"><label style = "color:red" > *</label> Status </label>
+                                                    @Html.DropDownListFor(m => Model.StatusId, new SelectList(ViewBag.StatusList, "StatusId", "StatusName"), new { @id = "ddlStatus", @class = "form-control js-example-basic-single" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div role="tabpanel" class="tab-pane" id="second">
+                                <div class="row BtnUpdateRow" style="padding-left:15px">
+                                </div>
+                                <div class="container-fluid" style="padding-top: 25px;">
+                                    <div id = "divTerminalList" style="width:100%; margin:0 auto;">
+                                        <div class="container-fluid">
+                                            <div class="dataTable-wrapper" style="width:100%; margin:0 auto;" id="divMachineTerminalMappedList">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                    @*</div>*@
+                            </div>
+                            <div role = "tabpanel" class="tab-pane" id="third">
+                                <div class="row BtnUpdateRow" style="padding-left:15px">
+                                    <button type = "button" id="btnAddMachineUserMapping" class="btn btn-primary">Add User</button>
+                                </div>
+                                <div class="container-fluid" style="padding-top: 25px;">
+                                    <div id = "divTerminalList" style="width:100%; margin:0 auto;">
+                                        <div class="container-fluid">
+                                            <div class="dataTable-wrapper" style="width:100%; margin:0 auto;" id="divMachineUserMappedList">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @*</div>*@
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane form-horizontal" id="tabMachineCommunication">
+                        <div id="divMachineCommunicationGrid"></div>
+                    </div>
+                    <div class="tab-pane form-horizontal" id="tabMachineParameter">
+                        <div id="divMachineParameterGrid"></div>
+                    </div>
+                    <div class="tab-pane form-horizontal" id="tabIpcParameter">
+                        <div id="divIpcParameterGrid"></div>
+                    </div>
+                    <div class="tab-pane form-horizontal" id="tabAlarm">
+                        <div id="divAlarmGrid"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @Html.HiddenFor(m => m.IsImportAccessForAlarm, new { @id = "hdnIsImportAccessForAlarm" })
+    @Html.HiddenFor(m => m.IsImportAccessForIpcParameter, new { @id = "hdnIsImportAccessForIpcParameter" })
+    @Html.HiddenFor(m => m.IsImportAccessForMachineCommunication, new { @id = "hdnIsImportAccessForMachineCommunication" })
+    @Html.HiddenFor(m => m.IsImportAccessForMachineParameter, new { @id = "hdnIsImportAccessForMachineParameter" })
+
+
+    }
+
+<script type="text/javascript">
+    function machineValidation() {
+        if ($("#txtMachineName").val().trim() == "" || $("#txtMachineSequence").val().trim() == "" || $("#txtAccessIp").val().trim() == "" || $("#txtPLCMake").val().trim() == "") {
+            alert("* Marks fields are mandatory fields");
+        }
+        else {
+            UpdateMachineDetails();
+        }
+    }
+
+    $("#btnUpdateMachineDetails").click(function () {
+        machineValidation();
+    })
+
+    function UpdateMachineDetails() {
+        $.ajax({
+            url: Q.resolveUrl('/terminaltab/UpdateMachineDetails'),
+            type: 'POST',
+            data: {
+                "MachineName": $("#txtMachineName").val(), "StatusId": $("#ddlStatus option:selected").val(), "MachineId": $("#hdnMachineId").val(), "MachineSequence": $("#txtMachineSequence").val(), "AccessIPAddress": $("#txtAccessIp").val(), "Description": $("#txtDescription").val(), "ModelNumber": $("#txtModelNumber").val(), "SerialNumber": $("#txtSerialNumber").val(), "Make": $("#txtMake").val(), "PlcMake": $("#txtPLCMake").val(), "Year": $("#txtYear").val(), "PlcModelNumber": $("#txtPLCModelNumber").val(), "PLCSerialNumber": $("#txtPLCSerialNumber").val(), "PLCAddress": $("#txtPLCAddress").val()
+            },
+            //  async: true,
+            success: function (response) {
+                alert(response.message);
+
+            },
+            error: function (x, y, z) {
+
+            }
+        });
+    }
+
+    $('#tabs').tabs({
+        activate: function (event, ui) {
+            var active = $('#tabs').tabs('option', 'active');
+            $("#divBreadCrumb").attr("style", "display:block");
+
+            if ($("#tabs ul>li a").eq(active).attr("href") == "#tabMachineDetails") {
+                showHideDivDetailsTab();
+                $("#anchrMachineBreadCrumb").text("Entity Details");
+
+            }
+
+            if ($("#tabs ul>li a").eq(active).attr("href") == "#tabMachineCommunication") {
+                showHideDivOtherTab();
+                if ($.isEmptyObject($('#divMachineCommunicationGrid').data())) {
+                    new CVC.ExternalApplicationInterface.MachineCommunicationGrid($('#divMachineCommunicationGrid'), {}).init();
+                    Q.initFullHeightGridPage($('#divMachineCommunicationGrid'));
+                }
+                //   $("div[id$='_QuickFilter_MachineId']").parent().hide();
+
+                $(".quick-filter-item,.quick-filters-bar").hide();
+                $("#anchrMachineBreadCrumb").text("Machine Communication");
+                //$("#divBreadCrumb").attr("style", "display:block");
+            }
+
+            if ($("#tabs ul>li a").eq(active).attr("href") == "#tabMachineParameter") {
+                showHideDivOtherTab();
+                if ($.isEmptyObject($('#divMachineParameterGrid').data())) {
+                    new CVC.MachineCustomization.MachineParameterGrid($('#divMachineParameterGrid'), {}).init();
+                    Q.initFullHeightGridPage($('#divMachineParameterGrid'));
+                }
+
+                $(".quick-filter-item,.quick-filters-bar").hide();
+
+                //$("div[id$='_QuickFilter_MachineId']").parent().hide();
+                $("#anchrMachineBreadCrumb").text("Entity Field");
+
+            }
+
+            if ($("#tabs ul>li a").eq(active).attr("href") == "#tabIpcParameter") {
+                showHideDivOtherTab();
+                if ($.isEmptyObject($('#divIpcParameterGrid').data())) {
+                    new CVC.ExternalApplicationInterface.IpcParameterGrid($('#divIpcParameterGrid'), {}).init();
+                    Q.initFullHeightGridPage($('#divIpcParameterGrid'));
+                }
+                $("div[id$='_QuickFilter_MachineId']").parent().hide();
+                $("#anchrMachineBreadCrumb").text("Ipc Parameter");
+            }
+
+            if ($("#tabs ul>li a").eq(active).attr("href") == "#tabAlarm") {
+                showHideDivOtherTab();
+                if ($.isEmptyObject($('#divAlarmGrid').data())) {
+                    jQuery(function () {
+                        new CVC.MachineCustomization.AlarmGrid($('#divAlarmGrid'), {}).init();
+                        Q.initFullHeightGridPage($('#divAlarmGrid'));
+                    });
+                }
+                $("div[id$='_QuickFilter_MachineId']").parent().hide();
+                $(".quick-filter-item,.quick-filters-bar").hide();
+                $("#anchrMachineBreadCrumb").text("Alarm");
+            }
+        }
+    });
+
+    function showHideDivDetailsTab() {
+        $("#divMachineDetailsDisplay").css("display","none");
+        $("#GridDiv").css("display","block");
+    }
+
+    function showHideDivOtherTab() {
+        $("#divMachineDetailsDisplay").css("display","block");
+        $("#GridDiv").css("display","none");
+    }
+
+</script>
+

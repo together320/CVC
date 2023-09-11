@@ -1,0 +1,24 @@
+﻿@{
+                /**/
+
+                ViewData["Title"] = Serenity.LocalText.Get("Db.PackSettings.Bottle.EntityPlural");
+}
+
+<div id="GridDiv"></div>
+<input type="hidden" id="hdnBottleImportAccess" />
+
+<script type="text/javascript">
+    $("#hdnBottleImportAccess").val('@ViewBag.IsModifyPermission')
+
+    jQuery(function () {
+        new CVC.PackSettings.BottleGrid($('#GridDiv'), {}).init();
+
+        Q.initFullHeightGridPage($('#GridDiv'));
+
+    });
+
+    $(document).ready(function (response) {
+        console.log("nn" + response);
+
+    });
+</script>

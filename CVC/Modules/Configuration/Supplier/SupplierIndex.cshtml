@@ -1,0 +1,22 @@
+﻿@{
+    ViewData["Title"] = Serenity.LocalText.Get("Db.Configuration.Supplier.EntityPlural");
+}
+@section Head
+{
+    @Html.Script("dynamic://Lookup.Configuration.Country")
+    @Html.Script("dynamic://Lookup.Configuration.State")
+    @Html.Script("dynamic://Lookup.Configuration.City")
+}
+
+<div id="GridDiv"></div>
+<input type="hidden" id="hdnSupplierImportAccess" />
+
+<script type="text/javascript">
+   $("#hdnSupplierImportAccess").val('@ViewBag.IsModifyPermission')
+
+    jQuery(function () {
+        new CVC.Configuration.SupplierGrid($('#GridDiv'), {}).init();
+
+        Q.initFullHeightGridPage($('#GridDiv'));
+    });
+</script>

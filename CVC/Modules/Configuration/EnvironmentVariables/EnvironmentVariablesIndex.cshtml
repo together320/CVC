@@ -1,0 +1,32 @@
+﻿@model int?
+
+@{
+    ViewData["Title"] = Serenity.LocalText.Get("Db.Configuration.EnvironmentVariables.EntityPlural");
+}
+
+<div class="s-DataGrid require-layout route-handler responsive-heights-DataGrid require-layout route-handler responsive-height" style="height:auto;">
+    <div class="grid-title"><div class="title-text">Environment Variables</div></div>
+    <div style="color:red">Remark : After update restart the server for  the changes to take effect </div><br />
+    <div id="DialogDiv"></div>
+</div>
+<script type="text/javascript">
+    //jQuery(function () {
+    //    new CVC.Configuration.EnvironmentVariablesGrid($('#GridDiv'), {}).init();
+
+    //    Q.initFullHeightGridPage($('#GridDiv'));
+    //});
+
+    var myDialogAsPanel;
+    jQuery(function () {
+        // first create a new dialog
+        myDialogAsPanel = new CVC.Configuration.EnvironmentVariablesDialog();
+        // load a new entity if url doesn't contain an ID, or load order with ID specified in page URL
+        // here we use done event in second parameter, to be sure operation succeeded before showing the panel
+        myDialogAsPanel.load(@Html.Raw(1) || {}, function() {
+            // if we didn't reach here, probably there is no order with specified ID in url
+            myDialogAsPanel.element.removeClass('hidden').appendTo('#DialogDiv');
+            myDialogAsPanel.arrange();
+        });
+
+    });
+</script>

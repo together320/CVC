@@ -1,0 +1,24 @@
+﻿@model List<CVC.Modules.MachineCustomization.MachineRecipe.RecipeReport>
+
+@{
+    Layout = null;
+}
+
+
+
+<table id="tablemachinerecipereport" class="table table-striped">
+
+    <tbody>
+        <tr>
+            <td>Machine Paramter (Recipe :- @Model.FirstOrDefault().RecipeName)</td>
+            <td>Value</td>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Paramter</td>
+                <td>@item.Value</td>
+            </tr>
+        }
+    </tbody>
+</table>

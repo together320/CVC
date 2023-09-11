@@ -1,0 +1,426 @@
+﻿@model CVC.AdminDashboard.AdminDashboardPageModel
+@{
+    ViewData["Title"] = "Dashboard";
+    ViewData["PageId"] = "Dashboard";
+}
+
+@section Head {
+    @Html.StyleBundle("Pages/Dashboard")
+    @Html.ScriptBundle("Pages/Dashboard")
+}
+
+
+<div class="dashBoardContainer clearfix">
+    <div class="tabContainer">
+        <ul class="nav nav-tabs tabs sortable container-fluid">
+            <li class="active dashboardTab" data-tabid="2" data-tabname="My Dashboard">
+                <a data-toggle="tab" href="#tab_2">
+                    <div>
+                        <span class="name textOverflowEllipsis" value="My Dashboard" style="width:10%">
+                            <strong>My Dashboard</strong>
+                        </span><span class="editTabName hide"><input type="text" name="tabName" /></span><i class="fa fa-bars moveTab hide"></i>
+                    </div>
+                </a>
+            </li>
+            @*<li class=" dashboardTab" data-tabid="1" data-tabname="Default">
+                <a data-toggle="tab" href="#tab_1"><div><span class="name textOverflowEllipsis" value="Default" style="width:10%"><strong>Default</strong></span><span class="editTabName hide"><input type="text" name="tabName" /></span><i class="fa fa-close deleteTab"></i><i class="fa fa-bars moveTab hide"></i></div></a>
+            </li>*@
+            @*<div class="moreSettings pull-right"><div class="dropdown dashBoardDropDown"><button class="btn btn-default reArrangeTabs dropdown-toggle" type="button" data-toggle="dropdown">More&nbsp;&nbsp;<span class="caret"></span></button><ul class="dropdown-menu dropdown-menu-right moreDashBoards"><li id="newDashBoardLi"><a class="addNewDashBoard" href="#">Add new dashboard</a></li><li><a class="reArrangeTabs" href="#">Rearrange Tabs</a></li></ul></div><button class="btn-success updateSequence pull-right hide">Save Order</button></div>*@
+        </ul>
+        <div class="tab-content">
+            <div id="tab_2" data-tabid="2" data-tabname="My Dashboard" class="tab-pane fade in active">
+                <div class='dashBoardTabContainer'>
+                    <div class='dashboardHeading container-fluid'>
+                        <div class="buttonGroups pull-right">
+                            <div class="btn-group">
+                                @*<button class='btn btn-default addButton dropdown-toggle' data-toggle='dropdown'>
+                                        Add Widget&nbsp;&nbsp;<i class="caret"></i>
+                                    </button>*@
+
+                                @*<ul class="dropdown-menu dropdown-menu-right widgetsList pull-right" style="min-width:100%;text-align:left;">
+                                        <li>
+                                            <a onclick="Vtiger_DashBoard_Js.addWidget(this, 'index.php?module=Home&view=ShowWidget&name=History&linkid=56')" href="javascript:void(0);"
+                                               data-linkid="56" data-name="History" data-width="1" data-height="2">
+                                                History
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a onclick="Vtiger_DashBoard_Js.addWidget(this, 'index.php?module=Potentials&view=ShowWidget&name=GroupedBySalesStage&linkid=58')" href="javascript:void(0);"
+                                               data-linkid="58" data-name="GroupedBySalesStage" data-width="2" data-height="1">
+                                                Funnel
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a onclick="Vtiger_DashBoard_Js.addWidget(this, 'index.php?module=Potentials&view=ShowWidget&name=GroupedBySalesPerson&linkid=59')" href="javascript:void(0);"
+                                               data-linkid="59" data-name="GroupedBySalesPerson" data-width="2" data-height="1">
+                                                Opportunities by Stage
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a onclick="Vtiger_DashBoard_Js.addWidget(this, 'index.php?module=Potentials&view=ShowWidget&name=TotalRevenuePerSalesPerson&linkid=61')" href="javascript:void(0);"
+                                               data-linkid="61" data-name="TotalRevenuePerSalesPerson" data-width="1" data-height="1">
+                                                Total Revenue
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a onclick="Vtiger_DashBoard_Js.addWidget(this, 'index.php?module=Leads&view=ShowWidget&name=LeadsByStatus&linkid=63')" href="javascript:void(0);"
+                                               data-linkid="63" data-name="LeadsByStatus" data-width="1" data-height="1">
+                                                Leads by Status
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a onclick="Vtiger_DashBoard_Js.addWidget(this, 'index.php?module=Leads&view=ShowWidget&name=LeadsBySource&linkid=64')" href="javascript:void(0);"
+                                               data-linkid="64" data-name="LeadsBySource" data-width="1" data-height="1">
+                                                Leads by Source
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a onclick="Vtiger_DashBoard_Js.addWidget(this, 'index.php?module=Leads&view=ShowWidget&name=LeadsByIndustry&linkid=65')" href="javascript:void(0);"
+                                               data-linkid="65" data-name="LeadsByIndustry" data-width="1" data-height="1">
+                                                Leads by Industry
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a onclick="Vtiger_DashBoard_Js.addWidget(this, 'index.php?module=Home&view=ShowWidget&name=OverdueActivities&linkid=66')" href="javascript:void(0);"
+                                               data-linkid="66" data-name="OverdueActivities" data-width="1" data-height="1">
+                                                Overdue Activities
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a onclick="Vtiger_DashBoard_Js.addWidget(this, 'index.php?module=HelpDesk&view=ShowWidget&name=TicketsByStatus&linkid=67')" href="javascript:void(0);"
+                                               data-linkid="67" data-name="TicketsByStatus" data-width="1" data-height="1">
+                                                Tickets by Status
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a onclick="Vtiger_DashBoard_Js.addWidget(this, 'index.php?module=HelpDesk&view=ShowWidget&name=OpenTickets&linkid=68')" href="javascript:void(0);"
+                                               data-linkid="68" data-name="OpenTickets" data-width="1" data-height="1">
+                                                Open Tickets
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a onclick="Vtiger_DashBoard_Js.addWidget(this, 'index.php?module=Home&view=ShowWidget&name=KeyMetrics&linkid=99')" href="javascript:void(0);"
+                                               data-linkid="99" data-name="KeyMetrics" data-width="1" data-height="1">
+                                                Key Metrics
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a onclick="Vtiger_DashBoard_Js.addWidget(this, 'index.php?module=Home&view=ShowWidget&name=TagCloud&linkid=101')" href="javascript:void(0);"
+                                               data-linkid="101" data-name="TagCloud" data-width="1" data-height="1">
+                                                Tag Cloud
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a onclick="Vtiger_DashBoard_Js.addWidget(this, 'index.php?module=Potentials&view=ShowWidget&name=FunnelAmount&linkid=103')" href="javascript:void(0);"
+                                               data-linkid="103" data-name="FunnelAmount" data-width="1" data-height="1">
+                                                Total Amount by Sales stage
+                                            </a>
+                                        </li>
+
+
+                                        <li class="divider"></li>
+                                        <li>
+                                            <a onclick="Vtiger_DashBoard_Js.addMiniListWidget(this, 'index.php?module=Home&view=ShowWidget&name=MiniList&linkid=100')" href="javascript:void(0);"
+                                               data-linkid="100" data-name="MiniList" data-width="1" data-height="1">
+                                                Mini List
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a onclick="Vtiger_DashBoard_Js.addNoteBookWidget(this, 'index.php?module=Home&view=ShowWidget&name=Notebook&linkid=104')" href="javascript:void(0);"
+                                               data-linkid="104" data-name="Notebook" data-width="1" data-height="1">
+                                                Notebook
+                                            </a>
+                                        </li>
+
+                                    </ul>*@
+                            </div>
+                        </div>
+                    </div>
+                    <br><div class="dashboardBanner"></div><div class="dashBoardTabContents clearfix">
+                        <div class="gridster_2 ready">
+                    <ul>
+                        <li id="57" data-row="1" data-col="1" data-sizex="1" data-sizey="1" data-position="false" class="dashboardWidget dashboardWidget_0 gs-w loadcompleted" data-url="index.php?module=Home&amp;view=ShowWidget&amp;name=CalendarActivities&amp;linkid=57&amp;widgetid=2" data-mode="open" data-name="CalendarActivities" style="display: list-item;">
+                            <div class="dashboardWidgetHeader clearfix">
+                                <div class="title">
+                                    <div class="dashboardTitle" title="Upcoming Activities"><b>Reset Password</b></div>
+                                </div>
+                                @*<div class="userList">
+                                    <div class="select2-container select2 widgetFilter" id="s2id_autogen1"><a href="javascript:void(0)" class="select2-choice" tabindex="-1">   <span class="select2-chosen" id="select2-chosen-2">Mine</span><abbr class="select2-search-choice-close"></abbr>   <span class="select2-arrow" role="presentation"><b role="presentation"></b></span></a><label for="s2id_autogen2" class="select2-offscreen"></label><input class="select2-focusser select2-offscreen" type="text" aria-haspopup="true" role="button" aria-labelledby="select2-chosen-2" id="s2id_autogen2"><div class="select2-drop select2-display-none select2-with-searchbox">   <div class="select2-search">       <label for="s2id_autogen2_search" class="select2-offscreen"></label>       <input type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" class="select2-input ignore-validation" role="combobox" aria-expanded="true" aria-autocomplete="list" aria-owns="select2-results-2" id="s2id_autogen2_search" placeholder="">   </div>   <ul class="select2-results" role="listbox" id="select2-results-2">   </ul></div></div><select class="select2 widgetFilter select2-offscreen" name="type" tabindex="-1" title="">
+                                        <option value="1" selected="">Mine</option>
+                                        <option value="3">Marketing Group</option>
+                                        <option value="4">Support Group</option>
+                                        <option value="2">Team Selling</option>
+                                        <option value="all">All</option>
+                                    </select>
+                                </div>*@
+                            </div>
+                            <div name="history" class="dashboardWidgetContent mCustomScrollbar _mCS_8 mCS_no_scrollbar" style="padding-top: 15px; height: 159px;">
+                                <div id="mCSB_8" class="mCustomScrollBox mCS-dark-thick mCSB_vertical mCSB_inside" tabindex="0">
+                                    <div id="mCSB_8_container" class="mCSB_container mCS_y_hidden mCS_no_scrollbar_y" style="position: relative; left: 0px; top: 0px;" dir="ltr">
+
+                                        <div class="dashboardWidgetData">
+                                            <div class="noDataMsg">
+                                                No Records Found
+                                            </div>
+
+                                        </div>
+                                    </div><div id="mCSB_8_scrollbar_vertical" class="mCSB_scrollTools mCSB_8_scrollbar mCS-dark-thick mCSB_scrollTools_vertical" style="display: none;"><div class="mCSB_draggerContainer"><div id="mCSB_8_dragger_vertical" class="mCSB_dragger" style="position: absolute; min-height: 30px; height: 0px; top: 0px;" oncontextmenu="return false;"><div class="mCSB_dragger_bar" style="line-height: 30px;"></div></div><div class="mCSB_draggerRail"></div></div></div>
+                                </div>
+                            </div>
+                            <div class="widgeticons dashBoardWidgetFooter">
+                                <div class="footerIcons pull-right">
+                                    <a href="javascript:void(0);" name="drefresh" data-url="index.php?module=Home&amp;view=ShowWidget&amp;name=CalendarActivities&amp;linkid=57&amp;widgetid=2&amp;linkid=57&amp;content=data">
+                                        <i class="fa fa-refresh" hspace="2" border="0" align="absmiddle" title="Refresh" alt="Refresh"></i>
+                                    </a>
+                                    <a name="dclose" class="widget" data-url="index.php?module=Vtiger&amp;action=RemoveWidget&amp;linkid=57&amp;widgetid=2">
+                                        <i class="fa fa-remove" hspace="2" border="0" align="absmiddle" title="Remove" alt="Remove"></i>
+                                    </a>
+
+                                </div>
+                            </div><span class="gs-resize-handle gs-resize-handle-both"></span>
+                        </li>
+                            @*<li id="60" data-row="1" data-col="2" data-sizex="2" data-sizey="1" data-position="false" class="dashboardWidget dashboardWidget_1" data-url="index.php?module=Potentials&view=ShowWidget&name=PipelinedAmountPerSalesPerson&linkid=60&widgetid=3" data-mode="open" data-name="PipelinedAmountPerSalesPerson"></li>
+                            <li id="62" data-row="2" data-col="1" data-sizex="1" data-sizey="1" data-position="false" class="dashboardWidget dashboardWidget_2" data-url="index.php?module=Potentials&view=ShowWidget&name=TopPotentials&linkid=62&widgetid=4" data-mode="open" data-name="TopPotentials"></li>*@
+                        </ul><input type="hidden" id=row value="2" /><input type="hidden" id=col value="1" /><input type="hidden" id="userDateFormat" value="mm-dd-yyyy" />
+                        </div>
+                    </div>
+                </div>
+            </div><div id="tab_1" data-tabid="1" data-tabname="Default" class="tab-pane fade "></div>
+        </div>
+    </div>
+</div>
+<style type="text/css">
+    [data-col="4"] {
+        left: 1318px;
+    }
+
+    [data-col="3"] {
+        left: 882px;
+    }
+
+    [data-col="2"] {
+        left: 446px;
+    }
+
+    [data-col="1"] {
+        left: 10px;
+    }
+
+    [data-row="24"] {
+        top: 7370px;
+    }
+
+    [data-row="23"] {
+        top: 7050px;
+    }
+
+    [data-row="22"] {
+        top: 6730px;
+    }
+
+    [data-row="21"] {
+        top: 6410px;
+    }
+
+    [data-row="20"] {
+        top: 6090px;
+    }
+
+    [data-row="19"] {
+        top: 5770px;
+    }
+
+    [data-row="18"] {
+        top: 5450px;
+    }
+
+    [data-row="17"] {
+        top: 5130px;
+    }
+
+    [data-row="16"] {
+        top: 4810px;
+    }
+
+    [data-row="15"] {
+        top: 4490px;
+    }
+
+    [data-row="14"] {
+        top: 4170px;
+    }
+
+    [data-row="13"] {
+        top: 3850px;
+    }
+
+    [data-row="12"] {
+        top: 3530px;
+    }
+
+    [data-row="11"] {
+        top: 3210px;
+    }
+
+    [data-row="10"] {
+        top: 2890px;
+    }
+
+    [data-row="9"] {
+        top: 2570px;
+    }
+
+    [data-row="8"] {
+        top: 2250px;
+    }
+
+    [data-row="7"] {
+        top: 1930px;
+    }
+
+    [data-row="6"] {
+        top: 1610px;
+    }
+
+    [data-row="5"] {
+        top: 1290px;
+    }
+
+    [data-row="4"] {
+        top: 970px;
+    }
+
+    [data-row="3"] {
+        top: 650px;
+    }
+
+    [data-row="2"] {
+        top: 330px;
+    }
+
+    [data-row="1"] {
+        top: 10px;
+    }
+
+    [data-sizey="1"] {
+        height: 300px;
+    }
+
+    [data-sizey="2"] {
+        height: 620px;
+    }
+
+    [data-sizey="3"] {
+        height: 940px;
+    }
+
+    [data-sizey="4"] {
+        height: 1260px;
+    }
+
+    [data-sizey="5"] {
+        height: 1580px;
+    }
+
+    [data-sizey="6"] {
+        height: 1900px;
+    }
+
+    [data-sizey="7"] {
+        height: 2220px;
+    }
+
+    [data-sizey="8"] {
+        height: 2540px;
+    }
+
+    [data-sizey="9"] {
+        height: 2860px;
+    }
+
+    [data-sizey="10"] {
+        height: 3180px;
+    }
+
+    [data-sizey="11"] {
+        height: 3500px;
+    }
+
+    [data-sizey="12"] {
+        height: 3820px;
+    }
+
+    [data-sizey="13"] {
+        height: 4140px;
+    }
+
+    [data-sizey="14"] {
+        height: 4460px;
+    }
+
+    [data-sizey="15"] {
+        height: 4780px;
+    }
+
+    [data-sizey="16"] {
+        height: 5100px;
+    }
+
+    [data-sizey="17"] {
+        height: 5420px;
+    }
+
+    [data-sizey="18"] {
+        height: 5740px;
+    }
+
+    [data-sizey="19"] {
+        height: 6060px;
+    }
+
+    [data-sizey="20"] {
+        height: 6380px;
+    }
+
+    [data-sizey="21"] {
+        height: 6700px;
+    }
+
+    [data-sizey="22"] {
+        height: 7020px;
+    }
+
+    [data-sizey="23"] {
+        height: 7340px;
+    }
+
+    [data-sizex="1"] {
+        width: 416px;
+    }
+
+    [data-sizex="2"] {
+        width: 852px;
+    }
+
+    [data-sizex="3"] {
+        width: 1288px;
+    }
+</style>
+
+
+
+
+
+
+@*@section Scripts
+    {
+
+
+
+    }
+
+    @section Style
+    {
+
+    }*@

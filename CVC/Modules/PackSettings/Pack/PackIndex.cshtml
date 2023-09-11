@@ -1,0 +1,16 @@
+﻿@{
+    ViewData["Title"] = Serenity.LocalText.Get("Db.PackSettings.Pack.EntityPlural");
+}
+
+<div id="GridDiv"></div>
+<input type="hidden" id="hdnPackImportAccess" />
+<script type="text/javascript">
+    debugger;
+    $("#hdnPackImportAccess").val('@ViewBag.IsModifyPermission')
+
+    jQuery(function () {
+        new CVC.PackSettings.PackGrid($('#GridDiv'), {}).init();
+
+        Q.initFullHeightGridPage($('#GridDiv'));
+    });
+</script>

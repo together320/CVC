@@ -1,0 +1,360 @@
+﻿@{
+    ViewData["Title"] = Serenity.LocalText.Get("Db.Report.AuditLog.EntityPlural");
+}
+
+<div id="GridDiv"></div>
+
+<script src="~/Scripts/site/CVC.Web.js"></script>
+<script type="text/javascript">
+
+    jQuery(function () {
+        new CVC.Report.AuditLogGrid($('#GridDiv'), {}).init();
+
+        Q.initFullHeightGridPage($('#GridDiv'));
+    });
+
+</script>
+
+<script>
+    var myoptions;
+    $(document).ready(function () {
+     
+        //setTimeout(function () {
+        //    debugger;
+          
+
+        //    $('#ui-datepicker-div').datepicker("destroy");
+        //    $("#ui-datepicker-div").datepicker({ minDate: 0 });
+
+        //    // $(".s-DateEditor").datepicker("destroy");
+        //    // $(".s-DateEditor").datepicker({ minDate: 0 });
+        //}, 0);
+        //$(".export-pdf-button").click(function () {
+
+        //});
+    });
+    //function Save() {
+    //    debugger;
+    //    SaveAuthenticationToAuditLog("","Download Audit Log Report","","");
+    //    //alert("ggg");
+    //   // exportToPdf1(myoptions);
+    //}
+
+
+    //function exportToPdf1(options) {
+    //    // myoptions = options;
+    //    debugger
+    //    var dateEmpty = false;
+    //    var i = 0;
+    //    var fromDate = "";
+    //    var toDate = "";
+    //    $(".hasDatepicker").each(function () {
+
+    //        if ($(this).val() == "") {
+    //            dateEmpty = true;
+    //        }
+    //        if (i == 0) {
+    //            fromDate = ($(this).val());
+    //        }
+    //        else {
+    //            toDate = ($(this).val());
+    //        }
+    //        i++;
+
+    //    });
+    //    if (dateEmpty) {
+
+    //        Q.alert("Please select appropriate date range for print");
+    //        return false;
+    //    }
+    //    else {
+    //        if ($.datepicker.parseDate('dd/mm/yy', fromDate) <= $.datepicker.parseDate('dd/mm/yy', toDate)) {
+
+    //        }
+    //        else {
+
+    //            Q.alert("From Date should be less than or equalto To Date");
+    //            return false;
+
+    //        }
+    //    }
+
+
+    //    var reportDetails;
+
+    //    var machine = {};
+    //    $.ajax({
+    //        async: false,
+    //        type: "POST",
+    //        url: Q.resolveUrl('~/api/Batch/GetReportDetails'),
+    //        data: JSON.stringify(machine),
+    //        contentType: "application/json; charset=utf-8",
+    //        dataType: "json",
+    //        success: function (response) {
+    //            reportDetails = response;
+
+    //        },
+    //        failure: function (response) {
+    //            alert(response.responseText);
+
+    //        },
+    //        error: function (response) {
+    //            alert(response.responseText);
+
+    //        },
+    //        complete: function (response) {
+    //            //  alert("complete");
+    //        }
+    //    });
+
+    //    if (reportDetails.Serial == null) {
+    //        reportDetails.Serial = ""
+    //    }
+
+    //    if (reportDetails.Model == null) {
+    //        reportDetails.Model = ""
+    //    }
+    //    var g = options.grid;
+    //    if (!options.onViewSubmit())
+    //        return;
+    //    includeAutoTable();
+    //    var request = Q.deepClone(g.view.params);
+    //    request.Take = 0;
+    //    request.Skip = 0;
+    //    var sortBy = g.view.sortBy;
+    //    if (sortBy != null)
+    //        request.Sort = sortBy;
+    //    var gridColumns = g.slickGrid.getColumns();
+    //    gridColumns = gridColumns.filter(function (x) { return x.id !== "__select__"; });
+    //    request.IncludeColumns = [];
+    //    for (var _i = 0, gridColumns_1 = gridColumns; _i < gridColumns_1.length; _i++) {
+    //        var column = gridColumns_1[_i];
+    //        request.IncludeColumns.push(column.id || column.field);
+    //    }
+    //    Q.serviceCall({
+    //        url: g.view.url,
+    //        request: request,
+    //        onSuccess: function (response) {
+    //           // hideLoader();
+    //            var doc = new jsPDF('l', 'pt');
+    //            var srcColumns = gridColumns;
+    //            var columnStyles = {};
+    //            var columns = toAutoTableColumns(srcColumns, columnStyles, options.columnTitles);
+    //            var keys = columns.map(function (x) { return x.dataKey; });
+    //            var entities = response.Entities || [];
+    //            var data = toAutoTableData(entities, keys, srcColumns);
+    //            doc.setFontSize(options.titleFontSize || 10);
+    //            doc.setFontStyle('bold');
+    //            var reportTitle = options.reportTitle || g.getTitle() || "Report";
+    //            doc.autoTableText(reportTitle, doc.internal.pageSize.width / 2, options.titleTop || 25, { halign: 'center' });
+    //            var totalPagesExp = "{{T}}";
+    //            var pageNumbers = options.pageNumbers == null || options.pageNumbers;
+    //            var autoOptions = $.extend({
+    //                margin: { top: 60, left: 25, right: 25, bottom: pageNumbers ? 25 : 30 },
+    //                startY: 60,
+    //                styles: {
+    //                    fontSize: 8,
+    //                    overflow: 'linebreak',
+    //                    cellPadding: 2,
+    //                    valign: 'middle'
+    //                },
+    //                columnStyles: columnStyles
+    //            }, options.tableOptions);
+    //            if (pageNumbers) {
+    //                var footer = function (data) {
+    //                    var str = data.pageCount;
+    //                    // Total page number plugin only available in jspdf v1.0+
+    //                    if (typeof doc.putTotalPages === 'function') {
+    //                        str = str + " / " + totalPagesExp;
+    //                    }
+    //                    doc.autoTableText(str, doc.internal.pageSize.width / 2, doc.internal.pageSize.height - autoOptions.margin.bottom, {
+    //                        halign: 'center'
+    //                    });
+    //                };
+    //                autoOptions.afterPageContent = footer;
+    //            }
+    //            // Print header of page
+    //            if (options.printDateTimeHeader == null || options.printDateTimeHeader) {
+
+
+    //                var beforePage = function (data) {
+    //                    doc.setFontSize(options.titleFontSize || 10);
+    //                    doc.setFontStyle('bold');
+    //                    doc.autoTableText(reportTitle, doc.internal.pageSize.width / 2, options.titleTop || 25, { halign: 'center' });
+
+    //                    doc.setFontStyle('normal');
+    //                    doc.setFontSize(8);
+    //                    // Date and time of the report
+    //                    doc.autoTableText("Equipment Name: " + reportDetails.MachineName, doc.internal.pageSize.width - autoOptions.margin.right, 10, {
+    //                        halign: 'right'
+    //                    });
+
+    //                    //doc.autoTableText("Serial Number: " + reportDetails.Serial, doc.internal.pageSize.width - autoOptions.margin.right, 20, {
+    //                    //    halign: 'right'
+    //                    //});
+
+    //                    //doc.autoTableText("Model Number: " + reportDetails.Model, doc.internal.pageSize.width - autoOptions.margin.right, 30, {
+    //                    //    halign: 'right'
+    //                    //});
+    //                    //EquipmentId
+    //                    doc.autoTableText("Equipment ID: " + reportDetails.Serial, doc.internal.pageSize.width - autoOptions.margin.right, 20, {
+    //                        halign: 'right'
+    //                    });
+
+
+    //                    //changes added By Vinayak On 31.07.2018
+
+    //                    doc.autoTableText("Page Number: " + doc.internal.getNumberOfPages() + " / " + totalPagesExp, doc.internal.pageSize.width - autoOptions.margin.right, 30, {
+    //                        halign: 'right'
+    //                    });
+
+    //                    //changes ended By Vinayak On 31.07.2018
+
+
+
+    //                    doc.autoTableText(reportDetails.comname, autoOptions.margin.left + 45, 10, {
+    //                        halign: 'left'
+    //                    });
+
+    //                    doc.autoTableText(reportDetails.address, autoOptions.margin.left + 45, 20, {
+    //                        halign: 'left'
+    //                    });
+
+    //                    //doc.addImage('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3NTc3Nzc3NjU3Ny01Nzc3NzUuNzUrLTc4LS01LzU1ODAvNzY3NS03KzU1KzU3LS0tN//AABEIACgAKAMBEQACEQEDEQH/xAAaAAEBAQADAQAAAAAAAAAAAAAGBQQCAwcB/8QAMxAAAQMCAgcFBwUAAAAAAAAAAQIDBAURABIGBxMhMVGRIkFhcaEUFSMyQmKBFiSxwdH/xAAbAQADAQEAAwAAAAAAAAAAAAAEBQYDAgABB//EAC0RAAEDAgQEBAcBAAAAAAAAAAEAAgMEEQUSITEGEyJRMnGRoRUjM0FhwfAU/9oADAMBAAIRAxEAPwAvpdHdn6XswkO3U7smmwTuQVG393xpiUvLJd9ghKJvywl8fVJBER1EyqSFSiew4ygJSgeKTe/UYh5eJnZ+lmiaCmFrqVI1R1BLlo9WhuI5uNrQegvgtnE8JHUyy4NO4LPN1W1KHS5koymZMhlKVtMRwbuAfPe/fbgBxxtFxBDLK1gFgd146nIChaEry1R5vN2XI5VbmQR/pwzrBduYoCpb0KpWoz9I0xFbmRnpMVCRLaDPC6bJQFn6U57XOCcSc2V74GnVe6L6Qcvg1m6Th8ul2EUE32Xs3ZHhe9/XCY4DRZb5fdGCdyvo1sL91Fxyir9tzZAtK/25Va/HiDbfl3+eFx4bZzNH9PutRUm2ynxtbFXRIC5VOgus33ttZkKt4Ek+owW7h6C1mGxXAqCsmh1OiLm1iXFlKdbjpSmPZOUFtw3ufuFgkjnfjgmunka1jCN/0hJ23icU+j02JUJWxmKKkTaa9GWzySlwEqB7j8T0GMMfnmgqXyAeEjX+8l1QAGJrUMkap6wmZkjT4TkUnc+4VJWB4oANz5HpjNnEVOY7uFndkSad104XoZTf0crR9K8rQ7ftSgMwevfaH87rct2EbcWmNZzyNO34W3KaG5V5yzqy0jXUBGeRGaj37UwOhSLcwn5ieQIHnikdj1I2LMDc9kOIH7J7Op0GlNvMxbJDMGPDQjvtnWvMfE8euE0VVLUuYXdys6zIyItXQxLjQqtAfkvJbIcUjf3hYym/IXsfxi14nijkoyB4kvwpkvNzW6UzffMdhTiWXninds2QCo9SB64+VRRB8gaTZUV+yBVCvUb3jZ7R1oykEo2LzyBvJubtC4Kr772J8cV8OFycnMJ7A+vruvYp2k3Ka0+RJks7WXEVDWrg2twKNu47uHliVqYGRy8tjsy80BQWWoyK1OmFeZL742QO6zaBlT1sT5EYp4GiOmawDZT1a7mS2WbQ2EKnpTDbk/FRmU47n33CUnd1thrE500vXqqqoa2KCwSaLNqOj7T7FSSqY3Bs24Ui72X6XOSkqTY34g3B4XwgxLDWGfK3QnZKWyubquCtZGjiU5i7JSrvBjquMC/A624tt5rv/S1Ea/p9NqclxulBUSBkKM7iRtXOZ+3+cU+EcORNs+fUrKSZ7tlPhVp+O20H0B9u1rk9tI8+/wDONKqkYJHALSehbIxsjRYr/9k=', 'jpg', autoOptions.margin.left, 10, 40, 40);
+    //                    doc.addImage('data:image/' + reportDetails.logotype + ';base64,' + reportDetails.logo, reportDetails.logotype, autoOptions.margin.left, 10, 40, 40);
+    //                };
+
+    //                var afterPage = function (data) {
+    //                    doc.setFontStyle('normal');
+    //                    doc.setFontSize(8);
+    //                    // Date and time of the report
+    //                    doc.autoTableText("Report Generated By:" + reportDetails.generatedby, autoOptions.margin.left, doc.internal.pageSize.height - 35, {
+    //                        halign: 'left'
+    //                    });
+    //                    doc.autoTableText("Generation Date Time:" + Q.formatDate(new Date(), "dd-MM-yyyy HH:mm"), autoOptions.margin.left, doc.internal.pageSize.height - 20, {
+    //                        halign: 'left'
+    //                    });
+
+
+    //                    doc.autoTableText("Checked By:_________________", doc.internal.pageSize.width - autoOptions.margin.right, doc.internal.pageSize.height - 35, {
+    //                        halign: 'right'
+    //                    });
+    //                    doc.autoTableText("Report Approved By:_________________", doc.internal.pageSize.width - autoOptions.margin.right, doc.internal.pageSize.height - 20, {
+    //                        halign: 'right'
+    //                    });
+    //                };
+    //                autoOptions.afterPageContent = afterPage;
+    //                autoOptions.beforePageContent = beforePage;
+    //            }
+    //            doc.autoTable(columns, data, autoOptions);
+    //            if (typeof doc.putTotalPages === 'function') {
+    //                doc.putTotalPages(totalPagesExp);
+    //            }
+    //            if (!options.output || options.output == "file") {
+    //                var fileName = options.fileName || options.reportTitle || "{0}_{1}.pdf";
+    //                fileName = Q.format(fileName, g.getTitle() || "report", Q.formatDate(new Date(), "yyyyMMdd_HHmm"));
+    //                doc.save(fileName);
+    //                return;
+    //            }
+    //            if (options.autoPrint)
+    //                doc.autoPrint();
+    //            var output = options.output;
+    //            if (output == 'newwindow' || '_blank')
+    //                output = 'dataurlnewwindow';
+    //            else if (output == 'window')
+    //                output = 'datauri';
+    //            doc.output(output);
+
+
+    //        }
+
+    //    });
+
+    //}
+    //function includeAutoTable() {
+    //    includeJsPDF();
+    //    if (typeof jsPDF === "undefined" ||
+    //        typeof jsPDF.API == "undefined" ||
+    //        typeof jsPDF.API.autoTable !== "undefined")
+    //        return;
+    //    var script = $("jsPDFAutoTableScript");
+    //    if (script.length > 0)
+    //        return;
+    //    $("<script/>")
+    //        .attr("type", "text/javascript")
+    //        .attr("id", "jsPDFAutoTableScript")
+    //        .attr("src", Q.resolveUrl("~/Scripts/jspdf.plugin.autotable.min.js"))
+    //        .appendTo(document.head);
+    //}
+    //function includeJsPDF() {
+    //    if (typeof jsPDF !== "undefined")
+    //        return;
+    //    var script = $("jsPDFScript");
+    //    if (script.length > 0)
+    //        return;
+    //    $("<script/>")
+    //        .attr("type", "text/javascript")
+    //        .attr("id", "jsPDFScript")
+    //        .attr("src", Q.resolveUrl("~/Scripts/jspdf.min.js"))
+    //        .appendTo(document.head);
+    //}
+
+    //function toAutoTableColumns(srcColumns, columnStyles, columnTitles) {
+    //    return srcColumns.map(function (src) {
+    //        var col = {
+    //            dataKey: src.id || src.field,
+    //            title: src.name || ''
+    //        };
+    //        if (columnTitles && columnTitles[col.dataKey] != null)
+    //            col.title = columnTitles[col.dataKey];
+    //        var style = {};
+    //        if ((src.cssClass || '').indexOf("align-right") >= 0)
+    //            style.halign = 'right';
+    //        else if ((src.cssClass || '').indexOf("align-center") >= 0)
+    //            style.halign = 'center';
+    //        columnStyles[col.dataKey] = style;
+    //        return col;
+    //    });
+    //}
+    //function toAutoTableData(entities, keys, srcColumns) {
+    //    var el = document.createElement('span');
+    //    var row = 0;
+    //    return entities.map(function (item) {
+    //        var dst = {};
+    //        for (var cell = 0; cell < srcColumns.length; cell++) {
+    //            var src = srcColumns[cell];
+    //            var fld = src.field || '';
+    //            var key = keys[cell];
+    //            var txt = void 0;
+    //            var html = void 0;
+    //            if (src.formatter) {
+    //                html = src.formatter(row, cell, item[fld], src, item);
+    //            }
+    //            else if (src.format) {
+    //                html = src.format({ row: row, cell: cell, item: item, value: item[fld] });
+    //            }
+    //            else {
+    //                dst[key] = item[fld];
+    //                continue;
+    //            }
+    //            if (!html || (html.indexOf('<') < 0 && html.indexOf('&') < 0))
+    //                dst[key] = html;
+    //            else {
+    //                el.innerHTML = html;
+    //                if (el.children.length == 1 &&
+    //                    $(el.children[0]).is(":input")) {
+    //                    dst[key] = $(el.children[0]).val();
+    //                }
+    //                else if (el.children.length == 1 &&
+    //                    $(el.children).is('.check-box')) {
+    //                    dst[key] = $(el.children).hasClass("checked") ? "X" : "";
+    //                }
+    //                else
+    //                    dst[key] = el.textContent || '';
+    //            }
+    //        }
+    //        row++;
+    //        return dst;
+    //    });
+    //}
+</script>

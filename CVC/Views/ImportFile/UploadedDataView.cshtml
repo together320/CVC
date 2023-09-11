@@ -1,0 +1,155 @@
+﻿@model CVC.ViewModels.ImportViewModel
+@using System.Data
+
+
+<div class="content-border">
+    <div class="grid-title"><div class="title-text">@ViewBag.FormattedFormName </div></div>
+    <div class="grid-title">
+        <div class="title-text">Uploaded Data View</div>
+        <ul class="breadcrumb-list">
+            <li><a href="@ViewBag.PreviousPageUrl">@ViewBag.FormattedFormName </a></li>
+            <li><a href="/ImportFile/Index?name=@ViewBag.FormName">Browse and Upload View</a></li>
+            <li><a href="">Uploaded Data View</a></li>
+        </ul>
+    </div>
+
+    @if (Model != null)
+    {
+        <table id="tblUploadedData" class="displays table-striped table-bordered nowrap cell-border" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    @foreach (DataColumn column in Model.dtUploadedData.Columns)
+                    {
+                        <th class="demoTh">@(column.ColumnName == "serialNumber" ? "Sr.No." : column.ColumnName)</th>
+                    }
+
+                </tr>
+            </thead>
+            <tbody>
+                @{var dt = @Model.dtUploadedData;}
+
+                @for (int i = 0; i < dt.Rows.Count; i++)
+                {
+
+                    <tr>
+                        @foreach (DataColumn column in Model.dtUploadedData.Columns)
+                        {
+                            <td>
+
+                                @if (column.ColumnName == "serialNumber" || column.ColumnName=="Error Message")
+                                {
+                                    @dt.Rows[i][@column.ColumnName]
+
+                                }
+                                else
+                                {
+                                    <input type="text" onchange="updateDataTableCache($(this))" class="form-control" value="@dt.Rows[i][@column.Caption]" columnName="@column.Caption" serialNumber="@dt.Rows[i]["serialNumber"]" rowIndex="@i" />
+                                }
+                            </td>
+                        }
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    <button type="button" style="display: none; text-align:left" id="btnBackTabNav" class="btn btn-primary">
+        <i class="far fa-share-square"></i><span>Back</span>
+    </button>
+    <div class="row btm_btnWrap" id="divNext">
+        <input type="button" id="btnBack" class="btn btn-md btn-default" value="Back" onclick="back()" />
+
+        <input type="button" id="btnNext" class="btn btn-md btn-primary" value="Next" onclick="uploadedDataViewNext()" />
+
+    </div>
+</div>
+<script type="text/javascript">
+    var previousPageUrl = "";
+    var errorRecordCount = 0;
+    $(document).ready(function () {
+        debugger;
+       previousPageUrl = '@ViewBag.PreviousPageUrl'
+        errorRecordCount = '@TempData["FailedRecordCount"]';
+        errorRecordCount = parseInt(errorRecordCount);
+        if (errorRecordCount > 0) {
+            $("#btnNext").attr("value", "Import");
+            $('#tblUploadedData').DataTable({
+                "order": [[0, "asc"]],
+                "pageLength": 15,
+                "scrollX": true,
+            });
+
+        }
+        else {
+            $('#tblUploadedData').DataTable({
+                "order": [[0, "asc"]],
+                "pageLength": 15,
+                "scrollX": true,
+                "columnDefs": [
+                    {
+                        "targets": [1],
+                        "visible": false,
+                        "searchable": false
+                    },
+                ]
+
+            });
+
+        }
+
+    });
+
+    function updateDataTableCache(element) {
+        $.ajax({
+            url: Q.resolveUrl('~/ImportFile/UpdateDataTableCache'),
+            type: 'POST',
+            data: {
+                "rowIndex": element.attr("rowIndex"), "serialNumber": element.attr("serialNumber"), "columnName": element.attr("columnName"), "columnValue": $(element).val()
+            },
+            dataType: 'json',
+            success: function (data) {
+                //if (!data.Item1) {
+                //    $("#infoModalBody").text(data.Item2);
+                //    $("#modal-info").modal('show');
+                //}
+            },
+            error: function (data) {
+            }
+        });
+
+    }
+
+    function uploadedDataViewNext() {
+
+        debugger;
+        if (errorRecordCount > 0) {
+            $('.loader').removeClass('hidden');
+
+            $.ajax({
+                url: Q.resolveUrl('~/ImportFile/ImportData'),
+                type: 'POST',
+               // data: { "lstColumnFieldMappingViewModel": columnFieldMappingArray },
+                dataType: 'json',
+                success: function (data) {
+                    $('.loader').addClass('hidden');
+                    window.location.href = "/ImportFile/SummaryView";
+
+                },
+                error: function (x, y, z) {
+                }
+            });
+
+        }
+        else {
+            window.location.href = "/ImportFile/ColumnFieldMappingView";
+
+        }
+
+    }
+
+    function back() {
+        window.location.href = '/ImportFile/Index?name=@ViewBag.FormName';
+
+    }
+
+</script>

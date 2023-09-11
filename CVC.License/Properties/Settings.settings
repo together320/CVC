@@ -1,0 +1,18 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="CVC.License.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="RSAPrivateFile" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">D:\Lijo\RSA\RSAPRIVATEKEY.xml</Value>
+    </Setting>
+    <Setting Name="RSAPublicFile" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">D:\Lijo\RSA\RSAPUBLICKEY.xml</Value>
+    </Setting>
+    <Setting Name="AESKEY" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DUMMYPASSWORD</Value>
+    </Setting>
+    <Setting Name="LicenseSaveFilePath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">D:\Lijo\LicenseFiles</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

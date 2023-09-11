@@ -1,0 +1,1612 @@
+﻿<!DOCTYPE html>
+@{
+    Func<string, IHtmlString> json = x => new HtmlString(Serenity.JSON.Stringify(x));
+    var hideNav = Request["hideNav"] == "1";
+    var logged = Serenity.Authorization.Username;
+    var themeCookie = Request.Cookies["ThemePreference"];
+    var theme = themeCookie != null && !themeCookie.Value.IsEmptyOrNull() ? themeCookie.Value : "blue";
+    var rtl = System.Globalization.CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft;
+    var user = (UserDefinition)Serenity.Authorization.UserDefinition;
+    var userImage = (user == null || string.IsNullOrEmpty(user.UserImage)) ? "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAMAAAAPdrEwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAMAUExURT0oHC0tLTIwLzQzMzo2NDs4Njo6OkQrHUMtIEkuIEYwIkgyI0o0KkI7NkM+O0g/O1M3K1c7KUFAPkpBPFdAK1pCLVFEPlhANWJHOWJJMWpONGlQNnJZO0FBQU5EQEpJRkxLS1JHQVNKRVBOTF1OR1JRTl5QSlFRUVhWVFlYVltbWmJUTGtRRWpWTGBeWmtbUXVcQXZbT3hURGNhXnhhRnVkW3hhVntlWmRkZG1qZWxranBsZ3FuaXRxbHt0bXNzc3l2cHx4coVQOIBcSopbRoVxWpRwX55yXYNtYYtvYYxxZIN/eZV1ZZV7bZt6aqZhQ65hQb1oQ6J9a+w4Puw9QsdlPMhnPsVrRcVuSclrQ8RxTMxyTMV1UsR4VsF7XMt2Uc55U859WtB6VdF9WcB/YexGS+5cYfBkafFtcfF3evJ4fIWBe4mFfpSEcJWHeZ6Pf6mDb6mKer6Far2IbrCJdbyMdLiPerCQfruRfM+CX9OAXMCAYsCSfNWFYdaJZteKaNiMatmQbtuTc9qXe92Yd96ZeuCdfYSEhIuHgI2JgoqKipKNhpmNhJWRiZmUjJ6ZkJ2dnaKWjKGck62dlLWTgbqXhLmZh7ibirifkKWgl6ahmKiimaqkm6umnKymna6onrailLWpnbiplbusmq+poKmpqbCqoLKsorOtpLWroLSsorSupLWwprexqLm5ucOXgMaZgcuchdKdg8iijcaol82mkdCgh9Ojit+gg9mmjdypjtKqld2qkNiumN6znMS9tOqKiuGfgPOChvSMj/SNkOKjhOOmieWqjOWtkeKumOiukeawlOG1numyluq1muy4ne28o+u+qsPBv8vBtsvFv+/Apu3CrezEsu/It/DAp/DBqPHHsfHJtPLNusPDw8rGwc7JwtbW1tjU0d/b19vb2+/RxeDb1+nd1/nCw/nKzPPTwvTXyPTZy/Xd0fvW2Pva2/fg0/jl2+Tj4+jk4evr6/fo4fnr5fzt7Pvx7PTz8/318/349v7+/gAAAAAAAAAAAIt9dAgAAAEAdFJOU////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////wBT9wclAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAGXRFWHRTb2Z0d2FyZQBwYWludC5uZXQgNC4wLjEzNANbegAAClFJREFUaEO1mX90FFcVx0k3efVHGzWxVbRT1tJ0YKNHNHrYxNJW688ey6mEFjYbSdxFqqb+KBSNsRuW0Y1GJFREsYCEtJJ4slo5WKxiK+LpZNZt3+zj6Iaz20DLkfoTrKQcCun84b1v3mzm1+6SP/ye/Jh9797P3Ln3vjczyby0v/YQqYwIqIZIOB+QtwlzP5VDp2+uxA7AJM43BFpHhb1XvujgzVt3P9xggvzE0ZwtkYbtwskjXzQJcKGrvwifE+yh7WPCzyl/NMYFl42u/uJUwa4JBHcLR4d80U3gg9UyARXEDWoCAbLFJ3Bf9AerMi2hIZAJ2SpcbfJFP1whFS7h9QVIbdMub6e40WNbbmlZ1MQ7wFSVC4BpjDpQs/AnglCSJ+ptmONAjfAEVWELA3Kb8J+VNyHDaGh2nulkrjy3PGOeLvHJ9RB6lRacybZ3izjCMXsPtQr3ktzobVtH07ehAw9csAOCwz+KQ0vcAkXchfSgF5GewVIVxW9B8VUpM2RQICx5EjLWUkeg6Ja9+bOyuI0ktQiCJTd6SAIypAC2TZRY7ILhVS0uF24iSUGBsORGjw6iFdjD9oROwhMxDvH9q+bGQzfhB7QAG4Gw5EnIfbOghR9vfkMtCE4yezZLAL76a6x4Px8y0XsFQsiDbuVW6Pt+ViwWC4VikR26c2lzc/MNjfW1V/BoQXWN796B8+wGtDWvrBpaFujAUjYJrkifxAP8ZuzZZ5/63aEdO3b86vfIxblDHI3sauixBWbMpPlYEQI2/fEAvyfzpTFLheL9tdwe3FyN7Ub/FO5baFn/lBsC8hkqFvN3inRXK+NetIF0LBeOlyG2lPeSdL1AWHKj99RxdGNO+F2OnmzEsIksEJY8aL4XBZabVbo85XprwKfqatzNt6K6zFzQOr0W0e6tz43exWvSTOcUNf0kLCrSIxCWvGiIOrBijuivYkBDAmHJm2tQ4MAc0Qcw6l0CYckXfcVv544mVW8Fezma/j/Qww1gFJgjWn8CEhKohh7lbU3pXJZMjh6uhVy7n83caHjeI3W1mOuCriQSsVgskVSOajqjiuBszuXoREpJxGOxeKJ/Ai5Pp4dxpVdFh7D5HtRzTIncPat7IhHVRBf6IvaJu7szgM40EqmhKvoDmJHllMYi8ZSmqQPfUpJJjFCQYTfqx3CTipJSYT4Zjag6feYdRApWRfcAmSzPJhSNZrNZSvELfmd1QQY2HzXHYUZNDFDaTKSmyujxjR13QUECD2SE46zsaKd0OMtSIr2lY82IwJhyon8cVQ/WQUZ6KdQNvNTN3V2dnV2JhJq1dSNVEp/p6uzq+npKg6j1AqV0OZHepSXWC4wpJ3rj5mK+HtAHqJ5nTE+9+IO3vfbK188/dbZvNuhiXvum8b35865805K//2mCsSID9ANEuqOY7RAYU070+gGmvhPQT+CaYZmLxve/fMu811z3vHEmI7io38wYX/rLVfNet2TaeBHGEd1LGj6m6xGBMeVEb9icinwYbjOHKc0XpwzD+Ov75r/57R+5ZBhnBBb1imG8sOSaa677IhhcyMOKofQAIXd109UCY8qJ7o3TrgeJVAfGkNupf52befnRR45cMmbOCirX1AXD+Nujj/z50oWzJ+Ajon9JpE9NDHQKjCknel+koByFFgFjc6Uz/fjx41OeDYWxY8ePH9Pz/IOO6PrG7kKyUhlHVmtZtVmqB2NRN/GYg7KdgD81iEeHAqJ7yXsUFt0pMKac6PQ3NuUyn5AItLVAzz56FKg4cAmrSFeQr2h09bigmHKhd0YY660nvwZr9/MMyxSnxKFDHH37FU+y5NqK6PHVKjsswZLx7thMq4B+67U6izjz4UanN/bl6U31K3zQehk0plq76g5ddeXDg94XYbBql4K5bf1x6dqUH5pXMfXGg3rfBoGw5EaPd2ThdnRjWTRzlyCP6L73ZvTIPoGw5Ean16g52nj9M2DvyAijE1mk5iZ0Z6Z4qqMfpe7+8EGvTTHlQ/XQfU60oqqZqannijl1oHRT4MK1qN4T1/Xq6PWbc9GDVyPafufN909MTBSfg7RktQExZgrzkVQSKdpRFb2xn+nsdg08HMlWs4oCz5i5o6mc42p4FaM5pmmdVdE/ihaKk4oCDmKLEMoXdbhXak4wT7WuxuBAWSsAJXnQI6tSTItFAe3t7JTm7g+e6mQ0ldNdGwjIg07vXL2qY2OHCi7uxxwPF4T56Nq5ZtWq9e58+KDT4yPj6d4EuLg7GziOHIGw9dQ1cK3OOy6XHxq+R6Jwm/ZuI+4Bju77oennlg+aaz0W0spIAZAFPZPJFwqUv4rkrXNAPjRP1wmVQ+/DQlo9oqWSm7pj8XhcTSQ3JZIDqiqWDQbd3ytc3CqHHl+DYbsSwKy3J6ug0B/ap8sEXRYNWyBk21NIpxjkI+FpOktl0ekN2CT2sAssByh7R0LQKdetxabyaJ4S+zbHqKaq9vaDTKudPl0nVB6dHumER1B7kPgXBtuyge1D63Jv0jZVQI972A4hubtsokEV0PBIHIGclGPndDVSru+4KqHTvbG+BNX92YwOdLvv4U5VRD8ep0pM1XM++1Ium+zLRh8Xhr6qhD5iTMKSiCk+OclpXZCrCeMFYeqnCuifnzeMs9DJSQjcuSwZjlF6wjAu/UIY+6gC+gg8PhvncAOKJ+zvG0WWiqaorv8b558Xxj4qgx4b3t5zEl2NC8CmqWhStxLO1Fg/bl3/5dMnW3q2DbvfvUz5oYeHli2WgqHT3Ne4iNtbVunqx72poKdiCbwDMXh8R50Py5K0aNlW19/4UB702JYWwIZJuE2gDWNKpxD6QDwai0VjCrxzUTo5I+amQ22yHA4FpdBg5df/0aHWoBxuC4cBHd4vvKGYTMe0UE3De4+uszNiwjD2y2E5GEYX+LXVQbejRwflYAtg0RLQbfB2JHTxBLNp6qIYhg4JyxA1xoIKLrzPBreht+HpeQAgKRwOPST8UedEEUFm/Uzth2wE5RB6taJbMDhUqmkJvXcZZFiAQyGZYA5PCQDXGXgsA515VXxGTYcALQVlGencOSS17RFECz0scgyTYCjLUigMXrMpQZ07MWWPGHQrWJpoEKeHW2Xr3ygWuk2CFADcBAMayiPL3xUIUy99bt0/xaGph9AyTPAnF0+MJLWYORHoIQlSBlUuKRjkH2a7xJh5emV7+8o/wquupZPcMjSLluXFLYuDrdIWzjTRo01QBUlMcwWJeR5zSYJeWtfOta6UpNPcAC/QLrx4ifeJie6BiKG6YpaLmKmx1uT5P5jk9nvPw66FOh2SuUPQi5b5P8Q4egy7TlhagssMSiQUCnPS+Vdf+Swnr4Rsv4wj03hVhEhBq4olQcaDwxZ6ENAw5LDh/zEILYb1AOxpYP2Doz/PsXAu6E0QWbDAGXQQ2zEsf0egxxZaLecQMSsp3zr9baDP3MvRK/+D7MdOYduhpAXiQIiHFw43/cxEb4f88HGnpMWl8z1mGE9zcnv7FxBthgwKEVc6+MdQWNqeTv8P8+F3kItdpBIAAAAASUVORK5CYII=" :
+        VirtualPathUtility.ToAbsolute("~/upload/") + user.UserImage;
+}
+<!--[if IE 8]> <html lang="@UICulture" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="@UICulture" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="@UICulture" class="no-js@(hideNav ? " no-navigation" : "")">
+<!--<![endif]-->
+<head>
+
+    @*<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">*@
+    <link href="~/Content/adminlte2/dist/css/fonts_googleapis_com.css" rel="stylesheet" type='text/css'>
+    @{Html.RenderPartial(MVC.Views.Shared._LayoutHead);}
+    @RenderSection("Head", false)
+    <title>@(ViewData["Title"]) - CVC</title>
+    <link rel="stylesheet" type="text/css" href="~/Content/site/custom.min.css" />
+
+
+    <title> Index</title>
+    <style>
+        .archive-div .form-control, .restore-div .form-control {
+            height: 34px;
+            padding: 5px 12px;
+        }
+
+        .datepicker .today {
+            color: #fff !important;
+            background-color: #3c8dbc !important;
+            background-image: -webkit-gradient(linear,0 0,0 100%,from(#3c8dbc),to(#3c8dbc)) !important;
+        }
+
+        .datepicker {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px #ccc;
+            width: 300px;
+        }
+    </style>
+
+</head>
+<body id="s-@(ViewData["PageId"])Page" class="@(ViewData["BodyClass"]) fixed sidebar-mini hold-transition skin-@theme@(hideNav ? " no-navigation" : " has-layout-event")@(rtl ? " rtl" : "") sidebar-collapse">
+
+    @if (hideNav)
+    {
+        <script type="text/javascript">
+    $(function () {
+        @RenderSection("PageInitScript", false)
+    });
+        </script>
+        <div id="page-outer-nonav">
+            <div id="page-container" class="page-container-common">
+                @RenderBody()
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="scrollwrap">
+            <button class="btn scrollToBottom"><span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></button>
+            <button class="btn scrollToTop"><span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span></button>
+        </div>
+        <div class="wrapper">
+            <header class="main-header">
+                <a href="#" class="logo">
+                    <span class="logo-mini"><img src="@CVC.Modules.Common.Dashboard.DashboardCommon.GetCompanyLogo()" width="80" height="50" preserveAspectRatio="true" preventEnlarge="true" /></span>
+                    @*<span class="logo-lg"><img src="~/Content/site/images/cvcTransLogoin.png" /></span>*@
+                    <span class="logo-lg"><img src="@CVC.Modules.Common.Dashboard.DashboardCommon.GetCompanyLogo()" /></span>
+                </a>
+                <nav class="navbar navbar-static-top">
+                    @*<div>*@
+                    @*<div class="navbar-header">*@
+
+                    @*<nav class="navbar navbar-static-top" role="navigation">*@
+                    @*<a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                            <span class="sr-only">Toggle navigation</span>
+                        </a>*@
+                    <ul class="nav navbar-nav">
+                        @{Html.RenderPartial(MVC.Views.Shared.LeftNavigation, new CVC.Navigation.NavigationModel()); }
+                    </ul>
+
+                    @*</div>*@
+
+                    <div class="collapse navbar-collapse pull-right" id="navbar-collapse">
+
+                        <ul class="nav navbar-nav">
+
+                            <li class="dropdown user user-menu">
+
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+
+                                    @*<span id="date_time"></span>*@
+
+                                    <img src="@userImage" class="user-image" alt="User Image">
+                                    <span class="hidden-xs">@Serenity.Authorization.Username </span>45
+                                    <span id="date_time"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <!-- User image -->
+                                    <li class="user-header">
+
+                                        <img src="@userImage" class="img-circle" alt="User Image">
+
+                                        <p>
+                                            @*@(user != null ? user.DisplayName : "")*@
+                                        </p>
+                                    </li>
+
+                                    <!-- Menu Footer-->
+                                    <li class="user-footer">
+                                        <div class="pull-left">
+                                            <a href="~/Account/ChangePassword" class="btn btn-default btn-flat"><i class="fa fa-lock fa-fw"></i> @Texts.Forms.Membership.ChangePassword.FormTitle</a>
+                                        </div>
+                                        <div class="pull-right">
+                                            <a @*href="~/Account/Signout"*@ onclick="return LogOutConirmationMsg();" class="btn btn-default btn-flat"><i class="fa fa-sign-out fa-fw"></i> @LocalText.Get("Navigation.LogoutLink")</a>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li>
+                                <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    @*</nav>*@
+                    @*</div>*@
+                    @*</div>*@
+                </nav>
+            </header>
+
+            @*<aside class="main-sidebar">
+                <section class="sidebar">*@
+            @*<div class="user-panel">
+                    <div class="pull-left image">
+                        <img src="@userImage" class="img-circle" alt="User Image">
+                    </div>
+                    <div class="pull-left info">
+                        <p>@Serenity.Authorization.Username</p>
+                        <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                    </div>
+                </div>*@
+            @*<form action="#" method="get" class="sidebar-form">
+                    <div class="input-group">
+                        <input type="text" id="SidebarSearch" name="q" class="form-control" autocomplete="off">
+                        <span class="input-group-btn">
+                            <button type="button" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i></button>
+                        </span>
+                    </div>
+                </form>*@
+            @*<ul class="sidebar-menu" id="SidebarMenu" data-widget="tree">*@
+            @*<li class="header">MAIN NAVIGATION</li>*@
+            @*@{Html.RenderPartial(MVC.Views.Shared.LeftNavigation, new CVC.Navigation.NavigationModel()); }
+                        </ul>
+                    </section>
+                </aside>*@
+
+
+
+            <div class="row" style="background-color:#ecf0f5;padding:0px;margin:0px;">
+                <div class="content-wrapper">
+                    <div class="content" style="padding:0px;min-height:0px;">
+                        <div class="row" style="padding:0px;margin:0px;display:none" id="divbatch">
+                            <div class="row tile_count" style="padding:0px;margin:0px;">
+
+                                <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+                                    <h4><span class="count_top"><i class="fa fa-cubes"></i> Package Line</span></h4>
+                                    <h6 style="color:#797979" class="count" id="lblPackageLine"></h6>
+                                    <h4>
+                                        <span class="count_top"><i class="fa fa-cube"></i> Pack</span>
+                                    </h4>
+                                    <h6 style="color:#797979" class="count" id="lblPack"></h6>
+                                </div>
+                                <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+                                    <h4>
+                                        <span class="count_top"><i class="fa fa-cubes"></i> Batch</span>
+                                    </h4>
+                                    <h6 style="color:#797979" class="count" id="lblBatch"></h6>
+                                    <h4>
+                                        <span class="count_top"><i class="fa fa-clock-o"></i> Start Date</span>
+                                    </h4>
+                                    <h6 style="color:#797979" class="count" id="lblStartDate"></h6>
+                                </div>
+                                <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+                                    <h4>
+                                        <span class="count_top"><i class="fa fa-shopping-cart"></i> Product</span>
+                                    </h4>
+                                    <h6 style="color:#797979" class="count" id="lblProduct"></h6>
+                                    <h4> <span class="count_top"><i class="fa fa-clock-o"></i> End Date</span></h4>
+                                    <h6 style="color:#797979" class="count" id="lblEndDate"></h6>
+                                </div>
+                                <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+
+                                    <h4>
+                                        <span class="count_top"><i class="fa fa-clock-o"></i> Batch Size</span>
+                                    </h4>
+                                    <h6 style="color:#797979" class="count" id="lblTotalBottles"></h6>
+                                    <h4>
+                                        <span class="count_top"><i class="fa fa-hourglass"></i> Production Speed</span>
+                                    </h4>
+                                    <h6 style="color:#797979" class="count" id="lblProductionSpeed"></h6>
+                                </div>
+
+                                <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+                                    <h4>
+                                        <span class="count_top"><i class="fa fa-check"></i> Total Good</span>
+                                    </h4>
+                                    <h6 style="color:#797979" class="count" id="lblTotalCood"></h6>
+                                    <h4>
+                                        <span class="count_top"><i class="fa fa-ban"></i> Total Reject</span>
+                                    </h4>
+                                    <h6 style="color:#797979" class="count" id="lblTotalReject"></h6>
+                                </div>
+                                @if (Serenity.Authorization.HasPermission("Batch:Modify"))
+                                {
+
+                                <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+                                    <input type="hidden" id="hdnBatchStatus" />
+                                    <div class="row" id="divrowNewBatch" style="display:none">
+                                        <div class="col-md-10 col-sm-10 col-xs-10 pull-right">
+                                            <a href="javascript:void(0)" id="btnNewBatch" onclick="CheckBatchStatus(1);" @*onclick="newBatchClick();"*@ style="filter: alpha(opacity=65);-webkit-box-shadow: none;box-shadow: none;opacity: .65;" aria-disabled="true">
+                                                <div class="info-box btn-danger circle_arrow_down">
+                                                    <span class="info-box-icon"><i class="fa fa-circle fa-2x"></i></span>
+                                                    <div class="info-box-content">
+                                                        New Batch
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="row" id="divrowReloadBatch" style="display:none">
+                                        <div class="col-md-10 col-sm-10 col-xs-10 pull-right">
+                                            <a href="javascript:void(0)" id="btnReloadBatch" onclick="CheckBatchStatus(6);" @*onclick="newBatchClick();"*@ style="filter: alpha(opacity=65);-webkit-box-shadow: none;box-shadow: none;opacity: .65;" aria-disabled="true">
+                                                <div class="info-box btn-danger circle_arrow_down">
+                                                    <span class="info-box-icon"><i class="fa fa-circle fa-2x"></i></span>
+                                                    <div class="info-box-content">
+                                                        Reload Batch
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="row" id="divrowStartStopBatch" style="display:none">
+                                        <div class="col-md-10 col-sm-10 col-xs-10 pull-right">
+                                            <a href="javascript:void(0)" id="btnStartBatch" onclick="CheckBatchStatus(23);" @*onclick="BatchStartStop();"*@>
+                                                <div class="info-box bg-aqua">
+                                                    <span class="info-box-icon"><i id="spaniStartBatch" class="fa fa-play-circle fa-3x"></i></span>
+                                                    <div class="info-box-content" id="contentStartBatch">
+                                                        Start Batch
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="row" id="divrowEditBatch" style="display:none">
+                                        <div class="col-md-10 col-sm-10 col-xs-10 pull-right">
+                                            <a href="javascript:void(0)" id="btnEditBatch" onclick="CheckBatchStatus(5);" @*onclick="BatchStartStop();"*@>
+                                                <div class="info-box bg-aqua">
+                                                    <span class="info-box-icon"><i id="spaniEditBatch" class="fa fa-pencil-square-o fa-3x"></i></span>
+                                                    <div class="info-box-content" id="contentEditBatch">
+                                                        Edit Batch
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="row" id="divrowEndBatch" style="display:none">
+                                        <div class="col-md-10 col-sm-10 col-xs-10 pull-right">
+                                            <a href="javascript:void(0)" id="btnEndBatch" onclick="CheckBatchStatus(4);" @*onclick="EndBatch();"*@ style="filter: alpha(opacity=65);-webkit-box-shadow: none;box-shadow: none;opacity: .65;" aria-disabled="true">
+                                                <div class="info-box bg-aqua">
+                                                    <span class="info-box-icon"><i class="fa fa-stop fa-2x"></i></span>
+                                                    <div class="info-box-content">
+                                                        End Batch
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                }
+                            </div>
+                        </div>
+                        @{
+                            var moduledata = new CVC.Modules.Common.Dashboard.DashboardCommon().GetModule(Request.QueryString["module"]); }
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="box box-default collapsed-box box-solid modules-tabs">
+                                    <div class="box-header with-border ui-tabs ui-corner-all ui-widget ui-widget-content">
+                                        <ul class="ui-tabs-nav ui-corner-all ui-helper-reset ui-helper-clearfix ui-widget-header">
+                                            <li class="ui-tabs-tab ui-corner-top ui-state-default ui-tab">
+                                                @*<h3 class="box-title">*@
+                                                @foreach (var item in moduledata.Modules)
+                                                {
+
+                                                    if (item.Key == moduledata.CurrentModule)
+                                                    {
+                                                        <a onClick="MachineClick();" style="font-size:16px" class="ui-tabs-anchor active" href="/SettingsMachine?module=@item.Key">
+
+                                                            <i class="fa fa-cog">
+                                                            </i>  @item.Value
+                                                        </a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a onClick="MachineClick();" style="font-size:16px" class="ui-tabs-anchor" href="/SettingsMachine?module=@item.Key"><i class="fa fa-cog"></i>  @item.Value</a>
+                                                    }
+                                                }
+                                                @*</h3>*@
+                                            </li>
+                                        </ul>
+                                        <div class="box-tools pull-right">
+
+                                            <button id="btnbatchclick" style="background-color: #02c0ce;border-color: #02c0ce;" type="button" class="btn" onclick="BatchClick();"><font color="white">Batch</font></button>
+                                            @*<div id="indMachineIndicator" class="col-sm-3 led-green"></div>*@
+                                            <input type="hidden" id="hdnAlarmId" />
+                                            <input type="hidden" id="hdnBatchId" />
+                                            <input type="hidden" id="hdnPackId" />
+                                            <input type="hidden" id="hdnBitValue" />
+                                        </div><!-- /.box-tools -->
+                                    </div><!-- /.box-header -->
+
+                                </div><!-- /.box -->
+                            </div><!-- /.col -->
+                            @*<div class="well well-sm">
+
+                                        <div class="col-lg-5" style="padding-top:10px;">
+                                            <div class="col-sm-5" style="font-size:20px;color:white;">Labeling Machine</div>
+                                            <div class="col-sm-3 led-yellow"></div>
+
+                                        </div>
+
+                                </div>*@
+                        </div>
+
+                        @*<div>@ViewBag.notConnected</div>
+                            @if (!string.IsNullOrEmpty(ViewBag.notConnected))
+                            {
+                                <div style="vertical-align:central;width:150px" class="alert-danger">
+                                    PLC Not Connected...!
+                                </div>
+                            }*@
+
+                        @if (moduledata.CommandPanel != null)
+                        {
+                            if (new CVC.Modules.Common.Dashboard.DashboardCommon().CheckViewPermission(moduledata.CommandPanel.Value))
+                            {
+                                <div class="row" id="rowCommandPanel" style="margin-right: 10px;margin-left: 7px">
+                                    @{Html.RenderAction("Index", "CommandPanel", new { ModuleId = moduledata.CurrentModule, ViewId = moduledata.CommandPanel.Value }); }
+                                </div>
+                            }
+                        }
+
+                        <div class="row" style="margin-right: 10px;margin-left: 10px; margin-top:10px;">
+                            <div class="col-md-12" id="rowAlarms" style="margin-left:-9px;padding-right:0px">
+                                @{Html.RenderAction("Index", "AlarmSummary", new { ModuleId = moduledata.CurrentModule }); }
+                            </div>
+                            @if (moduledata.MachineSummary != null)
+                            {
+                                if (new CVC.Modules.Common.Dashboard.DashboardCommon().CheckViewPermission(moduledata.MachineSummary.Value))
+                                {
+                                    <div class="col-md-12" id="rowMachineSummary">
+                                        @{Html.RenderAction("Index", "MachineSummary", new { ModuleId = moduledata.CurrentModule, ViewId = moduledata.MachineSummary.Value }); }
+                                    </div>
+                                }
+                            }
+                        </div>
+                        <div id="DangerModel" class="modal modal-warning" role="dialog">
+
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title">Machine</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Machine Not Connected</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
+
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+
+                        </div>
+                        <div id="AlarmModal" class="modal" role="dialog">
+
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <span class="modal-title h4" id="AlarmName">Alarm</span>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <div>
+                                            <span class="h3 col-sm-12" id="AlarmMessage">Email</span>
+                                        </div>
+                                        <div id="divComment" style="display:none;">
+                                            <label class="col-sm-2" for="inputEmail3">Comment</label>
+                                            <div class="col-sm-10">
+                                                <textarea id="inputEmail3"></textarea>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+
+                                        <button type="button" class="btn btn-primary" id="btnResetAlarm" style="display:none;">
+                                            Reset Alarm
+                                        </button>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-12" style="padding:15px 15px 0 15px;margin:0px auto -35px;min-height:0px;">
+                        @RenderSection("RightSideBar", required: false)
+                    </div>
+                    <div class="col-md-12" style="padding:0px;margin:0px;">
+                        @if (IsSectionDefined("Charts"))
+                        {
+                            @RenderSection("Charts");
+                            <section class="content" id="sectionchart" style="min-height:0px;padding-left:10px;margin:0px;display:none">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="box box-danger">
+                                            <div class="box-header with-border">
+                                                <h3 class="box-title">Label Remaining</h3>
+                                                <div class="box-tools pull-right">
+                                                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                                                </div>
+                                            </div>
+                                            <div class="box-body">
+                                                <div class="progress newtest2"></div>
+                                            </div><!-- /.box-body -->
+                                        </div><!-- /.box -->
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="box box-danger">
+                                            <div class="box-header with-border">
+                                                <h3 class="box-title">Charts</h3>
+                                                @*<div class="box-tools pull-right">
+                                                        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                                        <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                                                    </div>*@
+                                            </div>
+                                            <div class="box-body">
+                                                <div class="col-lg-4">
+                                                    <canvas width="180" height="100" id="chart_gauge_01" class="" style="width: 310px; height: 150px;"></canvas>
+                                                    <div class="goal-wrapper">
+                                                        <span id="gauge-text" class="gauge-value gauge-chart pull-left">0</span>
+                                                        <span class="gauge-value pull-left">%</span>
+                                                        <span id="goal-text" class="goal-value pull-right">100%</span>
+                                                    </div>
+                                                </div>
+                                            </div><!-- /.box-body -->
+                                        </div><!-- /.box -->
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="box box-danger">
+                                            <div class="box-header with-border">
+                                                <h3 class="box-title">Good/Reject Chart</h3>
+                                                <div class="box-tools pull-right">
+                                                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                                                </div>
+                                            </div>
+                                            <div class="box-body">
+                                                <div id="donut-chart" style="height: 300px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </section>
+                        }
+                        <section id="sectionbody" class="content" style="min-height:0px;padding-left:10px;margin:0px;">
+                            @RenderBody()
+                        </section>
+                    </div>
+                    @*<div class="col-md-3" style="padding-left:0px;margin:0px;min-height:0px;">
+                            <section class="content" style="padding-left:0px;margin:0px;min-height:0px;padding-right: 0px;">
+                                <div class="col-md-12" style="padding-left:0px;margin:0px;min-height:0px;padding-right: 0px;">
+                                    @RenderSection("RightSideBar", required: false)
+
+                                </div>
+
+                            </section>
+                        </div>*@
+
+                    @if (IsSectionDefined("Scripts"))
+                    {
+                        <section>
+                            @RenderSection("Scripts")
+                        </section>
+                    }
+                    @if (IsSectionDefined("Style"))
+                    {
+                        <section>
+                            @RenderSection("Style")
+                        </section>
+                    }
+
+
+                </div>
+            </div>
+
+            <footer class="main-footer">
+                <div class="pull-right hidden-xs">
+                    @Texts.Site.Layout.FooterInfo
+                </div>
+                <strong>@Texts.Site.Layout.FooterCopyright</strong> @Texts.Site.Layout.FooterRights
+            </footer>
+
+            <aside class="control-sidebar control-sidebar-dark">
+                <div class="tab-content">
+                    <div class="tab-pane active" id="control-sidebar-settings-tab">
+                        <form method="post">
+                            <h3 class="control-sidebar-heading">@Texts.Site.Layout.GeneralSettings</h3>
+
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">@Texts.Site.Layout.Language</label>
+                                <select id="LanguageSelect" class="form-control"></select>
+                            </div>
+
+                            <div class="form-group" style="margin-top: 15px;">
+                                <label class="control-sidebar-subheading">@Texts.Site.Layout.Theme</label>
+                                <select id="ThemeSelect" class="form-control"></select>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </aside>
+            <div class="control-sidebar-bg"></div>
+        </div>
+
+        <div class="modal fade" id="NewBatchModal" role="dialog" data-backdrop="static" style="top:150px">
+            <div class="modal-dialog modal-sm">
+
+                <div class="modal-content" style="width:500px">
+                    <div class="modal-header">
+                        <h4 class="modal-title" style="text-align:center; background-color:#3c8dbc; color:white;margin:0;padding:10px;"><span style="font-size:medium;text-align:center ">New Batch</span></h4>
+
+                    </div>
+                    <div class="modal-body" style="width:500px">
+                        <div class="form-group-wrap">
+                            <div class="form-group">
+                                <label style="color:red;font-weight:normal">*</label>Batch Number  <input type="text" id="txtBatchNumber" class="form-control AddKeypad" />
+                            </div>
+                            <div class="form-group">
+                                <label style="color:red;font-weight:normal">*</label>Pack Code  <input type="text" id="txtPackCode" class="form-control AddKeypad" />
+                            </div>
+                            <div class="form-group">
+                                <label style="color:red;font-weight:normal">*</label>Batch For  <input type="text" id="txtBatchFor" class="form-control AddKeypad" />
+                            </div>
+                            <div class="form-group">
+                                <label style="color:red;font-weight:normal">*</label>Batch Size   <input type="text" id="txtBatchSize" class="form-control AddKeypad" />
+                            </div>
+                            <div class='input-group date datetimepicker' data-format="dd/MM/yyyy">
+                                <label style="color:red;font-weight:normal">*</label>Expiry Date   <input type="text" id="txtExpiryDate" class="form-control AddKeypad" />
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+
+                        <button type="button" id="btnNewBatchSave" class="btn btn-primary">Save</button>
+                        <button type="button" id="btnNewBatchCancel" class="btn btn-danger" data-dismiss="modal" onclick="CancelModalPopUp_CommentAuthentication();">Cancel</button>
+
+                        @*<a href="@Url.Action("SaveComments", "AlarmMachine")" class="btn btn-default graybtn backbtn">Save</a>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="~/Scripts/sweetalert.min.js"></script>
+        <script type="text/javascript">
+            var packList = [];
+            var repackBatchList = [];
+            var NewBatch = 1;
+            var StartBatch = 2;
+            var StopBatch = 3;
+            var EndBatchValue = 4;
+            var EditBatchValue = 5;
+            var ReloadBatchValue = 6;
+            var isReloadBatch = false;
+
+       //  window.onload = date_time('date_time');
+            $().ready(function () {
+               // $('.loader').removeClass('hidden');
+                updateTime();
+        //new CVC.Common.SidebarSearch($('#SidebarSearch'), $('#SidebarMenu')).init();
+        new CVC.Common.LanguageSelection($('#LanguageSelect'), '@(System.Globalization.CultureInfo.CurrentUICulture.Name)');
+        new CVC.Common.ThemeSelection($('#ThemeSelect'));
+        @RenderSection("PageInitScript", false);
+
+        var doLayout = function () {
+            height = (this.window.innerHeight > 0) ? this.window.innerHeight : this.screen.height;
+            height -= $('header.main-header').outerHeight() || 0;
+            height -= $('section.content-header').outerHeight() || 0;
+            height -= $('footer.main-footer').outerHeight() || 0;
+            if (height < 200) height = 200;
+            $("section.content").css("min-height", (height) + "px");
+
+            $('body').triggerHandler('layout');
+        };
+
+        $(window).bind("load resize layout", doLayout);
+        doLayout();
+            });
+
+            //function date_time(id) {
+            //   /* date = new Date;
+            //    year = date.getFullYear();
+            //    month = date.getMonth();
+            //    months = new Array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
+            //    d = date.getDate();
+            //    day = date.getDay();
+            //    days = new Array('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');
+            //    h = date.getHours();
+            //    if (h < 10) {
+            //        h = "0" + h;
+            //    }
+            //    m = date.getMinutes();
+            //    if (m < 10) {
+            //        m = "0" + m;
+            //    }
+            //    s = date.getSeconds();
+            //    if (s < 10) {
+            //        s = "0" + s;
+            //    }
+            //    result = months[month] + ' ' + d + ' ' + year + ' ' + h + ':' + m + ':' + s;
+            //    document.getElementById(id).innerHTML = result;
+            //    setTimeout('date_time("' + id + '");', '1000');*/
+            //   $.ajax({
+            //        url: Q.resolveUrl('~/Common/GetDateTimeInEnvironmentalVariableFormat'),
+            //        type: 'GET',
+            //        async: true,
+            //        success: function (data) {
+            //            var result = data;
+            //            document.getElementById(id).innerHTML = result;
+            //            setTimeout('date_time("' + id + '");', '1000');
+            //        },
+            //        error: function (x, y, z) {
+            //            //$('#ScreenLockModel').modal('hide');
+            //        }
+            //    });
+            //    return true;
+            //}
+
+            function updateTime() {
+                var today = new Date();
+                var dd = today.getDate();
+
+                var mm = today.getMonth() + 1;
+                var yyyy = today.getFullYear();
+                if (dd < 10) {
+                    dd = '0' + dd;
+                }
+
+                if (mm < 10) {
+                    mm = '0' + mm;
+                }
+               
+                var currentDate = dd + '/' + mm + '/' + yyyy;
+
+                var day = today.getDay();
+                var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+                var dayname = days[day];
+                var currentDateTime = dayname + " " + currentDate + " " + today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+              
+                $('#date_time').html("");
+                // $('#date_time').html(new Date().toString().split("GMT")[0]);
+                $('#date_time').html(currentDateTime);
+
+                setTimeout(updateTime, 1000);
+            }
+           
+        </script>
+        <script src="~/Scripts/circularprogress.jquery.min.js"></script>
+        <script src="~/Scripts/number-pb.js"></script>
+        <script src="~/Scripts/jquery.velocity.min.js"></script>
+        <script src="~/Scripts/flot/jquery.flot.min.js"></script>
+        <script src="~/Scripts/flot/jquery.flot.resize.min.js"></script>
+        <script src="~/Scripts/flot/jquery.flot.pie.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                resetArrow();
+            });
+
+            function resetArrow() {
+                $(function () {
+                    var docHeight = $(document).height();
+                    $('.scrollToBottom').bind("click", function () {
+                      
+                        $(".scrollwrap").css("min-height", $(document).height() + "px")
+                        $('html, body').animate({ scrollTop: $('html').scrollTop() + 400 }, 400);
+                        if ($('html').scrollTop() + $(window).height() >= $(document).height()) {
+                            $(this).hide();
+                        }
+                        $('.scrollToTop').show();
+                        return false;
+                    });
+                    $('.scrollToTop').bind("click", function () {
+                     
+                        $('html, body').animate({ scrollTop: $('html').scrollTop() - 400 }, 400);
+                        if ($('html').scrollTop() <= 0) {
+                            $(this).hide();
+                        }
+                        $('.scrollToBottom').show();
+                        return false;
+
+                    });
+                });
+            }
+
+            $(function () {
+                $('.newtest2').circles({
+                    'targetPos': 0,
+                    speed: 40,
+                    onFinishMoving: function (pos) {
+                        console.log('done ', pos);
+                    }
+                });
+
+                /*
+         * DONUT CHART
+         * -----------
+         */
+
+                var donutData = [
+                    { label: "Total Bottles", data: 50, color: "#3c8dbc" },
+                    //{ label: "Series3", data: 20, color: "#0073b7" },
+                    //{ label: "Series4", data: 50, color: "#00c0ef" }
+                ];
+                $.plot("#donut-chart", donutData, {
+                    series: {
+                        pie: {
+                            show: true,
+                            radius: 1,
+                            innerRadius: 0.5,
+                            label: {
+                                show: true,
+                                radius: 2 / 3,
+                                formatter: labelFormatter,
+                                threshold: 0.1
+                            }
+
+                        }
+                    },
+                    legend: {
+                        show: false
+                    }
+                });
+
+                /*
+* Custom Label formatter
+* ----------------------
+*/
+                function labelFormatter(label, series) {
+                    return '<div style="font-size:13px; text-align:center; padding:2px; color: #fff; font-weight: 600;">'
+                        + label
+                        + "<br>"
+                        + Math.round(series.percent) + "%</div>";
+                }
+                /*
+                 * END DONUT CHART
+                 */
+
+
+                var MachineId;
+
+
+
+
+
+
+
+
+
+                BatchStartStop();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                //var myVar;
+                // setInterval(RunContinuous, 500);
+
+
+
+
+
+
+            });
+
+            function LogOutConirmationMsg() {
+
+
+
+                $(".swal-modal").attr("style", "display:inline-block");
+
+                var ConveyerValue = $(".IsConveyerClass").val();
+                if (ConveyerValue == "1" || ConveyerValue == "True") {
+                    swal("Please stop conveyer first!!!");
+
+                }
+                else {
+                    swal({
+                        title: "Are You Sure?",
+                        text: "Do you want to logout ?",
+                        icon: "warning",
+                        buttons: [
+                            'No, cancel it!',
+                            'Yes, I am sure!'
+                        ],
+                        dangerMode: true,
+                    }).then(function (isConfirm) {
+                        if (isConfirm) {
+                            funlogout();
+                        }
+
+                    });
+
+                }
+
+
+
+            }
+
+
+            function funlogout() {
+
+                if ($('#hdnBatchStatus').length > 0) {
+                    if ($('#hdnBatchStatus').val() == "Batch Started") {
+                        //if (confirm("Are you want to stop the batch?"))
+                        {
+                            location.href = "/Account/Signout?isStopBatch=true";
+                            return false;
+                        }
+                    }
+                }
+                location.href = "/Account/Signout";
+                return true;
+            }
+
+            function BatchStartStop() {
+
+
+
+                var BatchValue = 0;
+                if ($("#contentStartBatch").html() == "Start Batch") {
+                    BatchValue = 2;
+                }
+                else {
+
+                    var ConveyerValue = $(".IsConveyerClass").val();
+                    if (ConveyerValue == "1" || ConveyerValue == "True") {
+                        return swal("Please stop conveyer first!!!");
+
+                    }
+                    BatchValue = 3;
+                }
+
+                ConirmationMsg("Are You Sure?", "Do you Want to " + $("#contentStartBatch").html() + "?", "", "No", "Yes", BatchValue);
+
+            }
+
+            function newBatchClick() {
+                ConirmationMsg("Are You Sure?", "Do you Want to Create New Batch?", "", "No", "Yes", NewBatch);
+
+
+            }
+
+            function ReloadBatch() {
+                ConirmationMsg("Are You Sure?", "Do you Want to Reload Batch?", "", "No", "Yes", ReloadBatchValue);
+
+
+            }
+
+            function EndBatch() {
+
+                var ConveyerValue = $(".IsConveyerClass").val();
+                if (ConveyerValue == "1" || ConveyerValue == "True") {
+                    swal("Please stop conveyer first!!!");
+
+                }
+                else {
+
+                    ConirmationMsg("Aru You Sure?", "Do you want to End Batch?", "", "No", "Yes", EndBatchValue);
+
+
+                }
+
+            }
+
+            function EditBatch() {
+
+                var ConveyerValue = $(".IsConveyerClass").val();
+                if (ConveyerValue == "1" || ConveyerValue == "True") {
+                    swal("Please stop conveyer first!!!");
+
+                }
+                else {
+
+                    ConirmationMsg("Aru You Sure?", "Do you want to Edit Batch?", "", "No", "Yes", EditBatchValue);
+
+
+                }
+
+
+
+
+            }
+
+
+            function OpenNewBatchDialog() {
+                repackBatchList = null;
+                isReloadBatch = false;
+                $.ajax({
+                    url: Q.resolveUrl('~/Common/GetPacksList'),
+                    // data: machine,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+
+                        packList = data;
+
+                        //$("#NewBatchModal").modal('show');
+                        var dlg = new CVC.Batch.BatchDialog();
+                        setTimeout(function () {
+                            debugger;
+                            $('[name="ExpiryDate"]').datepicker("destroy");
+                            $('[name="ExpiryDate"]').datepicker({ minDate: 0 });
+
+                            // $(".s-DateEditor").datepicker("destroy");
+                            // $(".s-DateEditor").datepicker({ minDate: 0 });
+                        }, 0);
+                        dlg.dialogTitle = 'New Batch';
+                        dlg.dialogOpen();
+                    },
+                    error: function (x, y, z) {
+                        $('.loader').addClass('hidden');
+                        alert(x + '\n' + y + '\n' + z);
+                    }
+                });
+
+
+            }
+
+            function OpenReloadBatchDialog() {
+                isReloadBatch = true;
+                $.ajax({
+                    url: Q.resolveUrl('~/Common/GetPacksList'),
+                    // data: machine,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+
+                        packList = data;
+                        getRepackedBatch();
+                        //$("#NewBatchModal").modal('show');
+                       
+                    },
+                    error: function (x, y, z) {
+                        $('.loader').addClass('hidden');
+                        alert(x + '\n' + y + '\n' + z);
+                    }
+                });
+
+
+            }
+
+            function getRepackedBatch() {
+                $.ajax({
+                    url: Q.resolveUrl('~/Common/GetRepackedBatch'),
+                    // data: machine,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        repackBatchList = data; 
+                        var dlg = new CVC.Batch.BatchDialog();
+                        setTimeout(function () {
+                            $('[name="ExpiryDate"]').datepicker("destroy");
+                            $('[name="ExpiryDate"]').datepicker({ minDate: 0 });
+
+                            // $(".s-DateEditor").datepicker("destroy");
+                            // $(".s-DateEditor").datepicker({ minDate: 0 });
+                        }, 0);
+                        dlg.dialogTitle = 'Reload Batch';
+                        dlg.dialogOpen();
+                   },
+                    error: function (x, y, z) {
+                        $('.loader').addClass('hidden');
+                        alert(x + '\n' + y + '\n' + z);
+                    }
+                });
+            }
+
+            function OpenEditBatchDialog() {
+
+                $.ajax({
+                    url: Q.resolveUrl('~/Common/GetPacksList'),
+                    // data: machine,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+
+                        packList = data;
+                        var batchId = $("#hdnBatchId").val();
+
+                        var editBatchDialog = new CVC.Batch.BatchDialog();
+                        setTimeout(function () {
+                            $('[name="ExpiryDate"]').datepicker("destroy");
+                            $('[name="ExpiryDate"]').datepicker({ minDate: 0 });
+                            $("input[name='BatchStatus']").val($("#lblPack").text());
+                            $("input[name='BatchSize']").attr('min', $("input[name='BatchSize']").val());
+                            // $(".s-DateEditor").datepicker({ minDate: 0 });
+                        }, 100);
+                        editBatchDialog.load(batchId || {}, function () {
+                            $('[name="ExpiryDate"]').datepicker("destroy");
+                            $('[name="ExpiryDate"]').datepicker({ minDate: 0 });
+                            $("input[name='BatchStatus']").val($("#lblPack").text());
+                            $("input[name='BatchSize']").attr('min', $("input[name='BatchSize']").val());
+                            // if we didn't reach here, probably there is no order with specified ID in url
+                            editBatchDialog.element.removeClass('hidden').appendTo('#DialogDiv');
+                            editBatchDialog.arrange();
+                            //$("input[name='BatchStatus']").val("ccc");
+                        });
+                        // $("input[name='BatchStatus']").val("ccc");
+                        editBatchDialog.dialogOpen();
+                        // $("input[name='BatchStatus']").val("ccc");
+                    },
+                    error: function (x, y, z) {
+                        $('.loader').addClass('hidden');
+                        alert(x + '\n' + y + '\n' + z);
+                    }
+                });
+            }
+
+
+            function OpenStartStopBatchDialog() {
+                $('.loader').removeClass('hidden');
+
+                var ModuleId = $("#hdnModuleId").val();
+                var BatchId = $("#hdnBatchId").val();
+                var OnOrOff = 0;
+                if ($("#contentStartBatch").html() == "Start Batch") {
+                    OnOrOff = 1;
+                }
+                var machine = {
+                    "BatchId": BatchId, "StartStop": OnOrOff, "ModuleId": ModuleId
+                };
+                jQuery.support.cors = true;
+                $.ajax({
+                    url: Q.resolveUrl('~/api/Batch/StartStopBatch'),
+                    data: machine,
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function (data) {
+                      
+                        if (OnOrOff == 1) {
+                            $("#spaniStartBatch").removeClass("fa-play");
+                            $("#spaniStartBatch").addClass("fa-pause");
+                            $("#contentStartBatch").html("Stop Batch");
+
+                        }
+                        else {
+                            $("#spaniStartBatch").removeClass("fa-pause");
+                            $("#spaniStartBatch").addClass("fa-play");
+                            $("#contentStartBatch").html("Start Batch");
+                        }
+                        GetBatchDetails();
+                        $('.loader').addClass('hidden');
+
+                    },
+                    error: function (x, y, z) {
+                        alert(x + '\n' + y + '\n' + z);
+                        $('.loader').addClass('hidden');
+                    }
+                });
+            }
+
+            function ShowAuthentication(IsAuthenticationRequired) {
+                RequestPanel = "End Batch";
+                ClearControls_CommentAuthenticationModal();
+                var RoleNames = "Administrator,Operator,Manager,Supervisor";
+                if (IsAuthenticationRequired == true) {
+                    $("#lbl_RoleNamesAuthenticationtModal").text(RoleNames)
+                    $("#AuthenticationtModal").modal('show');
+                }
+            }
+
+            function ShowAuthenticationAndCommentPopUp(IsAuthenticationRequired) {
+                RequestPanel = "Edit Batch";
+                ClearControls_CommentAuthenticationModal();
+                var RoleNames = "Administrator,Operator,Manager,Supervisor";
+                if (IsAuthenticationRequired == true) {
+                    $("#lbl_RoleNamesCommentAuthenticationtModal").text(RoleNames)
+                    $("#Comment_AuthenticationtModal").modal('show');
+                }
+            }
+
+            function OpenEndBatchDialog() {
+                $('.loader').removeClass('hidden');
+
+                var ModuleId = $("#hdnModuleId").val();
+                var BatchId = $("#hdnBatchId").val();
+                var machine = {
+                    "BatchId": BatchId, "Recipe": $("#txtRecipeName").val(), "ModuleId": ModuleId
+                };
+                jQuery.support.cors = true;
+                $.ajax({
+                    url: Q.resolveUrl('~/api/Batch/EndBatch'),
+                    data: machine,
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function (data) {
+                    
+                        Q.notifySuccess("Batch Ended Successfully");
+                        $("#divrowNewBatch").show();
+                        $("#divrowReloadBatch").show();
+                        $("#divrowStartStopBatch").hide();
+                        $("#divrowEditBatch").hide();
+                        $("#divrowEndBatch").hide();
+                        GetBatchDetails();
+                        $('.loader').addClass('hidden');
+
+                    },
+                    error: function (x, y, z) {
+                        $('.loader').addClass('hidden');
+                        alert(x + '\n' + y + '\n' + z);
+                    }
+                });
+            }
+
+            function GetBatchDetails() {
+                var machine = {};
+                $.ajax({
+                    async: true,
+                    type: "POST",
+                    url: Q.resolveUrl('~/api/Batch/BatchDetails'),
+                    data: JSON.stringify(machine),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                      
+                        if (response != null) {
+                       
+                            if (response.BatchId > 0) {
+
+                                $("#hdnBatchId").val(response.BatchId);
+                                $("#hdnPackId").val(response.PackId);
+                                $("#lblPackageLine").html(response.PackageLine);
+
+                                //var BatchDetails = jQuery.pa$("#lblBatch").html(response.BatchName);rseJSON(response);
+                                $("#lblBatch").html(response.BatchName);
+                                $("#lblPack").html(response.Pack.PackName);
+                                $("#lblProduct").html(response.Pack.TabletDetail.TabletName);
+                                if (response.BatchStartDateTime != null) {
+                                    var todayDate = new Date(response.BatchStartDateTime);
+
+                                    var format = "AM";
+                                    var hour = todayDate.getHours();
+                                    var min = todayDate.getMinutes();
+                                    /*Start batch date to be displayed in 24 hr format - Lupin Indore*/
+                                    /* if (hour > 11) { format = "PM"; }
+                                     if (hour > 12) { hour = hour - 12; }
+                                     if (hour == 0) { hour = 12; }*/
+                                    format = "";
+                                    if (min < 10) { min = "0" + min; }
+
+                                    //$("#lblStartDate").html(todayDate.getDate() + 1 + " / " + todayDate.getMonth() + " / " + todayDate.getFullYear() + " " + hour + ":" + min + " " + format);
+                                    var month = (todayDate.getMonth() + 1);
+                                    $("#lblStartDate").html(todayDate.getDate() + " / " + month + " / " + todayDate.getFullYear() + " " + hour + ":" + min + " " + format);
+
+                                    if (response.BatchEndDateTime != null) {
+
+                                        var todayDate = new Date(response.BatchEndDateTime);
+                                        var format = "AM";
+                                        var hour = todayDate.getHours();
+                                        var min = todayDate.getMinutes();
+                                        /*End batch date to be displayed in 24 hr format - Lupin Indore*/
+                                        /* if (hour > 11) { format = "PM"; }
+                                         if (hour > 12) { hour = hour - 12; }
+                                         if (hour == 0) { hour = 12; }*/
+                                        format = "";
+                                        if (min < 10) { min = "0" + min; }
+                                        $("#lblEndDate").html(todayDate.getDate() + " / " + month + " / " + todayDate.getFullYear() + " " + hour + ":" + min + " " + format);
+                                    }
+                                    else {
+                                        $("#lblEndDate").html("Batch Running");
+
+                                        $("#spaniStartBatch").removeClass("fa-play");
+                                        $("#spaniStartBatch").addClass("fa-pause");
+                                        $("#contentStartBatch").html("Stop Batch");
+
+                                    }
+
+                                }
+                                else {
+                                    $("#lblStartDate").html("Batch Not Started");
+                                    $("#lblEndDate").html("Batch Not Started");
+
+                                }
+                                $("#lblTotalBottles").html(response.BatchSize);//$("#lblTotalBottles").html(response.NumberOfBottles);
+                                if (response.ProductionSpeed != "") {
+                                    $("#lblProductionSpeed").html(response.ProductionSpeed);
+                                }
+                                else {
+                                    $("#lblProductionSpeed").html("0 m/sec");
+                                }
+                                $("#lblTotalCood").html(response.TotalGoodBottles);
+                                $("#lblTotalReject").html(response.TotalRejectedBottles);
+
+                                $('#btnNewBatch').bind('click', false);
+                                $('#hdnBatchStatus').val(response.BatchStatus);
+                                if (response.BatchStatus == "Batch Ended") {
+                                    //$("#btnNewBatch").removeClass('disabled');
+                                    //$('#btnNewBatch').click(function () {
+                                    //    var dlg = new CVC.Batch.BatchDialog();
+                                    //    dlg.dialogTitle = 'New Batch';
+                                    //    dlg.dialogOpen();
+                                    //});
+
+                                    // $("#btnStartBatch").addClass('disabled');
+                                    $("#divrowNewBatch").show();
+                                    $("#divrowReloadBatch").show();
+                                    $("#divrowStartStopBatch").hide();
+                                    $("#divrowEditBatch").hide();
+                                    $("#divrowEndBatch").hide();
+                                    $("#GridDiv").hide();
+                                    if (isModifySelectRecipie == false) {
+                                        $("#btnSelectRecipe").attr("disabled", true);
+
+                                    }
+                                    else {
+                                        $("#btnSelectRecipe").attr("disabled", false);
+                                    }
+                                    if (isModifySaveRecipie == false) {
+                                        $("#btnSaveRecipe").attr("disabled", true);
+
+                                    }
+                                    else
+                                    {
+                                        $("#btnSaveRecipe").attr("disabled", false);
+
+                                    }
+                                    if (isModifyUpdateRecipie == false) {
+                                        $("#btnUpdateRecipe").attr("disabled", true);
+
+                                    }
+                                    else {
+                                        $("#btnUpdateRecipe").attr("disabled", false);
+
+                                    }
+                                }
+                                else if (response.BatchStatus == "Batch Started") {
+                                    $("#spaniStartBatch").removeClass("fa-play");
+                                    $("#spaniStartBatch").addClass("fa-pause");
+                                    $("#contentStartBatch").html("Stop Batch");
+
+
+                                    $("#divrowNewBatch").hide();
+                                    $("#divrowReloadBatch").hide();
+                                    $("#divrowStartStopBatch").show();
+                                    $("#divrowEndBatch").show();
+                                    $("#GridDiv").show();
+                                    $("#divrowEditBatch").hide();
+                                    $("#btnSelectRecipe").attr("disabled", true);
+                                    $("#btnSaveRecipe").attr("disabled", true);
+                                    $("#btnUpdateRecipe").attr("disabled", true);
+                                }
+                                else if (response.BatchStatus == "Batch Stopped" || response.BatchStatus == "Batch Edited") {
+                                    $("#spaniStartBatch").addClass("fa-play");
+                                    $("#spaniStartBatch").removeClass("fa-pause");
+                                    $("#contentStartBatch").html("Start Batch");
+
+
+                                    $("#divrowNewBatch").hide();
+                                    $("#divrowReloadBatch").hide();
+                                    $("#divrowStartStopBatch").show();
+                                    $("#divrowEndBatch").show();
+                                    $("#GridDiv").show();
+                                    $("#divrowEditBatch").show();
+                                    if (isModifySelectRecipie == false) {
+                                        $("#btnSelectRecipe").attr("disabled", true);
+
+                                    }
+                                    else {
+                                        $("#btnSelectRecipe").attr("disabled", false);
+                                    }
+                                    if (isModifySaveRecipie == false) {
+                                        $("#btnSaveRecipe").attr("disabled", true);
+
+                                    }
+                                    else {
+                                        $("#btnSaveRecipe").attr("disabled", false);
+
+                                    }
+                                    if (isModifyUpdateRecipie == false) {
+                                        $("#btnUpdateRecipe").attr("disabled", true);
+
+                                    }
+                                    else {
+                                        $("#btnUpdateRecipe").attr("disabled", false);
+
+                                    }
+                                }
+                                else if (response.BatchStatus == "Batch Created") {
+                                    $("#spaniStartBatch").removeClass("fa-pause");
+                                    $("#spaniStartBatch").addClass("fa-play");
+                                    $("#contentStartBatch").html("Start Batch");
+
+                                    $("#divrowNewBatch").hide();
+                                    $("#divrowReloadBatch").hide();
+                                    $("#divrowStartStopBatch").show();
+                                    $("#divrowEndBatch").hide();
+                                    $("#GridDiv").show();
+                                    $("#divrowEditBatch").show();
+                                    if (isModifySelectRecipie == false) {
+                                        $("#btnSelectRecipe").attr("disabled", true);
+
+                                    }
+                                    else {
+                                        $("#btnSelectRecipe").attr("disabled", false);
+                                    }
+                                    if (isModifySaveRecipie == false) {
+                                        $("#btnSaveRecipe").attr("disabled", true);
+
+                                    }
+                                    else {
+                                        $("#btnSaveRecipe").attr("disabled", false);
+
+                                    }
+                                    if (isModifyUpdateRecipie == false) {
+                                        $("#btnUpdateRecipe").attr("disabled", true);
+
+                                    }
+                                    else {
+                                        $("#btnUpdateRecipe").attr("disabled", false);
+
+                                    }
+                                }
+
+                            }
+                            else {
+                                $("#lblBatch").html("No Batch Found");
+                                $("#lblPack").html("No Pack Found");
+                                $("#lblProduct").html("No Product Found");
+                                $("#lblStartDate").html("No Record Found");
+                                $("#lblEndDate").html("No Record Found");
+                                $("#lblTotalBottles").html("0");
+                                $("#lblProductionSpeed").html("0");
+                                $("#lblTotalCood").html("0");
+                                $("#lblTotalReject").html("0");
+
+                                $("#divrowNewBatch").show();
+                                $("#divrowReloadBatch").show();
+                                $("#GridDiv").hide();
+                            }
+                        }
+                        else {
+                            $("#lblBatch").html("No Batch Found");
+                            $("#lblPack").html("No Pack Found");
+                            $("#lblProduct").html("No Product Found");
+                            $("#lblStartDate").html("No Record Found");
+                            $("#lblEndDate").html("No Record Found");
+                            $("#lblTotalBottles").html("0");
+                            $("#lblProductionSpeed").html("0");
+                            $("#lblTotalCood").html("0");
+                            $("#lblTotalReject").html("0");
+
+                            $("#divrowNewBatch").show();
+                            $("#divrowReloadBatch").show();
+                            $("#GridDiv").hide();
+                        }
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            }
+
+            function BatchClick() {
+                $('#divbatch').toggle('slow');
+            }
+
+            function ConirmationMsg(Title, text, icon, NoButtonText, YesButtonText, BatchValue) {
+                debugger;
+                $(".swal-modal").attr("style", "display:inline-block");
+                var response = false;
+                swal({
+                    // title: Title,
+                    text: text,
+                    icon: "warning",
+                    buttons: [
+                        NoButtonText,
+                        YesButtonText
+                    ],
+                    dangerMode: true,
+                }).then(function (isConfirm) {
+                    if (isConfirm) {
+                        AddToAuditLog(text, "Yes");
+
+                        if (BatchValue == 1) {
+                            OpenNewBatchDialog();
+                        }
+                        if (BatchValue == 2 || BatchValue == 3) {
+                            OpenStartStopBatchDialog();
+                        }
+                        if (BatchValue == 5) {
+                            $("#div_RoleNamesCommentAuthenticationtModal").hide();
+                            ShowAuthenticationAndCommentPopUp(true);
+                        }
+                        if (BatchValue == 6) {
+                            OpenReloadBatchDialog();
+                        }
+
+                        if (BatchValue == 4) {
+                            var Key = "Batch:Authentication";
+                            $.ajax({
+                                url: Q.resolveUrl('~/api/CommonApi/GetAuthorization?PermissionKey=' + Key),
+                                type: 'GET',
+                                async: false,
+                                dataType: 'json',
+                                success: function (response) {
+                                    if (response == true) {
+                                        $("#div_RoleNamesAuthenticationtModal").hide();
+                                        ShowAuthentication(true);
+                                    }
+                                    else {
+                                        OpenEndBatchDialog();
+                                    }
+                                },
+                                error: function (x, y, z) {
+                                    alert(x + '\n' + y + '\n' + z);
+                                    return null;
+                                }
+                            });
+                         }
+                    }
+                    else {
+                        debugger;
+                        response = false;
+                       
+                       AddToAuditLog(text, "No");
+
+                    }
+                });
+
+                return response;
+            }
+
+           
+            $(document).ready(function () {
+
+                GetBatchDetails();
+               
+
+
+                //$("li[class=treeview]").click(function () {
+                //    $('body[id=s-Page]').addClass("sidebar-collapse");
+                //});
+
+            });
+            function CheckBatchStatus(BatchStatusValue) {
+                debugger;
+                var BatchCurrentStatus = "";
+
+                var BatchOperationToDo = $("#contentStartBatch").html().toUpperCase();
+                if (BatchStatusValue == 4) {
+                    BatchOperationToDo = "END BATCH";
+                }
+                else if (BatchStatusValue == 1) {
+                    BatchOperationToDo = "NEW BATCH";
+                }
+                else if (BatchStatusValue == 5) {
+                    BatchOperationToDo = "EDIT BATCH";
+                }
+                else if (BatchStatusValue == 6) {
+                    BatchOperationToDo = "RELOAD BATCH";
+                }
+                if (BatchOperationToDo == "NEW BATCH") {
+                    BatchCurrentStatus = "Batch Created";
+                }
+                else if (BatchOperationToDo == "START BATCH") {
+                    BatchCurrentStatus = "Batch Started";
+                }
+                else if (BatchOperationToDo == "STOP BATCH") {
+                    BatchCurrentStatus = "Batch Stopped";
+                }
+                else if (BatchOperationToDo == "END BATCH") {
+                    BatchCurrentStatus = "Batch Ended";
+                }
+                else if (BatchOperationToDo == "EDIT BATCH") {
+                    BatchCurrentStatus = "Batch Edited";
+                }
+
+                var BatchId = $("#hdnBatchId").val();
+                jQuery.support.cors = true;
+                $.ajax({
+                    url: Q.resolveUrl('~/api/Batch/BatchStatus'),
+                    data: { "BatchId": BatchId },
+                    type: 'POST',
+                    async: true,
+                    dataType: 'json',
+                    success: function (data) {
+                     
+                        if (data == BatchCurrentStatus) {
+                            if (data == "Batch Edited") {
+                                EditBatch();
+
+                            }
+                            else {
+                                var splitdata = data.split(" ");
+                                swal("Batch already " + splitdata[1] + "");
+                                location.reload();
+                            }
+                        }
+                        else {
+                            if (BatchOperationToDo == "NEW BATCH") {
+                                newBatchClick();
+
+                            }
+                            else if (BatchOperationToDo == "START BATCH") {
+                                BatchStartStop();
+                            }
+                            else if (BatchOperationToDo == "STOP BATCH") {
+                                BatchStartStop();
+
+                            }
+                            else if (BatchOperationToDo == "END BATCH") {
+                                EndBatch();
+                            }
+                            else if (BatchOperationToDo == "EDIT BATCH") {
+                                EditBatch();
+                            }
+                            else if (BatchOperationToDo == "RELOAD BATCH") {
+                                ReloadBatch();
+                            }
+                        }
+
+
+
+                    },
+                    error: function (x, y, z) {
+                        alert(x + '\n' + y + '\n' + z);
+                        return null;
+                    }
+                });
+            }
+
+            function MachineClick() {
+                $('.loader').removeClass('hidden');
+            }
+
+            function AddToAuditLog(action,value) {
+                var parameter = {
+                    "Action": action, "BatchId": $("#hdnBatchId").val(), "ModuleId": $("#hdnModuleId").val(), "Value": value
+                };
+                $.ajax({
+                    url: Q.resolveUrl('~/Common/AddToAuditLog'),
+                    type: 'POST',
+                    async: true,
+                    data: parameter,
+                    success: function () {
+                    },
+                    error: function (x, y, z) {
+
+                    }
+                });
+            }
+
+        </script>
+    }
+</body>
+</html>

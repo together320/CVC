@@ -1,0 +1,199 @@
+﻿@model  CVC.ViewModels.RoleViewModel
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Role</h2>
+@*<button type="button" id="btnNewRole" class="btn btn-primary" data-toggle="modal" data-target="#divRole">New Role</button>*@
+
+<div class="table-sec" id="divRoleList" style="margin-top:10px">
+    @{Html.RenderPartial("RoleList_Partial");}
+
+</div>
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="divRole">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="myLargeModalLabel">Role</h4>
+            </div>
+            <div class="modal-body">
+
+
+                <div class="form-group">
+                    <label for="recipient-name" class="control-label">
+                        <sup class="mandatory-lable">*</sup>
+                        Role Name:
+                    </label>
+                    @Html.HiddenFor(m => Model.RoleId, new { @id = "hdnRoleId" })
+                    @Html.TextBoxFor(m => Model.RoleName, new { @class = "form-control", placeholder = "Enter Role Name", @maxlength = "50", @id = "txtRoleName" })
+                    <label id="lblRoleNameError" class="error"></label>
+                </div>
+                <div class="form-group">
+                    <label for="recipient-name" class="control-label">
+                        <sup class="mandatory-lable"></sup>
+                        Parent Role:
+                    </label>
+
+                    @Html.DropDownListFor(m => Model.RoleId, new SelectList(Model.lstRoleViewModel, "RoleId", "RoleName"), "-- Select --", new { @id = "ddlRole", @class = "form-control js-example-basic-single" })
+
+                </div>
+                <div class="form-group">
+                    <label for="recipient-name" class="control-label">
+                        <sup class="mandatory-lable"></sup>
+                        Status:
+                    </label>
+                    @Html.DropDownListFor(m => Model.StatusId, new SelectList(ViewBag.StatusList, "StatusId", "StatusName"), "-- Select --", new { @id = "ddlStatus", @class = "form-control js-example-basic-single" })
+                    <label id="lblStatusError" class="error"></label>
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="btnSave">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <button type="button" id="btnModule" class="btn btn-primary">Module</button>
+        <button type="button" id="btnView" class="btn btn-primary">View</button>
+        <button type="button" id="btnViewField" class="btn btn-primary">View Field</button>
+
+    </div>
+
+</div>
+<script type="text/javascript">
+
+    $("#btnNewRole").click(function () {
+        ClearControls();
+    });
+
+    $("#btnSave").click(function () {
+
+        if (Validation() == true) {
+            if ($("#hdnRoleId").val() == "") {
+                Create();
+            }
+            else {
+                Update();
+            }
+        }
+    });
+
+    $("#btnModule").click(function () {
+        window.location.href = "/NAdministration/RoleAccess/ModuleAccessList?RoleId=0";
+
+    });
+
+    $("#btnView").click(function () {
+        window.location.href = "/NAdministration/RoleAccess/ViewAccessList?RoleId=0&ModuleId=0";
+    });
+
+    $("#btnViewField").click(function () {
+        window.location.href = "/NAdministration/RoleAccess/ViewFieldAccessList?RoleId=0&ViewsId=0&ModuleId=0";
+    });
+
+    function Create() {
+        $.ajax({
+            url: "/NAdministration/RoleAccess/Create",
+            data: { "RoleName": $("#txtRoleName").val(), "ParentRoleId": $("#ddlRole").val(), "StatusId": $("#ddlStatus").val() },
+            type: 'POST',
+            success: function (response) {
+
+                if (response.IsStatus == false) {
+                    alert(response.StatusMessage);
+                }
+                else {
+                    ClearControls();
+                    $("#divRole").modal('hide');
+                    $("#divRoleList").html(response);
+                }
+            },
+            error: function (x, y, z) {
+                console.log(x + '\n' + y + '\n' + z);
+            }
+        });
+
+    }
+
+    function Update() {
+        $.ajax({
+            url: "/NAdministration/RoleAccess/Update",
+            data: {
+                "RoleName": $("#txtRoleName").val(), "ParentRoleId": $("#ddlRole").val(), "StatusId": $("#ddlStatus").val(), "RoleId": $("#hdnRoleId").val()
+            },
+            type: 'POST',
+            success: function (response) {
+
+                if (response.IsStatus == false) {
+                    alert(response.StatusMessage);
+                }
+                else {
+                    ClearControls();
+                    $("#divRole").modal('hide');
+                    $("#divRoleList").html(response);
+
+
+                }
+            },
+            error: function (x, y, z) {
+                console.log(x + '\n' + y + '\n' + z);
+            }
+        });
+
+    }
+
+    function GetRoleById(RoleId) {
+
+        $.ajax({
+            url: "/NAdministration/RoleAccess/RoleById?RoleId=" + RoleId,
+            type: 'GET',
+            success: function (data) {
+                $("#hdnRoleId").val(data.RoleId)
+                $("#txtRoleName").val(data.RoleName);
+                $("#ddlRole").select2("val", data.ParentRoleId);
+                $("#ddlStatus").select2("val", data.StatusId);
+                $("#divRole").modal('show');
+
+            },
+            error: function (x, y, z) {
+                console.log(x + '\n' + y + '\n' + z);
+            }
+        });
+
+    }
+
+    function ClearControls() {
+        $("#hdnRoleId").val('')
+        $("#txtRoleName").val('');
+        $("#ddlRole").select2("val", "");
+        $("#ddlStatus").select2("val", "");
+    }
+
+    function Validation() {
+        if ($("#txtRoleName").val() == "") {
+            $("#lblRoleNameError").text("Please enter Roll Name");
+            return false;
+        }
+        else {
+            $("#lblRoleNameError").text("");
+        }
+        if ($("#ddlStatus").select2("val") == "") {
+            $("#lblStatusError").text("Please Select Status");
+            return false;
+        }
+        else {
+            $("#lblStatusError").text("");
+        }
+        return true;
+    }
+
+</script>
+

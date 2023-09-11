@@ -1,0 +1,78 @@
+﻿@model IEnumerable<CVC.Data.EDMX.MasterTerminal>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>TerminalMasters</title>
+</head>
+<body>
+    <p>
+        @Html.ActionLink("Create Terminal", "Index")
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.TerminalName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MacAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsActive)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedOn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EditedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EditedOn)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TerminalName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MacAddress)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsActive)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedBy)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedOn)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EditedBy)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EditedOn)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                </td>
+            </tr>
+        }
+
+    </table>
+</body>
+</html>

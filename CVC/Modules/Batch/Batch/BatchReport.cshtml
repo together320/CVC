@@ -1,0 +1,152 @@
+﻿@model CVC.Modules.Batch.Batch.BatchReport
+
+@{
+    Layout = null;
+}
+
+
+
+<table id="tablebatchinfo" class="table table-striped" style="color:#000 !important">
+
+    <tbody>
+        <tr>
+            <td>Batch Details</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Batch Number</td>
+            <td>:@Model.BatchName</td>
+        </tr>
+        <tr>
+            <td>Version</td>
+            <td>:@Model.BatchVersion</td>
+        </tr>
+        <tr>
+            <td><b>@Model.Pack</b></td>
+            <td>:@Model.PackName</td>
+        </tr>
+        <tr>
+            <td><b>Product Name</b></td>
+            <td>:@Model.ProductName</td>
+        </tr>
+        <tr>
+            <td><b>Batch Start Date and Time</b></td>
+            <td>:@Model.BatchStart </td>
+        </tr>
+        <tr>
+            <td><b>Batch End Date and Time</b></td>
+            <td>:@Model.BatchEnd</td>
+        </tr>
+        <tr>
+            <td><b>Batch Created By</b></td>
+            <td>:@Model.CreateBy </td>
+        </tr>
+        <tr>
+            <td><b>Batch Size</b></td>
+            <td>:@Model.Size</td>
+        </tr>
+        <tr>
+            <td><b>Recipe Name</b></td>
+            <td>:@Model.RecipeName</td>
+        </tr>
+        <tr>
+            <td> <b>Total RunTime (In Minutes) </b></td>
+            <td>:@Model.RunTime </td>
+        </tr>
+        @* <tr>
+                <td><b>Average Speed(Per Minute) </b></td>
+                <td>:@Model.AverageSpeed </td>
+            </tr>*@
+        <tr>
+            <td align="center"><b>Batch Summary</b></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><b>Total @Model.BottleName</b></td>
+            <td>:@Model.Total </td>
+        </tr>
+        <tr>
+            <td><b>Good @Model.BottleName</b></td>
+            <td>:@Model.Good </td>
+        </tr>
+        <tr>
+            <td><b>Reject @Model.BottleName</b></td>
+            <td>:@Model.Reject </td>
+        </tr>
+        <tr style="color:black">
+            <td style="color:black"><b style="color:black">Good Percentage %</b></td>
+            <td>:@Model.GoodPercentage </td>
+        </tr>
+        <tr>
+            <td><b>Rejection Summary </b></td>
+            <td> </td>
+        </tr>
+        <tr>
+            <td><b>Rejection Percentage %</b></td>
+            <td>:@Model.RejectionPer  </td>
+        </tr>
+        <tr>
+            <td><b>Rejected by Camera 1 </b></td>
+            @if (Model.Rejcam1 != null)
+            {
+                <td>:@Model.Rejcam1.Replace(".00", "")</td>
+            }
+            else
+            {
+                <td></td>
+            }
+
+        </tr>
+        <tr>
+            <td><b>Rejected by Camera 2 </b></td>
+            @if (Model.Rejcam2 != null)
+            {
+                <td>:@Model.Rejcam2.Replace(".00", "")</td>
+            }
+            else
+            {
+                <td></td>
+            }
+
+        </tr>
+        <tr>
+            <td><b>Rejected by Missing Label Sensor</b></td>
+            @if (Model.Rejmissi != null)
+            {
+                <td>:@Model.Rejmissi.Replace(".00", "")</td>
+            }
+            else
+            {
+                <td></td>
+            }
+
+        </tr>
+        <tr>
+            <td>Latest Version</td>
+            <td>:@Model.BatchLatestVersion</td>
+        </tr>
+        <tr>
+            <td>Comments</td>
+            <td>:@Model.Comments</td>
+        </tr>
+
+    </tbody>
+</table>
+
+@*<table id="tablebatchsummary" class="table table-striped">
+
+        <tbody>
+
+
+        </tbody>
+    </table>
+
+    <table id="tablerejsummary" class="table table-striped">
+
+        <tbody>
+
+        </tbody>
+    </table>*@
+
+
+

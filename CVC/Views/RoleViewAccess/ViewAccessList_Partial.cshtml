@@ -1,0 +1,72 @@
+﻿@model  CVC.ViewModels.ViewAccessViewModel
+
+
+<style>
+    .error {
+        color: red;
+    }
+</style>
+<table class="display data-table2" cellspacing="0" width="100%" border="1" cellpadding="0" style="border-collapse:collapse;" bordercolor="#e7eaec">
+    <thead>
+        <tr>
+
+            <th align="left">
+                <label>View Name</label>
+            </th>
+            <th align="left">
+                <label>Is View</label>
+            </th>
+            <th align="left">
+                <label>Is Modify</label>
+            </th>
+            @*<th>
+                    Status
+                </th>*@
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.lstViewsViewModel)
+        {
+            <tr>
+
+                <td>
+                    <a href="/NAdministration/RoleAccess/ViewFieldAccessList?RoleId=@Model.RoleId&ViewsId=@item.ViewsId&ModuleId=@Model.ModuleId">@item.ViewName</a>
+
+                </td>
+                <td>
+                    @(item.IsView == true ? "Yes" : "No")
+
+                </td>
+                <td>
+                    @(item.IsModify == true ? "Yes" : "No")
+
+
+                </td>
+                @*<td>
+                        @item.StatusName
+                    </td>*@
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('.data-table2').DataTable({
+            responsive: {
+                details: {
+                    type: 'column'
+                }
+            },
+            //"order": [[3, "asc"]],
+            "language": {
+                "lengthMenu": "_MENU_ records per page",
+            },
+
+        });
+
+    });
+
+</script>

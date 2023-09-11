@@ -1,0 +1,17 @@
+﻿@{
+    ViewData["Title"] = Serenity.LocalText.Get("Db.PackSettings.EndOfLine.EntityPlural");
+}
+
+<div id="GridDiv"></div>
+<input type="hidden" id="hdnEndOfLineImportAccess" />
+
+
+<script type="text/javascript">
+    $("#hdnEndOfLineImportAccess").val('@ViewBag.IsModifyPermission')
+
+    jQuery(function () {
+        new CVC.PackSettings.EndOfLineGrid($('#GridDiv'), {}).init();
+
+        Q.initFullHeightGridPage($('#GridDiv'));
+    });
+</script>

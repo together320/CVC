@@ -1,0 +1,250 @@
+﻿@using CVC.ViewModels
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title> Index</title>
+    <style>
+        .archive-div .form-control, .restore-div .form-control {
+            height: 34px;
+            padding: 5px 12px;
+        }
+
+        .row-margin-05 {
+            margin-top: 0.5em;
+        }
+
+        .row-margin-10 {
+            margin-top: 1.0em;
+        }
+
+        .row-margin-20 {
+            margin-top: 2.0em;
+        }
+
+        .row-margin-30 {
+            margin-top: 3.0em;
+        }
+
+        .btn-bot {
+            position: absolute;
+            bottom: 50px;
+            float: right;
+        }
+
+        
+
+       
+
+            
+
+
+       
+    </style>
+
+</head>
+<body>
+
+    @using (Html.BeginForm("Upload", "ImportFile", FormMethod.Post, new { enctype = "multipart/form-data", @id = "frmImportFile" }))
+    {
+        @Html.AntiForgeryToken()
+    <div class="restore-div content-border">
+        <div class="grid-title"><div class="title-text">@ViewBag.FormName </div></div>
+        <div class="grid-title">
+            <div class="title-text">Browse and Upload View</div>
+            <ul class="breadcrumb-list">
+                <li><a href="@ViewBag.PreviousPageUrl">@ViewBag.FormName</a></li>
+                <li><a href="">Browse and Upload View</a></li>
+            </ul>
+        </div>
+        <div class="contentBox">
+            <label>Browse File </label>
+            <div class="upload_fileWrapper clearfix">
+
+                <div class="upload_btnWrap">
+                    <input id="fileUploadImport" class="form-control" name="fileUploadImport" type="file" accept=".xlsx, .xls, .csv">
+                    <input type="submit" class="btn btn-md btn-primary" id="btnUploadFile" value="Upload">
+                </div>
+                <label id="lblFileName" style="color:green;display:none;margin-top: 5px;"></label>
+            </div>
+
+
+            <div class="uploadView_btnWrap">
+                <div>
+                    <input type="button" id="btnCancel" class="btn btn-md btn-default" value="Back" onclick="backToForm();" style="float: left;" />
+                </div>
+                <div id="divNext" style="display:none">
+                    <input type="button" id="btnNext" class="btn btn-md btn-primary" value="Next" onclick="browseAndUploadNext()" />
+
+                </div>
+            </div>
+
+        </div>
+        @*<div class="row row-margin-30">
+            <div class=" form-group col-md-3">
+
+
+
+            </div>
+            <div class=" form-group col-md-3">
+                <input id="fileUploadImport" class="form-control" name="fileUploadImport" type="file" accept=".xlsx, .xls, .csv">
+                <br /> <label id="lblFileName" style="color:green;display:none"></label>
+
+            </div>
+            <div class="form-group col-md-3">
+                <input type="submit" id="btnUploadFile" class="btn btn-primary" value="Upload File" />
+
+                <input type="button" id="btnCancel" class="btn btn-primary" value="Cancel" onclick="backToForm();" />
+
+            </div>
+        </div>*@
+
+        <div class="row row-margin-30" id="divColumnHeader" style="display:none">
+            <div class=" form-group col-md-3">
+
+                <label>Column header row </label>
+
+            </div>
+            <div class=" form-group col-md-3">
+                <input id="txtColumnHeaderRowNumber" disabled="disabled" class="form-control" name="txtColumnHeaderRowNumber" type="text" value="1" onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')">
+
+            </div>
+
+
+        </div>
+
+
+
+    </div>
+    }
+</body>
+</html>
+@Html.Partial("~/Views/PartialViews/Message_PartialView.cshtml")
+
+
+<script type="text/javascript">
+   
+    var messageText = "";
+    var previousPageUrl = "";
+    function ShowMessage()
+    {
+        debugger;
+        var isStatus = '@TempData["IsStatus"]'
+        var message = '@TempData["Message"]'
+
+        if (isStatus != "")
+        {
+            if (isStatus) {
+               // $("#successModalBody").text(message);
+               // $("#modal-success").modal('show');
+                $("#divNext").attr("style", "display:block");
+                $("#lblFileName").attr("style", "display:block;color:green").text(message);
+
+            }
+        }
+
+    }
+
+    $(document).ready(function () {
+
+        ShowMessage();
+        previousPageUrl = '@ViewBag.PreviousPageUrl'
+        debugger;
+    });
+
+    $("#frmImportFile").submit(function (e) {
+        autoAcceptUntrustedCertificatesForOpcUaClient = false;
+        redirectUrlAfterLogin = "";
+
+        if ($('#fileUploadImport').get(0).files.length === 0) {
+            e.preventDefault(e);
+            $("#divNext").attr("style", "display:none");
+
+            messageText = getMessageDetailsById(17);
+
+            setTimeout(function () {
+                debugger;
+                if (messageText != undefined) {
+                    $("#infoModalBody").text(messageText);
+                    $("#modal-info").modal('show');
+                }
+            }, 500);
+        }
+
+
+        var file = $('#fileUploadImport').get(0).files[0];
+        var fileType = file.name.split('.')[1];
+        var validFileTypes = ["csv", "xls", "xlsx"];
+        if ($.inArray(fileType, validFileTypes) < 0) {
+            e.preventDefault(e);
+            $("#divNext").attr("style", "display:none");
+            messageText = getMessageDetailsById(22);
+
+            setTimeout(function () {
+                debugger;
+                if (messageText != undefined) {
+                    $("#infoModalBody").text(messageText);
+                    $("#modal-info").modal('show');
+                }
+            }, 500);
+
+        }
+    });
+
+    function browseAndUploadNext() {
+        $("#divNext").attr("style", "display:none");
+
+            $.ajax({
+                url: Q.resolveUrl('~/ImportFile/BrowseAndUploadNext'),
+                type: 'POST',
+                data: { "columnHeaderRowNumber": $("#txtColumnHeaderRowNumber").val()},
+                dataType: 'json',
+                success: function (data) {
+                    if (!data.Item1) {
+                        $("#infoModalBody").text(data.Item2);
+                        $("#modal-info").modal('show');
+                    }
+                    else {
+                        window.location.href = "/ImportFile/UploadedDataView";
+
+                    }
+
+                },
+                error: function (x, y, z) {
+                    alert(x + '\n' + y + '\n' + z);
+                }
+            });
+
+    }
+
+    function getMessageDetailsById(messageTypeId) {
+        debugger;
+        $.ajax({
+            url: Q.resolveUrl('~/Common/GetMessageDetailsById'),
+            type: 'GET',
+            data: { "messageTypeId": messageTypeId },
+            dataType: 'json',
+            success: function (response) {
+                debugger;
+                if (response.IsStatus) {
+                    return messageText = response.Data;
+                }
+
+            },
+            error: function (response) {
+                debugger;
+            }
+        });
+
+    }
+
+    function backToForm() {
+        debugger;
+        window.location.href = previousPageUrl;
+
+    }
+</script>
+
+
+

@@ -1,0 +1,288 @@
+﻿@model CVC.Modules.NModuleManagement.NModuleManagementViewModel
+
+
+<script>
+    $(document).ready(function () {
+        $('.data-table').DataTable({
+            responsive: {
+                details: {
+                    type: 'column'
+                }
+			},
+			//"order": [[3, "asc"]],
+            "language": {
+                "lengthMenu": "_MENU_ records per page",
+            },
+			//columnDefs: [{ orderable: false, targets: [3], visible: false, searchable: false }]
+            columnDefs: [{ orderable: false, targets: [-1, -2] }]
+        });
+        $('.js-example-basic-single').select2();
+    });
+
+    function getViewsBasedOnModuleId(id) {
+        var table = $('#tb_view_list').DataTable();
+        table.destroy();
+        $.ajax({
+            type: "GET",
+            url: "/NModuleManagement/Module/getViewsBasedOnModuleId?id=" + id,
+            dataType: "json",
+            success: function (list) {
+                // data;
+                console.log(list);
+                var table_data = list;//JSON.parse(data);
+
+                $('#tb_view_list tbody tr').remove();
+                $.each(list, function (index, value) {
+                    var tr = "<tr>";
+                    tr += "<td>" + value.ViewsId + "</td>";
+                    tr += "<td>" + value.ModuleModuleName + "</td>";
+                    tr += "<td>" + value.ViewName + "</td>";
+                    tr += "<td>" + value.StatusStatusName + "</td>";
+                    tr += "<td>" + '<span onclick="javascript: setSelectedView(' + value.ViewsId + ')" class="glyphicon glyphicon-pencil" aria-hidden="true"></span>|' +
+                        '<span onclick="javascript: deleteSelectedView(' + value.ViewsId + ')" class="glyphicon glyphicon-trash" aria-hidden="true"></span></td>';
+                    $('#tb_view_list tbody').append(tr);
+                });
+
+                var table = $('#tb_view_list').DataTable({
+                });
+            },
+            error: function () {
+                alert("Error occured!!")
+            }
+        });
+    }
+
+    function getPartaiViewsBasedOnModuleId(id, machineId) {
+        debugger;
+        $.ajax({
+            type: "POST",
+            url: "/NModuleManagement/Module/getPartailViewsBasedOnModuleId?id=" + id,
+            dataType: "html",
+            success: function (response) {
+                debugger;
+                $("#moduleId").val(id);
+               // $("#ViewsFormInfo_ModuleId")[0].val(id);//09-07-21
+				$("#machineId").val(machineId);
+				$("#viewDIV").html(response);
+                $("#viewfieldDIV").html("");
+                resetArrow();
+            },
+            error: function () {
+                alert("Error occured!!")
+            }
+        });
+    }
+
+	function clearForm() {
+		var validator = $("#ModuleFormId").validate();
+		validator.resetForm();
+        $("#ModuleFormInfo_ModuleId").val(0);
+        $("#ModuleFormInfo_ModuleName").val("");
+        $("#ModuleFormInfo_MachineId").val("");
+        $('#ModuleFormInfo_MachineId').trigger('change');
+        $("#ModuleFormInfo_StatusId").val(1);
+        $('#ModuleFormInfo_StatusId').trigger('change');
+        $("#ModuleFormInfo_Sequence").val("");
+        $("#ModuleFormInfo_EquipmentId").val("");
+        $("#ModuleFormInfo_SerialNumber").val("");
+        $("#ModuleFormInfo_SerialNumber").prop('readonly', false)
+    }
+
+	function setSelectedModule(id) {
+		var validator = $("#ModuleFormId").validate();
+		validator.resetForm();
+        $.ajax({
+            type: "GET",
+            url: "/NModuleManagement/Module/getSelectedModule?id=" + id,
+            //data: JSON.stringify(id),
+            dataType: "json",
+            //contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                console.log(data);
+                $("#ModuleFormInfo_ModuleId").val(data.ModuleId);
+                $("#ModuleFormInfo_ModuleName").val(data.ModuleName);
+                $("#ModuleFormInfo_MachineId").val(data.MachineId);
+                $('#ModuleFormInfo_MachineId').trigger('change');
+                $("#ModuleFormInfo_StatusId").val(data.StatusId);
+                $('#ModuleFormInfo_StatusId').trigger('change');
+                $("#ModuleFormInfo_Sequence").val(data.Sequence);
+                $("#ModuleFormInfo_EquipmentId").val(data.EquipmentId);
+                $("#ModuleFormInfo_SerialNumber").val(data.SerialNumber);
+                if (data.SerialNumber != null) {
+                    $("#ModuleFormInfo_SerialNumber").prop('readonly', true)
+                }
+                $("#myModule").modal('show');
+            },
+            error: function () {
+                alert("Error occured!!")
+            }
+        });
+    }
+
+	function deleteSelectedModule(id) {
+		$.ajax({
+			type: "GET",
+			url: "/NModuleManagement/Module/checkModuleInView?id=" + id,
+			dataType: "json",
+			contentType: 'application/json; charset=utf-8',
+			success: function (data) {
+				if (data == false) {
+					var confirmDelete = confirm("Do you really want to delete this record?");
+					if (confirmDelete) {
+						$("#IDToDelete").val(id);
+						$("#ModuleListRecords").submit();
+					}
+					else {
+						return false;
+					}
+				}
+				else {
+					alert("Please delete Module detail from View.");
+				}
+			},
+			error: function () {
+				alert("Error occured!!")
+			}
+		});
+
+    }
+</script>
+
+<!-- Large modal -->
+<br />
+<button type="button" class="btn btn-primary" data-toggle="modal" onclick="javascript: clearForm();" data-target="#myModule">New Module</button>
+<input type="hidden" id="moduleId" />
+<input type="hidden" id="viewId" />
+<input type="hidden" id="viewfieldId" />
+<input type="hidden" id="machineId" />
+<br />
+<br />
+
+@using (Html.BeginForm("DeleteModule", "NModuleManagement", FormMethod.Post, new { id = "ModuleListRecords" }))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" id="IDToDelete" name="IDToDelete" />
+    <div class="table-sec">
+        <table class="display data-table" cellspacing="0" width="100%" border="1" cellpadding="0" style="border-collapse:collapse;" bordercolor="#e7eaec">
+            <thead>
+                <tr>
+                    <th align="left">
+                        <label>ID</label>
+                    </th>
+                    <th align="left">
+                        <label>Module Name</label>
+                    </th>
+                    <th align="left">
+                        <label>Machine Machine Name</label>
+                    </th>
+                    @*<th align="left">
+                        <label>Sequence</label>
+                    </th>*@
+                    <th align="left">
+                        <label>Status Status Name</label>
+                    </th>
+                    <th>
+                        Actions
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.ModuleColumnsList)
+                {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ModuleId)
+                    </td>
+                    <td>
+                        <a href="javascript:void(0);" onclick="getPartaiViewsBasedOnModuleId(@item.ModuleId, @item.MachineId);">@Html.DisplayFor(modelItem => item.ModuleName)</a>
+
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MachineMachineName)
+                    </td>
+                    @*<td>
+            @Html.DisplayFor(modelItem => item.Sequence)
+        </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StatusStatusName)
+                    </td>
+                    <td align="center">
+                        <span onclick="javascript: setSelectedModule(@item.ModuleId)" class="glyphicon glyphicon-pencil" aria-hidden="true"></span>@*|*@
+                        @*<span onclick="javascript: deleteSelectedModule(@item.ModuleId)" class="glyphicon glyphicon-trash" aria-hidden="true"></span>*@
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<div id="viewDIV"></div>
+<div id="viewfieldDIV"></div>
+
+@using (Html.BeginForm("PostModuleForm", "NModuleManagement", FormMethod.Post, new { id = "ModuleFormId" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="myModule">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title" id="myLargeModalLabel">Module</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">
+                                <sup class="mandatory-lable">*</sup>
+                                Module Name:
+                            </label>
+                            @Html.HiddenFor(m => m.ModuleFormInfo.ModuleId)
+                            @Html.TextBoxFor(m => m.ModuleFormInfo.ModuleName, new { @class = "form-control", placeholder = "Enter Module Name", required = true, @maxlength = "50" })
+                            @Html.ValidationMessageFor(model => model.ModuleFormInfo.ModuleName, "Module Name is required.", new { @class = "error" })
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">
+                                <sup class="mandatory-lable">*</sup>
+                                Machine:
+                            </label>
+                            @Html.DropDownListFor(m => m.ModuleFormInfo.MachineId, new SelectList(Model.MachineListInfo, "MachineId", "MachineName"), "-- Select --", new { @class = "form-control js-example-basic-single", required = true })
+                            @Html.ValidationMessageFor(model => model.ModuleFormInfo.MachineId, "Machine is required.", new { @class = "error" })
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">
+                                <sup class="mandatory-lable">*</sup>
+                                Status:
+                            </label>
+                            @Html.DropDownListFor(m => m.ModuleFormInfo.StatusId, new SelectList(Model.StatusInfoList, "StatusId", "StatusName"), new { @class = "form-control js-example-basic-single", required = true })
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">
+                                Sequence:
+                            </label>
+                            @Html.TextBoxFor(a => a.ModuleFormInfo.Sequence, new { @class = "form-control", placeholder = "Enter Sequence", @type = "number", pattern = "^[0-9]*$", @min = 1 })
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">
+                                EquipmentId:
+                            </label>
+                            @Html.TextBoxFor(a => a.ModuleFormInfo.EquipmentId, new { @class = "form-control", placeholder = "Enter Equipment" })
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">
+                                Serial Number:
+                            </label>
+                            @Html.TextBoxFor(a => a.ModuleFormInfo.SerialNumber, new { @class = "form-control", placeholder = "Enter Serial Number" })
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

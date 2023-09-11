@@ -1,0 +1,196 @@
+﻿@model  CVC.ViewModels.ViewFieldAccessViewModel
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>View Field Access</h2>
+
+<div class="row">
+    <div class="form-group col-sm-4">
+        <label for="recipient-name" class="control-label">
+            <sup class="mandatory-lable"></sup>
+            Role
+        </label>
+
+        @Html.DropDownListFor(m => Model.RoleId, new SelectList(ViewBag.RoleList, "RoleId", "RoleName"), "-- Select --", new { @id = "ddlRole", @class = "form-control js-example-basic-single" })
+
+    </div>
+    <div class="form-group col-sm-4">
+        <label for="recipient-name" class="control-label">
+            <sup class="mandatory-lable"></sup>
+            Module
+        </label>
+
+        @Html.DropDownListFor(m => Model.ModuleId, new SelectList(ViewBag.ModuleList, "ModuleId", "ModuleName"), "-- Select --", new { @id = "ddlModule", @class = "form-control js-example-basic-single" })
+
+    </div>
+    <div class="form-group col-sm-4">
+        <label for="recipient-name" class="control-label">
+            <sup class="mandatory-lable"></sup>
+            View
+        </label>
+
+        @Html.DropDownListFor(m => Model.ViewId, new SelectList(ViewBag.ViewList, "ViewsId", "ViewName"), "-- Select --", new { @id = "ddlView", @class = "form-control js-example-basic-single" })
+
+    </div>
+</div>
+
+<div class="row" id="divViewFieldButton">
+    <div class="form-group col-sm-4">
+        <button type="button" id="btnAddViewField" class="btn btn-primary" data-toggle="modal">View Field Access</button>
+    </div>
+</div>
+
+<input type="hidden" id="hidModuleId" value="@Model.ModuleId" />
+<input type="hidden" id="hidRoleId" value="@Model.RoleId" />
+<input type="hidden" id="hidViewId" value="@Model.ViewId" />
+
+
+<div class="table-sec" style="margin-top:10px" id="divViewFieldAccess">
+
+    @{Html.RenderPartial("ViewFieldAccessList_Partial");}
+</div>
+
+<div id="divViewFieldList">
+
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <button type="button" id="btnRole" class="btn btn-primary">Role</button>
+        <button type="button" id="btnModule" class="btn btn-primary">Module</button>
+        <button type="button" id="btnView" class="btn btn-primary">View</button>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $("#btnAddViewField").click(function () {
+
+        GetAllViewField()
+    });
+
+    function GetAllViewField()
+    {
+
+        $.ajax({
+            url: "/NAdministration/RoleAccess/GetAllViewField",
+            type: 'POST',
+            data: { "ViewsId":@Model.ViewId,"RoleId":@Model.RoleId },
+            success: function (response) {
+
+                $("#divViewFieldList").html(response);
+                $("#divViewFieldListModal").modal('show');
+            },
+            error: function (x, y, z) {
+                console.log(x + '\n' + y + '\n' + z);
+            }
+        });
+
+    }
+    $(document).ready(function () {
+
+        $('.js-example-basic-single').select2();
+
+        var url = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+
+        if (url == "RoleId=0,ViewsId=0,ModuleId=0") {
+            $("#divViewFieldButton").attr("style", "display:none");
+        }
+    });
+
+    $("#ddlRole").change(function () {
+
+        BindModuleDropDown();
+    })
+
+    $("#ddlModule").change(function () {
+        BindViewDropDown();
+        $('.js-example-basic-single').select2();
+    })
+
+    $("#ddlView").change(function () {
+        var viewId = $("#ddlView").val();
+        LoadViewFieldAcess();
+    })
+
+    $("#btnRole").click(function () {
+        window.location.href = "/NAdministration/RoleAccess";
+    });
+
+    $("#btnModule").click(function () {
+        window.location.href = "/NAdministration/RoleAccess/ModuleAccessList?RoleId=0";
+    });
+
+    $("#btnView").click(function () {
+        window.location.href = "/NAdministration/RoleAccess/ViewAccessList?RoleId=0&ModuleId=0";
+    });
+
+
+    function BindModuleDropDown()
+    {
+
+        $("#ddlModule").empty();
+        $("#ddlModule").select2("val", "");
+            var optionhtml = '<option value>' + "--Select--" + '</option>';
+            $("#ddlModule").append(optionhtml);
+
+            $.ajax({
+                url: '/NAdministration/RoleAccess/GetModuleByRoleIdAjax',
+                type: "GET",
+                dataType: "JSON",
+                data: { RoleId: $("#ddlRole").val() },
+                success: function (response) {
+                    $.each(response, function (i, d) {
+                        debugger;
+                            var data = '<option value=' + d.ModuleId + '>' + d.ModuleName + '</option>'
+                            $('#ddlModule').append(data);
+
+                    });
+                },
+                error: function (request, status, error) {
+                }
+            });
+
+    }
+
+    function BindViewDropDown() {
+
+        $("#ddlView").empty();
+        $("#ddlView").select2("val", "");
+        var optionhtml = '<option value>' + "--Select--" + '</option>';
+        $("#ddlView").append(optionhtml);
+
+        $.ajax({
+            url: '/NAdministration/RoleAccess/GetViewByModuleIdAjax',
+            type: "GET",
+            dataType: "JSON",
+            data: { ModuleId: $("#ddlModule").val(), RoleId: $("#ddlRole").val() },
+            success: function (response) {
+                $.each(response, function (i, d) {
+
+                    var data = '<option value=' + d.ViewsId + '>' + d.ViewName + '</option>'
+                    $('#ddlView').append(data);
+
+                });
+            },
+            error: function (request, status, error) {
+            }
+        });
+
+    }
+
+    function LoadViewFieldAcess()
+    {
+
+        var roleId = $("#ddlRole").val();
+        var moduleId = $("#ddlModule").val();
+        var viewId = $("#ddlView").val();
+
+        if (moduleId != "" && roleId != "" && viewId != "")
+        {
+            window.location.href = "/NAdministration/RoleAccess/ViewFieldAccessList?RoleId=" + roleId + "&ModuleId=" + moduleId + "&ViewsId=" + viewId;
+        }
+    }
+
+</script>

@@ -1,0 +1,151 @@
+﻿@model  CVC.ViewModels.ViewAccessViewModel
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<h2>View Access</h2>
+<div class="row">
+    <div class="form-group col-sm-4">
+        <div class="form-group">
+            <label for="recipient-name" class="control-label">
+                <sup class="mandatory-lable"></sup>
+                Role
+            </label>
+
+            @Html.DropDownListFor(m => Model.RoleId, new SelectList(ViewBag.RoleList, "RoleId", "RoleName"), "-- Select --", new { @id = "ddlRole", @class = "form-control js-example-basic-single" })
+
+        </div>
+    </div>
+    <div class="form-group col-sm-4">
+        <label for="recipient-name" class="control-label">
+            <sup class="mandatory-lable"></sup>
+            Module
+        </label>
+
+        @Html.DropDownListFor(m => Model.ModuleId, new SelectList(ViewBag.ModuleList, "ModuleId", "ModuleName"), "-- Select --", new { @id = "ddlModule", @class = "form-control js-example-basic-single" })
+
+    </div>
+</div>
+<div class="row" id="divViewButton">
+    <div class="form-group col-sm-4">
+        <button type="button" id="btnAddView" class="btn btn-primary" data-toggle="modal">View Access</button>
+    </div>
+</div>
+
+
+<input type="hidden" id="hidModuleId" value="@Model.ModuleId" />
+<input type="hidden" id="hidRoleId" value="@Model.RoleId" />
+
+
+<div class="table-sec" style="margin-top:10px" id="divViewAccess">
+
+    @{Html.RenderPartial("ViewAccessList_Partial");}
+</div>
+
+<div id="divViewList">
+
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <button type="button" id="btnRole" class="btn btn-primary">Role</button>
+        <button type="button" id="btnModule" class="btn btn-primary">Module</button>
+        <button type="button" id="btnViewField" class="btn btn-primary">View Field</button>
+
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+    $("#btnAddView").click(function () {
+        GetAllView()
+    });
+
+    function GetAllView() {
+        $.ajax({
+            url: "/NAdministration/RoleAccess/GetAllView",
+            type: 'POST',
+            data: { "ModuleId":@Model.ModuleId,"RoleId":@Model.RoleId },
+            success: function (response) {
+
+                $("#divViewList").html(response);
+                $("#divViewListModal").modal('show');
+            },
+            error: function (x, y, z) {
+                console.log(x + '\n' + y + '\n' + z);
+            }
+        });
+
+    }
+    $(document).ready(function () {
+
+        $('.js-example-basic-single').select2();
+
+            var url = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+
+            if (url == "RoleId=0,ModuleId=0") {
+                $("#divViewButton").attr("style", "display:none");
+            }
+    });
+
+    $("#ddlModule").change(function () {
+        LoadViewAcess();
+    })
+
+    $("#ddlRole").change(function () {
+
+        BindModuleDropDown();
+    })
+
+    function BindModuleDropDown()
+    {
+        $('#ddlModule').empty();
+        $("#ddlModule").select2("val", "");
+            var optionhtml = '<option value>' + "--Select--" + '</option>';
+            $("#ddlModule").append(optionhtml);
+
+            $.ajax({
+                url: '/NAdministration/RoleAccess/GetModuleByRoleIdAjax',
+                type: "GET",
+                dataType: "JSON",
+                data: { RoleId: $("#ddlRole").val() },
+                success: function (response) {
+                    $.each(response, function (i, d) {
+                        debugger;
+                            var data = '<option value=' + d.ModuleId + '>' + d.ModuleName + '</option>'
+                            $('#ddlModule').append(data);
+
+                    });
+                },
+                error: function (request, status, error) {
+                }
+            });
+
+    }
+
+    function LoadViewAcess()
+    {
+        var moduleId = $("#ddlModule").val();
+        var roleId = $("#ddlRole").val();
+        if (moduleId != "" && roleId != "")
+        {
+            window.location.href = "/NAdministration/RoleAccess/ViewAccessList?RoleId=" + roleId + "&ModuleId=" + moduleId;
+        }
+    }
+
+
+    $("#btnRole").click(function () {
+        window.location.href = "/NAdministration/RoleAccess";
+    });
+
+    $("#btnModule").click(function () {
+        window.location.href = "/NAdministration/RoleAccess/ModuleAccessList?RoleId=0";
+    });
+
+    $("#btnViewField").click(function () {
+        window.location.href = "/NAdministration/RoleAccess/ViewFieldAccessList?RoleId=0&ViewsId=0&ModuleId=0";
+    });
+
+</script>

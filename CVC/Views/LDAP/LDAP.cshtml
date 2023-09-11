@@ -1,0 +1,78 @@
+﻿
+@model CVC.Models.LDAP
+
+@{
+    ViewBag.Title = "LDAP";
+}
+
+<h2>LDAP</h2>
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @*<h4>LDAP</h4>*@
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.LDAPUrl, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.LDAPUrl, new { htmlAttributes = new { @class = "form-control", style = "width:350px", required = true } })
+                @*@Html.ValidationMessageFor(model => model.LDAPUrl, "", new { @class = "text-danger" })*@
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control", style = "width:350px", required = true } })
+                @*@Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })*@
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.PasswordFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", style = "width:320px", required = true } })
+                @*@Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })*@
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Domain, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Domain, new { htmlAttributes = new { @class = "form-control", style = "width:350px", required = true } })
+                @*@Html.ValidationMessageFor(model => model.Domain, "", new { @class = "text-danger" })*@
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button id="LoginButton" class="btn btn-primary">
+                    Connect                 @*@Texts.Forms.Membership.Login.SignInButton*@
+                </button>
+
+                @*<input type="button" value="Cancel" class="btn btn-default" />*@
+                <button id="CancelButton" class="btn btn-primary">
+                    Cancel                   @*@Texts.Forms.Membership.Login.SignInButton*@
+                </button>
+            </div>
+        </div>
+        <div class="form-group">
+            @*@Html.LabelFor(model => model.Error, htmlAttributes: new { @class = "control-label col-md-2" })*@
+
+            <div class="col-md-10" style="color:red; text-align :center; font-weight:bold">
+                @Model.Error
+            </div>
+        </div>
+    </div>
+}
+
+@*<div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>*@
+
+

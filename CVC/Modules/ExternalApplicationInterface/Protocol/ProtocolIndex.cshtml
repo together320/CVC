@@ -1,0 +1,16 @@
+﻿@{
+    ViewData["Title"] = Serenity.LocalText.Get("Db.ExternalApplicationInterface.Protocol.EntityPlural");
+}
+
+<div id="GridDiv"></div>
+<input type="hidden" id="hdnProtocolImportAccess" />
+
+<script type="text/javascript">
+    $("#hdnProtocolImportAccess").val('@ViewBag.IsModifyPermission')
+
+    jQuery(function () {
+        new CVC.ExternalApplicationInterface.ProtocolGrid($('#GridDiv'), {}).init();
+
+        Q.initFullHeightGridPage($('#GridDiv'));
+    });
+</script>

@@ -1,0 +1,121 @@
+/*@import "site.theme.less";
+@import "site.mixins.less";
+@import "site.administration.less";
+@import "site.membership.less";*/
+.reset-box-sizing,
+.reset-box-sizing *,
+.reset-box-sizing *:before,
+.reset-box-sizing *:after {
+  -ms-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
+}
+.s-MachineCustomization-DisplayObjectTypesDialog > .size {
+  width: 650px;
+}
+.s-MachineCustomization-DisplayObjectTypesDialog .caption {
+  width: 150px;
+}
+.s-MachineCustomization-DisplayObjectDialog > .size {
+  width: 650px;
+}
+.s-MachineCustomization-DisplayObjectDialog .caption {
+  width: 150px;
+}
+.s-MachineCustomization-ListDisplayDialog > .size {
+  width: 650px;
+}
+.s-MachineCustomization-ListDisplayDialog .caption {
+  width: 150px;
+}
+.s-MachineCustomization-FormDisplayDialog > .size {
+  width: 650px;
+}
+.s-MachineCustomization-FormDisplayDialog .caption {
+  width: 150px;
+}
+.s-MachineCustomization-ButtonDisplayDialog > .size {
+  width: 650px;
+}
+.s-MachineCustomization-ButtonDisplayDialog .caption {
+  width: 150px;
+}
+.s-MachineCustomization-RealtimeParameterDisplayDialog > .size {
+  width: 650px;
+}
+.s-MachineCustomization-RealtimeParameterDisplayDialog .caption {
+  width: 150px;
+}
+.s-MachineCustomization-LineChartDisplayDialog > .size {
+  width: 650px;
+}
+.s-MachineCustomization-LineChartDisplayDialog .caption {
+  width: 150px;
+}
+.s-MachineCustomization-PieChartDisplayDialog > .size {
+  width: 650px;
+}
+.s-MachineCustomization-PieChartDisplayDialog .caption {
+  width: 150px;
+}
+.s-MachineCustomization-TreeDisplayDialog > .size {
+  width: 650px;
+}
+.s-MachineCustomization-TreeDisplayDialog .caption {
+  width: 150px;
+}
+.s-MachineCustomization-AttachmentDisplayDialog > .size {
+  width: 650px;
+}
+.s-MachineCustomization-AttachmentDisplayDialog .caption {
+  width: 150px;
+}
+.s-MachineCustomization-AlarmDisplayDialog > .size {
+  width: 650px;
+}
+.s-MachineCustomization-AlarmDisplayDialog .caption {
+  width: 150px;
+}
+.s-MachineCustomization-NotificationDisplayDialog > .size {
+  width: 650px;
+}
+.s-MachineCustomization-NotificationDisplayDialog .caption {
+  width: 150px;
+}
+.s-MachineCustomization-ContainerDisplayDialog > .size {
+  width: 650px;
+}
+.s-MachineCustomization-ContainerDisplayDialog .caption {
+  width: 150px;
+}
+.s-MachineCustomization-PrimaryRelationshipDialog > .size {
+  width: 650px;
+}
+.s-MachineCustomization-PrimaryRelationshipDialog .caption {
+  width: 150px;
+}
+.s-MachineCustomization-SecondaryRelationshipDialog > .size {
+  width: 650px;
+}
+.s-MachineCustomization-SecondaryRelationshipDialog .caption {
+  width: 150px;
+}
+.s-MachineCustomization-DisplayObjectFieldDialog > .size {
+  width: 650px;
+}
+.s-MachineCustomization-DisplayObjectFieldDialog .caption {
+  width: 150px;
+}
+.s-MachineCustomization-ScreenViewsDialog > .size {
+  width: 650px;
+}
+.s-MachineCustomization-ScreenViewsDialog .caption {
+  width: 150px;
+}
+div[class*="DisplayDialog"] {
+  width: 850px !important;
+}
+.CVC_Hidden {
+  display: none !important;
+}

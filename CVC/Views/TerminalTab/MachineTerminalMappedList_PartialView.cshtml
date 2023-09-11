@@ -1,0 +1,71 @@
+﻿@model  IEnumerable<CVC.ViewModels.MachineTerminalMapping>
+<table class="displays table-striped table-bordered dt-responsive nowrap cell-border" id="dtMachineTerminalMapped" cellspacing="0" width="100%" border="1" cellpadding="0" style="border-collapse:collapse;" bordercolor="#e7eaec">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th align="left">
+                <label>Terminal Name</label>
+            </th>
+            <th align="left">
+                <label>Mac Address</label>
+            </th>
+            <th align="left">
+                <label>Terminal Type</label>
+            </th>
+
+            <th align="left">
+                <label>Is Read</label>
+            </th>
+            <th align="left">
+                <label>Is Write</label>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+
+        <tr>
+            <td>@item.Id</td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TerminalName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MacAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TerminalType)
+
+            </td>
+
+            <td>
+                <input disabled="disabled" type="checkbox" checked="@item.IsRead" />
+            </td>
+
+            <td>
+                <input disabled="disabled" type="checkbox" checked="@item.IsWrite" />
+            </td>
+
+        </tr>
+        }
+    </tbody>
+</table>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#dtMachineTerminalMapped').DataTable({
+            responsive: {
+                details: {
+                    type: 'column'
+                }
+            },
+
+            "language": {
+                "lengthMenu": "_MENU_ records per page",
+            },
+
+        });
+
+    });
+ </script>

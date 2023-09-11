@@ -1,0 +1,114 @@
+﻿
+@{
+                /**/
+
+                ViewData["Title"] = "User";
+}
+<script src="@Url.Content("~/Scripts/jstree.js")" type="text/javascript"></script>
+
+<div id="GridDiv">
+
+</div>
+<input type="hidden" id="hdnUserImportAccess" />
+
+@if (Model != null)
+{
+    <div class="grid-title"><div class="title-text">Active Directory</div></div>
+
+    <div id="ADTree">
+        @if (Model.RootNode != null)
+        {
+            foreach (var treeNode in Model.RootNode)
+            {
+                <ul>
+
+                    @if (treeNode != null)
+                    {
+                        <li>
+                            @treeNode.TNode
+                            <ul>
+                                @foreach (var item in treeNode.ChildNode)
+                                {
+                                    <li class="jstree-clicked">@item.TNode </li>
+                                }
+                            </ul>
+
+                        </li>
+
+                    }
+                </ul>
+            }
+        }
+
+    </div>
+
+}
+
+<div>
+
+</div>
+
+<script type="text/javascript">
+    debugger;
+    $("#hdnUserImportAccess").val('@ViewBag.IsModifyPermission')
+
+
+    jQuery(function () {
+        new CVC.Administration.UserGrid($('#GridDiv'), {
+        });
+
+        Q.initFullHeightGridPage($('#GridDiv'));
+    });
+
+    $(function () {
+        $('#ADTree').jstree();
+    });
+
+
+
+
+
+    $(".jstree-clicked").click(function (e) {
+
+
+        var strnode = e.currentTarget.innerText;
+        //console.log($("#ADTree").jstree("get_selected").text());
+        var res = strnode.split(" ");
+        var fnm = res[0];
+        var lnm = res[1];
+        if (lnm == "undefined") {
+            lnm = "";
+        }
+        if (fnm != "") {
+            var parameter = {
+                "FirstName": fnm, "LastName": lnm
+            };
+            // console.log(new Date());
+            $.ajax({
+                url: Q.resolveUrl('~/Account/SaveADUser'),
+                type: 'POST',
+                async: false,
+                data: parameter,
+                success: function (data) {
+
+                    if (data == "AD User Saved Successfully") {
+                        alert(data);
+                    }
+                    else {
+                        alert(data);
+                    }
+
+
+                },
+                error: function (x, y, z) {
+
+                }
+            });
+        }
+        else {
+            alert("Error: User not saved");
+        }
+
+    });
+
+</script>

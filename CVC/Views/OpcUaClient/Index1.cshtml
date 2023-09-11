@@ -1,0 +1,58 @@
+﻿@model CVC.ViewModels.OPCUaClientAddressSpace
+
+@{
+    ViewBag.Title = "Address Space";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Address Space</title>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="dataTable-wrapper" style="width:100%; margin:0 auto;">
+
+            <div class="row">
+                <div class=" form-group col-md-3">
+                    <label>Machine </label>
+                    @Html.DropDownListFor(m => Model.NodeId, new SelectList(ViewBag.MachineList, "MachineId", "MachineName"), "-- Select --", new { @id = "ddlMachine", @class = "form-control js-example-basic-single" })
+                </div>
+   
+            </div>
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <div id="divAddressSpace"></div>
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</body>
+</html>
+
+<script type="text/javascript">
+    $("#ddlMachine").change(function () {
+        var machineId = parseInt( $("#ddlMachine option:selected").val());
+        $.ajax({
+            url: Q.resolveUrl('~/OpcUaClient/GetAddressSpace'),
+            data: {
+                machineId: machineId
+            },
+            type: 'GET',
+            success: function (data) {
+                debugger;
+                $("#divAddressSpace").html(data);
+                $("#AddressSpaceModal").modal('show');
+
+            }
+        });
+    });
+
+   
+</script>

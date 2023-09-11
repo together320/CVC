@@ -1,0 +1,51 @@
+﻿{
+  "Base": [
+    "~/Content/font-open-sans-base64.css",
+    "~/Content/font-awesome.css",
+    "~/Content/aristo/aristo.css",
+    "~/Content/bootstrap.css",
+    "~/Content/css/select2.css",
+    "~/Content/pace.css",
+    "~/Content/toastr.css",
+    "~/Content/slick.grid.css",
+    "~/Content/slick-default-theme.css",
+    "~/Content/serenity/serenity.css",
+    "~/Scripts/vegas/vegas.css",
+    "~/Content/font-awesome-animation.min.css",
+    "~/Content/_responsive.css",
+    "~/Content/animation_style.css",
+    "~/Content/bootstrap2-toggle.min.css"
+    //  ,
+    //"~/Content/dist/css/todc-bootstrap.css",
+    //"~/Content/dist/css/Style.css",
+    //"~/Content/jquery.gridster.min.css",
+    //"~/Content/adminlte2/bower_components/bootstrap/dist/css/bootstrap.min.css",
+    //"~/Content/adminlte2/bower_components/font-awesome/css/font-awesome.min.css",
+    //"~/Content/adminlte2/bower_components/Ionicons/css/ionicons.min.css",
+    //"~/Content/adminlte2/dist/css/AdminLTE.min.css",
+    //"~/Content/adminlte2/dist/css/skins/_all-skins.min.css",
+    //"~/Content/adminlte2/bower_components/morris.js/morris.css",
+    //"~/Content/adminlte2/bower_components/jvectormap/jquery-jvectormap.css",
+    //"~/Content/adminlte2/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css",
+    //"~/Content/adminlte2/bower_components/bootstrap-daterangepicker/daterangepicker.css",
+    //"~/Content/adminlte2/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css",
+    //"~/Content/adminlte2/plugins/bootstrap-wysihtml5/fonts_googleapis_com.css",
+    //"~/Content/adminlte2/plugins/bootstrap-wysihtml5/fonts_googleapis_com.css"
+   // "~/Content/adminlte2/dist/skins/fonts_googleapis_com.css"
+  ],
+  "Site": [
+    "~/Content/jquery.fileupload.css",
+    "~/Content/colorbox/jquery.colorbox.css",
+    "~/Content/site/site.css",
+    "~/Content/site/jsguru.site.css",         // added by Denis for less dated 8/2/2021
+    "~/Content/site/cvc.custom.css"
+  ],
+  "Pages/Dashboard": [
+    "~/Content/iCheck/flat/blue.css",
+    "~/Scripts/morris/morris.css",
+    "~/Scripts/jvectormap/jquery-jvectormap-1.2.2.css",
+    "~/Scripts/datepicker/datepicker3.css",
+    "~/Scripts/daterangepicker/daterangepicker-bs3.css",
+    "~/Scripts/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css"
+  ]
+}

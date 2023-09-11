@@ -1,0 +1,18 @@
+﻿@{
+                /**/
+
+                ViewData["Title"] = Serenity.LocalText.Get("Db.PackSettings.Cotton.EntityPlural");
+}
+
+<div id="GridDiv"></div>
+<input type="hidden" id="hdnCottonImportAccess" />
+
+<script type="text/javascript">
+    $("#hdnCottonImportAccess").val('@ViewBag.IsModifyPermission')
+
+    jQuery(function () {
+        new CVC.PackSettings.CottonGrid($('#GridDiv'), {}).init();
+
+        Q.initFullHeightGridPage($('#GridDiv'));
+    });
+</script>

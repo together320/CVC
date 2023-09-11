@@ -1,0 +1,3330 @@
+﻿@model CVC.Machine.SettingsPageModel
+
+@section Charts
+{
+}
+<body>
+    <style>
+
+        .loader {
+            position: fixed;
+            background: rgba(89, 90, 93, 0.5);
+            left: 0;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            z-index: 9999;
+            overflow: hidden;
+            /* height: 100%;
+            width: 100%; */
+        }
+
+        .loadingmainwrap {
+            transform: translate(-50%, -45%);
+            left: 50%;
+            top: 45%;
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background: #fff;
+            border-radius: 360px;
+        }
+
+        .loadingwrap,
+        .loadinglogo {
+            transform: translate(-50%, -50%);
+            left: 50%;
+            top: 50%;
+            position: absolute;
+        }
+
+            .loadingwrap svg {
+                width: 100%;
+                height: 100%;
+            }
+
+        .loadingwrap {
+            width: 100%;
+            height: 100%;
+        }
+
+        .loadinglogo {
+            width: 70%;
+        }
+
+            .loadinglogo img {
+                max-width: 100%;
+            }
+
+        .loadercircle {
+            border: 5px solid #006bd5;
+            border-top: 5px solid #e40000;
+            border-radius: 50%;
+            width: 100%;
+            height: 100%;
+            animation: spin 2s linear infinite;
+            background-color: #fff;
+        }
+
+        @@keyframes spin {
+            0% {
+                transform: rotate(0deg);
+                border-radius: 0%;
+            }
+
+            100% {
+                transform: rotate(360deg);
+                border-radius: 100%;
+            }
+        }
+
+        #chartdiv g[aria-labelledby='id-66-title'] {
+            display: none;
+        }
+
+        #chartdiv g[transform tspan] {
+            display: none;
+        }
+    </style>
+
+    @*<style>
+            body {
+                background-color: #f9f9fa
+            }
+
+            .flex {
+                -webkit-box-flex: 1;
+                -ms-flex: 1 1 auto;
+                flex: 1 1 auto
+            }
+
+            @@media (max-width:991.98px) {
+                .padding {
+                    padding: 1.5rem
+                }
+            }
+
+            @@media (max-width:767.98px) {
+                .padding {
+                    padding: 1rem
+                }
+            }
+
+            .padding {
+                padding: 5rem
+            }
+
+            .card {
+                background: #fff;
+                border-width: 0;
+                border-radius: .25rem;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, .05);
+                margin-bottom: 1.5rem
+            }
+
+            .card {
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                min-width: 0;
+                word-wrap: break-word;
+                background-color: #fff;
+                background-clip: border-box;
+                border: 1px solid rgba(19, 24, 44, .125);
+                border-radius: .25rem
+            }
+
+            .card-header {
+                padding: .75rem 1.25rem;
+                margin-bottom: 0;
+                background-color: rgba(19, 24, 44, .03);
+                border-bottom: 1px solid rgba(19, 24, 44, .125)
+            }
+
+                .card-header:first-child {
+                    border-radius: calc(.25rem - 1px) calc(.25rem - 1px) 0 0
+                }
+
+            card-footer,
+            .card-header {
+                background-color: transparent;
+                border-color: rgba(160, 175, 185, .15);
+                background-clip: padding-box
+            }
+        </style>*@
+
+    <div class="" id="rowSettingsMachine1" style="padding-left: 5px;">
+        @{Html.RenderAction("Index", "RenderViewFields", new { ModuleId = Model.ModuleId, ViewId = Model.Views.FirstOrDefault().Key, ForLabelRollView = true }); }
+
+    </div>
+    <div class="" id="rowSettingsMachine" style="padding-left: 5px;">
+        @{ Html.RenderAction("Index", "RenderViewFields", new { ModuleId = Model.ModuleId, ViewId = Model.Views.FirstOrDefault().Key, ForLabelRollView = false }); }
+
+    </div>
+
+
+
+    <!-- Main row naresh31oct-->
+    @section RightSideBar
+{
+
+        <div class="box box-solid custom-tab-wrap setting-panel-tabs">
+            <input type="hidden" id="hdnviewId" value="@Model.Views.FirstOrDefault().Key" />
+            <input type="hidden" id="hdnModuleId" value="@Model.ModuleId" />
+            <input type="hidden" id="hdnMachineSettingsviewId" value="@Model.Views.FirstOrDefault().Key" />
+            <input type="hidden" id="hdnLabelRollviewId" value="@Model.LabelRollViewId" />
+            <div class="box-body">
+                <ul class="nav nav-tabs">
+
+                    @*<li ModuleId="@Model.ModuleId" ViewId="0">
+                            <a href="@Url.Content("SettingsMachine")">
+                                <i class="fa fa-inbox"></i> Machine Dashboard
+                            </a>
+                        </li>*@
+                    @{int i = 0;}
+                    @foreach (var item in Model.Views)
+                    {
+                        <li class="@(i==0 ? "nav-item active" : "nav-item")" @if (item.Key == Model.Views.FirstOrDefault().Key) { <text> class="active" </text> } name="ulSettingsMenu" onclick="changeview(this,@item.Key)"><a class="nav-link" @*href="#spdiv-@item.Key"*@ href="javascript:void(0)"><i class="fa fa-cog"></i>@item.Value</a></li>
+                        i++;
+                    }
+
+                    @*<li class="pull-right">
+                        <a target="_blank" class="fa fa-question-circle FontLarger" style="font-size:26px;line-height: 1;padding: 8.5px 15px;" href="manual.pdf" onclick="open(this.href, this.target, 'width=600, height=450, top=200, left=250,resizable=no'); return false;"></a>
+                    </li>*@
+                </ul>
+
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /. box -->
+        <!-- /.box -->
+    }
+    @*<input type="hidden" value="@Session["CVCUserName_ForSessionTimeOut"]" id="hdnSessionTimeOut" />*@
+
+    <div class="modal fade" id="alarmModel" role="dialog" data-backdrop="static">
+        <div class="modal-dialog modal-sm">
+
+            <div class="modal-content" style="width:500px">
+                <div class="modal-header">
+
+                    <div class="alert-danger">
+                        <h4 class="modal-title"><span style="font-size:medium">Alarm</span></h4>
+                    </div>
+                </div>
+                <div class="modal-body" style="width:500px" id="nareshdiv">
+
+
+                    <table ViewStateMode="false" id="tableComment" class="table table-striped" style="width :450px">
+
+                        <tbody>
+
+                            <tr>
+                                <th style="background-color:lightgray">Id</th>
+                                <th style="width:150px;background-color:lightgray">Alarm</th>
+                                <th style="width:150px;background-color:lightgray">Comments</th>
+                            </tr>
+
+
+                        </tbody>
+                    </table>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" ViewStateMode="false" onclick="SaveComments();" class="btn btn-default">OK</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*<div class="modal fade" id="ScreenLockModel" role="dialog" data-backdrop="static" style="top:150px">
+        <div class="modal-dialog modal-sm">
+
+            <div class="modal-content" style="width:500px">
+                <div class="modal-header">
+
+                    <div style="text-align:center; background-color:#3c8dbc; color:white;height:30px;vertical-align:central;padding-top:1px">
+                        <h4 class="modal-title;"><span style="font-size:medium;text-align:center ">UnLock Screen</span></h4>
+                    </div>
+                </div>
+                <div class="modal-body" style="width:500px">
+                    <div class="row">
+                        <div class="col-md-12">
+                            User Name :   <label id="lblUserName">@Serenity.Authorization.Username</label>
+
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-md-12">
+                            PassWord :    <input type="password" id="txtPassword" />
+
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="CheckLogin();" class="btn btn-primary">Login</button>*@
+    @*<a href="@Url.Action("SaveComments", "AlarmMachine")" class="btn btn-default graybtn backbtn">Save</a>*@
+    @*</div>
+                </div>
+            </div>
+        </div>*@
+
+    @*<div class="modal fade" id="NoHeartBeatModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header btn-danger">
+
+                        <h4 class="modal-title">Alert !!!</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p id="paraMachineCommunicationFailed"> No Heartbeat has been selected, so communication failures are not tracked</p>
+                    </div>
+                    <div class="modal-footer" id="NoHeartBeatModalFooter">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
+    <div id="dialog">
+        <div>
+            <div style="text-align:center; background-color:#3c8dbc; color:white;height:50px;vertical-align:central;padding-top:1px">
+                <h4 class="modal-title;"><span style="font-size:medium;text-align:center ">Unlock Screen</span></h4>
+            </div>
+            <div style="width:500px">
+                <div class="row">
+                    <div class="col-md-12">
+                    </div>
+                    <div class="col-md-12">
+                        <label>User Name :</label>  <label ViewStateMode="false" id="lblUserName">@Serenity.Authorization.Username</label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-md-12">
+                    </div>
+                    <div>
+                        <input id="txtTemp" ViewStateMode="false" style="width:0px;height:0px" />
+                    </div>
+                    <div class="col-md-12">
+                        <label>Password :</label>     <input ViewStateMode="false" type="password" id="txtPassword" class="form-control AddKeypad" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @Html.Partial("~/Views/PartialViews/Comments_AuthenticationPartialView.cshtml")
+
+    <div class="loader" style="" ViewStateMode="false">
+        <div class="loadingmainwrap" id="loadingmainwrap">
+            <div class="loadingwrap">
+                <div class="loadercircle"></div>
+            </div>
+            <div class="loadinglogo">
+
+                <img src="../Content/site/images/cvcTransLogo.png" ViewStateMode="false">
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(document).ready
+            (function () {
+
+                $(".AddKeypad").keyboard({
+                    layout: 'custom',
+                    usePreview: false,
+                    customLayout: {
+                        'normal': [
+                            '` 1 2 3 4 5 6 7 8 9 0 - = {bksp}',
+                            '{tab} q w e r t y u i o p [ ] \\',
+                            'a s d f g h j k l ; \' {accept}',
+                            '{shift} z x c v b n m , . / {shift}',
+                            ' {space} {left} {right}'
+                        ],
+                        'shift': [
+                            '~ ! @@ # $ % ^ & * ( ) _ + {bksp}',
+                            '{tab} Q W E R T Y U I O P { } |',
+                            'A S D F G H J K L : " {accept}',
+                            '{shift} Z X C V B N M < > ? {shift}',
+                            ' {space} {left} {right}'
+                        ]
+                    }
+                })
+                    .addCaret({
+                        caretClass: '',
+                        // *** for future use ***
+                        // data-attribute containing the character(s) next to the caret
+                        charAttr: 'data-character',
+                        // # character(s) next to the caret (can be negative for RTL)
+                        // default is 1 which shows the character to the right of the caret
+                        // setting this to -1 shows the character to the left
+                        charIndex: -1,
+                        // tweak caret position & height
+                        offsetX: 0,
+                        offsetY: 0,
+                        adjustHt: 0
+                    });
+
+                   });
+    </script>
+
+    @section Scripts
+{
+        <script src="~/Scripts/circularprogress.jquery.min.js"></script>
+        <script src="~/Scripts/number-pb.js"></script>
+        <script src="~/Scripts/jquery.velocity.min.js"></script>
+        @*<script src="~/Scripts/jquery.keyboard.js"></script>*@
+
+        <script src="~/Scripts/sweetalert.min.js"></script>
+        <script type="text/javascript" src="~/Scripts/bootstrap-dialog.min.js"></script>
+        <!--Reference the SignalR library. -->
+        <script src="~/Scripts/jquery.signalR-2.4.1.min.js"></script>
+        <!--Reference the autogenerated SignalR hub script. -->
+        <script src="~/signalr/hubs"></script>
+
+
+        <script src="~/Scripts/autocompleteKeyboard/js/jquery-ui-custom.min.js"></script>
+
+
+        <!-- keyboard widget css & script (required) -->
+        <link href="~/Scripts/autocompleteKeyboard/keyboard.css" rel="stylesheet" />
+        <script src="~/Scripts/autocompleteKeyboard/jquery.keyboard.js"></script>
+        <!-- keyboard extensions (optional) -->
+        <script src="~/Scripts/autocompleteKeyboard/jquery.keyboard.extension-typing.js"></script>
+        <script src="~/Scripts/autocompleteKeyboard/jquery.keyboard.extension-autocomplete.js"></script>
+        <script src="~/Scripts/autocompleteKeyboard/jquery.keyboard.extension-caret.js"></script>
+        <!-- demo only -->
+
+
+
+        <script src="~/Scripts/autocompleteKeyboard/js/demo.js"></script>
+        <script src="~/Scripts/autocompleteKeyboard/js/jquery.tipsy.min.js"></script>
+
+        <script src="~/Content/JS/Chart.bundle.min.js"></script>
+        <script src="~/Content/JS/canvasjs.min.js"></script>
+        <script src="~/Content/JS/jspdf.min.js"></script>
+        <script>
+            var ScreenLockTimeOut=60000;
+
+            var timeoutID;
+
+            var dialog;
+
+            var IsDialog = false;
+
+
+            function setup() {
+                this.addEventListener("mousemove", resetTimer, false);
+                this.addEventListener("mousedown", resetTimer, false);
+                this.addEventListener("keypress", resetTimer, false);
+                this.addEventListener("DOMMouseScroll", resetTimer, false);
+                this.addEventListener("mousewheel", resetTimer, false);
+                this.addEventListener("touchmove", resetTimer, false);
+                this.addEventListener("MSPointerMove", resetTimer, false);
+                window.setTimeout(startTimer, ScreenLockTimeOut);
+            }
+            setup();
+            function startTimer() {
+
+                window.clearTimeout(timeoutID);
+                timeoutID = window.setTimeout(goInactive, ScreenLockTimeOut);
+
+            }
+
+            function resetTimer(e) {
+
+                window.clearTimeout(timeoutID);
+
+                //if ($('#ScreenLockModel').is(':visible') == false) {
+                // if (dialog.is(':visible') == false) {
+                if (IsDialog == false) {
+                    startTimer();
+                }
+
+                //goActive();
+            }
+
+            function goInactive() {
+                //  console.log("Inactive at " + new Date()); console.log(' Inactive');
+                window.clearTimeout(timeoutID);
+
+                /* if ($('#ScreenLockModel').is(':visible') == false) {
+
+                     $("#ScreenLockModel").modal('show');
+                 }*/
+                if (IsDialog == false) {
+
+                    $("div#dialog").dialog().prev().find(".ui-dialog-titlebar-close").hide();
+                    $("#txtPassword").val("");
+                    $("#dialog").dialog("open");
+                    IsDialog = true;
+                }
+
+                AddAuditLogForScreenLockTimeOut();
+
+            }
+
+            $(function () {
+                $("#dialog").dialog({
+                    autoOpen: false,
+                    modal: true,
+                    width: 600,
+                    height: 300,
+                    buttons: {
+                        "Login": function () {
+                            CheckLogin();
+                        },
+                        "Logout": function () {
+                            LogOutConirmationMsg();
+                        }
+                    }
+                });
+
+            });
+
+            //function goActive() {
+
+            //  // console.log('Yakko Aaaaaaaactive');
+            //    //if ($('#ScreenLockModel').is(':visible') == false) {
+            //   // if (dialog.is(':visible') == false) {
+            //        //   console.log("hide");
+            //    if (IsDialog == false) {
+            //        startTimer();
+            //    }
+
+            //}
+
+        var ShowModal = false;
+        var popupcomment = 0;
+            var flag = 0;
+
+
+           // var ScreenLockTimeOut = 900000;
+            var ResetTime = true;
+
+            var timoutNow = ScreenLockTimeOut; // Timeout in 2 mins.
+            var logoutUrl = 'http://www.asp.net'; // URL to logout page.
+
+            var timeoutTimer;
+
+            var IsHeartBeat = false;
+            var IPCAddress_HeartBeat = "";
+            var MachineParameterId_HeartBeat = "";
+            var timeoutTimerHeartBeat;
+            var HeartBeatFailedTime = 60000;
+            var HeartBeatTimerArray = [];
+            var IsHeartBeatSend = false;
+            var HearBeatSend_Value = "0";
+            var IPCAddress_IsHeartBeatSend = "";
+            var MachineParameterId_IsHeartBeatSend = "";
+            var HeartBeat = -1;
+            var IncrementalNumber_HeartBeatSend = 0;
+            var StartNumber_HeartBeatSend = 0;
+            var EndNumber_HeartBeatSend = 0;
+            var ScreenLockTimeOutArray = [];
+            var IsRefresh = true;
+
+            var paraId1 = 0;
+            var name1 = "";
+            var Mtype1 = "";
+            var GetValue1 = "";
+            var MachineType1 = "";
+            var DateTypeId1 = "";
+            var IsRefreshMachineSettings1 = "";
+            var ViewFieldId1 = 0;
+            var RequestPanel = "";
+            var obj1 = "";
+            var OnOffValue = "";
+            var WriteToPLCIPCMachineParameterId = 0;
+            var timeoutHandleHeartBeat;
+            var CancelAjaxRequest = false;
+            var XhrCommandPanel;
+            var XhrAlarmPanel;
+            var XhrMachineSummaryPanel;
+            var XhrSettingsPanel;
+            var XhrSendHeartBeat;
+            var XhrReadHeartBeat;
+            var IsToggleClick = true;
+            var XhrAlarmService;
+
+            var TimerForAlarm = 0;
+            var alarmCounterTimer1;
+            var alarmCounterTimer2;
+            var alarmCounterTimer3;
+            var alarmCounterTimer4;
+            var alarmCounterTimer5;
+            var alarmCounterTimer6;
+            var alarmCounterTimer7;
+            var alarmCounterTimer8;
+            var alarmCounterTimer9;
+            var alarmCounterTimer10;
+            var alarmCounterTimer11;
+            var alarmCounterTimer12;
+            var alarmCounterTimer13;
+            var alarmCounterTimer14;
+            var alarmCounterTimer15;
+            var alarmCounterTimer16;
+            var alarmCounterTimer17;
+            var alarmCounterTimer18;
+            var alarmCounterTimer19;
+            var alarmCounterTimer20;
+
+            // var take = true;
+            //  var missingLabelTimeOut;
+            //  var missingLabelTimeOut1;
+
+            var initialMissingLabelValue = 0;
+
+
+            //function StartTimers() {
+
+            //    timeoutTimer ="SL"+setTimeout("IdleTimeout()", ScreenLockTimeOut);
+            //    ScreenLockTimeOutArray.push(timeoutTimerHeartBeat);
+            //}
+
+            //function ResetTimers() {
+
+            //    if (ResetTime == true) {
+
+            //       // clearTimeout(timeoutTimer);
+            //        for (var i = 0; i < ScreenLockTimeOutArray.length; i++) {
+            //            clearTimeout(ScreenLockTimeOutArray[i]);
+            //        }
+            //        ScreenLockTimeOutArray = [];
+
+            //        StartTimers();
+            //    }
+            //    else {
+
+            //    }
+            //}
+
+            //function IdleWarning() {
+            //    $("#timeout").dialog({
+            //        modal: true
+            //    });
+            //}
+
+            //function IdleTimeout() {
+            //    ResetTime = false;
+            //    $("#ScreenLockModel").modal('show');
+            //    AddAuditLogForScreenLockTimeOut();
+
+            //}
+
+            function bodyclick() {
+                alert("body click");
+            }
+
+
+            function CheckLogin() {
+
+                if ($("#txtPassword").val() != "") {
+                    //$('#ScreenLockModel').modal('hide');
+                    var parameter = {
+                        "UserName": $("#lblUserName").text(), "Password": $("#txtPassword").val()
+                    };
+
+                    $.ajax({
+                        url: Q.resolveUrl('~/Account/CheckLogin'),
+                        type: 'GET',
+                        async: true,
+                        data: parameter,
+                        success: function (data) {
+
+                            if (data == "Login Successfull") {
+                                IsRefresh = true;
+                                $("#dialog").dialog("close");
+                                IsDialog = false;
+                               // $('#ScreenLockModel').modal('hide');
+                               // goActive();
+                            }
+                            else {
+
+                               // $('#ScreenLockModel').modal('show');
+                                alert(data);
+                            }
+                            data = null;
+
+                        },
+                        error: function (x, y, z) {
+                            IsRefresh = true;
+                          //  $('#ScreenLockModel').modal('hide');
+                        }
+                    });
+                }
+                else {
+                    ResetTime = false;
+                    alert("Password Cannot Blank");
+                }
+            }
+
+            function GetScreenLockTimeOut() {
+                $.ajax({
+                    url: Q.resolveUrl('~/Account/GetScreenLockTimeOut'),
+                    type: 'GET',
+                    async: true,
+                    success: function (response) {
+                        ScreenLockTimeOut = response;
+                       // alert(ScreenLockTimeOut);
+                       // SetScreenLockTimer();
+                    },
+                    error: function (x, y, z) {
+                    }
+                });
+            }
+
+            function downloadPDF() {
+                var canvas = document.querySelector('#cnvsdoughnut');
+                //creates image
+                var canvasImg = canvas.toDataURL("image/jpeg", 1.0);
+
+                //creates PDF from img
+                var doc = new jsPDF('landscape');
+                doc.setFontSize(20);
+                doc.text(15, 15, "Cool Chart");
+                doc.addImage(canvasImg, 'JPEG', 10, 10, 280, 150);
+                doc.save('canvas.pdf');
+            }
+
+            function update()
+            {
+              totalBottles = parseInt($(".lblGoodBottle").text()) + parseInt($(".lblRejectBottle").text());
+              goodPercentage= parseInt($(".lblGoodBottle").text())/totalBottles*100
+               rejectPercentage= parseInt($(".lblRejectBottle").text())/totalBottles*100
+            }
+
+            function DisplayMachineSummaryDoughNutChart() {
+                var ctx = $("#cnvsdoughnut");
+
+               totalBottles = parseInt($(".lblGoodBottle").text()) + parseInt($(".lblRejectBottle").text());
+               goodPercentage= parseInt($(".lblGoodBottle").text())/totalBottles*100
+              rejectPercentage= parseInt($(".lblRejectBottle").text())/totalBottles*100
+
+                var doughnutChart =new Chart(ctx, {
+                    type: 'doughnut',
+                    data:{
+
+                        labels: ["Good Bottle", "Reject Bottle"],
+                        datasets: [{
+
+                            data: [goodPercentage, rejectPercentage],
+                            backgroundColor: ["green", "red"/*, "rgba(0, 100, 255, 0.5)"*/],
+
+
+                        }]
+
+                    },
+                    showInLegend: true,
+                    animationEnabled: true,
+                    options: {
+                        title: {
+                            display: true,
+                            text: 'Machine Summary',
+
+                        },
+
+                    },
+
+                });
+            }
+
+            function chart()
+            {
+                debugger;
+                var totalBottles = parseInt($(".lblGoodBottle").text()) + parseInt($(".lblRejectBottle").text());
+
+                var chart = new CanvasJS.Chart("chartContainer", {
+            title: {
+                text: "Desktop Search Engine Market Share, Jul-2016"
+            },
+            animationEnabled: true,
+            legend: {
+                fontSize: 20,
+                fontFamily: "Helvetica"
+                    },
+                    // exportEnabled: true,
+                    animationEnabled: true,
+
+
+            theme: "light2",
+            data: [
+            {
+                type: "doughnut",
+                indexLabelFontFamily: "Garamond",
+                indexLabelFontSize: 20,
+                indexLabel: "{label} {y}",
+                startAngle: -20,
+                showInLegend: true,
+                toolTipContent: "{legendText} {y}",
+                dataPoints: [
+                    { y: $(".lblGoodBottle").text(), legendText: "Google", label: "Google", color: "red", },
+                    { y: $(".lblRejectBottle").text(), legendText: "Bing", label: "Bing" },
+                    { y: totalBottles, legendText: "Yahoo!", label: "Yahoo!" },
+
+                ],
+
+                //You can add dynamic data from the controller as shown below. Check the controller and uncomment the line which generates dataPoints.
+                //dataPoints: @Html.Raw(ViewBag.DataPoints),
+            }
+            ]
+        });
+        chart.render();
+    };
+
+            function AddAuditLogForScreenLockTimeOut() {
+                var parameter = {
+                    "UserName": $("#lblUserName").text(), "Password": $("#txtPassword").val()
+                };
+                $.ajax({
+                    url: Q.resolveUrl('~/Account/AddAuditLogForScreenLockTimeOut'),
+                    type: 'POST',
+                    async: true,
+                    data: parameter,
+                    success: function () {
+                    },
+                    error: function (x, y, z) {
+
+                    }
+                });
+            }
+
+            function CheckHeartBeat() {
+                $.ajax({
+                    url: Q.resolveUrl('~/Common/CheckHeartBeat'),
+                    type: 'GET',
+                    data: { "ModuleId": $("#hdnModuleId").val() },
+                    async: true,
+                    success: function (response) {
+                        if (response.IsHeartBeat == true) {
+                          IsHeartBeat = true;
+                            IPCAddress_HeartBeat = response.IPCAddress;
+                            MachineParameterId_HeartBeat = response.MachineParameterId;
+                           GetHeartBeatFailedTime();
+
+                        }
+                        else {
+                           // $("#NoHeartBeatModalFooter").attr("style", "display:block");
+                           // $("#NoHeartBeatModal").modal('show');
+                        }
+                    },
+                    error: function (x, y, z) {
+                        console.log(x + '\n' + y + '\n' + z);
+                    }
+                });
+
+            }
+
+            function ReadHeartBeat() {
+                if (CancelAjaxRequest) {
+                    if (XhrReadHeartBeat && XhrReadHeartBeat.readyState != 4) {
+                        XhrReadHeartBeat.abort();
+                    }
+                }
+
+
+                XhrReadHeartBeat = $.ajax({
+                    url: Q.resolveUrl('/RenderViewFieldsMachine/ReadHeartBeat'),
+                   // url: Q.resolveUrl('~/Common/ReadHeartBeat'),
+                    type: 'GET',
+                    data: { "MachineParameterId": MachineParameterId_HeartBeat, "IPCAddress": IPCAddress_HeartBeat },
+                    async: true,
+                    success: function (response) {
+
+                        if (response == HeartBeat) {
+                            // console.log("match at" + new Date() + "res " + response + " heartbeat" + HeartBeat);
+                            SetHeartBeatTimer();
+                        }
+                        else {
+                            // console.log("not match at" + new Date() + "res " + response + " heartbeat" + HeartBeat);
+                            ResetHeartBeatTimer();
+                        }
+                        HeartBeat = response;
+                        window.setTimeout(
+                            function () {
+                                ReadHeartBeat();
+                            }, 1000);
+                    },
+                    error: function (x, y, z) {
+                       // console.log('errrrrrrrrrooooooooooooooooorrrrrrrrrrrrrrrrr');
+                        ResetHeartBeatTimer();
+                        ReadHeartBeat();
+                    }
+                });
+
+            }
+
+            function StartTimersHeartBeat() {
+
+                timeoutTimerHeartBeat ="HB"+setTimeout("IdleTimeoutHeartBeat()", HeartBeatFailedTime);
+                HeartBeatTimerArray.push(timeoutTimerHeartBeat);
+            }
+
+            function IdleTimeoutHeartBeat() {
+                $("#divMachineCommunicationFailed").attr("style", "display:block");
+                  AddAuditLogForHeartBeat();
+            }
+
+            function ResetTimersHeartBeat() {
+                $("#divMachineCommunicationFailed").attr("style", "display:none");
+
+                for (var i = 0; i < HeartBeatTimerArray.length; i++) {
+                    clearTimeout(HeartBeatTimerArray[i]);
+                }
+                HeartBeatTimerArray = [];
+            }
+
+            function AddAuditLogForHeartBeat() {
+                var parameter = {
+                    "ModuleId": $("#hdnModuleId").val(), "Action": "PLC Disconnect"
+                };
+                $.ajax({
+                    url: Q.resolveUrl('~/Common/AddAuditLog'),
+                    type: 'POST',
+                    async: true,
+                    data: parameter,
+                    success: function (data) {
+                    },
+                    error: function (x, y, z) {
+
+                    }
+                });
+
+            }
+
+            function CheckHeartBeatSend() {
+
+                $.ajax({
+                    url: Q.resolveUrl('~/Common/CheckHeartBeatSend'),
+                    type: 'GET',
+                    data: { "ModuleId": $("#hdnModuleId").val() },
+                    async: true,
+                    success: function (response) {
+
+                        if (response.IsHeartBeatSend == true) {
+                            IsHeartBeatSend = true;
+                            IPCAddress_IsHeartBeatSend = response.IPCAddress;
+                            MachineParameterId_IsHeartBeatSend = response.MachineParameterId;
+                            IncrementalNumber_HeartBeatSend = response.IncrementalNumber;
+                            HearBeatSend_Value = response.StartNumber;
+                            StartNumber_HeartBeatSend = response.StartNumber;
+                            EndNumber_HeartBeatSend = response.EndNumber;
+                        }
+
+                    },
+                    error: function (x, y, z) {
+
+                    }
+                });
+
+            }
+
+            function SendHeartBeat() {
+                if (CancelAjaxRequest) {
+                    if (XhrSendHeartBeat && XhrSendHeartBeat.readyState != 4) {
+                        XhrSendHeartBeat.abort();
+                    }
+                }
+
+
+                XhrSendHeartBeat = $.ajax({
+                    url: Q.resolveUrl('/RenderViewFieldsMachine/SendHeartBeat'),
+                    //url: Q.resolveUrl('~/Common/SendHeartBeat'),
+                    type: 'GET',
+                    data: {
+                        "MachineParameterId": MachineParameterId_IsHeartBeatSend, "Value": HearBeatSend_Value, "IncrementalNumber": IncrementalNumber_HeartBeatSend, "EndNumber": EndNumber_HeartBeatSend },
+                    async: true,
+                    success: function (response) {
+
+
+                        //console.log("inc num " + response);
+                        if (EndNumber_HeartBeatSend != 1) {
+                            if (response == EndNumber_HeartBeatSend) {
+                                HearBeatSend_Value = StartNumber_HeartBeatSend;
+                            }
+                            else {
+                                HearBeatSend_Value = response;
+                            }
+                        }
+                        else {
+                            HearBeatSend_Value = response;
+                        }
+
+                    },
+                    error: function (x, y, z) {
+                       // HearBeatSend_Value = response;
+                    }
+                });
+
+            }
+
+            function GetHeartBeatFailedTime() {
+
+                $.ajax({
+                    url: Q.resolveUrl('~/Common/GetHeartBeatFailedTime'),
+                    type: 'GET',
+                    data: { "ModuleId": $("#hdnModuleId").val() },
+                    async: true,
+                    success: function (response) {
+                        HeartBeatFailedTime = response;
+                        ReadHeartBeat();
+                    },
+                    error: function (x, y, z) {
+
+                    }
+                });
+            }
+
+
+        function ApplyRemoveRollClick(grid,LabelRollId, isapply) {
+            var para = { "rollId": LabelRollId, "IsApplied": isapply,"MachineId" : @Model.ModuleId};
+            jQuery.support.cors = true;
+            $.ajax({
+                url: Q.resolveUrl('~/api/Batch/ApplyRemoveRoll'),
+                data: para,
+                type: 'POST',
+                dataType: 'json',
+                success: function (data) {
+                    if (isapply)
+                        Q.notifySuccess("Roll Applied Successfully");
+                    else
+                        Q.notifySuccess("Roll Removed Successfully");
+
+                },
+                error: function (x, y, z) {
+                    alert(x + '\n' + y + '\n' + z);
+                }
+            });
+        }
+
+        //function ResetSession() {
+
+
+        //    if ($("#txtPassword").val() != "") {
+        //        var parameter = {
+        //            "UserName": $("#lblUserName").text(), "Password": $("#txtPassword").val()
+        //        };
+        //        // console.log(new Date());
+        //        $.ajax({
+        //            url: Q.resolveUrl('~/Account/ResetSession'),
+        //            type: 'POST',
+        //            async: false,
+        //            data: parameter,
+        //            success: function (data) {
+
+        //                if (data == "Login Successfull") {
+        //                    $('#LoginModel').modal('hide');
+        //                }
+        //                else {
+        //                    alert(data);
+        //                }
+
+
+        //            },
+        //            error: function (x, y, z) {
+        //                $('#LoginModel').modal('hide');
+        //            }
+        //        });
+        //    }
+        //    else {
+        //        alert("Password Cannot Blank");
+        //    }
+        //}
+
+
+            function changeview(obj, viewId) {
+                debugger;
+                $('.loader').removeClass('hidden');
+
+
+           $("#sectionchart").hide();
+            $("li[name=ulSettingsMenu]").removeClass("active");
+            $(obj).addClass("active");
+
+            $("#hdnviewId").val(viewId);
+
+
+
+
+
+            fillview(false);
+
+
+        }
+
+
+
+            function fillview(IsLoadDefaultRecipe) {
+
+                $.ajax({
+                    url: Q.resolveUrl('/RenderViewFieldsMachine/IndexAjax?ModuleId=' + $("#hdnModuleId").val() + '&ViewId=' + $("#hdnviewId").val() + '&IsLoadDefaultRecipe=' + IsLoadDefaultRecipe + '&LabelRollViewId=' + $("#hdnLabelRollviewId").val()),
+
+                type: 'GET',
+                async: true,
+                    success: function (data) {
+
+                        IsToggleClick = false;
+                        $("#hdnRecipeId").val(data.RecipeId);
+                        $("#txtRecipeName").val(data.RecipeName);
+                    var LabelRollviewId = $("#hdnLabelRollviewId").val()
+                    var ViewId = $("#hdnviewId").val();
+                        if (LabelRollviewId != ViewId) {
+                        $("#rowSettingsMachine1").attr("style", "display:none");
+                        $("#rowSettingsMachine").attr("style", "display:block");
+                            $(data.ViewFieldList).each(function (i, item) {
+
+                            $("#sph5-" + item.ViewFieldId).text(item.Value);
+
+
+                                if (item.DateTypeId == 3 || item.DateTypeId == 4 || item.DateTypeId == 7 || item.DateTypeId==11) {
+
+                                if (item.Value == "True" || item.Value == "1") {
+                                    $("#spchk-" + item.ViewFieldId).bootstrapToggle('on');
+
+                                }
+                                else {
+
+                                    $("#spchk-" + item.ViewFieldId).bootstrapToggle('off');
+
+                                }
+
+                            }
+                                else if (item.DateTypeId == 1 || item.DateTypeId == 5 || item.DateTypeId == 6 || item.DateTypeId == 8 || item.DateTypeId == 9 || item.DateTypeId == 10 || item.DateTypeId == 14 ||item.DateTypeId == 15 || item.DateTypeId == 16 || item.DateTypeId == 17 || item.DateTypeId == 20) {
+                                $("#spminusbtn-" + item.ViewFieldId).val(item.Value).attr("oldvalue", item.Value);
+                                $("#spplusbtn-" + item.ViewFieldId).val(item.Value).attr("oldvalue", item.Value);
+                                $("#sptxt-" + item.ViewFieldId).val(item.Value).attr("oldvalue", item.Value);
+
+                                }
+                                else if (item.DateTypeId == 2 || item.DateTypeId==11) {
+
+                                $("#spanchr-" + item.ViewFieldId).attr("oldvalue", item.Value);
+
+                                if (item.Value == "True"|| item.Value == "1") {
+                                    $("#spanchr-" + item.ViewFieldId).addClass("on");
+                                }
+                                else {
+                                    $("#spanchr-" + item.ViewFieldId).removeClass("on");
+                                }
+                            }
+
+                        });
+                        IsToggleClick = true;
+                        var viewId = parseInt($("#hdnviewId").val());
+
+                        var hdnMachineSettingsviewId = $("#hdnMachineSettingsviewId").val();
+
+                        if (hdnMachineSettingsviewId == viewId) {
+
+                            $(".sprecipediv").attr("style", "display: block;background-color:#02c0ce");
+
+                        }
+                        else {
+                            $(".sprecipediv").attr("style", "display: none");
+
+                        }
+
+
+                        $(".spdiv").attr("style", "display:none");
+                        $("#spdiv-" + viewId + "").attr("style", "display: block");
+
+                        $('.loader').addClass('hidden');
+
+                    }
+                    else {
+
+                        $('.loader').addClass('hidden');
+                        $(".spdiv").attr("style", "display:none");
+                        $("#rowSettingsMachine").attr("style", "display:none");
+                        $("#rowSettingsMachine1").attr("style", "display:block");
+                        $("#rowSettingsMachine1").html(data);
+                    }
+
+
+                        data = null;
+
+                },
+                error: function (x, y, z) {
+                    $('.loader').addClass('hidden');
+
+                   // console.log(x + '\n' + y + '\n' + z);
+                }
+            });
+        }
+
+        $(function () {
+
+
+            $('#btnSelectRecipe').click(function () {
+
+
+            });
+
+
+    //    // place code to be executed on completion of last outstanding ajax call here
+       //     window.setInterval(function () {
+       //         ShowModal = true;
+       //         if (flag == 0) {
+       //             AlarmMachineFunction();
+       //        // MachineSummaryFunction();
+       //     }
+       //        // RefreshFields();
+       //         //if (flag == 0) {
+       //         //    RefreshFields();
+
+       //         //}
+       //},1000 );
+
+            function MachineSettingsFunction() {
+
+                $.ajax({
+                    url: Q.resolveUrl('/RenderViewFieldsMachine/IndexAjax?ModuleId=' + $("#hdnModuleId").val() + '&ViewId=' + $("#hdnviewId").val()),
+                    type: 'GET',
+                    async: true,
+                    success: function (data) {
+                        //alert("fillview" + data)
+                        $("#rowSettingsMachine").html(data);
+                    },
+                    error: function (x, y, z) {
+                        console.log(x + '\n' + y + '\n' + z);
+                    }
+                });
+            }
+
+            function MachineSummaryFunction() {
+                if ($("#rowMachineSummary").length > 0) {
+
+                    if (CancelAjaxRequest) {
+                        if (XhrMachineSummaryPanel && XhrMachineSummaryPanel.readyState != 4) {
+                            XhrMachineSummaryPanel.abort();
+                        }
+                    }
+
+                    XhrMachineSummaryPanel = $.ajax({
+                        url: Q.resolveUrl('/MachineSummaryMachine/IndexAjax?ModuleId=' + $("#hdnModuleId").val()),
+                        //data: { "ModuleId": $("#hdnModuleId").val() },
+                        type: 'GET',
+                        async: true,
+                        success: function (data) {
+
+                            $(data).each(function (i, item) {
+
+                                if (item.Value != "True" && item.Value != "False") {
+
+                                    $("#h2-" + item.ViewFieldId).text(item.Value);
+                                    $("#lbl-" + item.ViewFieldId).text(item.Value);
+                                    $("#div-" + item.ViewFieldId).removeClass("bg-green bg-red bg-yellow bg-blue").addClass("bg-" + item.BackgroundColor);
+
+                                }
+
+                            });
+
+
+                            //$("#rowMachineSummary").html(data);
+
+
+                        },
+                        error: function (x, y, z) {
+                            console.log(x + '\n' + y + '\n' + z);
+                        }
+                    });
+                }
+            }
+
+            function CommandPanelFunction() {
+                if ($("#rowCommandPanel").length > 0) {
+
+                    if (CancelAjaxRequest) {
+                        if (XhrCommandPanel && XhrCommandPanel.readyState != 4) {
+                            XhrCommandPanel.abort();
+                        }
+                    }
+
+                    XhrCommandPanel= $.ajax({
+                        url: Q.resolveUrl('/CommandPanelMachine/IndexAjax?ModuleId=' + $("#hdnModuleId").val()),
+                        type: 'GET',
+                        async: true,
+                        success: function (data) {
+
+                            $(data).each(function (i, item) {
+
+                                $("#" + item.ViewFieldId).val(item.Value);
+                                $("#" + item.ViewFieldId).attr("ParamValue", item.Value)
+
+                                if (item.DateTypeId == 2) {
+                                    if (item.Value == "1" || item.Value == "True") {
+
+                                        $("#" + item.ViewFieldId).addClass("pressed");
+
+                                    }
+                                    else {
+
+                                        $("#" + item.ViewFieldId).removeClass("pressed");
+
+
+                                    }
+
+                                }
+                                else {
+                                    if (item.Value == "1" || item.Value == "True") {
+                                        $("#" + item.ViewFieldId).find("#cpdivon-" + item.ViewFieldId).attr("style", "display:block");
+                                        $("#" + item.ViewFieldId).find("#cmspanon-" + item.ViewFieldId).attr("style", "display:block");
+                                        $("#" + item.ViewFieldId).find("#cplioff-" + item.ViewFieldId).attr("style", "display:none");
+                                        $("#" + item.ViewFieldId).find("#cmspanoff-" + item.ViewFieldId).attr("style", "display:none");
+
+
+                                    }
+                                    else {
+
+                                        $("#" + item.ViewFieldId).find("#cpdivon-" + item.ViewFieldId).attr("style", "display:none");
+                                        $("#" + item.ViewFieldId).find("#cmspanon-" + item.ViewFieldId).attr("style", "display:none");
+                                        $("#" + item.ViewFieldId).find("#cplioff-" + item.ViewFieldId).attr("style", "display:block");
+                                        $("#" + item.ViewFieldId).find("#cmspanoff-" + item.ViewFieldId).attr("style", "display:block");
+
+
+                                    }
+
+                                }
+
+
+
+
+                            });
+
+                            //$("#rowCommandPanel").html(data);
+
+
+                        },
+                        error: function (x, y, z) {
+                            console.log(x + '\n' + y + '\n' + z);
+                        }
+                    });
+                }
+            }
+
+            function RaiseAlarmFunction() {
+                if (CancelAjaxRequest) {
+                    if (XhrAlarmService && XhrAlarmService.readyState != 4) {
+                        XhrAlarmService.abort();
+                    }
+                }
+
+
+                XhrAlarmService=  $.ajax({
+                     url: Q.resolveUrl('/AlarmMachine/CheckAlarmNew1?ModuleId=' + $("#hdnModuleId").val()),
+                        type: 'GET',
+                        async: true,
+                        success: function (data) {
+
+
+                        },
+                        error: function (x, y, z) {
+                            console.log(x + '\n' + y + '\n' + z);
+                        }
+                    });
+                }
+
+
+            function AlarmMachineFunction() {
+                if ($("#rowAlarms").length > 0) {
+                    if (CancelAjaxRequest) {
+                        if (XhrAlarmPanel && XhrAlarmPanel.readyState != 4) {
+                            XhrAlarmPanel.abort();
+                        }
+                    }
+
+                    XhrAlarmPanel = $.ajax({
+                        url: Q.resolveUrl('/AlarmMachine/IndexAjax?ModuleId=' + $("#hdnModuleId").val()),
+                        type: 'GET',
+                        async: true,
+                        success: function (data, Model) {
+
+                            $("#rowAlarms").html(data);
+                           // CheckAlarmComment();
+                        },
+                        error: function (x, y, z) {
+                            console.log(x + '\n' + y + '\n' + z);
+                        }
+                    });
+                }
+            }
+
+            function ClearMemoryFunction() {
+
+                $.ajax({
+                    url: Q.resolveUrl('/SettingsMachine/CleanMemory'),
+                    type: 'GET',
+                    async: true,
+                    success: function () {
+                    },
+                    error: function (x, y, z) {
+                        console.log(x + '\n' + y + '\n' + z);
+                    }
+                });
+            }
+
+            function CheckAlarmComment() {
+
+                if ($("#rowAlarms").length > 0) {
+
+                    $.ajax({
+                        url: Q.resolveUrl('/SettingsMachine/ShowAlarmPopUp?ModuleId=' + $("#hdnModuleId").val()),
+                        type: 'GET',
+                        async: true,
+
+                        success: function (data, Model) {
+
+                            $(".trcomment").remove();
+                            $.each(data, function (i, item) {
+                                $('#tableComment').append('<tr id="t1" class="trcomment"><td><span>' + item.Item4 + '</span></td><td style="width:100px"><span>' + item.Item1 + '</span></td><td style="width:100px"><span><input class="comment" type="text" id="txt" /></span></td></tr>');
+                            });
+                            ShowAlarm(data)
+
+
+                        },
+                        error: function (x, y, z) {
+                            console.log(x + '\n' + y + '\n' + z);
+                        }
+                    });
+                }
+
+            }
+
+            function ShowAlarm(data) {
+
+                if (data.length >= 1) {
+
+
+                    if ($('#tableComment tr').length > 1) {
+                        flag = 1;
+
+
+                        $('#alarmModel').modal('show');
+                    }
+                    else {
+                        // console.log('else');
+                        $('#alarmModel').modal('hide');
+                    }
+
+
+                    //$('#alarmModel').modal('show');
+
+                } else {
+                    flag = 0;
+                    // popupcomment = "0";
+                }
+
+            }
+
+            function ShowAlarmPopUp() {
+
+                if ($("#rowAlarms").length > 0) {
+                    //console.log(counter+1);
+                    $.ajax({
+                        url: Q.resolveUrl('/AlarmMachine/IndexAjax?ModuleId=' + $("#hdnModuleId").val()),
+                        type: 'GET',
+                        async: true,
+                        success: function (data) {
+
+
+
+
+                            if (data.length >= 1) {
+
+
+                                if ($('#tableComment tr').length > 1) {
+                                    flag = 1;
+
+
+                                    $('#alarmModel').modal('show');
+                                }
+                                else {
+                                    // console.log('else');
+                                    $('#alarmModel').modal('hide');
+                                }
+
+
+                                //$('#alarmModel').modal('show');
+
+                            } else {
+                                flag = 0;
+                                // popupcomment = "0";
+                            }
+                            var viewId = $("#hdnviewId").val();
+                            if (viewId != 0 && viewId != 8) {
+                                fillview(false);
+
+                            }
+                        },
+                        error: function (x, y, z) {
+                            console.log(x + '\n' + y + '\n' + z);
+                        }
+                    });
+                }
+
+            }
+
+            function RefreshFields() {
+              //  console.log('RF');
+
+                //if ($('.modal').hasClass('in')) {
+                //   // $('#alarmModel').modal('hide');
+                //    // alert('op');
+                //    return true;
+                //}
+
+                //if ($('#hdnval').val() == 1 && !$('.modal').hasClass('in')) {
+                //    //window.location.reload();
+                //    //$('body').removeClass('modal-open');
+
+                //    $('#alarmModel').modal('show');
+                //    return true;
+                //}
+
+                //if (popupcomment == "1") {
+                //   // alert('modal show :' + popupcomment)
+                //      //    //window.location.reload();
+                ////    //$('body').removeClass('modal-open');
+
+                //    $('#alarmModel').modal('show');
+                //    return true;
+                //}
+
+                if ($("#rowMachineSummary").length > 0) {
+                    $.ajax({
+
+
+                        url: Q.resolveUrl('/MachineSummaryMachine/index?ModuleId=' + $("#hdnModuleId").val()),
+                        //data: { "ModuleId": $("#hdnModuleId").val() },
+                        type: 'GET',
+                        async: true,
+                        success: function (data) {
+                         //   alert("machine" + data);
+                            $("#rowMachineSummary").html(data);
+                        },
+                        error: function (x, y, z) {
+                            console.log(x + '\n' + y + '\n' + z);
+                        }
+                    });
+                }
+
+                if ($("#rowCommandPanel").length > 0) {
+                    $.ajax({
+                        url: Q.resolveUrl('/CommandPanelMachine/index?ModuleId=' + $("#hdnModuleId").val()),
+                        type: 'GET',
+                        async: true,
+                        success: function (data) {
+                          //  alert("commandpanel" + data);
+                            $("#rowCommandPanel").html(data);
+                        },
+                        error: function (x, y, z) {
+                            console.log(x + '\n' + y + '\n' + z);
+                        }
+                    });
+                }
+
+                if ($("#rowAlarms").length > 0) {
+                   // console.log(new Date());
+                    $.ajax({
+                        url: Q.resolveUrl('/AlarmMachine/index?ModuleId=' + $("#hdnModuleId").val() ),
+                        type: 'GET',
+                        async: true,
+                        success: function (data, Model) {
+                          //  alert("alarm" + data)
+                            $("#rowAlarms").html(data);
+                        },
+                        error: function (x, y, z) {
+                            console.log(x + '\n' + y + '\n' + z);
+                        }
+                    });
+                }
+
+
+
+
+
+
+
+                if ($("#rowAlarms").length > 0) {
+                    //console.log(counter+1);
+                    $.ajax({
+                        url: Q.resolveUrl('/AlarmMachine/IndexAjax?ModuleId=' + $("#hdnModuleId").val() ),
+                        type: 'GET',
+                        async: true,
+                        success: function (data) {
+
+
+
+                            if (data.length >= 1) {
+
+                                flag = 1;
+
+
+                                if ($("#nareshdiv > #tableComment").length > 0) {
+                                   // console.log('if');
+                                    $('#alarmModel').modal('show');
+                                }
+                                else {
+                                   // console.log('else');
+                                    $('#alarmModel').modal('hide');
+                                }
+
+
+                                //$('#alarmModel').modal('show');
+
+                            } else {
+                                flag = 0;
+                               // popupcomment = "0";
+                            }
+                        },
+                        error: function (x, y, z) {
+                            console.log(x + '\n' + y + '\n' + z);
+                        }
+                    });
+                }
+
+
+
+
+                    var viewId = $("#hdnviewId").val();
+                    if (viewId != 0 && viewId != 8) {
+                        fillview(false);
+                }
+                //console.log('RF1');
+                    //setTimeout(RefreshFields, 5000);
+            }
+
+
+                    var SelfsetOnOrOff = "False";
+                    $('#btnSelfSet').click(function () {
+                        SelfsetOnOrOff = "True";
+                        SelfsetOnOff();
+                    });
+
+                    $('#btnSaveRecipe').click(function () {
+
+                    });
+
+                    function GetSaveRecipeParameter() {
+                        var UserId = @Serenity.Authorization.UserId;
+                        var MachineRecipeParameterID = $("#hdnRecipeId").val();
+
+                        var machine = { "RecipeSettingsId": 1 };
+                        jQuery.support.cors = true;
+                        $.ajax({
+                            url: Q.resolveUrl('~/api/Batch/RecipeParameter'),
+                            data: machine,
+                            type: 'POST',
+                            dataType: 'json',
+                            success: function (settingsParameter) {
+                                var jsonObj = [];
+                                if (settingsParameter.length > 0) {
+
+                                    for (var i = 0; i < settingsParameter.length; i++) {
+                                        if ($("#" + settingsParameter[i].IPCParameterId) != null) {
+                                            var item = {}
+                                            item["MachineRecipeId"] = MachineRecipeParameterID;
+                                            item["RecipeSettingsParameterId"] = settingsParameter[i].RecipeParameterId;
+                                            item["RecipeParameterValue"] = $("#" + settingsParameter[i].IPCParameterId).val();
+                                            item["CreatedBy"] = UserId;
+                                            jsonObj.push(item);
+                                        }
+
+                                    }
+
+                                    if (json.length > 0)
+                                    {
+
+
+                                        jQuery.support.cors = true;
+                                        $.ajax({
+                                            url: Q.resolveUrl('~/api/Batch/SaveMachineRecipeParameter'),
+                                            data: json,
+                                            type: 'POST',
+                                            dataType: 'json',
+                                            success: function (settingsParameter) {
+
+                                                alert("Records added successfully")
+
+                                                //for (var j = 0; j < settingsLength; j++) {
+
+                                                //}
+                                            },
+                                            error: function (x, y, z) {
+                                                alert(x + '\n' + y + '\n' + z);
+                                            }
+                                        });
+                                    }
+
+                                }
+
+
+                            },
+                            error: function (x, y, z) {
+                                alert(x + '\n' + y + '\n' + z);
+                            }
+                        });
+                    }
+
+                    function SelfsetOnOff() {
+                        var machine = { "MachineId": 1, "OnOrOff": SelfsetOnOrOff };
+                        jQuery.support.cors = true;
+                        $.ajax({
+                            url: Q.resolveUrl('~/api/PLCToHMI/Selfset'),
+                            data: machine,
+                            type: 'POST',
+                            dataType: 'json',
+                            success: function (data) {
+                                //WriteResponse(data);
+                                //alert(data);
+                                if (data == "True") {
+                                    $("#selfsetModal").modal('toggle');
+
+                                }
+
+                            },
+                            error: function (x, y, z) {
+                                alert(x + '\n' + y + '\n' + z);
+                            }
+                        });
+            }
+            function AllInOneAjax() {
+
+                $.ajax({
+                    url: Q.resolveUrl('~/Common/AllInOneAjax?ModuleId=' + $("#hdnModuleId").val()),
+                    type: 'GET',
+                    async: true,
+                    success: function (data) {
+
+                        $(data.cp.ViewFieldList).each(function (i, item) {
+                            $("#" + item.ViewFieldId).val(item.Value);
+                            $("#" + item.ViewFieldId).attr("ParamValue", item.Value)
+
+                            if (item.DateTypeId == 2) {
+                                if (item.Value == "1" || item.Value == "True") {
+
+                                    $("#" + item.ViewFieldId).addClass("pressed");
+
+                                }
+                                else {
+
+                                    $("#" + item.ViewFieldId).removeClass("pressed");
+
+
+                                }
+
+                            }
+                            else {
+                                if (item.Value == "1" || item.Value == "True") {
+                                    $("#" + item.ViewFieldId).find("#cpdivon-" + item.ViewFieldId).attr("style", "display:block");
+                                    $("#" + item.ViewFieldId).find("#cmspanon-" + item.ViewFieldId).attr("style", "display:block");
+                                    $("#" + item.ViewFieldId).find("#cplioff-" + item.ViewFieldId).attr("style", "display:none");
+                                    $("#" + item.ViewFieldId).find("#cmspanoff-" + item.ViewFieldId).attr("style", "display:none");
+
+
+                                }
+                                else {
+
+                                    $("#" + item.ViewFieldId).find("#cpdivon-" + item.ViewFieldId).attr("style", "display:none");
+                                    $("#" + item.ViewFieldId).find("#cmspanon-" + item.ViewFieldId).attr("style", "display:none");
+                                    $("#" + item.ViewFieldId).find("#cplioff-" + item.ViewFieldId).attr("style", "display:block");
+                                    $("#" + item.ViewFieldId).find("#cmspanoff-" + item.ViewFieldId).attr("style", "display:block");
+
+
+                                }
+
+                            }
+
+
+
+
+                        });
+
+                        $(data.msp.ViewFieldList).each(function (i, item) {
+
+                            if (item.Value != "True" && item.Value != "False") {
+
+                                $("#h2-" + item.ViewFieldId).text(item.Value);
+                                $("#lbl-" + item.ViewFieldId).text(item.Value);
+                                $("#div-" + item.ViewFieldId).removeClass("bg-green bg-red bg-yellow bg-blue").addClass("bg-" + item.BackgroundColor);
+
+                            }
+
+                        });
+
+                        data = null;
+                    },
+                    error: function (x, y, z) {
+
+                    }
+                });
+            }
+
+            //bind CommandPanel Data
+            function processCommandPanel(data) {
+               
+                $(data).each(function (i, item) {
+                    $("#" + item.ViewFieldId).val(item.Value);
+                    $("#" + item.ViewFieldId).attr("ParamValue", item.Value)
+                    if (item.DateTypeId == 2 || item.DateTypeId==11) {
+                        if (item.Value == "1" || item.Value == "True") {
+                            $("#" + item.ViewFieldId).addClass("pressed");
+                        }
+                        else {
+                            $("#" + item.ViewFieldId).removeClass("pressed");
+                        }
+                    }
+                    else {
+                        if (item.Value == "1" || item.Value == "True") {
+                            $("#" + item.ViewFieldId).find("#cpdivon-" + item.ViewFieldId).attr("style", "display:block");
+                            $("#" + item.ViewFieldId).find("#cmspanon-" + item.ViewFieldId).attr("style", "display:block");
+                            $("#" + item.ViewFieldId).find("#cplioff-" + item.ViewFieldId).attr("style", "display:none");
+                            $("#" + item.ViewFieldId).find("#cmspanoff-" + item.ViewFieldId).attr("style", "display:none");
+                        }
+                        else {
+                            $("#" + item.ViewFieldId).find("#cpdivon-" + item.ViewFieldId).attr("style", "display:none");
+                            $("#" + item.ViewFieldId).find("#cmspanon-" + item.ViewFieldId).attr("style", "display:none");
+                            $("#" + item.ViewFieldId).find("#cplioff-" + item.ViewFieldId).attr("style", "display:block");
+                            $("#" + item.ViewFieldId).find("#cmspanoff-" + item.ViewFieldId).attr("style", "display:block");
+                        }
+                    }
+                });
+                data = null;
+            }
+
+             //bind MachineSummary Data
+            function processMachineSummary(data) {
+                $(data).each(function (i, item) {
+                    if (item.Value != "True" && item.Value != "False") {
+                        if (item.IsMissingLabelCounter == true) {
+                            //  debugger;
+                            // var missingLabelTimeOut = null;
+
+                            var oldValue = $("#limsnglabel-" + item.MachineParameterId).attr("oldvalue");
+                            if (oldValue == item.Value) {
+                                //  $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:none");
+                                // console.log(new Date());
+                            }
+                            else {
+                                if (initialMissingLabelValue != 0) {
+                                    AlarmCounter(item);
+                                    //var aa = item.MachineParameterId;
+                                    //if (item.MachineParameterId) {
+                                    //    clearTimeout(item.MachineParameterId);
+                                    //    item.MachineParameterId = null;
+                                    //}
+                                    //$("#limsnglabel-" + aa).attr("style", "display:block");
+                                    //item.MachineParameterId = setTimeout(() => {
+                                    //    $("#limsnglabel-" + aa).attr("style", "display:none");
+
+                                    //    }, TimerForAlarm);
+
+
+
+
+                                    ////                     if (item.MachineParameterId == eval('_dtimeForAlarm' + item.MachineParameterId));
+                                    ////                     {
+                                    ////                         if (eval('dtimeForAlarm' + item.MachineParameterId)) {
+                                    ////                             clearTimeout(eval('dtimeForAlarm' + item.MachineParameterId));
+                                    ////                             eval('dtimeForAlarm' + item.MachineParameterId) = null;
+                                    ////                             // }
+                                    ////                         }
+                                    ////                     }
+
+                                    ////                         $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:block");
+                                    ////                   //  if (item.MachineParameterId == 1450) {
+                                    ////setTimeout(() => {
+                                    ////                             $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:none");
+
+                                    ////                         }, TimerForAlarm);
+                                    ////                    // }
+                                    //else {
+                                    //    missingLabelTimeOut1 = setTimeout(() => {
+                                    //        $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:none");
+
+                                    //    }, TimerForAlarm);
+                                    //}
+
+                                    // alert(n1nik);
+                                    AddToAuditLog();
+                                    AddToAlarmLog(item.AlarmId);
+                                }
+
+                            }
+                            $("#limsnglabel-" + item.MachineParameterId).attr("oldvalue", item.Value);
+
+                            // item.OldValue = item.Value;
+                            initialMissingLabelValue = 1;
+                        }
+
+
+                        $("#h2-" + item.ViewFieldId).text(item.Value);
+                        $("#lbl-" + item.ViewFieldId).text(item.Value);
+                        $("#div-" + item.ViewFieldId).removeClass("bg-green bg-red bg-yellow bg-blue").addClass("bg-" + item.BackgroundColor);
+                    }
+                });
+                data = null;
+            }
+
+            function AddToAuditLog() {
+                var parameter = {
+                    "ModuleId": $("#hdnModuleId").val(), "Action": "Counter Alarm Detected", "BatchId": $("#hdnBatchId").val(), "UserName": $("#lblUserName").text()
+                };
+                $.ajax({
+                    url: Q.resolveUrl('~/Common/AddAuditLog'),
+                    type: 'POST',
+                    async: true,
+                    data: parameter,
+                    success: function (data) {
+                    },
+                    error: function (x, y, z) {
+
+                    }
+                });
+
+            }
+
+            function AddToAlarmLog(AlarmId) {
+                var parameter = {
+                    "ModuleId": $("#hdnModuleId").val(), "AlarmId": AlarmId
+                };
+                $.ajax({
+                    url: Q.resolveUrl('~/Common/AddAlarmLog'),
+                    type: 'POST',
+                    async: true,
+                    data: parameter,
+                    success: function (data) {
+                    },
+                    error: function (x, y, z) {
+
+                    }
+                });
+
+            }
+
+            function AlarmCounter(item) {
+
+                if (item.AlarmCounterSequence == 1) {
+                    if (alarmCounterTimer1) {
+                        clearTimeout(alarmCounterTimer1);
+                        alarmCounterTimer1 = null;
+                    }
+                    $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:block");
+                    alarmCounterTimer1 = setTimeout(() => {
+                        $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:none");
+
+                    }, TimerForAlarm);
+                }
+
+                else if (item.AlarmCounterSequence == 2) {
+                    if (alarmCounterTimer2) {
+                        clearTimeout(alarmCounterTimer2);
+                        alarmCounterTimer2 = null;
+                    }
+                    $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:block");
+                    alarmCounterTimer2 = setTimeout(() => {
+                        $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:none");
+
+                    }, TimerForAlarm);
+                }
+
+
+
+                else if (item.AlarmCounterSequence == 3) {
+                    if (alarmCounterTimer3) {
+                        clearTimeout(alarmCounterTimer3);
+                        alarmCounterTimer3 = null;
+                    }
+                    $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:block");
+                    alarmCounterTimer3 = setTimeout(() => {
+                        $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:none");
+
+                    }, TimerForAlarm);
+                }
+
+
+                else if (item.AlarmCounterSequence == 4) {
+                    if (alarmCounterTimer4) {
+                        clearTimeout(alarmCounterTimer4);
+                        alarmCounterTimer4 = null;
+                    }
+                    $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:block");
+                    alarmCounterTimer4 = setTimeout(() => {
+                        $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:none");
+
+                    }, TimerForAlarm);
+                }
+
+
+                else if (item.AlarmCounterSequence == 5) {
+                    if (alarmCounterTimer5) {
+                        clearTimeout(alarmCounterTimer5);
+                        alarmCounterTimer5 = null;
+                    }
+                    $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:block");
+                    alarmCounterTimer5 = setTimeout(() => {
+                        $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:none");
+
+                    }, TimerForAlarm);
+                }
+
+                else if (item.AlarmCounterSequence == 6) {
+                    if (alarmCounterTimer6) {
+                        clearTimeout(alarmCounterTimer6);
+                        alarmCounterTimer6 = null;
+                    }
+                    $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:block");
+                    alarmCounterTimer6 = setTimeout(() => {
+                        $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:none");
+
+                    }, TimerForAlarm);
+                }
+
+                else if (item.AlarmCounterSequence == 7) {
+                    if (alarmCounterTimer7) {
+                        clearTimeout(alarmCounterTimer7);
+                        alarmCounterTimer7 = null;
+                    }
+                    $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:block");
+                    alarmCounterTimer7 = setTimeout(() => {
+                        $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:none");
+
+                    }, TimerForAlarm);
+                }
+
+                else if (item.AlarmCounterSequence == 8) {
+                    if (alarmCounterTimer8) {
+                        clearTimeout(alarmCounterTimer8);
+                        alarmCounterTimer8 = null;
+                    }
+                    $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:block");
+                    alarmCounterTimer8 = setTimeout(() => {
+                        $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:none");
+
+                    }, TimerForAlarm);
+                }
+                else if (item.AlarmCounterSequence == 9) {
+                    if (alarmCounterTimer9) {
+                        clearTimeout(alarmCounterTimer9);
+                        alarmCounterTimer9 = null;
+                    }
+                    $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:block");
+                    alarmCounterTimer9 = setTimeout(() => {
+                        $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:none");
+
+                    }, TimerForAlarm);
+                }
+                else if (item.AlarmCounterSequence == 10) {
+                    if (alarmCounterTimer10) {
+                        clearTimeout(alarmCounterTimer10);
+                        alarmCounterTimer10 = null;
+                    }
+                    $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:block");
+                    alarmCounterTimer10 = setTimeout(() => {
+                        $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:none");
+
+                    }, TimerForAlarm);
+                }
+                else if (item.AlarmCounterSequence == 11) {
+                    if (alarmCounterTimer11) {
+                        clearTimeout(alarmCounterTimer11);
+                        alarmCounterTimer11 = null;
+                    }
+                    $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:block");
+                    alarmCounterTimer11 = setTimeout(() => {
+                        $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:none");
+
+                    }, TimerForAlarm);
+                }
+
+                else if (item.AlarmCounterSequence == 12) {
+                    if (alarmCounterTimer12) {
+                        clearTimeout(alarmCounterTimer12);
+                        alarmCounterTimer12 = null;
+                    }
+                    $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:block");
+                    alarmCounterTimer12 = setTimeout(() => {
+                        $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:none");
+
+                    }, TimerForAlarm);
+                }
+                else if (item.AlarmCounterSequence == 13) {
+                    if (alarmCounterTimer13) {
+                        clearTimeout(alarmCounterTimer13);
+                        alarmCounterTimer13 = null;
+                    }
+                    $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:block");
+                    alarmCounterTimer13 = setTimeout(() => {
+                        $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:none");
+
+                    }, TimerForAlarm);
+                }
+                else if (item.AlarmCounterSequence == 14) {
+                    if (alarmCounterTimer14) {
+                        clearTimeout(alarmCounterTimer14);
+                        alarmCounterTimer14 = null;
+                    }
+                    $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:block");
+                    alarmCounterTimer14 = setTimeout(() => {
+                        $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:none");
+
+                    }, TimerForAlarm);
+                }
+
+                else if (item.AlarmCounterSequence == 15) {
+                    if (alarmCounterTimer15) {
+                        clearTimeout(alarmCounterTimer15);
+                        alarmCounterTimer15 = null;
+                    }
+                    $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:block");
+                    alarmCounterTimer15 = setTimeout(() => {
+                        $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:none");
+
+                    }, TimerForAlarm);
+                }
+                else if (item.AlarmCounterSequence == 16) {
+                    if (alarmCounterTimer16) {
+                        clearTimeout(alarmCounterTimer16);
+                        alarmCounterTimer16 = null;
+                    }
+                    $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:block");
+                    alarmCounterTimer16 = setTimeout(() => {
+                        $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:none");
+
+                    }, TimerForAlarm);
+                }
+                else if (item.AlarmCounterSequence == 17) {
+                    if (alarmCounterTimer17) {
+                        clearTimeout(alarmCounterTimer17);
+                        alarmCounterTimer17 = null;
+                    }
+                    $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:block");
+                    alarmCounterTimer17 = setTimeout(() => {
+                        $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:none");
+
+                    }, TimerForAlarm);
+                }
+                else if (item.AlarmCounterSequence == 18) {
+                    if (alarmCounterTimer18) {
+                        clearTimeout(alarmCounterTimer18);
+                        alarmCounterTimer18 = null;
+                    }
+                    $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:block");
+                    alarmCounterTimer18 = setTimeout(() => {
+                        $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:none");
+
+                    }, TimerForAlarm);
+                }
+                else if (item.AlarmCounterSequence == 19) {
+                    if (alarmCounterTimer19) {
+                        clearTimeout(alarmCounterTimer19);
+                        alarmCounterTimer19 = null;
+                    }
+                    $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:block");
+                    alarmCounterTimer19 = setTimeout(() => {
+                        $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:none");
+
+                    }, TimerForAlarm);
+                }
+                else if (item.AlarmCounterSequence == 20) {
+                    if (alarmCounterTimer20) {
+                        clearTimeout(alarmCounterTimer20);
+                        alarmCounterTimer20 = null;
+                    }
+                    $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:block");
+                    alarmCounterTimer20 = setTimeout(() => {
+                        $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:none");
+
+                    }, TimerForAlarm);
+                }
+            }
+
+
+            function processAlarmMachine(data) {
+
+                $("#ulAlarmPanel").html("");
+                $(data.AlarmsExist).each(function (i, item) {
+                    $("#ulAlarmPanel").append("<li title=" + item.Item2 + " style='padding: 5px 10px;'><div style='color: #f1556c; background-color:#fef0f2; border:#f9b3bd 1px solid; padding:10px; border-radius:4px; font-weight:normal;font-size:16px;'>" + item.Item1 + "</div></li>");
+                });
+                data = null;
+            }
+
+              //bind Alarm Data
+            function processRaiseAlarm(result) {
+                
+                // $(".clsliAlarm").attr("style", "display:none");
+                //  $(result.Data).each(function (i, item) {
+                //  $("#ulAlarmPanel").find("#" + item.AlarmId).attr("style", "display:block");
+                //var heartBeatTimeOut;
+                //if (item.IsHeartBeat) {
+
+                //        heartBeatTimeOut = setTimeout(function () {
+                //            $("#ulAlarmPanel").find("#" + item.AlarmId).attr("style", "display:block");
+
+                //        }, 5000);
+                //}
+                //else {
+
+                //   clearTimeout(heartBeatTimeOut);
+                //    $("#ulAlarmPanel").find("#" + item.AlarmId).attr("style", "display:block");
+                //}
+                // });
+
+
+                $("#ulAlarmPanel").html("");
+                var isHideEdit = false;
+
+
+                if ($('#divrowStartStopBatch').is(':visible') == true) {
+                    if ($("#contentStartBatch").html() == "Start Batch") {
+                        $("#divrowEditBatch").show();
+                    }
+                }
+                $(result.Data).each(function (i, item) {
+
+                    var color = item.IsShowAsMessage ? "#008000" : "#f1556c";
+                    $("#ulAlarmPanel").append("<li style='padding: 5px 10px;'><div style='color:" +color+"; background-color:#fef0f2; border:#f9b3bd 1px solid; padding:10px; border-radius:4px; font-weight:normal;font-size:16px;'>" + item.AlarmName + "</div></li>");
+
+                    if (item.IsRefreshMachineSettings) {
+                        fillview(false);
+                    }
+
+                    if (item.IsHideEdit) {
+                        isHideEdit=true;
+                    }
+
+
+
+                    if (isHideEdit == false) {
+                        if ($('#divrowStartStopBatch').is(':visible') == true) {
+                            if ($("#contentStartBatch").html() == "Start Batch") {
+                                $("#divrowEditBatch").show();
+                            }
+                        }
+                            else {
+                                $("#divrowEditBatch").hide();
+                            }
+                        }
+                        else {
+                            $("#divrowEditBatch").hide();
+                        }
+
+                });
+                isHideEdit = null;
+                result = null;
+            }
+
+            function processSendHeartBeat(data) {
+                if (EndNumber_HeartBeatSend != 1) {
+                    if (data == EndNumber_HeartBeatSend) {
+                        HearBeatSend_Value = StartNumber_HeartBeatSend;
+                    }
+                    else {
+                        HearBeatSend_Value = data;
+                    }
+                }
+                else {
+                    HearBeatSend_Value = data;
+                }
+                data = null;
+            }
+
+            function processReadHeartBeat(data) {
+                if (data == HeartBeat) {
+                    SetHeartBeatTimer();
+                }
+                else {
+                    ResetHeartBeatTimer();
+                }
+                HeartBeat = data;
+                data = null;
+            }
+
+            function connectToSocket() {
+
+                var socket = $.connection.socketHub;
+                socket.client.addNewMessageToPage = function (data, message) {
+
+                    var result = JSON.parse(data);
+                    switch (result.type) {
+                        case 'commandpanel':
+                            setTimeout(() => {
+                                socket.server.send('commandpanel', '');
+                            }, 300);
+                            processCommandPanel(result.data);
+
+                            break;
+                        case 'machinesummary':
+                            setTimeout(() => {
+                                socket.server.send('machinesummary', '');
+                            }, 300);
+                            processMachineSummary(result.data);
+
+                            break;
+                        //case 'alarmmachine':
+                        //    setTimeout(() => {
+                        //        socket.server.send('alarmmachine-'+ $("#hdnModuleId").val(), '');
+                        //    }, 300);
+                        //    processAlarmMachine(result.data);
+                        //    break;
+                        case 'raisealarm':
+                            setTimeout(() => {
+                                socket.server.send('raisealarm-' + $("#hdnModuleId").val(), '');
+                            }, 1000);
+                            processRaiseAlarm(result.data);
+                            break;
+                        //case 'sendheartbeat':
+
+                        //    if (IsHeartBeatSend == true)
+                        //    {
+                        //        setTimeout(() => {
+                        //            socket.server.send('sendheartbeat-' + MachineParameterId_IsHeartBeatSend + "-" + HearBeatSend_Value + "-" + IncrementalNumber_HeartBeatSend + "-" + EndNumber_HeartBeatSend,'');
+
+                        //        }, 300);
+                        //        processSendHeartBeat(result.data);
+
+                        //    }
+                        //    break;
+                        //case 'readheartbeat':
+                        //     if (IsHeartBeat == true) {
+                        //        setTimeout(() => {
+                        //            socket.server.send("readheartbeat-" + MachineParameterId_HeartBeat + "-" + IPCAddress_HeartBeat);
+                        //        }, 300);
+                        //        processReadHeartBeat(result.data);
+
+                        //    }
+                        //    break;
+                        default:
+                    }
+                    //data = null;
+                    //message = null;
+                    result = null;
+
+                };
+
+                $.connection.hub.start().done(function () {
+
+                    //console.log('hub connected');
+
+
+                    socket.server.send('commandpanel', '');
+                    socket.server.send('machinesummary', '');
+                    //  socket.server.send('alarmmachine-'+ $("#hdnModuleId").val(),'');
+                    socket.server.send('raisealarm-' + $("#hdnModuleId").val(), '');
+                    //if (IsHeartBeatSend == true)
+                    //{
+                    //    socket.server.send('sendheartbeat-' + MachineParameterId_IsHeartBeatSend + "-" + HearBeatSend_Value + "-" + IncrementalNumber_HeartBeatSend + "-" + EndNumber_HeartBeatSend, '');
+
+                    //}
+
+                    //if (IsHeartBeat == true) {
+                    //    socket.server.send("readheartbeat-" + MachineParameterId_HeartBeat + "-" + IPCAddress_HeartBeat);
+                    //}
+                });
+
+                $.connection.hub.disconnected(function () {
+                    //console.log('hub got disconnected');
+                    setTimeout(function () {
+                        $.connection.hub.start();
+                    }, 3000); // Restart connection after 3 seconds.
+                });
+            }
+
+            $(document).ready(function () {
+
+               GetScreenLockTimeOut();
+               // CheckHeartBeat();
+                CheckHeartBeatSend();
+
+                $('.modal').on('hidden.bs.modal', function (e) {
+
+                    if ($(".modal.in").length == 0) {
+                        $(".modal-backdrop").remove();
+                    }
+
+                })
+
+                setTimeout(() => {
+                    connectToSocket();
+                }, 3000);
+
+                var alarmCnt = 2;
+
+              //window.setInterval(function () {
+              //     fillview(false);
+
+              //  //    ShowModal = true;
+
+              //  //  //  if (IsRefresh == true) {
+              //  //       CommandPanelFunction();
+              //  //      AlarmMachineFunction();
+              //  //    MachineSummaryFunction();
+              //  //    if (alarmCnt == 2) {
+              //  //        RaiseAlarmFunction();
+              //  //        ClearMemoryFunction();
+              //  //        alarmCnt = 0;
+              //  //    }
+              //  //    alarmCnt++;
+              //  //       // MachineSettingsFunction();
+
+              //  //       // if (IsHeartBeat == true) {
+
+              //  //        // ReadHeartBeat();
+              //  //       // }
+
+              //  //        if (IsHeartBeatSend == true) {
+
+              //  //           SendHeartBeat();
+              //  //        }
+              //  //    //}
+              //  //   // else {
+              //  //       // console.log("refresh stop" + new Date())
+              //  //   // }
+              //  }, 2000);
+
+                //$(window).bind("load", function () {
+                //    console.log("window load" + new Date)
+                //    GetScreenLockTimeOut();
+                //});
+
+
+            });
+
+
+                    function GetSelfSetStatus() {
+                        var machine = { "MachineId": 1 };
+                        jQuery.support.cors = true;
+                        $.ajax({
+                            url: Q.resolveUrl('~/api/PLCToHMI/SelfsetStatus'),
+                            data: machine,
+                            type: 'POST',
+                            dataType: 'json',
+                            success: function (data) {
+                                //WriteResponse(data);
+                                //alert(data);
+                                if (data == "True") {
+
+
+                                }
+                                else if (data == "noconnection") {
+
+
+                                    $('#DangerModel').modal('toggle');
+
+                                }
+                                else {
+                                    $("#txtSelsetModel").html("Self-set completed.Labelling machine is read to use");;
+                                    $('#selfsetModal').modal('toggle');
+                                }
+                            },
+                            error: function (x, y, z) {
+                                alert(x + '\n' + y + '\n' + z);
+                            }
+                        });
+                    }
+
+                    function GetSettingsParameter() {
+                        var machine = { "MachineId": 1, "ViewId": 1 };
+                        jQuery.support.cors = true;
+                        $.ajax({
+                            url: Q.resolveUrl('~/api/PLCToHMI/SettingsParameter'),
+                            data: machine,
+                            type: 'POST',
+                            dataType: 'json',
+                            success: function (settingsParameter) {
+
+                                if (settingsParameter.length > 0) {
+                                    $("#lblLength").html(settingsParameter[7].ParameterValue);
+                                    $("#lblLabelToOut").html(settingsParameter[8].ParameterValue);
+                                    $("#lblContainer").html(settingsParameter[1].ParameterValue);
+                                    //$("#txtProductionSpeed").val(settingsParameter[0].ParameterValue);
+                                    $("#" + settingsParameter[0].HMIParameterId).val(settingsParameter[0].ParameterValue);
+                                    $("#" + settingsParameter[5].HMIParameterId).val(settingsParameter[5].ParameterValue);
+                                    $("#" + settingsParameter[4].HMIParameterId).val(settingsParameter[4].ParameterValue);
+
+                                    $("#" + settingsParameter[6].HMIParameterId).val(settingsParameter[6].ParameterValue);
+                                    $("#" + settingsParameter[3].HMIParameterId).val(settingsParameter[3].ParameterValue);
+                                    $("#" + settingsParameter[11].HMIParameterId).val(settingsParameter[11].ParameterValue);
+                                    $("#" + settingsParameter[12].HMIParameterId).val(settingsParameter[12].ParameterValue);
+                                    $("#" + settingsParameter[13].HMIParameterId).val(settingsParameter[13].ParameterValue);
+                                    $("#" + settingsParameter[14].HMIParameterId).val(settingsParameter[14].ParameterValue);
+                                    $("#" + settingsParameter[9].HMIParameterId).val(settingsParameter[9].ParameterValue);
+                                    $("#" + settingsParameter[10].HMIParameterId).val(settingsParameter[10].ParameterValue);
+
+                                    if (settingsParameter[2].ParameterValue == "False")
+                                    {
+                                        $("#chkSeparator").bootstrapToggle('off')
+                                    }
+                                    else {
+                                        $("#chkSeparator").bootstrapToggle('on')
+                                    }
+
+                                    if (settingsParameter[15].ParameterValue == "False") {
+                                        $("#chkPrinter").bootstrapToggle('off')
+                                    }
+                                    else {
+                                        $("#chkPrinter").bootstrapToggle('on')
+                                    }
+
+                                    if (settingsParameter[16].ParameterValue == "False") {
+                                        $("#chkTemperature").bootstrapToggle('off')
+                                    }
+                                    else {
+                                        $("#chkTemperature").bootstrapToggle('on')
+                                    }
+
+                                    if (settingsParameter[17].ParameterValue == "False") {
+                                        $("#chkBarCode").bootstrapToggle('off')
+                                    }
+                                    else {
+                                        $("#chkBarCode").bootstrapToggle('on')
+                                    }
+
+                                    if (settingsParameter[18].ParameterValue == "False") {
+                                        $("#chkDateCeck").bootstrapToggle('off')
+                                    }
+                                    else {
+                                        $("#chkDateCeck").bootstrapToggle('on')
+                                    }
+                                }
+
+                                //for (var j = 0; j < settingsLength; j++) {
+
+                                //}
+                            },
+                            error: function (x, y, z) {
+                                alert(x + '\n' + y + '\n' + z);
+                            }
+                        });
+                    }
+
+                    $('[name="txtProductionSpeed"]')
+                        .keyboard({
+                            layout: 'custom',
+                            customLayout: {
+                                'normal': [
+                                    '7 8 9',
+                                    '4 5 6',
+                                    '1 2 3',
+                                    '{bksp} . 0 ',
+                                    '{a} {c}'
+                                ]
+                            },
+                            maxLength: 3,
+                            // Prevent keys not in the displayed keyboard from being typed in
+                            restrictInput: true,
+                            // include lower case characters (added v1.25.7)
+                            //restrictInclude: 'a b c d e f',
+                            // don't use combos or A+E could become a ligature
+                            useCombos: false,
+                            // activate the "validate" callback function
+                            acceptValid: true,
+                            //validate: function (keyboard, value, isClosing) {
+                            //    // only make valid if input is 6 characters in length
+                            //    return value.length === 6;
+                            //}
+                        })
+                        ;
+
+                    $('[name="txtExtension"]')
+                        .keyboard({
+                            layout: 'custom',
+                            customLayout: {
+                                'normal': [
+                                    '7 8 9',
+                                    '4 5 6',
+                                    '1 2 3',
+                                    '{bksp} . 0 ',
+                                    '{a} {c}'
+                                ]
+                            },
+                            maxLength: 3,
+                            // Prevent keys not in the displayed keyboard from being typed in
+                            restrictInput: true,
+                            // include lower case characters (added v1.25.7)
+                            //restrictInclude: 'a b c d e f',
+                            // don't use combos or A+E could become a ligature
+                            useCombos: false,
+                            // activate the "validate" callback function
+                            acceptValid: true,
+                            //validate: function (keyboard, value, isClosing) {
+                            //    // only make valid if input is 6 characters in length
+                            //    return value.length === 6;
+                            //}
+                        })
+                        ;
+
+                    $('[name="txtStartPosition"]')
+                        .keyboard({
+                            layout: 'custom',
+                            customLayout: {
+                                'normal': [
+                                    '7 8 9',
+                                    '4 5 6',
+                                    '1 2 3',
+                                    '{bksp} . 0 ',
+                                    '{a} {c}'
+                                ]
+                            },
+                            maxLength: 3,
+                            // Prevent keys not in the displayed keyboard from being typed in
+                            restrictInput: true,
+                            // include lower case characters (added v1.25.7)
+                            //restrictInclude: 'a b c d e f',
+                            // don't use combos or A+E could become a ligature
+                            useCombos: false,
+                            // activate the "validate" callback function
+                            acceptValid: true,
+                            //validate: function (keyboard, value, isClosing) {
+                            //    // only make valid if input is 6 characters in length
+                            //    return value.length === 6;
+                            //}
+                        })
+                        ;
+
+                    $('[name="txtLabelHDSpeed"]')
+                        .keyboard({
+                            layout: 'custom',
+                            customLayout: {
+                                'normal': [
+                                    '7 8 9',
+                                    '4 5 6',
+                                    '1 2 3',
+                                    '{bksp} . 0 ',
+                                    '{a} {c}'
+                                ]
+                            },
+                            maxLength: 3,
+                            // Prevent keys not in the displayed keyboard from being typed in
+                            restrictInput: true,
+                            // include lower case characters (added v1.25.7)
+                            //restrictInclude: 'a b c d e f',
+                            // don't use combos or A+E could become a ligature
+                            useCombos: false,
+                            // activate the "validate" callback function
+                            acceptValid: true
+                            //validate: function (keyboard, value, isClosing) {
+                            //    // only make valid if input is 6 characters in length
+                            //    return value.length === 6;
+                            //}
+                        })
+                        ;
+
+                    $('[name="txtSeparatorSpeed"]')
+                        .keyboard({
+                            layout: 'custom',
+                            customLayout: {
+                                'normal': [
+                                    '7 8 9',
+                                    '4 5 6',
+                                    '1 2 3',
+                                    '{bksp} . 0 ',
+                                    '{a} {c}'
+                                ]
+                            },
+                            maxLength: 3,
+                            // Prevent keys not in the displayed keyboard from being typed in
+                            restrictInput: true,
+                            // include lower case characters (added v1.25.7)
+                            //restrictInclude: 'a b c d e f',
+                            // don't use combos or A+E could become a ligature
+                            useCombos: false,
+                            // activate the "validate" callback function
+                            acceptValid: true
+                            //validate: function (keyboard, value, isClosing) {
+                            //    // only make valid if input is 6 characters in length
+                            //    return value.length === 6;
+                            //}
+                        })
+                        ;
+
+                    $('[name="txtBackPaper"]')
+                        .keyboard({
+                            layout: 'custom',
+                            customLayout: {
+                                'normal': [
+                                    '7 8 9',
+                                    '4 5 6',
+                                    '1 2 3',
+                                    '{bksp} . 0 ',
+                                    '{a} {c}'
+                                ]
+                            },
+                            maxLength: 3,
+                            // Prevent keys not in the displayed keyboard from being typed in
+                            restrictInput: true,
+                            // include lower case characters (added v1.25.7)
+                            //restrictInclude: 'a b c d e f',
+                            // don't use combos or A+E could become a ligature
+                            useCombos: false,
+                            // activate the "validate" callback function
+                            acceptValid: true,
+                            //validate: function (keyboard, value, isClosing) {
+                            //    // only make valid if input is 6 characters in length
+                            //    return value.length === 6;
+                            //}
+                        })
+                        ;
+
+                    $('[name="txtPaperValue"]')
+                        .keyboard({
+                            layout: 'custom',
+                            customLayout: {
+                                'normal': [
+                                    '7 8 9',
+                                    '4 5 6',
+                                    '1 2 3',
+                                    '{bksp} . 0 ',
+                                    '{a} {c}'
+                                ]
+                            },
+                            maxLength: 3,
+                            // Prevent keys not in the displayed keyboard from being typed in
+                            restrictInput: true,
+                            // include lower case characters (added v1.25.7)
+                            //restrictInclude: 'a b c d e f',
+                            // don't use combos or A+E could become a ligature
+                            useCombos: false,
+                            // activate the "validate" callback function
+                            acceptValid: true,
+                            //validate: function (keyboard, value, isClosing) {
+                            //    // only make valid if input is 6 characters in length
+                            //    return value.length === 6;
+                            //}
+                        })
+                        ;
+
+                    $('[name="txtPrinterTime"]')
+                        .keyboard({
+                            layout: 'custom',
+                            customLayout: {
+                                'normal': [
+                                    '7 8 9',
+                                    '4 5 6',
+                                    '1 2 3',
+                                    '{bksp} . 0 ',
+                                    '{a} {c}'
+                                ]
+                            },
+                            maxLength: 3,
+                            // Prevent keys not in the displayed keyboard from being typed in
+                            restrictInput: true,
+                            // include lower case characters (added v1.25.7)
+                            //restrictInclude: 'a b c d e f',
+                            // don't use combos or A+E could become a ligature
+                            useCombos: false,
+                            // activate the "validate" callback function
+                            acceptValid: true,
+                            //validate: function (keyboard, value, isClosing) {
+                            //    // only make valid if input is 6 characters in length
+                            //    return value.length === 6;
+                            //}
+                        })
+                        ;
+
+                    $('[name="txtPrinterTemprature"]')
+                        .keyboard({
+                            layout: 'custom',
+                            customLayout: {
+                                'normal': [
+                                    '7 8 9',
+                                    '4 5 6',
+                                    '1 2 3',
+                                    '{bksp} . 0 ',
+                                    '{a} {c}'
+                                ]
+                            },
+                            maxLength: 3,
+                            // Prevent keys not in the displayed keyboard from being typed in
+                            restrictInput: true,
+                            // include lower case characters (added v1.25.7)
+                            //restrictInclude: 'a b c d e f',
+                            // don't use combos or A+E could become a ligature
+                            useCombos: false,
+                            // activate the "validate" callback function
+                            acceptValid: true,
+                            //validate: function (keyboard, value, isClosing) {
+                            //    // only make valid if input is 6 characters in length
+                            //    return value.length === 6;
+                            //}
+                        })
+                        ;
+
+                    $('[name="txtPulsForBarcode"]')
+                        .keyboard({
+                            layout: 'custom',
+                            customLayout: {
+                                'normal': [
+                                    '7 8 9',
+                                    '4 5 6',
+                                    '1 2 3',
+                                    '{bksp} . 0 ',
+                                    '{a} {c}'
+                                ]
+                            },
+                            maxLength: 3,
+                            // Prevent keys not in the displayed keyboard from being typed in
+                            restrictInput: true,
+                            // include lower case characters (added v1.25.7)
+                            //restrictInclude: 'a b c d e f',
+                            // don't use combos or A+E could become a ligature
+                            useCombos: false,
+                            // activate the "validate" callback function
+                            acceptValid: true,
+                            //validate: function (keyboard, value, isClosing) {
+                            //    // only make valid if input is 6 characters in length
+                            //    return value.length === 6;
+                            //}
+                        })
+                        ;
+
+                    $('[name="txtPulsForDatecheck"]')
+                        .keyboard({
+                            layout: 'custom',
+                            customLayout: {
+                                'normal': [
+                                    '7 8 9',
+                                    '4 5 6',
+                                    '1 2 3',
+                                    '{bksp} . 0 ',
+                                    '{a} {c}'
+                                ]
+                            },
+                            maxLength: 3,
+                            // Prevent keys not in the displayed keyboard from being typed in
+                            restrictInput: true,
+                            // include lower case characters (added v1.25.7)
+                            //restrictInclude: 'a b c d e f',
+                            // don't use combos or A+E could become a ligature
+                            useCombos: false,
+                            // activate the "validate" callback function
+                            acceptValid: true,
+                            //validate: function (keyboard, value, isClosing) {
+                            //    // only make valid if input is 6 characters in length
+                            //    return value.length === 6;
+                            //}
+                        })
+                        ;
+
+                    function LoadRecipeAfterSelection()
+                    {
+                        $("#s-Page").removeClass('modal-dialog-open');
+                        $("#CVC_Machine_MachineRecipeDialog4").remove();
+                        $(".ui-dialog").remove();
+                    }
+
+                    function GetMachineRecipeParameter() {
+                        var MachineRecipeId = $("hdnRecipeId").val();
+                        var machine = { "MacineRecipeId": MachineRecipeId };
+                        jQuery.support.cors = true;
+                        $.ajax({
+                            url: Q.resolveUrl('~/api/Batch/MachineRecipeParameter'),
+                            data: machine,
+                            type: 'POST',
+                            dataType: 'json',
+                            success: function (settingsParameter) {
+
+                                if (settingsParameter.length > 0) {
+
+                                    for (var i = 0; i < settingsParameter.length; i++) {
+                                        if ($("#" + settingsParameter[i].HMIParameterId) != null)
+                                            $("#" + settingsParameter[i].HMIParameterId).val(settingsParameter[i].ParameterValue);
+
+                                    }
+
+                                }
+
+                                //for (var j = 0; j < settingsLength; j++) {
+
+                                //}
+                            },
+                            error: function (x, y, z) {
+                                alert(x + '\n' + y + '\n' + z);
+                            }
+                        });
+                    }
+
+                    //GetSettingsParameter();
+                });
+
+                jQuery(function () {
+
+
+
+                    //$('.ui-dialog')..on('dialogclose', function (event) {
+                    //    alert('closed');
+                    //});
+
+                    //$('.MachineRecipeGrid').on('hide', function (event) {
+                    //    alert('closed');
+                    //});
+        });
+
+        function SaveComments() {
+
+           // alert('before :' + popupcomment);
+
+            var taboneAddedBoxtable = document.getElementById('tableComment');
+
+            var taboneAddedBoxjsonArr = [];
+            // To validation
+
+            if (taboneAddedBoxtable.rows.length > 0) {
+               // console.log("tableComment.rows", taboneAddedBoxtable, taboneAddedBoxtable.rows);
+                for (var i = 1, row; row = taboneAddedBoxtable.rows[i]; i++) {
+                    //alert(taboneAddedBoxtable.rows[i]);
+                    //($(row).find('#txt').val() == "")
+                    var col = row.cells;
+                    if ($(row).find('#txt').val() == "") {
+                        alert('Please Enter Comments before Saving...')
+                        return false;
+                    }
+                }
+            }
+
+            $('#alarmModel').modal('hide');
+           // $('.comment').val('');
+
+           // $("#tableComment tr").remove();
+
+            if (taboneAddedBoxtable.rows.length > 0) {
+                for (var i = 1, row; row = tableComment.rows[i]; i++) {
+                    var col = row.cells;
+                    // alert($(row).closest('.comment').text());
+                    //var col1 = col[i].innerText,
+                    //var spans = row.getElementsByTagName("span");
+                    var jsonObj = {
+                        AlarmId: col[0].innerText,
+                        Comments: $(row).find('.comment').val(),// col[1].innerText,
+                    }
+                    taboneAddedBoxjsonArr.push(jsonObj);
+                }
+            }
+
+            $.ajax({
+                url: Q.resolveUrl('/AlarmMachine/SaveComments/?taboneAddedBoxjsonArr=' + JSON.stringify(taboneAddedBoxjsonArr)),
+                async: false,
+                success: function (data) {
+                    $(".comment").val('');
+                }
+            });
+            $(".comment").val('');
+            flag = 0;
+            //$('#hdnval').val(0);
+            //popupcomment = "0";
+
+         //   alert('after :' +popupcomment);
+            //setTimeout(RefreshFields, 10000);
+        }
+
+            function SetHeartBeatTimer() {
+
+                timeoutHandleHeartBeat = window.setTimeout(
+                    function () {
+                        DisplayMachineFailedError();
+                    }, HeartBeatFailedTime);
+
+            }
+
+
+
+            function DisplayMachineFailedError() {
+                /*if ($('#NoHeartBeatModal').is(':visible') == false) {
+                    $("#paraMachineCommunicationFailed").text("Machine Communication Failed !!!")
+
+                    $("#NoHeartBeatModalFooter").attr("style", "display:none");
+                    $("#NoHeartBeatModal").modal('show');
+
+                }*/
+                var parameter = {
+                    "ModuleId": $("#hdnModuleId").val(), "MachineParameterId": MachineParameterId_HeartBeat,"IsError":true
+                };
+                $.ajax({
+                    url: Q.resolveUrl('~/Common/DisplayComError'),
+                    type: 'POST',
+                    async: true,
+                    data: parameter,
+                    success: function (data) {
+                    },
+                    error: function (x, y, z) {
+
+                    }
+                });
+                // $("#divMachineCommunicationFailed").attr("style", "display:block");
+                AddAuditLogForHeartBeat();
+            }
+
+            function ResetHeartBeatTimer() {
+               // $("#NoHeartBeatModal").modal('hide');
+                var parameter = {
+                    "ModuleId": $("#hdnModuleId").val(), "MachineParameterId": MachineParameterId_HeartBeat, "IsError": false
+                };
+                $.ajax({
+                    url: Q.resolveUrl('~/Common/DisplayComError'),
+                    type: 'POST',
+                    async: true,
+                    data: parameter,
+                    success: function (data) {
+                    },
+                    error: function (x, y, z) {
+
+                    }
+                });
+                window.clearTimeout(timeoutHandleHeartBeat);
+            }
+
+            $(window).on('load', function () {
+
+                $('.loader').addClass('hidden');
+            })
+
+            function ShowLoader() {
+                $('.loader').removeClass('hidden');
+            }
+
+            var isModifyLabelRoll = @Html.Raw(Json.Encode(Model.IsModifyLabelRoll));
+        </script>
+
+
+    }
+
+    @section Style
+{
+        <link rel="stylesheet" type="text/css" href="~/Content/circularprogress.css" />
+        <link rel="stylesheet" type="text/css" href="~/Content/number-pb.css" />
+        <link rel="stylesheet" type="text/css" href="~/Content/AnimatedSlimstyle.css" />
+        <link href="~/Content/site/keyboard.css" type="text/css" rel="stylesheet">
+
+
+        <style>
+            .ibox-content {
+                clear: both;
+            }
+
+            .ibox-content {
+                background-color: #ffffff;
+                color: inherit;
+                padding: 5px 5px 5px 5px;
+                border-color: #e7eaec;
+                border-image: none;
+                border-style: solid solid none;
+                border-width: 1px 0;
+            }
+
+            .toggle.btn {
+                min-width: 70px;
+                min-height: 30px;
+            }
+
+            .containerdiv {
+                border: 1px solid #DDDDDD;
+                width: 693px;
+                height: 153px;
+                position: relative;
+            }
+
+            .tag {
+                float: left;
+                position: absolute;
+                left: 70%;
+                top: 10%;
+                background-color: orange;
+            }
+
+            /*.line {
+                    position: absolute;
+                    top: 50%;
+                    width: 100%;
+                    border: 1px solid #000;
+                }*/
+
+            .stepwizard-step p {
+                margin-top: 10px;
+            }
+
+            .stepwizard-row {
+                display: table-row;
+            }
+
+            .stepwizard {
+                display: table;
+                width: 100%;
+                position: relative;
+            }
+
+            .stepwizard-step button[disabled] {
+                opacity: 1 !important;
+                filter: alpha(opacity=100) !important;
+            }
+
+            .stepwizard-row:before {
+                top: 50px;
+                bottom: 0;
+                position: absolute;
+                content: " ";
+                width: 100%;
+                height: 5px;
+                background-color: #ccc;
+                z-order: 0;
+            }
+
+            .stepwizard-step {
+                display: table-cell;
+                text-align: center;
+                position: relative;
+            }
+
+            .btn-circle {
+                width: 30px;
+                height: 30px;
+                text-align: center;
+                padding: 6px 0;
+                font-size: 12px;
+                line-height: 1.428571429;
+                border-radius: 15px;
+            }
+
+            .boxNew > .icon {
+                text-align: center;
+                position: relative;
+            }
+
+                .boxNew > .icon > .image {
+                    position: relative;
+                    z-index: 2;
+                    margin: auto;
+                    width: 200px;
+                    height: 30px;
+                    border: 2px solid #e4e0e0;
+                    line-height: 30px;
+                    border-radius: 2%;
+                    background: #fff;
+                    vertical-align: middle;
+                    font-weight: bold;
+                }
+
+                .boxNew > .icon:hover > .image {
+                    background: #fff;
+                }
+
+                .boxNew > .icon > .image > i {
+                    font-size: 36px !important;
+                    color: #fff !important;
+                }
+
+                .boxNew > .icon:hover > .image > i {
+                    color: white !important;
+                }
+
+                .boxNew > .icon > .info {
+                    margin-top: -24px;
+                    background: rgba(0, 0, 0, 0.04);
+                    border: 1px solid #e0e0e0;
+                    padding: 25px 0px 0px 0px;
+                }
+
+                .boxNew > .icon:hover > .info {
+                    background: rgba(0, 0, 0, 0.04);
+                    border-color: #e0e0e0;
+                }
+
+                .boxNew > .icon > .info > h3.title {
+                    font-family: "Roboto",sans-serif !important;
+                    font-size: 16px;
+                    color: #222;
+                    font-weight: 500;
+                }
+
+                .boxNew > .icon > .info > p {
+                    font-family: "Roboto",sans-serif !important;
+                    font-size: 13px;
+                    color: #666;
+                    line-height: 1.5em;
+                    margin: 20px;
+                }
+
+                .boxNew > .icon:hover > .info > h3.title, .box > .icon:hover > .info > p, .box > .icon:hover > .info > .more > a {
+                    color: #222;
+                }
+
+                .boxNew > .icon > .info > .more a {
+                    font-family: "Roboto",sans-serif !important;
+                    font-size: 12px;
+                    color: #222;
+                    line-height: 12px;
+                    text-transform: uppercase;
+                    text-decoration: none;
+                }
+
+                .boxNew > .icon:hover > .info > .more > a {
+                    color: #fff;
+                    padding: 6px 8px;
+                    background-color: #63B76C;
+                }
+
+            .boxNew .space {
+                height: 0px;
+            }
+
+            .card {
+                border-radius: 2px;
+                border-top: 4px solid #8CDDCD;
+                box-shadow: 0 2px 1px rgba(0, 0, 0, 0.05);
+                border-left: none;
+                border-right: none;
+                border-bottom: none;
+                margin-bottom: 30px;
+                background-color: #fff;
+            }
+
+            .table-card .row-table:first-child {
+                border-bottom: 1px solid #ddd;
+            }
+
+            .table-card .row-table {
+                display: flex;
+                align-items: center;
+                table-layout: fixed;
+                height: 100%;
+                width: 100%;
+                margin: 0;
+            }
+
+                .table-card .row-table > [class*="col-"] {
+                    display: table-cell;
+                    float: none;
+                    table-layout: fixed;
+                    vertical-align: middle;
+                }
+
+                .table-card .row-table .br {
+                    border-right: 1px solid #ccc;
+                }
+
+            .card-block-big {
+                padding: 0.5em;
+            }
+        </style>
+    }
+
+
+</body>
+
+@*<script>
+
+        var timeoutHandleScreenLock;
+
+
+        function SetScreenLockTimer() {
+
+            timeoutHandleScreenLock = window.setTimeout(
+                function () {
+                    OpenScreenLockPopUp();
+                }, ScreenLockTimeOut);
+        }
+
+        function OpenScreenLockPopUp() {
+          //  IsRefresh = false;
+            $("#ScreenLockModel").modal('show');
+           AddAuditLogForScreenLockTimeOut();
+        }
+
+        function ResetScreenLockTimer() {
+
+            window.clearTimeout(timeoutHandleScreenLock);
+            SetScreenLockTimer();
+        }
+
+
+
+    </script>*@
+
+<style>
+    #chartdiv {
+        width: 100%;
+        height: 500px;
+    }
+</style>
+
+<!-- Resources -->
+
+<script src="~/Content/JS/core.js"></script>
+<script src="~/Content/JS/charts.js"></script>
+<script src="~/Content/JS/animated.js"></script>
+<!-- Chart code -->
+<script>
+    
+am4core.ready(function() {
+
+// Themes begin
+am4core.useTheme(am4themes_animated);
+// Themes end
+
+// Create chart instance
+var chart = am4core.create("chartdiv", am4charts.PieChart);
+
+// Add data
+chart.data = [
+  { "viewFieldName": "Good Bottles", "viewFieldValue": $(".lblGoodBottle").text(),"color":"#00a65a" },
+  { "viewFieldName":"Reject Bottles", "viewFieldValue": $(".lblRejectBottle").text(),"color":"#dd4b39" },
+
+];
+
+// Add label
+chart.innerRadius = 100;
+    var label = chart.seriesContainer.createChild(am4core.Label);
+    //label.text ="Total Bottle";
+    label.horizontalCenter = "middle";
+    label.verticalCenter = "middle";
+    label.fontSize = 30;
+    label.fontWeight = "bold";
+
+    
+   // label.text = totalBottle;
+
+    var label1 = chart.seriesContainer.createChild(am4core.Label);
+    //label.text ="Total Bottle";
+    label1.horizontalCenter = "bottom";
+    label1.verticalCenter = "bottom";
+    label1.fontSize = 20;
+
+    label1.fontWeight = "bold";
+    label1.x = -60;
+    label1.y = 65;
+    label1.text = "Total Bottles";
+
+var pieSeries = chart.series.push(new am4charts.PieSeries());
+pieSeries.dataFields.value = "viewFieldValue";
+pieSeries.dataFields.category = "viewFieldName";
+var sliceTemplate = pieSeries.slices.template;
+    sliceTemplate.propertyFields.fill = "color";
+    var title = chart.titles.create();
+        title.text = "Statistics";
+        title.textAlign = "middle";
+        title.fontSize = 30;
+        title.fontWeight = "200";
+        title.cssClass="box-title";
+        chart.legend = new am4charts.Legend();
+   // chart.labels.template.disabled = true;
+
+function refreshGraphData() {    
+    chart.data[0].viewFieldValue= $(".lblGoodBottle").text();
+    chart.data[1].viewFieldValue= $(".lblRejectBottle").text();
+    var totalBottle=parseInt($(".lblGoodBottle").text()) + parseInt($(".lblRejectBottle").text());
+    var codeBlock = '<div >' +
+                        '<p>'+totalBottle+'</p><br/>' +
+                        '<p>Total Bottles</p>' +
+        '</div>';
+    label.text = totalBottle;
+   // label.text="<html><label>"+parseInt($(".lblGoodBottle").text()) + parseInt($(".lblRejectBottle").text())+"</label><br/><label>Total Bottle</label></html>"
+  chart.invalidateRawData();
+  chart.setTimeout( refreshGraphData, 1000 );
+    
+}
+
+refreshGraphData();
+
+}); // end am4core.ready()
+    
+</script>

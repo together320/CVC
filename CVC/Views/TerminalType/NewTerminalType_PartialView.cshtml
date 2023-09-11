@@ -1,0 +1,86 @@
+﻿
+@model CVC.ViewModels.TerminalTypeViewModel
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="newTerminalTypeModalPopUp">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="myLargeModalLabel">New Terminal Type</h4>
+            </div>
+           
+            <div class="modal-body">
+                <div class="machine-tab-links">
+                    <a href="">General</a>
+                    <a href="">Status</a>
+                </div>
+                <form class="edit-machine-form">
+
+                    <div class="edit-machine-title">
+                        <h6>General</h6>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="TerminalTypeName"><label style="color:red">*</label>Terminal Type Name</label>
+                                @Html.TextBoxFor(m => Model.TerminalTypeName, new { @class = "form-control" })
+                            </div>
+                        </div>
+                      
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="Description">Description</label>
+                                @Html.TextAreaFor(m => Model.Description, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="IsRead">Is Read</label>
+                                @Html.CheckBoxFor(m => Model.IsRead,new { @checked=true, @disabled =true})
+
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="IsWrite">Is Write</label>
+                                @Html.CheckBoxFor(m => Model.IsWrite)
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="edit-machine-title">
+                        <h6>Status</h6>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="Status">Status</label>
+                                <select id="ddlStatus" class="form-control">
+                                    <option value="1">Active</option>
+                                    <option value="2">In-Active</option>
+
+                                </select>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="SaveTerminalType();" class="btn btn-primary" id="btnSaveTerminalType">Save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
