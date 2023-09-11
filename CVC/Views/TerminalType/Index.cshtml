@@ -1,0 +1,221 @@
+﻿@model CVC.ViewModels.TerminalTypeViewModel
+
+@{
+    ViewBag.Title = "Terminal View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Terminal Type</title>
+</head>
+<body>
+    <div class="container-fluid">
+
+        <div class="dataTable-wrapper" style="width:100%; margin:0 auto;">
+            <div class="row BtnUpdateRow" style="padding-left:15px">
+                <button type="button" id="btnNewTerminalType" class="btn btn-primary">New Terminal Type</button>
+            </div>
+            <div id="divTerminalTypeList"></div>
+        </div>
+    </div>
+
+    <ul class="nav nav-tabs" role="tablist" id="terminalTypeTab">
+        <li role="presentation" class="active" id="liFirst"><a href="#first" aria-controls="first" role="tab" data-toggle="tab">Details</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="row BtnUpdateRow" style="padding-left:15px">
+            <button type="button" onclick="UpdateTerminalType();" id="btnUpdateTerminalType" class="btn btn-primary">Update</button>
+        </div>
+        <div class="machine-tab-links">
+            <a href="">General</a>
+            <a href="">Status</a>
+        </div>
+        <form class="edit-machine-form">
+
+            <div class="edit-machine-title">
+                <h6>General</h6>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="TerminalTypeName"><label style="color:red">*</label>Terminal Type Name</label>
+                        @Html.HiddenFor(m => Model.TerminalTypeId, new { @id = "hdnTerminalTypeId" })
+                        @Html.TextBoxFor(m => Model.TerminalTypeName, new { @class = "form-control", @id = "txtUpdateTerminalTypeName" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="Description">Description</label>
+                        @Html.TextAreaFor(m => Model.Description, new { @class = "form-control", @id = "txtUpdateDescription" })
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="IsRead">Is Read</label>
+                        @Html.CheckBoxFor(m => Model.IsRead, new { @id = "chkUpdateIsRead", @disabled=true })
+
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="IsWrite">Is Write</label>
+                        @Html.CheckBoxFor(m => Model.IsWrite, new { @id = "chkUpdateIsWrite" })
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="edit-machine-title">
+                <h6>Status</h6>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="Status">Status</label>
+                        <select id="ddlUpdateStatus" class="form-control">
+                            <option value="1">Active</option>
+                            <option value="2">In-Active</option>
+
+                        </select>
+
+                    </div>
+                </div>
+
+
+            </div>
+        </form>
+
+    </div>
+</body>
+</html>
+@Html.Partial("~/Views/TerminalType/NewTerminalType_PartialView.cshtml")
+
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+        GetAllTerminalType();
+
+    });
+
+    $("#btnNewTerminalType").click(function () {
+        ClearControls();
+        $("#newTerminalTypeModalPopUp").modal('show');
+    })
+
+    function ClearControls() {
+        $("#TerminalTypeName").val("");
+        $("#Description").val("");
+        // $("#IsRead").prop("checked", false);
+        $("#IsWrite").prop("checked", false)
+        $('#ddlStatus').val("1")
+    }
+
+    function SaveTerminalType() {
+
+        if (Validation("Save") == true) {
+            $.ajax({
+                url: Q.resolveUrl('/TerminalType/SaveTerminalType'),
+                type: 'POST',
+                data: {
+                    "TerminalTypeName": $("#TerminalTypeName").val(), "Description": $.trim($("#Description").val()), "IsActive": $("#ddlStatus option:selected").val() == "1" ? true : false, "IsRead": $("#IsRead").prop("checked") ? true : false, "IsWrite": $("#IsWrite").prop("checked") ? true : false
+                },
+
+                success: function (response) {
+                    alert(response.message);
+
+                    if (response.status == true) {
+                        $("#newTerminalTypeModalPopUp").modal('hide');
+                        GetAllTerminalType();
+                    }
+
+                },
+                error: function (x, y, z) {
+
+                }
+            });
+        }
+    }
+
+    function UpdateTerminalType() {
+        if (Validation("Update") == true) {
+            $.ajax({
+                url: Q.resolveUrl('/TerminalType/UpdateTerminalType'),
+                type: 'POST',
+                data: {
+                    "TerminalTypeId": $("#hdnTerminalTypeId").val(), "TerminalTypeName": $("#txtUpdateTerminalTypeName").val(), "Description": $.trim($("#txtUpdateDescription").val()), "IsActive": $("#ddlUpdateStatus option:selected").val() == "1" ? true : false, "IsRead": $("#chkUpdateIsRead").prop("checked") ? true : false, "IsWrite": $("#chkUpdateIsWrite").prop("checked") ? true : false
+                },
+                success: function (response) {
+                    alert(response.message);
+
+                    if (response.status == true) {
+                        GetAllTerminalType();
+                    }
+                },
+                error: function (x, y, z) {
+
+                }
+            });
+        }
+    }
+
+    function GetAllTerminalType() {
+
+        $.ajax({
+            url: Q.resolveUrl('/TerminalType/GetAllTerminalType'),
+            type: 'GET',
+            success: function (response) {
+                $("#divTerminalTypeList").html(response);
+            },
+            error: function (x, y, z) {
+
+            }
+        });
+    }
+
+    function GetTerminalTypeDetails(TerminalTypeId) {
+
+        $.ajax({
+            url: Q.resolveUrl('/TerminalType/GetTerminalTypeDetails'),
+            type: 'GET',
+            data: { "TerminalTypeId": TerminalTypeId },
+            success: function (response) {
+                $("#hdnTerminalTypeId").val(response.TerminalTypeId);
+                $("#txtUpdateTerminalTypeName").val(response.TerminalTypeName);
+                $("#txtUpdateDescription").val(response.Description);
+                $("#chkUpdateIsRead").prop("checked", response.IsRead);
+                $("#chkUpdateIsWrite").prop("checked", response.IsWrite);
+                $("#ddlUpdateStatus").val(response.IsActive == true ? "1" : "2");
+            },
+            error: function (x, y, z) {
+
+            }
+        });
+    }
+
+    function Validation(actionType) {
+        if (actionType == "Save") {
+            if ($("#TerminalTypeName").val().trim() == "") {
+                alert("* marks fields are mandatory");
+                return false;
+            }
+            return true;
+        }
+        else {
+            if ($("#txtUpdateTerminalTypeName").val().trim() == "") {
+                alert("* marks fields are mandatory");
+                return false;
+            }
+            return true;
+        }
+    }
+
+
+</script>

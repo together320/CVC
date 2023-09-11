@@ -1,0 +1,131 @@
+﻿@model  IEnumerable<CVC.ViewModels.ModuleViewModel>
+
+
+<style>
+    .error {
+        color: red;
+    }
+</style>
+
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="divModuleListModal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="myLargeModalLabel">Module</h4>
+            </div>
+            <div class="modal-body">
+                <table class="display data-table1" id="" cellspacing="0" width="100%" border="1" cellpadding="0" style="border-collapse:collapse;" bordercolor="#e7eaec">
+                    <thead>
+                        <tr>
+                            <th align="left">
+                                <label>IsAccess</label>
+                            </th>
+                            <th align="left">
+                                <label>Module Name</label>
+                            </th>
+                            <th align="left">
+                                <label>Machine Name</label>
+                            </th>
+
+                            @*<th align="left">
+                                    <label>Status</label>
+                                </th>*@
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+
+                                    <input type="checkbox" id="item_IsSelect" checked="@item.IsAccess" value="@item.ModuleId" />
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ModuleName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.MachineName)
+                                </td>
+
+                                @*<td>
+                                        @Html.DropDownListFor(m => item.StatusId, new SelectList(ViewBag.StatusList, "StatusId", "StatusName",item.StatusId), new { @id = "ddlStatus", @class = "form-control js-example-basic-single clsmodulestatus-"+item.ModuleId+"", @ModuleId=@item.ModuleId })
+                                    </td>*@
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="btnSave">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+   // var ActiveStatusArray = [];
+    $(document).ready(function () {
+        $('.data-table1').DataTable({
+
+            responsive: {
+                details: {
+                    type: 'column'
+                }
+            },
+            //"order": [[3, "asc"]],
+            "language": {
+                "lengthMenu": "_MENU_ records per page",
+            },
+            columnDefs: [{ orderable: false, targets: [-1, -2] }]
+            //columnDefs: [{ orderable: false, targets: [3], visible: false, searchable: false }]
+        });
+
+    });
+
+    $('body').on('click', '#btnSave', function (event) {
+
+        $("#divModuleListModal").modal('hide');
+        var ModuleIdArray = [];
+        var checkedItemcollection = $('.data-table1').DataTable().$("#item_IsSelect:checked", { "page": "all" });
+        checkedItemcollection.each(function (index, elem) {
+
+
+            //var StatusId = $('.data-table1').DataTable().$(".clsmodulestatus-" + $(elem).val(), { "page": "all" }).val();
+
+            //ModuleIdArray.push({ "ModuleId": $(elem).val(), "SatusId": StatusId });
+            ModuleIdArray.push($(elem).val() + "&1");
+
+        });
+
+        CreateModuleAccess(ModuleIdArray);
+    });
+
+    function CreateModuleAccess(ModuleIdArray) {
+        $.ajax({
+            url: "/NAdministration/RoleAccess/CreateModuleAccess",
+            data: {
+                "RoleId":@Model.FirstOrDefault().RoleId , "ModuleIds": ModuleIdArray/*, "ActiveStatusIds": ActiveStatusArray*/ },
+            type: 'POST',
+            success: function (response) {
+                window.location.href="/NAdministration/RoleAccess/ModuleAccessList?RoleId=@Model.FirstOrDefault().RoleId"
+            },
+            error: function (x, y, z) {
+               // console.log(x + '\n' + y + '\n' + z);
+            }
+        });
+
+    }
+
+    //$('body').on('change', '#ddlStatus', function (event) {
+    //    if ($(this).val() == "1")
+    //        ActiveStatusArray.push($(this).attr("ModuleId"));
+    //});
+</script>

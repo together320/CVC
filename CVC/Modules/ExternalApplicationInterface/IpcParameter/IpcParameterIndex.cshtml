@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = Serenity.LocalText.Get("Db.ExternalApplicationInterface.IpcParameter.EntityPlural");
+}
+
+<div id="GridDiv"></div>
+<input type="hidden" id="hdnIpcParameterImportAccess" />
+
+
+
+
+<script type="text/javascript">
+    $("#hdnIpcParameterImportAccess").val('@ViewBag.IsModifyPermission')
+
+    jQuery(function () {
+        new CVC.ExternalApplicationInterface.IpcParameterGrid($('#GridDiv'), {}).init();
+
+        Q.initFullHeightGridPage($('#GridDiv'));
+    });
+
+
+
+</script>
+

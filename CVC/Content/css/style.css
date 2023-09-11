@@ -1,0 +1,250 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
+body {
+  font-family: "Open Sans", sans-serif;
+  font-size: 13px;
+  background: #f4f8fb;
+}
+@media (min-width: 576px) {
+  .form-inline .input-group {
+    width: 49%;
+  }
+}
+.container-fluid.wrapper {
+  /* background: #f4f8fb; */
+  float: left;
+  width: 100%;
+  padding: 0;
+}
+.form-inline .input-group {
+  margin-top: 5px;
+}
+.input-group-text {
+  width: 200px;
+  background: transparent;
+  border: none;
+  font-size: 14px;
+  text-align: right;
+  display: inline;
+  float: left;
+  padding-right: 5px;
+}
+.form-control[type="text"] {
+width:51% !important
+}
+.form-control[type="email"] {
+    width: 51% !important
+}
+
+    .form-control {
+  height: 28px;
+  border-radius: 3px !important;
+  font-size: 13px;
+}
+textarea.form-control {
+  height: 50px;
+}
+select.form-control:not([size]):not([multiple]) {
+    height: calc(2em + 0px);
+    font-size: 13px;
+    padding: 2px 6px;
+    width: 51%;
+}
+.card {
+  border: none;
+  padding: 10px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  background: #fff;
+  border:none !important  
+}
+
+.table-wrap {
+  margin-top: 20px;
+}
+table.dataTable thead th,
+table.dataTable thead td {
+  padding: 10px 7px !important;
+}
+h3.title {
+  font-size: 18px;
+  color: #1f7dce;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+h4.sub-title {
+  font-size: 13px;
+  color: #db9d4e;
+  font-weight: 600;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 5px;
+}
+.btn-wrap {
+  display: flex;
+  padding: 0px 10px;
+  background: #fff;
+}
+
+.btn {
+    font-size: 13px;
+    background-color: #3c8dbc;
+    color: #fff;
+    margin-right: 5px;
+    width: auto;
+    margin-right: 5px;
+    padding: 2px 6px;
+    border: 1px solid #367fa9;
+}
+.btn.btn-big {
+  width: 200px;
+}
+.tab-content .card {
+  margin-top: 0;
+}
+.nav-tabs .nav-item.show .nav-link,
+.nav-tabs .nav-link.active {
+  border-color: transparent;
+}
+.nav-tabs .nav-item.active {
+  background: #fff;
+}
+.tab-btn {
+  font-size: 13px;
+  color: #db9d4e;
+  margin-top: 10px;
+  padding-left: 10px;
+}
+.nav-link {
+  background: #dce4ea;
+  color: #495057;
+  font-weight: bold;
+}
+.tab-div {
+  background: #fff;
+  padding: 10px 0;
+}
+footer {
+  clear: both;
+  margin-top: 10px;
+  float: left;
+  width: 100%;
+}
+textarea {
+  max-width: 100%;
+}
+.w-100 {
+  width: 100% !important;
+}
+.form-inline .w-100 .form-control {
+  width: 74.22% !important;
+}
+.dataTable td a {
+  cursor: pointer;
+}
+.title-align {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.upload-form input[type="radio"] {
+  margin-top: 0px;
+  margin-right: 5px;
+  margin-left: 10px;
+}
+
+.upload-form .status {
+  padding-top: 7px;
+  padding-left: 10px;
+}
+
+.upload-form input[type="file"] {
+  width: 180px;
+  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+  float: left;
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+
+.upload-form .upload-btn {
+    width: 80px;
+    float: left;
+    position: relative;
+    top: 20px;
+}
+.text-field {
+  float: left;
+  margin-right: 5px;
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+.upload-form .input-group {
+  width: 100%;
+  display: inherit;
+  clear: both;
+  margin-bottom: 10px;
+}
+.activation-key {
+  position: relative;
+  width: 100% !important;
+}
+.activation-key textarea {
+  width: 74% !important;
+  float: left !important;
+  padding-right: 13%;
+}
+.activation-key button {
+  position: absolute;
+  right: 101px;
+  z-index: 999;
+  top: 14px;
+}
+#ID_Txt_Customer_Address {
+  width: 73.82%;
+}
+.uid-text {
+    vertical-align: top;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 20px;
+}
+span.uid-label {
+    display: inline-block;
+    vertical-align: top;
+}
+span.uidCode {
+    width: 30px;
+    display: inline-block;
+    min-width: 50%;
+    padding: 10px;
+    background: #eaeaea;
+    overflow-wrap: break-word;
+    border: 1px dashed;
+}
+.btn.uid-btn {
+    width: 80px;
+    position: relative;
+    bottom: -6px;
+}
+.act-key{
+    width:36.5%
+}
+
+.SoonExpire {
+    background-color: #f7ec60 !important
+}
+
+.Expired {
+    background-color: #c00000 !important
+}
+
+.New {
+    background-color: #80cc82 !important
+}
+
+.Normal {
+    background-color: #ffc3c3 !important;
+}
+.DatatableColumnControl {
+    word-break: break-word;
+    white-space: break-spaces!important;
+}

@@ -1,0 +1,253 @@
+﻿
+@model CVC.ViewModels.ColumnFieldMappingViewModel
+@using Newtonsoft.Json;
+
+<style>
+    .select2-container {
+        width: 100%;
+    }
+</style>
+
+<div>
+    <div class="grid-title"><div class="title-text">@ViewBag.FormattedFormName </div></div>
+    <div class="grid-title">
+        <div class="title-text">Column Field Mapping View</div>
+        <ul class="breadcrumb-list">
+            <li><a href="@ViewBag.PreviousPageUrl">@ViewBag.FormattedFormName </a></li>
+            <li><a href="/ImportFile/Index?name=@ViewBag.FormName">Browse and Upload View</a></li>
+            <li><a href="/ImportFile/UploadedDataView">Uploaded Data View</a></li>
+            <li><a href="">Column Field Mapping View</a></li>
+        </ul>
+    </div>
+
+    @if (Model != null)
+    {
+        <table id="tblColumnFieldMapping" class="displays table-striped table-bordered dt-responsive nowrap cell-border" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Sr.No.</th>
+                    <th>Header</th>
+                    <th>Form Field</th>
+                    <th>First Row Value</th>
+
+
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in Model.lstColumnFieldMappingList)
+                {
+                    <tr>
+                        <td>@item.serialNumber</td>
+                        <td>@item.header</td>
+                        <td>
+                            @Html.DropDownListFor(m => item.serialNumber, new SelectList(ViewBag.FormFieldList, "Value", "Text"), "-- Select --", new { @id = "ddlFormFields", @class = "formField", @serialNumber = item.serialNumber, @header = item.header, @row = item.row, onchange = "onFormFieldChange($(this))" })
+                        </td>
+                        <td id="td-@item.serialNumber">
+
+                            <label id="lbl-@item.serialNumber" style="display:none">@item.row</label>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    <div class="row btm_btnWrap" id="divNext">
+        <input type="button" id="btnBack" class="btn btn-md btn-default" value="Back" onclick="back()" />
+
+        <input type="button" id="btnNext" class="btn btn-md btn-primary" value="Import" onclick="importData()" />
+
+    </div>
+</div>
+@Html.Partial("~/Views/PartialViews/Message_PartialView.cshtml")
+
+<script type="text/javascript">
+    var columnFieldMappingArray = [];
+    var formMandatoryFieldsCount = 0;
+    var selectedMandatoryFieldsCount = 0;
+    var messageText = "";
+    var formFieldList = [];
+    var columnFieldMappingList = [];
+    $(document).ready(function () {
+
+        $('#tblColumnFieldMapping').DataTable({
+            "order": [[0, "asc"]],
+            "pageLength": 15,
+            drawCallback: function () {
+
+                initializeSelect2();
+                //$('.dt-select2').select2();
+            }
+
+        });
+       // $('.formField').select2();
+        formMandatoryFieldsCount = '@ViewBag.MandatoryFormFieldsCount'
+        debugger;
+        formFieldList =  @Html.Raw(Json.Encode(@Model.lstViewModel));
+        columnFieldMappingList =  @Html.Raw(Json.Encode(@Model.lstColumnFieldMappingList));
+
+    });
+    //$('#example').on('change', 'select.mySelect', function() {
+
+    function onFormFieldChange(element) {
+
+        var serialNumber = element.attr("serialNumber");
+        var header = element.attr("header");
+        var row = element.attr("row");
+
+        var formFieldValue = element.val();
+        var formFieldText = "";
+
+        var data = element.select2('data');
+        if (data) {
+            formFieldText = data.text;
+        }
+        debugger;
+
+        if (formFieldValue != "--Select--" && formFieldValue != "-1" && formFieldValue != "") {
+            var index = findInColumnFieldMappingArray(serialNumber);
+            var mappedFieldText = formFieldList.find(x => x.Text === formFieldText).MappedFieldText;
+
+            if (index > -1) {
+                columnFieldMappingArray.splice(index, 1);
+                columnFieldMappingArray.push({
+                    "serialNumber": serialNumber, "header": header, "row": row, "formFieldText": formFieldText, "formFieldValue": formFieldValue, "mappedFieldText": mappedFieldText
+                });
+            }
+            else {
+                columnFieldMappingArray.push({
+                    "serialNumber": serialNumber, "header": header, "row": row, "formFieldText": formFieldText, "formFieldValue": formFieldValue, "mappedFieldText": mappedFieldText
+                });
+            }
+            $("#lbl-" + serialNumber).attr("style", "display:block");
+
+        }
+        else {
+            debugger;
+            $("#lbl-" + serialNumber).attr("style", "display:none");
+
+            var index = findInColumnFieldMappingArray(serialNumber);
+            if (index > -1) {
+                columnFieldMappingArray.splice(index, 1);
+            }
+        }
+
+
+
+
+
+
+      //  var headerAfterRemovingAsteRisk = formFieldText.replace("(*)", "");
+      //  var rowValue = columnFieldMappingList.find(x => x.header === headerAfterRemovingAsteRisk);
+       // if (rowValue != undefined)
+         //   $("#td-" + serialNumber).text(rowValue.row);
+    }
+
+    function findInColumnFieldMappingArray(serialNumber) {
+
+        for (var i = 0; i < columnFieldMappingArray.length; i++) {
+            var data = columnFieldMappingArray[i];
+            if (data.serialNumber == serialNumber) {
+
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    function findDuplicateItemInArray() {
+
+        var hasDuplicate = false;
+        columnFieldMappingArray.map(v => v.formFieldValue).sort().sort((a, b) => {
+            if (a === b)
+                hasDuplicate = true
+        })
+        return hasDuplicate;
+    }
+
+    function findMandatoryItemInArray() {
+        debugger;
+        return columnFieldMappingArray.filter((obj) => obj.formFieldText.includes("(*)")).length;
+    }
+
+    function importData() {
+       if (findDuplicateItemInArray() == true) {
+            messageText = getMessageDetailsById(20);
+
+           setTimeout(function () {
+               autoAcceptUntrustedCertificatesForOpcUaClient = false;
+                if (messageText != undefined) {
+                    $("#infoModalBody").text(messageText);
+                    $("#modal-info").modal('show');
+                }
+           }, 500);
+
+           return false;
+        }
+        selectedMandatoryFieldsCount = findMandatoryItemInArray();
+        debugger;
+        if (formMandatoryFieldsCount != selectedMandatoryFieldsCount) {
+            messageText = getMessageDetailsById(21);
+
+            setTimeout(function () {
+                debugger;
+                if (messageText != undefined) {
+                    $("#infoModalBody").text(messageText);
+                    $("#modal-info").modal('show');
+                }
+            }, 500);
+
+            return false;
+        }
+        $('.loader').removeClass('hidden');
+
+        $.ajax({
+            url: Q.resolveUrl('~/ImportFile/ImportData'),
+            type: 'POST',
+            data: { "lstColumnFieldMappingViewModel": columnFieldMappingArray },
+            dataType: 'json',
+            success: function (data) {
+                $('.loader').addClass('hidden');
+
+                window.location.href = "/ImportFile/SummaryView";
+
+            },
+            error: function (x, y, z) {
+            }
+        });
+
+    }
+
+    function getMessageDetailsById(messageTypeId) {
+        debugger;
+        $.ajax({
+            url: Q.resolveUrl('~/Common/GetMessageDetailsById'),
+            type: 'GET',
+            data: { "messageTypeId": messageTypeId },
+            dataType: 'json',
+            success: function (response) {
+                debugger;
+                if (response.IsStatus) {
+                    return messageText = response.Data;
+                }
+
+            },
+            error: function (response) {
+                debugger;
+            }
+        });
+
+    }
+
+    function back() {
+        window.location.href = "/ImportFile/UploadedDataView";
+
+    }
+
+    function initializeSelect2() {
+        debugger;
+       $('.formField').select2('destroy');
+        $('.formField').select2();
+    }
+
+</script>

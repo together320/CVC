@@ -1,0 +1,534 @@
+﻿@model CVC.Machine.ReconcilationPageModel
+@{
+    ViewData["Title"] = "Dashboard";
+    ViewData["PageId"] = "Dashboard";
+}
+
+@section Head {
+    @Html.StyleBundle("Pages/Dashboard")
+    @Html.ScriptBundle("Pages/Dashboard")
+<script src="~/Scripts/chartjs/Chart.min.js"></script>
+}
+
+
+
+        <div class="row" style="padding:0px;margin:0px;">
+            <div class="col-md-12 col-xl-12" style="padding:0px;margin:0px;">
+
+                <div class="card table-card" style="padding:0px;margin:0px;">
+                    <div class="">
+                        <div class="row-table">
+                            <div class="col-sm-2 card-block-big br">
+                                <div class="row">
+
+                                    <div class="col-sm-12 text-center">
+                                        <h5><label id="lblContainerPerMin">0</label></h5>
+                                        <span>CONTAINER/MIN</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 card-block-big br">
+                                <div class="row">
+
+                                    <div class="col-sm-12 text-center">
+                                        <h5><label id="lblOutputPerJob">0</label></h5>
+                                        <span>OUTPUT/JOB</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 card-block-big br">
+                                <div class="row">
+
+                                    <div class="col-sm-12 text-center">
+                                        <h5><select id="selLabelRoll"><option>1</option></select></h5>
+                                        <span>LABEL ROLL</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 card-block-big br">
+                                <div class="row">
+
+                                    <div class="col-sm-12 text-center">
+                                        <h5><label id="lblLabelRemaining">0</label></h5>
+                                        <span>LABEL REMAINING</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 card-block-big br">
+                                <div class="row">
+
+                                    <div class="col-sm-12 text-center">
+                                        <h5><label id="lblLabelLength">0</label></h5>
+                                        <span>LABEL LENGTH</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="">
+                        <div class="row-table">
+                            <div class="col-sm-2 card-block-big br">
+                                <div class="row">
+                                    @*<div class="col-sm-4">
+                                            <i class="icofont icofont-ui-music text-danger"></i>
+                                        </div>*@
+                                    <div class="col-sm-12 text-center">
+                                        <h5><label id="lblLabelExtension">0</label></h5>
+                                        <span>LABEL EXTENSION</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 card-block-big br">
+                                <div class="row">
+                                    @*<div class="col-sm-4">
+                                            <i class="icofont icofont-files text-info"></i>
+                                        </div>*@
+                                    <div class="col-sm-12 text-center">
+                                        <h5><label id="lblLabelHDSpeed">0</label></h5>
+                                        <span>LABEL HD SPEED</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 card-block-big br">
+                                <div class="row">
+
+                                    <div class="col-sm-12 text-center">
+                                        <h5><label id="lblGoodBottle">0</label></h5>
+                                        <span>GOOD BOTTLE</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 card-block-big br">
+                                <div class="row">
+
+                                    <div class="col-sm-12 text-center">
+                                        <h5><label id="lblRejectionQuantity">0</label></h5>
+                                        <span>REJECTION QUANTITY</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 card-block-big br">
+                                <div class="row">
+
+                                    <div class="col-sm-12 text-center">
+                                        <h5><label id="lblLabelGap">0</label></h5>
+                                        <span>LABEL GAP</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    
+        <div class="row">
+                <div class="col-lg-12">
+                    <div class="box box-danger">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Charts</h3>
+                            @*<div class="box-tools pull-right">
+                                <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>*@
+                        </div>
+                        <div class="box-body">
+                            <div class="col-lg-4">
+                                <canvas width="180" height="100" id="chart_gauge_01" class="" style="width: 310px; height: 150px;"></canvas>
+                                <div class="goal-wrapper">
+                                    <span id="gauge-text" class="gauge-value gauge-chart pull-left">0</span>
+                                    <span class="gauge-value pull-left">%</span>
+                                    <span id="goal-text" class="goal-value pull-right">100%</span>
+                                </div>
+                            </div>
+                        </div><!-- /.box-body -->
+                    </div><!-- /.box -->
+                </div>
+                @*<div class="col-lg-8">
+                    <div class="box box-danger">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Good/Reject Chart</h3>
+                            <div class="box-tools pull-right">
+                                <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <canvas id="pieChart" style="height:250px"></canvas>
+                        </div>
+                    </div>
+                </div>*@
+        </div>
+               
+
+<!-- Main row -->
+
+@section RightSideBar
+{
+
+
+    <div class="box box-solid">
+
+        <div class="box-body no-padding">
+            <ul class="nav nav-pills nav-stacked">
+                <li>
+                    <a href="@Url.Content("LabelingMachine")">
+                        <i class="fa fa-inbox"></i> Machine Dashboard
+                        
+                    </a>
+                </li>
+                <li><a href="@Url.Content("SettingsMachine")"><i class="fa fa-envelope-o"></i> Machine Settings</a></li>
+                <li><a href="@Url.Content("TechnicalSettingsMachine")"><i class="fa fa-file-text-o"></i> Technical Settings</a></li>
+                <li>
+                    <a href="@Url.Content("EquipmentOptionsMachine")"><i class="fa fa-filter"></i> Equipment Options</a>
+                </li>
+                <li><a href="@Url.Content("ManualServiceModeMachine")"><i class="fa fa-trash-o"></i> Manual Service Mode</a></li>
+                <li><a href="@Url.Content("LabelRoll")"><i class="fa fa-trash-o"></i> Label Roll</a></li>
+                <li class="active"><a href="@Url.Content("Reconciliation")"><i class="fa fa-trash-o"></i> Label Reconciliation</a></li>
+            </ul>
+        </div>
+        <!-- /.box-body -->
+    </div>
+    <!-- /. box -->
+    <!-- /.box -->
+
+}
+
+
+
+
+
+
+@section Scripts
+{
+    <script src="~/Scripts/circularprogress.jquery.min.js"></script>
+    <script src="~/Scripts/number-pb.js"></script>
+<script src="~/Scripts/jquery.velocity.min.js"></script>
+<script src="~/Scripts/gauge.js"></script>
+    <script>
+        //$(function(){
+        //   alert("All good");
+        //});
+
+
+        $(function () {
+            var chart_gauge_settings = {
+                lines: 12,
+                angle: 0,
+                lineWidth: 0.4,
+                pointer: {
+                    length: 0.75,
+                    strokeWidth: 0.042,
+                    color: '#1D212A'
+                },
+                limitMax: 'false',
+                colorStart: '#1ABC9C',
+                colorStop: '#1ABC9C',
+                strokeColor: '#F0F3F3',
+                generateGradient: true
+            };
+
+
+            if ($('#chart_gauge_01').length) {
+
+                var chart_gauge_01_elem = document.getElementById('chart_gauge_01');
+                var chart_gauge_01 = new Gauge(chart_gauge_01_elem).setOptions(chart_gauge_settings);
+
+            }	
+            ////-------------
+            ////- PIE CHART -
+            ////-------------
+            //// Get context with jQuery - using jQuery's .get() method.
+            //var pieChartCanvas = $("#pieChart").get(0).getContext("2d");
+            //var pieChart = new Chart(pieChartCanvas);
+            //var PieData = [
+            //    {
+            //        value: 700,
+            //        color: "#f56954",
+            //        highlight: "#f56954",
+            //        label: "Total Good"
+            //    },
+            //    {
+            //        value: 500,
+            //        color: "#00a65a",
+            //        highlight: "#00a65a",
+            //        label: "Total Reject"
+            //    }
+            //];
+            //var pieOptions = {
+            //    //Boolean - Whether we should show a stroke on each segment
+            //    segmentShowStroke: true,
+            //    //String - The colour of each segment stroke
+            //    segmentStrokeColor: "#fff",
+            //    //Number - The width of each segment stroke
+            //    segmentStrokeWidth: 2,
+            //    //Number - The percentage of the chart that we cut out of the middle
+            //    percentageInnerCutout: 50, // This is 0 for Pie charts
+            //    //Number - Amount of animation steps
+            //    animationSteps: 100,
+            //    //String - Animation easing effect
+            //    animationEasing: "easeOutBounce",
+            //    //Boolean - Whether we animate the rotation of the Doughnut
+            //    animateRotate: true,
+            //    //Boolean - Whether we animate scaling the Doughnut from the centre
+            //    animateScale: false,
+            //    //Boolean - whether to make the chart responsive to window resizing
+            //    responsive: true,
+            //    // Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
+            //    maintainAspectRatio: true,
+            //    //String - A legend template
+            //    legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>"
+            //};
+            ////Create pie or douhnut chart
+            //// You can switch between pie and douhnut using the method below.
+            //pieChart.Doughnut(PieData, pieOptions);
+
+
+
+        
+
+            var counterOnOff = 0;
+            var myVar;
+            //myVar = setInterval(GetBatchParameter, 500);
+
+            //$('.newtest2').circles({
+            //    'targetPos': 0,
+            //    speed: 40,
+            //    onFinishMoving: function (pos) {
+            //        console.log('done ', pos);
+            //    }
+            //});
+
+            
+
+            //jQuery(function () {
+            //    new CVC.BatchSetting.LabelRollGrid($('#divLabelRoll'), {}).init();
+            //});
+
+
+           
+        });
+    </script>
+
+
+}
+
+@section Style
+{
+    <link rel="stylesheet" type="text/css" href="~/Content/circularprogress.css" />
+<link rel="stylesheet" type="text/css" href="~/Content/number-pb.css" />
+<link rel="stylesheet" type="text/css" href="~/Content/AnimatedSlimstyle.css" />
+
+    <style>
+        .ibox-content {
+            clear: both;
+        }
+
+        .ibox-content {
+            background-color: #ffffff;
+            color: inherit;
+            padding: 5px 5px 5px 5px;
+            border-color: #e7eaec;
+            border-image: none;
+            border-style: solid solid none;
+            border-width: 1px 0;
+        }
+
+        .toggle.btn {
+            min-width: 100px;
+            min-height: 30px;
+        }
+
+        .containerdiv {
+            border: 1px solid #DDDDDD;
+            width: 693px;
+            height: 153px;
+            position: relative;
+        }
+
+        .tag {
+            float: left;
+            position: absolute;
+            left: 70%;
+            top: 10%;
+            background-color: orange;
+        }
+
+        /*.line {
+                    position: absolute;
+                    top: 50%;
+                    width: 100%;
+                    border: 1px solid #000;
+                }*/
+
+        .stepwizard-step p {
+            margin-top: 10px;
+        }
+
+        .stepwizard-row {
+            display: table-row;
+        }
+
+        .stepwizard {
+            display: table;
+            width: 100%;
+            position: relative;
+        }
+
+        .stepwizard-step button[disabled] {
+            opacity: 1 !important;
+            filter: alpha(opacity=100) !important;
+        }
+
+        .stepwizard-row:before {
+            top: 50px;
+            bottom: 0;
+            position: absolute;
+            content: " ";
+            width: 100%;
+            height: 5px;
+            background-color: #ccc;
+            z-order: 0;
+        }
+
+        .stepwizard-step {
+            display: table-cell;
+            text-align: center;
+            position: relative;
+        }
+
+        .btn-circle {
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            padding: 6px 0;
+            font-size: 12px;
+            line-height: 1.428571429;
+            border-radius: 15px;
+        }
+
+        .boxNew > .icon {
+            text-align: center;
+            position: relative;
+        }
+
+            .boxNew > .icon > .image {
+                position: relative;
+                z-index: 2;
+                margin: auto;
+                width: 200px;
+                height: 30px;
+                border: 2px solid #e4e0e0;
+                line-height: 30px;
+                border-radius: 2%;
+                background: #fff;
+                vertical-align: middle;
+                font-weight: bold;
+            }
+
+            .boxNew > .icon:hover > .image {
+                background: #fff;
+            }
+
+            .boxNew > .icon > .image > i {
+                font-size: 36px !important;
+                color: #fff !important;
+            }
+
+            .boxNew > .icon:hover > .image > i {
+                color: white !important;
+            }
+
+            .boxNew > .icon > .info {
+                margin-top: -24px;
+                background: rgba(0, 0, 0, 0.04);
+                border: 1px solid #e0e0e0;
+                padding: 25px 0px 0px 0px;
+            }
+
+            .boxNew > .icon:hover > .info {
+                background: rgba(0, 0, 0, 0.04);
+                border-color: #e0e0e0;
+            }
+
+            .boxNew > .icon > .info > h3.title {
+                font-family: "Roboto",sans-serif !important;
+                font-size: 16px;
+                color: #222;
+                font-weight: 500;
+            }
+
+            .boxNew > .icon > .info > p {
+                font-family: "Roboto",sans-serif !important;
+                font-size: 13px;
+                color: #666;
+                line-height: 1.5em;
+                margin: 20px;
+            }
+
+            .boxNew > .icon:hover > .info > h3.title, .box > .icon:hover > .info > p, .box > .icon:hover > .info > .more > a {
+                color: #222;
+            }
+
+            .boxNew > .icon > .info > .more a {
+                font-family: "Roboto",sans-serif !important;
+                font-size: 12px;
+                color: #222;
+                line-height: 12px;
+                text-transform: uppercase;
+                text-decoration: none;
+            }
+
+            .boxNew > .icon:hover > .info > .more > a {
+                color: #fff;
+                padding: 6px 8px;
+                background-color: #63B76C;
+            }
+
+        .boxNew .space {
+            height: 0px;
+        }
+
+        .card {
+            border-radius: 2px;
+            border-top: 4px solid #8CDDCD;
+            box-shadow: 0 2px 1px rgba(0, 0, 0, 0.05);
+            border-left: none;
+            border-right: none;
+            border-bottom: none;
+            margin-bottom: 30px;
+            background-color: #fff;
+        }
+
+        .table-card .row-table:first-child {
+            border-bottom: 1px solid #ddd;
+        }
+
+        .table-card .row-table {
+            display: flex;
+            align-items: center;
+            table-layout: fixed;
+            height: 100%;
+            width: 100%;
+            margin: 0;
+        }
+
+            .table-card .row-table > [class*="col-"] {
+                display: table-cell;
+                float: none;
+                table-layout: fixed;
+                vertical-align: middle;
+            }
+
+            .table-card .row-table .br {
+                border-right: 1px solid #ccc;
+            }
+
+        .card-block-big {
+            padding: 0.5em;
+        }
+    </style>
+}

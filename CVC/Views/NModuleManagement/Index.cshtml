@@ -1,0 +1,40 @@
+﻿@model CVC.Modules.NModuleManagement.NModuleManagementViewModel
+
+@{
+    ViewBag.Title = "Module Management";
+}
+
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+
+<script type="text/javascript">
+    function selectedTab(tab) {
+        $("#isModule").val(false);
+        $("#isView").val(false);
+        $("#isViewField").val(false);
+        $("#selectedView").val(tab);
+        $("#" + tab).val(true);
+    }
+</script>
+
+<style>
+    .error {
+        color: red;
+    }
+    .dropdown-menu {
+        background-color: #3c8dbc !important
+    }
+</style>
+
+<h2>Overview</h2>
+
+<div>
+    @Html.HiddenFor(m => m.isModule)
+    @Html.HiddenFor(m => m.isView)
+    @Html.HiddenFor(m => m.isViewField)
+    @Html.HiddenFor(m => m.selectedView)
+    <hr />
+    <h3 class="heading-title">Module List</h3>
+    @{Html.RenderPartial("_Module"); }
+
+</div>
+

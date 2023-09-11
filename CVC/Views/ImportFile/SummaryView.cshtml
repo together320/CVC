@@ -1,0 +1,118 @@
+﻿
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>SummaryView</title>
+   
+</head>
+<body>
+
+    <div class="content-border">
+        <div class="grid-title"><div class="title-text">@ViewBag.FormattedFormName </div></div>
+        <div class="grid-title">
+            <div class="title-text">Import Summary</div>
+            <ul class="breadcrumb-list">
+                <li><a href="@ViewBag.PreviousPageUrl">@ViewBag.FormattedFormName </a></li>
+                @*<li><a href="/ImportFile/Index?name=@ViewBag.FormName">Browse and Upload View</a></li>
+               <li><a href="/ImportFile/UploadedDataView">Uploaded Data View</a></li>
+               <li><a href="">Column Field Mapping View</a></li>*@
+                <li><a href="">Import Summary</a></li>
+
+            </ul>
+        </div>
+
+        <div class="summaryBox">
+            <h2 class="summaryBox-heading">Import @ViewBag.FormattedFormName - Result</h2>
+            <div class="summaryBoxWrapper"
+                <div class="summaryWrapper">
+                    <div class="summaryRow">
+                        <span class="summaryRowLabel">Succeded Record</span>
+                        <span class="summaryColSeparator">:</span>
+                        <span class="summaryRowData">@TempData["SuccededRecordCount"]</span>
+                    </div>
+                    <div class="summaryRow">
+                        <span class="summaryRowLabel">Error Record</span>
+                        <span class="summaryColSeparator">:</span>
+                        <span class="summaryRowData">@TempData["FailedRecordCount"]</span>
+                    </div>
+                    <div class="summaryRow">
+                        <span class="summaryRowLabel">Total Record</span>
+                        <span class="summaryColSeparator">:</span>
+                        <span class="summaryRowData">@TempData["TotalRecordCount"]</span>
+                    </div>
+                </div>
+
+
+                <div class="btm_btnWrap clearfix">
+                    <input type="button" id="btnFinish" class="btn btn-success pull-right btn-bot" value="Finish" onclick="back()" />
+                    <input type="button" style="display:none;" id="btnEditErrorRecord" class="btn btn-danger pull-right btn-bot" value="Edit Error Record" onclick="displayErrorData()" />
+
+                    @*<input type="button" id="btnBack" class="btn btn-default pull-right btn-bot" value="Back" onclick="back()" />*@
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    @*<div class="row">
+        <div class="col-sm-6">Succeded Record</div>
+        <div class="col-sm-6">@TempData["SuccededRecordCount"]</div>
+
+    </div>
+    <div class="row">
+        <div class="col-sm-6">Error Record</div>
+        <div class="col-sm-6">@TempData["FailedRecordCount"]</div>
+
+    </div>
+    <div class="row">
+        <div class="col-sm-6">Total Record</div>
+        <div class="col-sm-6">@TempData["TotalRecordCount"]</div>
+
+    </div>*@
+
+   
+
+</body>
+</html>
+
+<script type="text/javascript">
+    var previousPageUrl = "";
+
+    $(document).ready(function () {
+        debugger;
+        previousPageUrl = '@ViewBag.PreviousPageUrl'
+
+        var errorRecordCount = '@TempData["FailedRecordCount"]';
+        errorRecordCount = parseInt(errorRecordCount);
+        if (errorRecordCount > 0) {
+            $("#btnEditErrorRecord").attr("style", "display:block");
+
+        }
+
+    });
+
+    function displayErrorData() {
+        $.ajax({
+            url: Q.resolveUrl('~/ImportFile/DisplayErrorData'),
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                window.location.href = "/ImportFile/UploadedDataView";
+            },
+            error: function (data) {
+            }
+        });
+
+    }
+
+    function back() {
+        window.location.href = previousPageUrl;
+
+    }
+
+</script>

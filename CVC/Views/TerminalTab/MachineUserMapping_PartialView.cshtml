@@ -1,0 +1,143 @@
+﻿@model  IEnumerable<CVC.ViewModels.MachineUserMapping>
+
+
+<style>
+    .error {
+        color: red;
+    }
+</style>
+
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="divMachineUserMapping">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="myLargeModalLabel">Machine - User Mapping</h4>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+
+                    <div class="dataTable-wrapper" style="width:100%; margin:0 auto;">
+
+
+                        <table class="displays table-striped table-bordered dt-responsive nowrap cell-border" id="dtMachineUserMapping" cellspacing="0" width="100%" border="1" cellpadding="0" style="border-collapse:collapse;" bordercolor="#e7eaec">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th align="left">
+                                        <label>User Name</label>
+                                    </th>
+                                    <th align="left">
+                                        <label>Role</label>
+                                    </th>
+                                    <th align="left">
+                                        <label>Status</label>
+                                    </th>
+
+                                    <th align="left">
+                                        <label>Select</label>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+
+                                    <tr>
+                                        <td>@item.Id</td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.UserName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Role)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Status)
+
+                                        </td>
+
+                                        <td>
+                                            <input checked="@item.IsSelected" type="checkbox" id="chkSelectUser" value="@item.UserId" />
+                                        </td>
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnSaveUserMachineMapping">Save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#dtMachineUserMapping').DataTable({
+            responsive: {
+                details: {
+                    type: 'column'
+                }
+            },
+
+            "language": {
+                "lengthMenu": "_MENU_ records per page",
+            },
+
+        });
+
+    });
+
+    $('#btnSaveUserMachineMapping').click(function () {
+      
+        var selectedItemList = [];
+
+        var checkedSelectedItemcollection = $('#dtMachineUserMapping').DataTable().$("#chkSelectUser:checked", { "page": "all" });
+        checkedSelectedItemcollection.each(function (index, elem) {
+
+            selectedItemList.push($(elem).val());
+        });
+        if (selectedItemList.length > 0) {
+            SaveMachineUserMapping(selectedItemList);
+
+        }
+        else {
+            alert("Please select atleast one record");
+        }
+    });
+
+    function SaveMachineUserMapping(selectedItemList) {
+        $.ajax({
+            url: "/terminaltab/SaveMachineUserMapping",
+            data: { "MachineId": $("#hdnMachineId").val(), "SelectedItemList": selectedItemList },
+            type: 'POST',
+            // async: true,
+            success: function (response) {
+                alert(response.message);
+                if (response.status == true) {
+                   $("#divMachineUserMapping").modal('hide');
+                    getMachineUserMappedData();
+
+                }
+                //else {
+                //    alert("Error while saving data");
+                //}
+
+            },
+            error: function (x, y, z) {
+                alert("Error while saving data");
+            }
+        });
+
+    }
+    
+
+</script>

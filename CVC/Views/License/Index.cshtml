@@ -1,0 +1,1495 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<html>
+
+<head>
+    @* <link href="~/Content/bootstrap.min.css" rel="stylesheet" />*@
+    <link href="~/Content/css/style.css" rel="stylesheet" />
+    @*<link href="~/Content/css/DataTable/jquery.dataTables.min.css" rel="stylesheet" />*@
+    <link href="~/Content/css/jquery.datetimepicker.css" rel="stylesheet" />
+    <script src="~/Scripts/underscore-min.js"></script>
+    @*<script src="~/Scripts/bootstrap.min.js"></script>*@
+    @*<script src="~/Scripts/jquery-3.4.1.min.js"></script>*@
+    <script src="~/Scripts/jquery.datetimepicker.full.js"></script>
+    <script src="~/Scripts/DataTable/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/Moment/moment.min.js"></script>
+</head>
+
+<body>
+    @Html.AntiForgeryToken()
+    <div class="container-fluid wrapper">
+        <div class="card">
+            <h3 class="title">License Form</h3>
+            <h4 class="sub-title">Manage License</h4>
+            <button id="ID_Btn_Add_License" type="button" class="btn btn-big mb-2">Add New License</button>
+            <div class="table-wrap" id="ID_Div_DataTable_Templates">
+            </div>
+        </div>
+        <div id="ID_Div_New_Template" style="display:none" class="tab-div">
+            <div class="btn-wrap">
+                <button id="ID_Btn_Cancel_License" type="button" class="btn btn-info mb-2">Cancel</button>
+                <button id="ID_Btn_Clear_License" type="button" class="btn btn-info mb-2">Clear</button>
+                <button id="ID_Btn_Save_License" type="button" class="btn btn-info mb-2">Save</button>
+                <button id="ID_Btn_Update_Template" type="button" class="btn btn-info mb-2">Update</button>
+            </div>
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs tab-btn">
+                <li class="nav-item active">
+                    <a class="nav-link" data-toggle="tab" href="#tab1">Basic Description</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#tab2">Module</a>
+                </li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content tab-div">
+                <div id="tab1" class="tab-pane active">
+                    <div class="card">
+                        <h4 class="sub-title">Part 1 (Basic Description)</h4>
+                        <form class="form-inline">
+                            <div class="input-group mb-6 mr-sm-6" style="display:none;">
+                                <div class="input-group-text">ID</div>
+                                <input id="ID_Txt_ID" type="text" class="form-control">
+                            </div>
+                            <div class="input-group mb-6 mr-sm-6">
+                                <div class="input-group-text">
+                                    <sup style="color: red;" title="this field is required">*</sup>
+                                    Template Name
+                                </div>
+                                <select id="ID_Drp_Template_Name" class="custom-select form-control"></select>
+                            </div>
+                            <div class="input-group mb-6 mr-sm-6">
+                                <div class="input-group-text">
+                                    <sup style="color: red;" title="this field is required">*</sup>
+                                    License Name
+                                </div>
+                                <input id="ID_Txt_License_Name" type="text" class="form-control">
+                            </div>
+                            <div class="input-group mb-6 mr-sm-6" style="display: none;">
+                                <div class="input-group-text">
+                                    <sup style="color: red;" title="this field is required">*</sup>
+                                    License Display Text
+                                </div>
+                                <input id="ID_Txt_License_Display" type="text" class="form-control">
+                            </div>
+                            <div class="input-group mb-12 mr-sm-12 w-100">
+                                <div class="input-group-text">
+                                    @*<sup style="color: red;" title="this field is required">*</sup>*@
+                                    Description
+                                </div>
+                                <textarea id="ID_Txt_License_Desc" type="text" class="form-control"></textarea>
+                            </div>
+                            <div class="input-group mb-6 mr-sm-6">
+                                <div class="input-group-text">
+                                    <sup style="color: red;" title="this field is required">*</sup>
+                                    License Type
+                                </div>
+                                <select id="ID_Drp_License_Type" class="custom-select form-control"></select>
+                            </div>
+                            <div class="input-group mb-6 mr-sm-6">
+                                @*<div class="input-group-text">
+                                        <sup style="color: red;" title="this field is required">*</sup>
+                                        Customer Code
+                                    </div>
+                                    <input id="ID_Txt_Customer_Code" type="text" class="form-control">*@
+                            </div>
+                            <div class="input-group mb-6 mr-sm-6">
+                                <div class="input-group-text">
+                                    <sup style="color: red;" title="this field is required">*</sup>
+                                    Company Name
+                                </div>
+                                <select id="ID_Drp_Company" class="custom-select form-control"></select>
+                            </div>
+                            <div class="input-group mb-6 mr-sm-6">
+                                <div class="input-group-text">
+                                    <sup style="color: red;" title="this field is required">*</sup>
+                                    Location
+                                </div>
+                                <select id="ID_Drp_Location" class="custom-select form-control"></select>
+                            </div>
+                            <div class="input-group mb-6 mr-sm-6">
+                                <div class="input-group-text">
+                                    <sup style="color: red;" title="this field is required">*</sup>
+                                    Address Type
+                                </div>
+                                <select id="ID_Drp_Address_Type" class="custom-select form-control"></select>
+                            </div>
+                            <div class="input-group mb-6 mr-sm-6">
+                                <div class="input-group-text">
+                                    <sup style="color: red;" title="this field is required">*</sup>
+                                    Customer Name
+                                </div>
+                                <select id="ID_Drp_Customer_Name" class="custom-select form-control"></select>
+                            </div>
+                            <div class="input-group mb-6 mr-sm-6">
+                                <div class="input-group-text">
+                                    <sup style="color: red;" title="this field is required">*</sup>
+                                    Line ID
+                                </div>
+                                <select id="ID_Drp_LINE" class="custom-select form-control"></select>
+                            </div>
+                            <div class="input-group mb-6 mr-sm-6">
+                                <div class="input-group-text">
+                                    <sup style="color: red;" title="this field is required">*</sup>
+                                    UID
+                                </div>
+                                <select id="ID_Drp_UID" class="custom-select form-control"></select>
+                            </div>
+                            <div class="input-group mb-6 mr-sm-6">
+                                <div class="input-group-text">
+                                    <sup style="color: red;" title="this field is required">*</sup>
+                                    Start Date
+                                </div>
+                                <input id="ID_Txt_StartDate" type="text" class="form-control">
+                            </div>
+                            <div class="input-group mb-6 mr-sm-6">
+                                <div class="input-group-text">
+                                    <sup style="color: red;" title="this field is required">*</sup>
+                                    End Date
+                                </div>
+                                <input id="ID_Txt_EndDate" type="text" class="form-control">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div id="tab2" class="tab-pane fade">
+                    <div class="mb-0">
+                        <div class="btn-wrap">
+                            <button id="ID_Btn_Add_Module" type="button" class="btn btn-info mb-2">Add a Module</button>
+                        </div>
+                        <div id="ID_Div_Modules" style="display:none">
+                            <h4 class="sub-title title-align">Part 2 (Adding Modules to License)</h4>
+                            <div class="btn-wrap">
+                                <button id="ID_Btn_Module_Cancel" type="button" class="btn btn-info mb-2">
+                                    Cancel
+                                </button>
+                                @* <button id="ID_Btn_Template_Clear" type="button" class="btn btn-info
+                                    mb-2">Clear</button> *@
+                                <button id="ID_Btn_Module_Update" type="button" class="btn btn-info mb-2">
+                                    Update
+                                </button>
+                                <button id="ID_Btn_Add_Module_Item" type="button" class="btn btn-info mb-2">
+                                    Add
+                                </button>
+                            </div>
+                            <form class="form-inline">
+                                <div class="input-group mb-6 mr-sm-6">
+                                    <div class="input-group-text">
+                                        <sup style="color: red;" title="this field is required">*</sup>
+                                        Module Name
+                                    </div>
+                                    <select id="ID_Drp_Module_Name" class="custom-select form-control"></select>
+                                </div>
+                                <div class="input-group mb-6 mr-sm-6">
+                                    <div class="input-group-text">
+                                        <sup style="color: red;" title="this field is required">*</sup>
+                                        Action Name
+                                    </div>
+                                    <select id="ID_Drp_Module_Action" class="custom-select form-control"></select>
+                                </div>
+                                <div class="input-group mb-6 mr-sm-6">
+                                    <div class="input-group-text">
+                                        <sup style="color: red;" title="this field is required">*</sup>
+                                        License Type
+                                    </div>
+                                    <select id="ID_Drp_Module_Type" class="custom-select form-control"></select>
+                                </div>
+                                <div class="input-group mb-6 mr-sm-6">
+                                    <div class="input-group-text">
+                                        <sup style="color: red;" title="this field is required">*</sup>
+                                        License Value
+                                    </div>
+                                    <input id="ID_Txt_License_Value" type="text" class="form-control numberonly">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="card mt-0">
+                        <h4 class="sub-title">Module Preview</h4>
+                        <div class="table-wrap" id="ID_Div_DataTable_Modules">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+
+
+</html>
+@Html.Partial("~/Views/PartialViews/Message_PartialView.cshtml")
+
+<script>
+    var redirectUrlAfterLogin = "";
+    var IsTemplateItemEditable = true, LicenseId, CurrentModuleID = null;
+    var TemplateList, ModuleListByTemplateItem, LicenseListItem, ModuleListItemByTemplateItem, TemplateItem, LicenseItem;
+    var ModuleListNewItem = [];
+    var messageText ;
+    $(document).ready(function () {
+          Initialize();
+    });
+    function ServerNotification(data) {
+        $("#ID_Body_ServerNotification").html("");
+        $("#ID_Body_ServerNotification").html(data.Body);
+        $("#ID_Error_Message").html(data.ErrorMessage);
+        $('#ID_ServerNotification').modal('show');
+
+    }
+    function Initialize() {
+
+        Reset();
+        BindDropDownswithAPI('ID_Drp_Module_Name', 'GetAllModules', 'ModuleID', 'ModuleName');
+        $('#ID_Txt_StartDate').datetimepicker({
+            i18n: {
+                de: {
+                    months: [
+                        'Januar', 'Februar', 'März', 'April',
+                        'Mai', 'Juni', 'Juli', 'August',
+                        'September', 'Oktober', 'November', 'Dezember',
+                    ],
+                    dayOfWeek: [
+                        "So.", "Mo", "Di", "Mi",
+                        "Do", "Fr", "Sa.",
+                    ]
+                }
+            },
+            timepicker: false,
+            format: 'Y/m/d'
+        });
+        $('#ID_Txt_EndDate').datetimepicker({
+            i18n: {
+                de: {
+                    months: [
+                        'Januar', 'Februar', 'März', 'April',
+                        'Mai', 'Juni', 'Juli', 'August',
+                        'September', 'Oktober', 'November', 'Dezember',
+                    ],
+                    dayOfWeek: [
+                        "So.", "Mo", "Di", "Mi",
+                        "Do", "Fr", "Sa.",
+                    ]
+                }
+            },
+            timepicker: false,
+            format: 'Y/m/d'
+        });
+        $("#ID_Drp_Module_Name").change(function () {
+            var ModuleID = $('#ID_Drp_Module_Name option:selected').val();
+            BindDropDownswithAPI('ID_Drp_Module_Action', "GetActionsByModuleID?ModuleID=" + ModuleID, 'ActionID', 'ActionName');
+        });
+        $("#ID_Drp_Module_Action").change(function () {
+            var ModuleID = $('#ID_Drp_Module_Name option:selected').val();
+            var ActionID = $('#ID_Drp_Module_Action option:selected').val();
+            BindDropDownswithAPI('ID_Drp_Module_Type', "GetLicenseType?ModuleID=" + ModuleID + "&ActionId=" + ActionID, 'LICENSETYPEID', 'LICENSETYPE');
+        });
+        $("#ID_Drp_Module_Type").change(function () {
+            var ModuleID = $('#ID_Drp_Module_Name option:selected').val();
+            var ActionID = $('#ID_Drp_Module_Action option:selected').val();
+            var LicenseTypeId = $('#ID_Drp_Module_Type option:selected').val();
+            GetLicenseValue(ModuleID, ActionID, LicenseTypeId);
+        });
+        $("#ID_Btn_Add_License").click(function () {
+            BindDropDownswithAPI('ID_Drp_Template_Name', 'GetAllTemplates', 'ID', 'TEMPLATENAME');
+            BindDropDownswithAPI('ID_Drp_Company', 'getCompany', 'ID', 'COMPANY')
+            ShowNewTemplate();
+            BindDropDownswithAPI('ID_Drp_License_Type', 'getMasterLicenseType', 'ID', 'LICENSETYPE');
+            $("#ID_Div_DataTable_Templates").hide();
+        });
+        $("#ID_Btn_Cancel_License").click(function () {
+            if (confirm("Do you want to cancel?")) {
+                Reset();
+            }
+        });
+        $("#ID_Btn_Clear_License").click(function () {
+            if (confirm("Do you want to clear?")) {
+                ClearNewTemplate();
+            }
+        });
+        $("#ID_Btn_Save_License").click(function () {
+            if (confirm("Do you want to save?")) {
+                if (Validate_Save()) {
+                   SaveLicense();
+                }
+            }
+        });
+        $("#ID_Btn_Add_Module").click(function () {
+            AddNewModules();
+        });
+        $("#ID_Btn_Module_Cancel").click(function () {
+            CancelNewModule();
+        });
+        $("#ID_Btn_Template_Clear").click(function () {
+            ClearNewModule();
+        });
+        $("#ID_Btn_Module_Update").click(function () {
+            if (Validate_UpdateModule()) {
+                UpdateNewModule();
+            }
+        });
+        $("#ID_Btn_Add_Module_Item").click(function () {
+            if (Validate_AddModule()) {
+                AddNewModule();
+            }
+        });
+        $("#ID_Btn_Update_Template").click(function () {
+            if (confirm("Do you want to update?")) {
+                if (Validate_Update()) {
+                    UpdateLicense();
+                }
+            }
+        });
+        // New drop downs
+        $("#ID_Drp_Company").change(function () {
+            if ($("#ID_Drp_Company option:selected").index() > 0) {
+                var CompanyID = $('#ID_Drp_Company option:selected').val();
+                BindDropDownswithAPI('ID_Drp_Location', 'getLocationByCompany?ID=' + CompanyID, 'ID', 'LOCATION');
+            }
+        });
+        $("#ID_Drp_Template_Name").change(function () {
+            if ($("#ID_Drp_Template_Name option:selected").index() > 0) {
+                var TemplateId = $('#ID_Drp_Template_Name option:selected').val();
+                LoadDtAllModules(0, TemplateId);
+            }
+        });
+        $("#ID_Drp_Customer_Name").change(function () {
+            if ($("#ID_Drp_Customer_Name option:selected").index() > 0) {
+                var CompanyID = $('#ID_Drp_Company option:selected').val();
+                var CustomerID = $('#ID_Drp_Customer_Name option:selected').val();
+                BindDropDownswithAPI('ID_Drp_LINE', 'getLineIdByCustomerid?COMPANYID=' + CompanyID + '&CUSTOMERID=' + CustomerID, 'ID', 'NAME');
+            }
+        });
+        $("#ID_Drp_Location").change(function () {
+            if ($("#ID_Drp_Location option:selected").index() > 0) {
+                var CompanyID = $('#ID_Drp_Company option:selected').val();
+                var Location = $('#ID_Drp_Location option:selected').val();
+                BindDropDownswithAPI('ID_Drp_Address_Type', 'getAddressTypeByCompany?ID=' + CompanyID + '&LOCATION=' + Location, 'ID', 'ADDRESSTYPE');
+            }
+        });
+        $("#ID_Drp_Address_Type").change(function () {
+            if ($("#ID_Drp_Address_Type option:selected").index() > 0) {
+                var CompanyID = $('#ID_Drp_Company option:selected').val();
+                var Location = $('#ID_Drp_Location option:selected').val();
+                var AddressType = $('#ID_Drp_Address_Type option:selected').val();
+                BindDropDownswithAPI('ID_Drp_Customer_Name', 'getCustomerByCompany?ID=' + CompanyID + '&LOCATION=' + Location + '&ADDRESSTYPE=' + AddressType, 'ID', 'CUSTOMER');
+            }
+        });
+        $("#ID_Drp_LINE").change(function () {
+            if ($("#ID_Drp_LINE option:selected").index() > 0) {
+                var CompanyID = $('#ID_Drp_Company option:selected').val();
+                var CustomerID = $('#ID_Drp_Customer_Name option:selected').val();
+                var LineID = $('#ID_Drp_LINE option:selected').val();
+                BindDropDownswithAPI('ID_Drp_UID', 'getUIDByCustomerId?COMPANYID=' + CompanyID + '&CUSTOMERID=' + CustomerID + '&LINEID=' + LineID, 'ID', 'UID');
+            }
+        });
+        $("#ID_Drp_UID").change(function () {
+        });
+        $('.numberonly').keypress(function (e) {
+            if (e.which != 46 && e.which != 45 && e.which != 46 &&
+                !(e.which >= 48 && e.which <= 57)) {
+                return false;
+            }
+            //var charCode = (e.which) ? e.which : event.keyCode
+
+            //if (String.fromCharCode(charCode).match(/[^0-9]/g))
+
+            //    return false;
+
+        });    
+    }
+    function Validate_Save() {
+        if
+        ($('#ID_Txt_License_Name').val().length < 1 ||
+        //$('#ID_Txt_License_Desc').val().length < 1 ||
+        $("#ID_Drp_Template_Name")[0].selectedIndex < 1 ||
+        $("#ID_Drp_License_Type")[0].selectedIndex < 1 ||
+        $("#ID_Drp_Company")[0].selectedIndex < 1 ||
+        $("#ID_Drp_Customer_Name")[0].selectedIndex < 1 ||
+        $("#ID_Drp_Location")[0].selectedIndex < 1 ||
+        $("#ID_Drp_Address_Type")[0].selectedIndex < 1 ||
+        $("#ID_Drp_LINE")[0].selectedIndex < 1 ||
+        $("#ID_Drp_UID")[0].selectedIndex < 1 ||
+        $("#ID_Txt_StartDate").val().length < 1 ||
+            $("#ID_Txt_EndDate").val().length < 1
+        ) {
+            messageText = getMessageDetailsById(28);
+            ValidationPopUp("", "");
+            return false;
+        }
+        var currentDate = moment(new Date(), "DD-MM-YYYY");
+        var StartDate = moment(new Date($("#ID_Txt_StartDate").val()), "DD-MM-YYYY");
+        if (!StartDate.isSameOrAfter(currentDate, "day")) {
+            messageText = getMessageDetailsById(34);
+            ValidationPopUp("", "");
+            //console.log("Start date should be same or greater than today");
+            return false;
+        }
+
+        //if (StartDate.isBefore(currentDate)) {
+        //    messageText = getMessageDetailsById(34);
+        //    ValidationPopUp("", "");
+        //    //console.log("Start date should be same or greater than today");
+        //    return false;
+        //}
+        var EndDate = moment(new Date($("#ID_Txt_EndDate").val()), "DD-MM-YYYY");
+        if (!EndDate.isSameOrAfter(currentDate, "day")) {
+            messageText = getMessageDetailsById(35);
+            ValidationPopUp("", "");
+            //console.log("End date should be same or greater than today");
+            return false;
+        }
+
+        //if (EndDate.isBefore(currentDate)) {
+        //    messageText = getMessageDetailsById(35);
+        //    ValidationPopUp("", "");
+        //    //console.log("End date should be same or greater than today");
+        //    return false;
+        //}
+
+        //if (EndDate.isSameOrBefore(StartDate)) {
+        //    messageText = getMessageDetailsById(36);
+        //    ValidationPopUp("", "");
+        //    //console.log("End Date should be greater than Start");
+        //    return false;
+        //}
+        if (typeof ModuleListByTemplateItem == undefined) {
+            messageText = getMessageDetailsById(26);
+            ValidationPopUp('Name', 'Modules');
+            return false;
+        }
+        if (_.isEmpty(ModuleListByTemplateItem)) {
+            messageText = getMessageDetailsById(26);
+            ValidationPopUp('Name', 'Modules');
+            return false;
+        }
+        return true;
+    }
+    function Validate_Update() {
+        if
+        ($('#ID_Txt_License_Name').val().length < 1 ||
+        //$('#ID_Txt_License_Desc').val().length < 1 ||
+        $("#ID_Drp_Template_Name")[0].selectedIndex < 1 ||
+        $("#ID_Drp_License_Type")[0].selectedIndex < 1 ||
+        $("#ID_Drp_Company")[0].selectedIndex < 1 ||
+        $("#ID_Drp_Customer_Name")[0].selectedIndex < 1 ||
+        $("#ID_Drp_Location")[0].selectedIndex < 1 ||
+        $("#ID_Drp_Address_Type")[0].selectedIndex < 1 ||
+        $("#ID_Drp_LINE")[0].selectedIndex < 1 ||
+        $("#ID_Drp_UID")[0].selectedIndex < 1 ||
+        $("#ID_Txt_StartDate").val().length < 1 ||
+            $("#ID_Txt_EndDate").val().length < 1
+        ) {
+            messageText = getMessageDetailsById(28);
+            ValidationPopUp("", "");
+            return false;
+        }
+        var currentDate = moment(new Date(), "DD-MM-YYYY");
+        var StartDate = moment(new Date($("#ID_Txt_StartDate").val()), "DD-MM-YYYY");
+        if (!StartDate.isSameOrAfter(currentDate, "day")) {
+            messageText = getMessageDetailsById(34);
+            ValidationPopUp("", "");
+            //console.log("Start date should be same or greater than today");
+            return false;
+        }
+
+        var EndDate = moment(new Date($("#ID_Txt_EndDate").val()), "DD-MM-YYYY");
+        if (!EndDate.isSameOrAfter(currentDate, "day")) {
+            messageText = getMessageDetailsById(35);
+            ValidationPopUp("", "");
+            //console.log("End date should be same or greater than today");
+            return false;
+        }
+
+    //    var currentDate = moment(new Date(), "DD-MM-YYYY");
+    //    var StartDate = moment(new Date($("#ID_Txt_StartDate").val()), "DD-MM-YYYY");
+    //    if (StartDate.isBefore(currentDate)) {
+    //messageText = getMessageDetailsById(34);
+    //        ValidationPopUp("", "");
+    //        //console.log("Start date should be same or greater than today");
+    //        return false;
+    //    }
+    //    var EndDate = moment(new Date($("#ID_Txt_EndDate").val()), "DD-MM-YYYY");
+    //    if (EndDate.isBefore(currentDate)) {
+    //  messageText = getMessageDetailsById(35);
+    //        ValidationPopUp("", "");
+    //        //console.log("End date should be same or greater than today");
+    //        return false;
+    //    }
+
+    //    if (EndDate.isSameOrBefore(StartDate)) {
+    //          messageText = getMessageDetailsById(36);
+    //        ValidationPopUp("", "");
+    //        //console.log("End Date should be greater than Start");
+    //        return false;
+    //    }
+        if (typeof ModuleListByTemplateItem == undefined) {
+            messageText = getMessageDetailsById(26);
+            ValidationPopUp('Name', 'Modules');
+            return false;
+        }
+        if (_.isEmpty(ModuleListByTemplateItem)) {
+            messageText = getMessageDetailsById(26);
+            ValidationPopUp('Name', 'Modules');
+            return false;
+        }
+        return true;
+    }
+    function Validate_AddModule() {
+        if
+        (
+            $("#ID_Drp_Module_Name")[0].selectedIndex < 1 ||
+            $("#ID_Drp_Module_Action")[0].selectedIndex < 1 ||
+            $("#ID_Drp_Module_Type")[0].selectedIndex < 1 ||
+            $('#ID_Txt_License_Value').val().length < 1
+        ) {
+            messageText = getMessageDetailsById(28);
+            ValidationPopUp("", "");
+            return false;
+        }
+        return true;
+    }
+    function Validate_UpdateModule() {
+        if
+        (
+            $("#ID_Drp_Module_Name")[0].selectedIndex < 1 ||
+            $("#ID_Drp_Module_Action")[0].selectedIndex < 1 ||
+            $("#ID_Drp_Module_Type")[0].selectedIndex < 1 ||
+            $('#ID_Txt_License_Value').val().length < 1
+        ) {
+            messageText = getMessageDetailsById(28);
+            ValidationPopUp("", "");
+            return false;
+        }
+        return true;
+    }
+    function ClearNewModule() {
+        $("#ID_Txt_License_Value").val("");
+        $('#ID_Drp_Module_Name').prop('selectedIndex', 0);
+        $('#ID_Drp_Module_Action').prop('selectedIndex', 0);
+        $('#ID_Drp_Module_Type').prop('selectedIndex', 0);
+    }
+    function CancelNewModule() {
+        $("#ID_Txt_License_Value").val("");
+        $('#ID_Drp_Module_Name').prop('selectedIndex', 0);
+        $('#ID_Drp_Module_Action').prop('selectedIndex', 0);
+        $('#ID_Drp_Module_Type').prop('selectedIndex', 0);
+        $("#ID_Drp_Module_Name").prop("disabled", false);
+        $("#ID_Drp_Module_Action").prop("disabled", false);
+        $('#ID_Drp_Module_Type').prop("disabled", false);
+        $('#ID_Div_Modules').hide();
+    }
+    function AddNewModule() {
+        var ModuleID = $('#ID_Drp_Module_Name option:selected').val();
+        var ModuleText = $('#ID_Drp_Module_Name option:selected').text();
+        var ActionID = $('#ID_Drp_Module_Action option:selected').val();
+        var ActionText = $('#ID_Drp_Module_Action option:selected').text();
+        var LicenseTypeId = $('#ID_Drp_Module_Type option:selected').val();
+        var LicenseTypeText = $('#ID_Drp_Module_Type option:selected').text();
+        var LicenseValue = $('#ID_Txt_License_Value').val();
+        ModuleListNewItem = undefined;
+        if (typeof ModuleListNewItem === "undefined") {
+            ModuleListNewItem = new Array();
+        }
+        ModuleListNewItem.push
+            ({
+                'ACTIONID': parseInt(ActionID),
+                'ACTIONNAME': ActionText,
+                'MODULEID': parseInt(ModuleID),
+                'MODULENAME': ModuleText,
+                'ID': 0,
+                'LICENSETYPE': LicenseTypeText,
+                'LICENSETYPEID': parseInt(LicenseTypeId),
+                'LICENSEVALUE': LicenseValue,
+                'ItemStatus': "Added"
+            });
+        var FilteredItem = _.findWhere(ModuleListByTemplateItem, {
+            ACTIONID: parseInt(ActionID), MODULEID: parseInt(ModuleID)
+        });
+        if (typeof FilteredItem != "undefined") {
+            if (!_.isNull(FilteredItem)) {
+                alert("Duplicate Alert,");
+            }
+        }
+        else {
+            ModuleListByTemplateItem = _.union(ModuleListNewItem, ModuleListByTemplateItem);
+            CancelNewModule();
+        }
+        RefreshDTModuleList(ModuleListByTemplateItem);
+    }
+    function RefreshDTModuleList(data) {
+        $("#ID_Div_DataTable_Modules").html('<table id="ID_DataTable_Modules"  class="displays table-striped table-bordered nowrap cell-border" width="100%" cellspacing="0">' +
+            '<thead>' +
+            '<tr><th>ModuleName</th> ' +
+            '<th>ActionName</th>' +
+            '<th>LicenseType</th>' +
+            '<th>LicenseValue</th>' +
+            '<th>UpdatedDate</th>' +
+            //'<th>Edit</th> ' +
+            '<th>Delete</th> </tr>' +
+            '</thead> ' +
+            '<tbody id="ID_DataTable_Modules_Items"></table>');
+        var content = '';
+        var contentall = '';
+        var results;
+        if (data != null) {
+            results = data;
+            for (var i = 0; i < results.length; i++) {
+                //Content appending
+                content = '<tr>' +
+                    '<td>' + results[i].MODULENAME + '</td>' +
+                    '<td>' + results[i].ACTIONNAME + '</td>' +
+                    '<td>' + results[i].LICENSETYPE + '</td>' +
+                    '<td>' + results[i].LICENSEVALUE + '</td>' +
+                    '<td>' + results[i].UD + '</td>' +
+                    //'<td>' + '<a onclick=UpdateModuleListItem(' + results[i].MODULEID + ',' + results[i].ACTIONID + ',' + LicenseId + ',' + results[i].LICENSETYPEID + '); class="CLS_DT_MODULE_ITEM_EDIT CLS_DT_MODULE_ITEM" >Edit</a>' + '</td>' +
+                    '<td>' + '<a onclick=DeleteModuleListItem(' + results[i].MODULEID + ',' + results[i].ACTIONID + ',' + LicenseId + ',' + results[i].LICENSETYPEID + '); class="CLS_DT_MODULE_ITEM_DELETE CLS_DT_MODULE_ITEM" >Delete</a>' + '</td>' +
+                    '</tr>';
+                contentall = contentall + content;
+                content = '';
+            }
+            $("#ID_DataTable_Modules_Items").html(contentall);
+        }
+        $("#ID_DataTable_Modules").DataTable({
+            "columnDefs": [
+                {
+                    "targets": [4],
+                    "visible": false,
+                    "searchable": false
+                }
+            ],
+            "order": [[4, "desc"]]
+        });
+    }
+    function UpdateNewModule() {
+        if (!_.isUndefined(CurrentModuleID)) {
+            if (!_.isNull(CurrentModuleID)) {
+                if (_.isNumber(CurrentModuleID)) {
+                    if (CurrentModuleID > 0) {
+                        var ModuleID = $('#ID_Drp_Module_Name option:selected').val();
+                        var ActionID = $('#ID_Drp_Module_Action option:selected').val();
+                        var LicenseTypeId = $('#ID_Drp_Module_Type option:selected').val();
+                        var LicenseTypeText = $('#ID_Drp_Module_Type option:selected').text();
+                        var LicenseValue = $('#ID_Txt_License_Value').val();
+                        ModuleListByTemplateItem = _.without(ModuleListByTemplateItem, _.findWhere(ModuleListByTemplateItem, {
+                            ACTIONID: parseInt(ModuleListItemByTemplateItem[0].ACTIONID)
+                            , MODULEID: parseInt(ModuleListItemByTemplateItem[0].MODULEID)
+                            , LICENSETYPEID: parseInt(ModuleListItemByTemplateItem[0].LICENSETYPEID)
+                        }));
+                        ModuleListItemByTemplateItem[0]["LICENSETYPE"] = LicenseTypeText;
+                        ModuleListItemByTemplateItem[0]["LICENSETYPEID"] = parseInt(LicenseTypeId);
+                        ModuleListItemByTemplateItem[0]["LICENSEVALUE"] = LicenseValue;
+                        ModuleListItemByTemplateItem[0]["ItemStatus"] = "Updated";
+                        // Checking for duplicate
+                        var FilteredItem = _.findWhere(ModuleListByTemplateItem, {
+                            ACTIONID: parseInt(ModuleListItemByTemplateItem[0].ACTIONID)
+                            , MODULEID: parseInt(ModuleListItemByTemplateItem[0].MODULEID)
+                        });
+                        if (typeof FilteredItem != "undefined") {
+                            if (!_.isNull(FilteredItem)) {
+                                alert("Duplicate Alert,");
+                            }
+                        }
+                        else {
+                            ModuleListByTemplateItem.push(ModuleListItemByTemplateItem[0]);
+                            CancelNewModule();
+                            RefreshDTModuleList(ModuleListByTemplateItem);
+                            CurrentModuleID = null;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    function AddNewModules() {
+        $('#ID_Div_Modules').show();
+        $('#ID_Btn_Add_Module_Item').show();
+        $('#ID_Btn_Module_Update').hide();
+        $('#ID_Drp_Module_Name').prop('selectedIndex', 0);
+        $('#ID_Drp_Module_Action').prop('selectedIndex', 0);
+        $('#ID_Drp_Module_Type').prop('selectedIndex', 0);
+        $("#ID_Drp_Module_Name").prop("disabled", false);
+        $("#ID_Drp_Module_Action").prop("disabled", false);
+    }
+    function SaveLicense() {
+        var ID_Drp_Template_Name = $("#ID_Drp_Template_Name  option:selected").val();
+        var ID_Txt_ID = $("#ID_Txt_ID").val();
+        var ID_Txt_License_Name = $("#ID_Txt_License_Name").val();
+        var ID_Txt_License_Display = $("#ID_Txt_License_Display").val();
+        var ID_Txt_License_Desc = $("#ID_Txt_License_Desc").val();
+        var ID_Drp_License_Type = $("#ID_Drp_License_Type  option:selected").val();
+        var ID_Drp_Company = $("#ID_Drp_Company  option:selected").val();
+        var ID_Drp_Customer_Name = $("#ID_Drp_Customer_Name  option:selected").val();
+        var ID_Drp_Location = $("#ID_Drp_Location  option:selected").val();
+        var ID_Drp_Address_Type = $("#ID_Drp_Address_Type  option:selected").val();
+        var ID_Drp_LINE = $("#ID_Drp_LINE  option:selected").val();
+        var ID_Drp_UID = $("#ID_Drp_UID  option:selected").val();
+        var ID_Txt_StartDate = $("#ID_Txt_StartDate").val();
+        var ID_Txt_EndDate = $("#ID_Txt_EndDate").val();
+        LicenseItem = new Array();
+        console.log(ModuleListByTemplateItem);
+        var ModelLicenseModules1 = ModuleListByTemplateItem;
+
+        var Customer = {
+            CUSTOMERID: ID_Drp_Customer_Name
+        };
+        var CustomerList = new Array();
+        CustomerList.push(Customer);
+
+        var Company = {
+            COMPANYID: ID_Drp_Company,
+            CustomerList: CustomerList
+
+        };
+        var BasicInfo = {
+            Id: 0,
+            tbl_template_id: ID_Drp_Template_Name,
+            LicenseName: ID_Txt_License_Name,
+            License_Display: ID_Txt_License_Display,
+            LicenseDescription: ID_Txt_License_Desc,
+            LicenseStartDate: ID_Txt_StartDate,
+            LicenseEndDate: ID_Txt_EndDate,
+            LicenseType: ID_Drp_License_Type,
+            UID_ID: ID_Drp_UID,
+            ModelLicenseModules: ModelLicenseModules1,
+            CustomerDetails: Company
+        };
+        LicenseItem.push(BasicInfo);
+        var apiPath = "LicenseCreate";
+        $.ajax({
+            method: "POST",
+            url: apiPath,
+            data: { __RequestVerificationToken: $('[name=__RequestVerificationToken]').val(), LicenseValue: JSON.stringify(BasicInfo) },
+            headers: {
+                Accept: "application/json;odata=verbose"
+            },
+            async: false,
+            success: function (data) {
+                if (data.IsStatus) {
+                    ShowMessage(data);
+                }
+                else {
+                    Reset();
+                }
+            },
+            eror: function (data) {
+                console.log("An error occurred. Please try again.");
+            }
+        });
+    }
+    function ClearNewTemplate() {
+        $("#ID_Txt_ID").val("");
+        $("#ID_Txt_License_Name").val("");
+        $("#ID_Txt_License_Display").val("");
+        $("#ID_Txt_License_Desc").val("");
+        $("#ID_Txt_License_Value").val("");
+        $('#ID_Drp_Module_Name').prop('selectedIndex', 0);
+        $('#ID_Drp_Module_Action').prop('selectedIndex', 0);
+        $('#ID_Drp_Module_Type').prop('selectedIndex', 0);
+        $('#ID_Div_Modules').hide();
+    }
+    function LoadDtAllModules(LicenseId, TemplateId) {
+        if (LicenseId == 0 || typeof LicenseId === "undefined") {
+            var apiPath = "GetAllModulesByTemplateID?TemplateID=" + TemplateId;
+        } else {
+            var apiPath = "GetAllModulesByLicenseID?LicenseID=" + LicenseId;
+        }
+        $("#ID_Div_DataTable_Modules").html('<table id="ID_DataTable_Modules"  class="displays table-striped table-bordered nowrap cell-border" width="100%" cellspacing="0">' +
+            '<thead>' +
+            '<tr><th>ModuleName</th> ' +
+            '<th>ActionName</th>' +
+            '<th>LicenseType</th>' +
+            '<th>LicenseValue</th>' +
+            '<th>UpdatedDate</th>' +
+            //'<th>Edit</th> ' +
+            '<th>Delete</th> </tr>' +
+            '</thead> ' +
+            '<tbody id="ID_DataTable_Modules_Items"></table>');
+        $.ajax({
+            url: apiPath,
+            headers: {
+                Accept: "application/json;odata=verbose"
+            },
+            async: false,
+            success: function (data) {
+                var content = '';
+                var contentall = '';
+                var items; // Data will have user object
+                var results;
+                if (data != null) {
+                    items = data;
+                    if (items != null) {
+                        results = items;
+                        ModuleListByTemplateItem = results;
+                        for (var i = 0; i < ModuleListByTemplateItem.length; i++) {
+                            content = '<tr>' +
+                                '<td>' + ModuleListByTemplateItem[i].MODULENAME + '</td>' +
+                                '<td>' + ModuleListByTemplateItem[i].ACTIONNAME + '</td>' +
+                                '<td>' + ModuleListByTemplateItem[i].LICENSETYPE + '</td>' +
+                                '<td>' + ModuleListByTemplateItem[i].LICENSEVALUE + '</td>' +
+                                '<td>' + ModuleListByTemplateItem[i].UD + '</td>' +
+                                //'<td>' + '<a onclick=UpdateModuleListItem(' + results[i].MODULEID + ',' + results[i].ACTIONID + ',' + LicenseId + ',' + results[i].LICENSETYPEID + '); class="CLS_DT_MODULE_ITEM_EDIT CLS_DT_MODULE_ITEM" >Edit</a>' + '</td>' +
+                                '<td>' + '<a onclick=DeleteModuleListItem(' + results[i].MODULEID + ',' + results[i].ACTIONID + ',' + LicenseId + ',' + results[i].LICENSETYPEID + '); class="CLS_DT_MODULE_ITEM_DELETE CLS_DT_MODULE_ITEM" >Delete</a>' + '</td>' +
+                                '</tr>';
+                            contentall = contentall + content;
+                            content = '';
+                        }
+                        $("#ID_DataTable_Modules_Items").html(contentall);
+                    }
+                }
+            },
+            eror: function (data) {
+                console.log("An error occurred. Please try again.");
+            }
+        });
+        $("#ID_DataTable_Modules").DataTable({
+            stateSave: true,
+            "columnDefs": [
+                {
+                    "targets": [4],
+                    "visible": false,
+                    "searchable": false
+                }
+            ],
+            "order": [[4, "desc"]]
+        });
+    }
+    //function LoadDTAllLicense() {
+    //    var apiPath = "GetAllLicenses";
+    //    $("#ID_Div_DataTable_Templates").html('<table id="ID_DataTable_License"  class="displays table-striped table-bordered nowrap cell-border" width="100%" cellspacing="0">' +
+    //        '<thead>' +
+    //        '<tr>' +
+    //        '<th>TemplateName</th>' +
+    //        '<th>License Name</th>' +
+    //        '<th>Customer Name</th>' +
+    //        '<th>License Type</th>' +
+    //        '<th>End date</th>' +
+    //        '<th>UpdatedDate</th>' +
+    //        '<th>CreatedDate</th>' +
+    //        '<th>UpdatedDateHidden</th>' +
+    //        '<th>Edit</th>' +
+    //        '<th>Delete</th>' +
+    //        '<th>Files</th>' +
+    //        '</tr>' +
+    //        '</thead>' +
+    //        '<tbody id="ID_DataTable_License_Items">' +
+    //        '</table>');
+    //    $.ajax({
+    //        url: apiPath,
+    //        headers: {
+    //            Accept: "application/json;odata=verbose"
+    //        },
+    //        async: false,
+    //        success: function (data) {
+    //            //
+    //            var content = '';
+    //            var contentall = '';
+    //            var items; // Data will have user object
+    //            var results;
+    //            if (data != null) {
+    //                items = data;
+    //                if (items != null) {
+    //                    results = items;
+    //                    TemplateList = results;
+    //                    for (var i = 0; i < TemplateList.length; i++) {
+    //                        //Content appending
+    //                        content = '<tr>' +
+    //                            '<td>' + TemplateList[i].TEMPLATENAME + '</td>' +
+    //                            '<td>' + TemplateList[i].LICENSENAME + '</td>' +
+    //                            '<td>' + TemplateList[i].CUSTOMERNAME + '</td>' +
+    //                            '<td>' + TemplateList[i].LICENSETYPE + '</td>' +
+    //                            '<td>' + TemplateList[i].LICENSEENDDATE + '</td>' +
+    //                            '<td>' + TemplateList[i].UPDATEDDATE + '</td>' +
+    //                            '<td>' + TemplateList[i].CREATEDDATE + '</td>' +
+    //                            '<td>' + TemplateList[i].UD + '</td>' +
+    //                            '<td>' + '<a class="CLS_DT_LICENSE_ITEM_EDIT CLS_DT_TEMPLATE_ITEM" onclick=UpdateLicenseListItem(' + TemplateList[i].ID + '); >Edit</a>' + '</td>' +
+    //                            '<td>' + '<a class="CLS_DT_LICENSE_ITEM_DELETE CLS_DT_TEMPLATE_ITEM" onclick=DeleteLicenseListItem(' + TemplateList[i].ID + '); >Delete</a>' + '</td>' +
+    //                            '<td>' + '<a class="CLS_DT_LICENSE_ITEM_DOWNLOAD CLS_DT_TEMPLATE_ITEM" onclick=DownloadLicenseFiles(' + TemplateList[i].TBL_LICENSE_FILES_ID + '); >Download</a>' + '</td>' +
+    //                            '</tr>';
+    //                        contentall = contentall + content;
+    //                        content = '';
+    //                    }
+    //                    $("#ID_DataTable_License_Items").html(contentall);
+    //                }
+    //            }
+    //        },
+    //        eror: function (data) {
+    //            console.log("An error occurred. Please try again.");
+    //        }
+    //    });
+    //    $("#ID_DataTable_License").DataTable({
+    //        "columnDefs": [
+    //            {
+    //                "targets": [7],
+    //                "visible": false,
+    //                "searchable": false
+    //            }
+    //        ],
+    //        "order": [[7, "desc"]]
+    //    });
+    //}
+    function LoadDTAllLicense() {
+        var apiPath = "GetAllLicenses";
+        $("#ID_Div_DataTable_Templates").html('<table id="ID_DataTable_License" class="display" style="width:100%">' +
+            '<thead>' +
+            '<tr>' +
+            '<th>TemplateName</th>' +
+            '<th>License Name</th>' +
+            '<th>Customer Name</th>' +
+            '<th>License Type</th>' +
+            '<th>End date</th>' +
+            '<th>UpdatedDate</th>' +
+            '<th>CreatedDate</th>' +
+            '<th>UpdatedDateHidden</th>' +
+            //'<th>Edit</th>' +
+            //'<th>Delete</th>' +
+            '<th>Files</th>' +
+            '</tr>' +
+            '</thead>' +
+            '<tbody id="ID_DataTable_License_Items">' +
+            '</table>');
+        $.ajax({
+            url: apiPath,
+            headers: {
+                Accept: "application/json;odata=verbose"
+            },
+            async: false,
+            success: function (data) {
+                //
+                var content = '';
+                var contentall = '';
+                var items; // Data will have user object
+                var results;
+                if (data != null) {
+                    items = data;
+                    if (items != null) {
+                        results = items;
+                        TemplateList = results;
+                        for (var i = 0; i < TemplateList.length; i++) {
+                            //Content appending
+                            content = '<tr>' +
+                                '<td><a class="CLS_DT_LICENSE_ITEM_EDIT CLS_DT_TEMPLATE_ITEM" onclick=UpdateLicenseListItem(' + TemplateList[i].ID + '); >'
+                                + TemplateList[i].TEMPLATENAME + '</a></td>' +
+                                '<td>' + TemplateList[i].LICENSENAME + '</td>' +
+                                '<td>' + TemplateList[i].CUSTOMERNAME + '</td>' +
+                                '<td>' + TemplateList[i].LICENSETYPE + '</td>' +
+                                '<td>' + TemplateList[i].LICENSEENDDATE + '</td>' +
+                                '<td>' + TemplateList[i].UPDATEDDATE + '</td>' +
+                                '<td>' + TemplateList[i].CREATEDDATE + '</td>' +
+                                '<td>' + TemplateList[i].UD + '</td>' +
+                                //'<td>' + '<a class="CLS_DT_LICENSE_ITEM_EDIT CLS_DT_TEMPLATE_ITEM" onclick=UpdateLicenseListItem(' + TemplateList[i].ID + '); >Edit</a>' + '</td>' +
+                                //'<td>' + '<a class="CLS_DT_LICENSE_ITEM_DELETE CLS_DT_TEMPLATE_ITEM" onclick=DeleteLicenseListItem(' + TemplateList[i].ID + '); >Delete</a>' + '</td>' +
+                                '<td>' + '<a class="CLS_DT_LICENSE_ITEM_DOWNLOAD CLS_DT_TEMPLATE_ITEM" onclick=DownloadLicenseFiles(' + TemplateList[i].TBL_LICENSE_FILES_ID + '); >Download</a>' + '</td>' +
+                                '</tr>';
+                            contentall = contentall + content;
+                            content = '';
+                        }
+                        $("#ID_DataTable_License_Items").html(contentall);
+                    }
+                }
+            },
+            eror: function (data) {
+                console.log("An error occurred. Please try again.");
+            }
+        });
+        $("#ID_DataTable_License").DataTable({
+            stateSave: true,
+            "columnDefs": [
+                {
+                    "targets": [7],
+                    "visible": false,
+                    "searchable": false
+                }
+            ],
+            "order": [[7, "desc"]]
+        });
+    }
+    function DownloadLicenseFiles(id) {
+        debugger;
+        @*$.ajax(
+            {
+                url: '@Url.Action("DownloadLicenseFile", "License")',
+                contentType: 'application/json; charset=utf-8',
+                datatype: 'json',
+                data: {
+                    ID: id
+                },
+                type: "GET",
+                success: function () {
+                    window.location = '@Url.Action("DownloadAttachment", "PostDetail", new { studentId = 123 })';
+                }
+            });*@
+
+        //window.location = "@Url.RouteUrl(new { Controller = "License", Action = "DownloadLicenseFile" })?ID=" + id;
+        window.open("@Url.RouteUrl(new { Controller = "License", Action = "DownloadLicenseFile" })?ID=" + id, "_blank");
+        debugger;
+    }
+    function Reset() {
+        $("#ID_Div_New_Template").hide();
+        $("#ID_Btn_Update_Template").hide();
+        $("#ID_Btn_Clear_License").show();
+        $("#ID_Btn_Save_License").show();
+        $("#ID_Txt_ID").val("");
+        $("#ID_Txt_License_Name").val("");
+        $("#ID_Txt_License_Display").val("");
+        $("#ID_Txt_License_Desc").val("");
+        $("#ID_Txt_License_Value").val("");
+        $('#ID_Drp_Module_Name').prop('selectedIndex', 0);
+        $('#ID_Drp_Module_Action').prop('selectedIndex', 0);
+        $('#ID_Drp_Module_Type').prop('selectedIndex', 0);
+        $("#ID_Drp_Module_Name").prop("disabled", false);
+        $("#ID_Drp_Module_Action").prop("disabled", false);
+        $("#ID_Div_DataTable_Templates").show();
+        $('#ID_Div_Modules').hide();
+        $("#ID_Drp_Template_Name  ").prop('selectedIndex', 0);
+        $("#ID_Txt_ID").val("");
+        $("#ID_Txt_License_Name").val("");
+        $("#ID_Txt_License_Display").val("");
+        $("#ID_Txt_License_Desc").val("");
+        $("#ID_Drp_License_Type  ").prop('selectedIndex', 0);
+        $("#ID_Drp_Company  ").prop('selectedIndex', 0);
+        $("#ID_Drp_Customer_Name  ").prop('selectedIndex', 0);
+        $("#ID_Drp_Location  ").prop('selectedIndex', 0);
+        $("#ID_Drp_Address_Type  ").prop('selectedIndex', 0);
+        $("#ID_Drp_LINE  ").prop('selectedIndex', 0);
+        $("#ID_Drp_UID  ").prop('selectedIndex', 0);
+        $("#ID_Txt_StartDate").val("");
+        $("#ID_Txt_EndDate").val("");
+        LicenseId = 0;
+        LoadDTAllLicense();
+    }
+    function ShowNewTemplate() {
+        $("#ID_Div_New_Template").show();
+    }
+    // need to work
+    function GetLicenseValue(ModuleId, ActionId, LicenseTypeId) {
+        if (typeof TemplateId === "undefined") {
+            TemplateId = 0;
+        }
+        var apiPath = "GetLicenseValue?ModuleID=" + ModuleId + "&ActionId=" + ActionId + "&LicenseTypeID=" + LicenseTypeId + "&LicenseID=0";
+        $.ajax({
+            url: apiPath,
+            headers: {
+                Accept: "application/json;odata=verbose"
+            },
+            async: false,
+            success: function (data) {
+                var items; // Data will have user object
+                var results;
+                if (data != null) {
+                    if (data.length > 0) {
+                        items = data;
+                        if (items != null) {
+                            results = items;
+                            for (var i = 0; i < results.length; i++) {
+                                $('#ID_Txt_License_Value').val(results[i].LICENSEVALUE);
+                                break;
+                            }
+                        }
+                    } else {
+                        $('#ID_Txt_License_Value').val("");
+                    }
+                }
+            },
+            eror: function (data) {
+                console.log("An error occurred. Please try again.");
+            }
+        });
+    }
+    function ShowLicenseItem(data) {
+        // Controls
+        $("#ID_Div_New_Template").show();
+        $("#ID_Btn_Save_License").hide();
+        $("#ID_Btn_Update_Template").show();
+        $("#ID_Btn_Clear_License").hide();
+        // Data Controls, Clearing selection
+        $("#ID_Drp_Template_Name").prop('selectedIndex', 0);
+        $("#ID_Txt_ID").val("");
+        $("#ID_Txt_License_Name").val("");
+        $("#ID_Txt_License_Display").val("");
+        $("#ID_Txt_License_Desc").val("");
+        $("#ID_Drp_License_Type").prop('selectedIndex', 0);
+        $("#ID_Drp_Company").prop('selectedIndex', 0);
+        $("#ID_Drp_Customer_Name").prop('selectedIndex', 0);
+        $("#ID_Drp_Location").prop('selectedIndex', 0);
+        $("#ID_Drp_Address_Type").prop('selectedIndex', 0);
+        $("#ID_Drp_LINE").prop('selectedIndex', 0);
+        $("#ID_Drp_UID").prop('selectedIndex', 0);
+        $("#ID_Txt_StartDate").val("");
+        $("#ID_Txt_EndDate").val("");
+        BindDropDownswithAPI('ID_Drp_Template_Name', 'GetAllTemplates', 'ID', 'TEMPLATENAME');
+        BindDropDownswithAPI('ID_Drp_Company', 'getCompany', 'ID', 'COMPANY')
+        BindDropDownswithAPI('ID_Drp_License_Type', 'getMasterLicenseType', 'ID', 'LICENSETYPE');
+        for (var i = 0; i < data.length; i++) {
+            $("#ID_Txt_ID").val(data[i].ID);
+            $("#ID_Txt_License_Name").val(data[i].LICENSENAME);
+            $("#ID_Txt_License_Display").val(data[i].TEMPLATEDISPLAYTEXT);
+            $("#ID_Txt_License_Desc").val(data[i].LICENSEDESCRIPTION);
+            $("#ID_Txt_License_Desc").val(data[i].LICENSEDESCRIPTION);
+            $("#ID_Txt_EndDate").val(data[i].LICENSEENDDATE);
+            $("#ID_Txt_StartDate").val(data[i].LICENSESTARTDATE);
+            $("#ID_Drp_Template_Name").val(data[i].TBL_TEMPLATE_ID);
+            $("#ID_Drp_License_Type").val(data[i].TBL_LICENSETYPE_ID);
+            $("#ID_Drp_Company").val(data[i].TBL_COMPANY_ID);
+            if ($("#ID_Drp_Company option:selected").index() > 0) {
+                var CompanyID = $('#ID_Drp_Company option:selected').val();
+                BindDropDownswithAPI('ID_Drp_Location', 'getLocationByCompany?ID=' + CompanyID, 'ID', 'LOCATION');
+                $("#ID_Drp_Location").val(data[i].LOCATION);
+            }
+            if ($("#ID_Drp_Location option:selected").index() > 0) {
+                var CompanyID = $('#ID_Drp_Company option:selected').val();
+                var Location = $('#ID_Drp_Location option:selected').val();
+                BindDropDownswithAPI('ID_Drp_Address_Type', 'getAddressTypeByCompany?ID=' + CompanyID + '&LOCATION=' + Location, 'ID', 'ADDRESSTYPE');
+                $("#ID_Drp_Address_Type").val(data[i].ADDRESSTYPE);
+            }
+            if ($("#ID_Drp_Address_Type option:selected").index() > 0) {
+                var CompanyID = $('#ID_Drp_Company option:selected').val();
+                var Location = $('#ID_Drp_Location option:selected').val();
+                var AddressType = $('#ID_Drp_Address_Type option:selected').val();
+                BindDropDownswithAPI('ID_Drp_Customer_Name', 'getCustomerByCompany?ID=' + CompanyID + '&LOCATION=' + Location + '&ADDRESSTYPE=' + AddressType, 'ID', 'CUSTOMER');
+                $("#ID_Drp_Customer_Name").val(data[i].TBL_CUSTOMER_ID);
+            }
+            if ($("#ID_Drp_Customer_Name option:selected").index() > 0) {
+                var CompanyID = $('#ID_Drp_Company option:selected').val();
+                var CustomerID = $('#ID_Drp_Customer_Name option:selected').val();
+                BindDropDownswithAPI('ID_Drp_LINE', 'getLineIdByCustomerid?COMPANYID=' + CompanyID + '&CUSTOMERID=' + CustomerID, 'ID', 'NAME');
+                $("#ID_Drp_LINE").val(data[i].LINEID);
+            }
+            if ($("#ID_Drp_LINE option:selected").index() > 0) {
+                var CompanyID = $('#ID_Drp_Company option:selected').val();
+                var CustomerID = $('#ID_Drp_Customer_Name option:selected').val();
+                var LineID = $('#ID_Drp_LINE option:selected').val();
+                BindDropDownswithAPI('ID_Drp_UID', 'getUIDByCustomerId?COMPANYID=' + CompanyID + '&CUSTOMERID=' + CustomerID + '&LINEID=' + LineID, 'ID', 'UID');
+                $("#ID_Drp_UID").val(data[i].TBL_CUSTOMER_UID_ID);
+            }
+            IsDownloaded(data[i].IsDownloaded);
+        }
+        LoadDtAllModules(LicenseId, 0);
+    }
+    function IsDownloaded(IsTrue) {
+        if (IsTrue) {
+            $("#ID_Btn_Update_Template").hide();
+        }
+        else {
+            $("#ID_Btn_Update_Template").show();
+        }
+    }
+    function UpdateLicenseListItem(ID) {
+        LicenseId = ID;
+        var apiPath = "GetLicenseById?LicenseID=" + LicenseId;
+        $.ajax({
+            url: apiPath,
+            headers: {
+                Accept: "application/json;odata=verbose"
+            },
+            async: false,
+            success: function (data) {
+                var items; // Data will have user object
+                var results;
+                if (data != null) {
+                    items = data;
+                    if (items != null) {
+                        results = items;
+                        LicenseListItem = results;
+                        ShowLicenseItem(LicenseListItem);
+                    }
+                }
+            },
+            eror: function (data) {
+                console.log("An error occurred. Please try again.");
+            }
+        });
+    }
+    function ShowModuleItem(data) {
+        $('#ID_Btn_Add_Module_Item').hide();
+        $('#ID_Btn_Module_Update').show();
+        $('#ID_Div_Modules').show();
+        $('#ID_Drp_Module_Name').prop('selectedIndex', 0);
+        $('#ID_Drp_Module_Action').prop('selectedIndex', 0);
+        $('#ID_Drp_Module_Type').prop('selectedIndex', 0);
+        $('#ID_Txt_License_Value').val("");
+        for (var i = 0; i < data.length; i++) {
+            $("#ID_Drp_Module_Name").val(data[i].MODULEID);
+            var ModuleID = $('#ID_Drp_Module_Name option:selected').val();
+            BindDropDownswithAPI('ID_Drp_Module_Action', "GetActionsByModuleID?ModuleID=" + ModuleID, 'ActionID', 'ActionName');
+            $('#ID_Drp_Module_Action').val(data[i].ACTIONID);
+            var ModuleID = $('#ID_Drp_Module_Name option:selected').val();
+            var ActionID = $('#ID_Drp_Module_Action option:selected').val();
+            BindDropDownswithAPI('ID_Drp_Module_Type', "GetLicenseType?ModuleID=" + ModuleID + "&ActionId=" + ActionID, 'LICENSETYPEID', 'LICENSETYPE');
+            $('#ID_Drp_Module_Type').val(data[i].LICENSETYPEID);
+            var ModuleID = $('#ID_Drp_Module_Name option:selected').val();
+            var ActionID = $('#ID_Drp_Module_Action option:selected').val();
+            var LicenseTypeId = $('#ID_Drp_Module_Type option:selected').val();
+            $('#ID_Txt_License_Value').val(data[i].LICENSEVALUE);
+        }
+        $("#ID_Drp_Module_Name").prop("disabled", true);
+        $("#ID_Drp_Module_Action").prop("disabled", true);
+    }
+    function UpdateModuleListItem(MID, AID, TID, TYPID) {
+        CurrentModuleID = MID;
+        if (typeof TID === "undefined") {
+            TID = 0;
+        }
+        var apiPath = "GetModuleById?ModuleID=" + CurrentModuleID + "&ActionId=" + AID + "&LicenseID=" + TID;
+        $.ajax({
+            url: apiPath,
+            headers: {
+                Accept: "application/json;odata=verbose"
+            },
+            async: false,
+            success: function (data) {
+                var items; // Data will have user object
+                var results;
+                if (data != null) {
+                    if (data.length > 0) {
+                        items = data;
+                        if (items != null) {
+                            results = items;
+                            ModuleListItemByTemplateItem = results;
+                            var ItemStatus = ModuleListItemByTemplateItem[0];
+                            ItemStatus["ItemStatus"] = "Updating";
+                            ShowModuleItem(ModuleListItemByTemplateItem);
+                        }
+                    }
+                }
+            },
+            eror: function (data) {
+                console.log("An error occurred. Please try again.");
+            }
+        });
+    }
+    function DeleteLicenseListItem(ID) {
+        if (confirm("Are You sure to delete the Licese?")) {
+            var BasicInfo = { ID: ID };
+            var apiPath = "LicenseDelete";
+            $.ajax({
+                method: "POST",
+                url: apiPath,
+                data: { __RequestVerificationToken: $('[name=__RequestVerificationToken]').val(), LicenseValue: JSON.stringify(BasicInfo) },
+                headers: {
+                    Accept: "application/json;odata=verbose"
+                },
+                async: false,
+                success: function (data) {
+                    Reset();
+                },
+                eror: function (data) {
+                    console.log("An error occurred. Please try again.");
+                }
+            });
+        }
+    }
+    function DeleteModuleListItem(MID, AID, TID, TYPID) {
+        if (!_.isUndefined(MID)) {
+            if (!_.isNull(MID)) {
+                if (_.isNumber(MID)) {
+                    if (MID > 0) {
+                        ModuleListByTemplateItem = _.without(ModuleListByTemplateItem,
+                            _.findWhere(ModuleListByTemplateItem, {
+                                ACTIONID: parseInt(AID), MODULEID: parseInt(MID), LICENSETYPEID: parseInt(TYPID)
+                            }));
+                        RefreshDTModuleList(ModuleListByTemplateItem);
+                        CurrentModuleID = null;
+                    }
+                }
+            }
+        }
+    }
+    function BindTemplateItemReadonly() {
+        $("#ID_Div_New_Template :input").attr("disabled", true);
+        $('.CLS_DT_MODULE_ITEM').prop('onclick', null);
+    }
+    function BindTemplateItemEditable() {
+        $("#ID_Div_New_Template :input").attr("disabled", false);
+    }
+    function UpdateLicense() {
+        var ID_Drp_Template_Name = $("#ID_Drp_Template_Name  option:selected").val();
+        var ID_Txt_ID = $("#ID_Txt_ID").val();
+        var ID_Txt_License_Name = $("#ID_Txt_License_Name").val();
+        var ID_Txt_License_Display = $("#ID_Txt_License_Display").val();
+        var ID_Txt_License_Desc = $("#ID_Txt_License_Desc").val();
+        var ID_Drp_License_Type = $("#ID_Drp_License_Type  option:selected").val();
+        var ID_Drp_Company = $("#ID_Drp_Company  option:selected").val();
+        var ID_Drp_Customer_Name = $("#ID_Drp_Customer_Name  option:selected").val();
+        var ID_Drp_Location = $("#ID_Drp_Location  option:selected").val();
+        var ID_Drp_Address_Type = $("#ID_Drp_Address_Type  option:selected").val();
+        var ID_Drp_LINE = $("#ID_Drp_LINE  option:selected").val();
+        var ID_Drp_UID = $("#ID_Drp_UID  option:selected").val();
+        var ID_Txt_StartDate = $("#ID_Txt_StartDate").val();
+        var ID_Txt_EndDate = $("#ID_Txt_EndDate").val();
+        LicenseItem = new Array();
+        console.log(ModuleListByTemplateItem);
+        var ModelLicenseModules1 = ModuleListByTemplateItem;
+        var Customer = {
+            CUSTOMERID: ID_Drp_Customer_Name
+        };
+        var CustomerList = new Array();
+        CustomerList.push(Customer);
+
+        var Company = {
+            COMPANYID: ID_Drp_Company,
+            CustomerList: CustomerList
+
+        };
+        var BasicInfo = {
+            Id: LicenseId,
+            tbl_template_id: ID_Drp_Template_Name,
+            LicenseName: ID_Txt_License_Name,
+            License_Display: ID_Txt_License_Display,
+            LicenseDescription: ID_Txt_License_Desc,
+            LicenseStartDate: ID_Txt_StartDate,
+            LicenseEndDate: ID_Txt_EndDate,
+            LicenseType: ID_Drp_License_Type,
+            UID_ID: ID_Drp_UID,
+            ModelLicenseModules: ModelLicenseModules1,
+            CustomerDetails: Company
+        };
+        LicenseItem.push(BasicInfo);
+        var apiPath = "LicenseUpdate";
+        $.ajax({
+            method: "POST",
+            url: apiPath,
+            data: { __RequestVerificationToken: $('[name=__RequestVerificationToken]').val(), LicenseValue: JSON.stringify(BasicInfo) },
+            headers: {
+                Accept: "application/json;odata=verbose"
+            },
+            async: false,
+            success: function (data) {
+                if (data.IsStatus) {
+                    ShowMessage(data);
+                }
+                else {
+                    Reset();
+                }
+            },
+            eror: function (data) {
+                console.log("An error occurred. Please try again.");
+            }
+        });
+    }
+    function ShowMessage(data) {
+        debugger;
+        if (data != null) {
+            $("#successModalBody").text(data.Data);
+            $("#modal-success").modal('show');
+        }
+    }
+    // New Code
+    // Reusable functions
+    // Binding DropDown based on Ajax
+    function BindDropDownswithAPI(ControlId, APIPath, Id, Title, DefaultText = "Please Select", DefaultValue = "-1", IsAsync = false) {
+        var apiPath = APIPath;
+        var content = "<option selected=" + DefaultValue + ">" + DefaultText + "</option>";
+        $.ajax({
+            url: apiPath,
+            headers: {
+                Accept: "application/json;odata=verbose"
+            },
+            async: IsAsync,
+            success: function (data) {
+                if (typeof data != "undefined") {
+                    if (data != null) {
+                        results = data;
+                        for (var i = 0; i < results.length; i++) {
+                            content += "<option value=" + results[i][Id] + ">" + results[i][Title] + "</option>";
+                        }
+                    }
+                }
+            },
+            eror: function (data) {
+                console.log("An error occurred. Please try again.");
+            }
+        });
+        $('#' + ControlId).html(content);
+    }
+    // Binding DropDown based on Data array
+    function BindDropDownsWithData(ControlId, Data, Id, Title, DefaultText = "Please Select", DefaultValue = "-1") {
+        var content = "<option selected=" + DefaultValue + ">" + DefaultText + "</option>";
+        if (typeof Data != "undefined") {
+            if (Data != null) {
+                results = Data;
+                for (var i = 0; i < results.length; i++) {
+                    content += "<option value=" + results[i][Id] + ">" + results[i][Title] + "</option>";
+                }
+            }
+        }
+        $('#' + ControlId).html(content);
+    }
+    // Binding Data Table using API end point, no need to mention column names (Auto detection enabled)
+    function BindDataTablewithAPI(ControlId, APIPath, IsAsync = false) {
+        var apiPath = APIPath;
+        $.ajax({
+            url: apiPath,
+            headers: {
+                Accept: "application/json;odata=verbose"
+            },
+            async: IsAsync,
+            success: function (data) {
+                if (typeof data != "undefined") {
+                    if (data != null) {
+                        BindDataTablewithData(ControlId, data);
+                    }
+                }
+            },
+            eror: function (data) {
+                console.log("An error occurred. Please try again.");
+            }
+        });
+    }
+    //Binding Data Table using Data and control id , No need to mention columns (Auto detection is enabled)
+    function BindDataTablewithData(ControlId, data) {
+        var my_columns = [];
+        $.each(data, function (key, value) {
+            var my_item = {};
+            my_item.data = key;
+            my_item.title = key;
+            my_columns.push(my_item);
+        });
+        if (typeof my_columns != "undefined") {
+            if (my_columns != null) {
+                if (typeof data != "undefined") {
+                    if (data != null) {
+                        $('#' + ControlId).DataTable({
+                            data: data,
+                            "columns": my_columns
+                        });
+                        return true;
+                    }
+                }
+            }
+        }
+        console.log("An error occurred. BindDataTablewithData()");
+    }
+    function getMessageDetailsById(messageTypeId) {
+        $.ajax({
+            url: Q.resolveUrl('~/Common/GetMessageDetailsById'),
+            type: 'GET',
+            data: { "messageTypeId": messageTypeId },
+            dataType: 'json',
+            success: function (response) {
+                if (response.IsStatus) {
+                    return messageText = response.Data;
+                }
+
+            },
+            error: function (response) {
+            }
+        });
+
+    }
+    function ValidationPopUp(Basictext, Replacetext) {
+        setTimeout(function () {
+            autoAcceptUntrustedCertificatesForOpcUaClient = false;
+            if (messageText != undefined) {
+                messageText = messageText.replace(Basictext, Replacetext);
+                $("#infoModalBody").text(messageText);
+                $("#modal-info").modal('show');
+            }
+        }, 500);
+    }
+</script>

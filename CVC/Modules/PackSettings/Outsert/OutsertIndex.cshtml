@@ -1,0 +1,16 @@
+﻿@{
+    ViewData["Title"] = Serenity.LocalText.Get("Db.PackSettings.Outsert.EntityPlural");
+}
+
+<div id="GridDiv"></div>
+<input type="hidden" id="hdnOutsertImportAccess" />
+
+<script type="text/javascript">
+    $("#hdnOutsertImportAccess").val('@ViewBag.IsModifyPermission')
+
+    jQuery(function () {
+        new CVC.PackSettings.OutsertGrid($('#GridDiv'), {}).init();
+
+        Q.initFullHeightGridPage($('#GridDiv'));
+    });
+</script>

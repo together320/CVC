@@ -1,0 +1,17 @@
+﻿@{
+    ViewData["Title"] = Serenity.LocalText.Get("Db.MachineCustomization.Alarm.EntityPlural");
+}
+
+<div id="GridDiv"></div>
+<input type="hidden" id="hdnAlarmImportAccess" />
+
+
+<script type="text/javascript">
+    $("#hdnAlarmImportAccess").val('@ViewBag.IsModifyPermission')
+
+    jQuery(function () {
+        new CVC.MachineCustomization.AlarmGrid($('#GridDiv'), {}).init();
+
+        Q.initFullHeightGridPage($('#GridDiv'));
+    });
+</script>

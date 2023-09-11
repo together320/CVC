@@ -1,0 +1,57 @@
+﻿@model  CVC.ViewModels.ModuleAccessViewModel
+
+<style>
+    .error {
+        color: red;
+    }
+</style>
+<table class="display data-table2" cellspacing="0" width="100%" border="1" cellpadding="0" style="border-collapse:collapse;" bordercolor="#e7eaec">
+    <thead>
+        <tr>
+
+            <th align="left">
+                <label>Module Name</label>
+            </th>
+            @*<th>Status</th>*@
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.lstModuleViewModel)
+        {
+            <tr>
+
+                <td>
+                    <a href="/NAdministration/RoleAccess/ViewAccessList?RoleId=@item.RoleId&ModuleId=@item.ModuleId">@item.ModuleName</a>
+
+                </td>
+                @*<td>
+                        @item.StatusName
+                    </td>*@
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('.data-table2').DataTable({
+
+            responsive: {
+                details: {
+                    type: 'column'
+                }
+            },
+            //"order": [[3, "asc"]],
+            "language": {
+                "lengthMenu": "_MENU_ records per page",
+            },
+
+        });
+
+    });
+
+</script>

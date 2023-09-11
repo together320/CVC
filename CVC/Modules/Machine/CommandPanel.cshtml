@@ -1,0 +1,429 @@
+﻿@model CVC.ViewModels.CommandPanelPageModel
+@{Layout = null;}
+
+<link href="~/Content/css/spinkit/spinkit.css" rel="stylesheet" />
+<style>
+    .btn-push .fa {
+        color: #212529;
+    }
+    .btn-push:active .fa, .btn-push.pressed .fa {
+        color: #0acf97;
+    }
+</style>
+@*test comment 28 aug 2018*@
+<div id="divCommandPanelView">
+
+
+@{var index = 0; var GroupList = Model.ViewFieldList.GroupBy(x => index++ / 12).ToList();}
+@foreach (var item in GroupList)
+{
+<div id="divCommandPanel" class="col-md-12 " style="padding-right:0px;padding-left: 0px; margin-top:10px;">
+    @foreach (var subitem in item)
+    {
+        if (subitem.DataTypeId == 2)
+        {
+
+            if (subitem.Value == "1")
+            {
+                <button ViewStateMode="false" ParamValue="@subitem.Value" MachineType="@ViewBag.MachineType" type="button" @if (subitem.IsDisabled || (!subitem.IsModify)) { <text> disabled </text> } title="@subitem.ParameterName" onmouseup="CommandPanelBitMomentaryUp(@subitem.MachineParameterId,'@subitem.ParameterName','@subitem.Type','@subitem.Value','@ViewBag.MachineType','@subitem.DateTypeId','@subitem.IsRefreshMachineSettings','@subitem.IsAuthorisedRole','@subitem.IsPopUpRequired','@subitem.IsCommentRequired','@subitem.IsAuthenticationRequired','@subitem.ViewFieldId','@subitem.RoleNames','@subitem.WriteToPLCIPCMachineParameterId','@subitem.Value','0','@subitem.NodeId','@subitem.AttributeId')" onmousedown="CommandPanelBitMomentaryDown(@subitem.MachineParameterId,'@subitem.ParameterName','@subitem.Type','@subitem.Value','@ViewBag.MachineType','@subitem.DateTypeId','@subitem.IsRefreshMachineSettings','@subitem.IsAuthorisedRole','@subitem.IsPopUpRequired','@subitem.IsCommentRequired','@subitem.IsAuthenticationRequired','@subitem.ViewFieldId','@subitem.RoleNames','@subitem.WriteToPLCIPCMachineParameterId','@subitem.Value','1','@subitem.NodeId','@subitem.AttributeId')" class="btn btn-app btn-light btn-push @(subitem.Value=="1"? "pressed": "") @subitem.IsConveyerClass" id="@subitem.ViewFieldId">
+
+
+                    @if (subitem.Value == "0" || string.IsNullOrEmpty(subitem.Value) || subitem.Value == "False")
+                    {
+
+                        <i class="fa fa-circle" id="cplioff-@subitem.ViewFieldId"></i>
+
+                        <span id="cmspanbtimmomentary-@subitem.ViewFieldId" style="font-family:Roboto;width:20px;font-size:16px">
+                            @subitem.ParameterName
+
+                        </span>
+
+
+                    }
+                    else
+                    {
+                        
+                        <i class="fa fa-circle" id="cplioff-@subitem.ViewFieldId" style="display:none"></i>
+                        <span id="cmspanbtimmomentary-@subitem.ViewFieldId" style="font-family:Roboto;width:20px;font-size:16px">
+                            @subitem.ParameterName
+
+                        </span>
+                    }
+
+
+                </button>
+            }
+            else
+            {
+                <button  ViewStateMode="false" ParamValue="@subitem.Value" MachineType="@ViewBag.MachineType" type="button" @if (subitem.IsDisabled || (!subitem.IsModify)) { <text> disabled </text> } title="@subitem.ParameterName" onmouseup="CommandPanelBitMomentaryUp(@subitem.MachineParameterId,'@subitem.ParameterName','@subitem.Type','@subitem.Value','@ViewBag.MachineType','@subitem.DateTypeId','@subitem.IsRefreshMachineSettings','@subitem.IsAuthorisedRole','@subitem.IsPopUpRequired','@subitem.IsCommentRequired','@subitem.IsAuthenticationRequired','@subitem.ViewFieldId','@subitem.RoleNames','@subitem.WriteToPLCIPCMachineParameterId','@subitem.Value','0','@subitem.NodeId','@subitem.AttributeId')" onmousedown="CommandPanelBitMomentaryDown(@subitem.MachineParameterId,'@subitem.ParameterName','@subitem.Type','@subitem.Value','@ViewBag.MachineType','@subitem.DateTypeId','@subitem.IsRefreshMachineSettings','@subitem.IsAuthorisedRole','@subitem.IsPopUpRequired','@subitem.IsCommentRequired','@subitem.IsAuthenticationRequired','@subitem.ViewFieldId','@subitem.RoleNames','@subitem.WriteToPLCIPCMachineParameterId','@subitem.Value','1','@subitem.NodeId','@subitem.AttributeId')" class="btn btn-app btn-light btn-push @(subitem.Value=="1"? "pressed": "") @subitem.IsConveyerClass" id="@subitem.ViewFieldId">
+
+
+                    @if (subitem.Value == "0" || string.IsNullOrEmpty(subitem.Value) || subitem.Value == "False")
+                    {
+
+                        <i class="fa fa-circle" id="cplioff-@subitem.ViewFieldId"></i>
+
+                        <span id="cmspanbtimmomentary-@subitem.ViewFieldId" style="font-family:Roboto;width:20px;font-size:16px">
+                            @subitem.ParameterName
+
+                        </span>
+
+                    }
+                    else
+                    {
+
+                        <i class="fa fa-circle" id="cplioff-@subitem.ViewFieldId" style="display:none"></i>
+
+                        <span id="cmspanbtimmomentary-@subitem.ViewFieldId" style="font-family:Roboto;width:20px;font-size:16px">
+                            @subitem.ParameterName
+
+                        </span>
+                    }
+                </button>
+            }
+
+        }
+        else
+        {
+            if (subitem.Value == "1")
+            {
+                <button ViewStateMode="false" ParamValue="@subitem.Value" MachineType="@ViewBag.MachineType" type="button" @if (subitem.IsDisabled || (!subitem.IsModify)) { <text> disabled </text> } title="@subitem.ParameterName" onclick="ChangeCommandParamter(@subitem.MachineParameterId,'@subitem.ParameterName','@subitem.Type','@subitem.Value','@ViewBag.MachineType','@subitem.DateTypeId','@subitem.IsRefreshMachineSettings','@subitem.IsAuthorisedRole','@subitem.IsPopUpRequired','@subitem.IsCommentRequired','@subitem.IsAuthenticationRequired','@subitem.ViewFieldId','@subitem.RoleNames','@subitem.WriteToPLCIPCMachineParameterId','@subitem.Value','','@subitem.NodeId','@subitem.AttributeId')" class="btn btn-app btn-light @subitem.IsConveyerClass" id="@subitem.ViewFieldId">
+
+
+                    @if (subitem.Value == "0" || string.IsNullOrEmpty(subitem.Value) || subitem.Value == "False")
+                    {
+
+                        <i class="fa fa-play" id="cplioff-@subitem.ViewFieldId"></i>
+
+                        <span id="cmspanoff-@subitem.ViewFieldId" style="font-family:Roboto;width:20px;font-size:16px">
+                            @subitem.ParameterName
+
+                        </span>
+
+                        <div id="cpdivon-@subitem.ViewFieldId" class="sk-wave sk-wave-custom" style="display:none;">
+                            <div class="sk-rect sk-rect1"></div>
+                            <div class="sk-rect sk-rect2"></div>
+                            <div class="sk-rect sk-rect3"></div>
+                            <div class="sk-rect sk-rect4"></div>
+                            <div class="sk-rect sk-rect5"></div>
+                        </div>
+                        <span style="font-family:Roboto;width:20px;font-size:16px;display:none" id="cmspanon-@subitem.ViewFieldId">
+                            @subitem.ParameterName
+
+                        </span>
+
+
+                    }
+                    else
+                    {
+                        <div id="cpdivon-@subitem.ViewFieldId" class="sk-wave sk-wave-custom" style="">
+                            <div class="sk-rect sk-rect1"></div>
+                            <div class="sk-rect sk-rect2"></div>
+                            <div class="sk-rect sk-rect3"></div>
+                            <div class="sk-rect sk-rect4"></div>
+                            <div class="sk-rect sk-rect5"></div>
+                        </div>
+                        <span style="font-family:Roboto;width:20px;font-size:16px" id="cmspanon-@subitem.ViewFieldId">
+                            @subitem.ParameterName
+
+                        </span>
+
+                        <i class="fa fa-play" id="cplioff-@subitem.ViewFieldId" style="display:none"></i>
+                        <span id="cmspanoff-@subitem.ViewFieldId" style="font-family:Roboto;width:20px;font-size:16px;display:none">
+                            @subitem.ParameterName
+
+                        </span>
+
+                    }
+
+
+                </button>
+            }
+            else
+            {
+                <button ViewStateMode="false" ParamValue="@subitem.Value" MachineType="@ViewBag.MachineType" type="button" @if (subitem.IsDisabled || (!subitem.IsModify)) { <text> disabled </text> } title="@subitem.ParameterName" onclick="ChangeCommandParamter(@subitem.MachineParameterId,'@subitem.ParameterName','@subitem.Type','@subitem.Value','@ViewBag.MachineType','@subitem.DateTypeId','@subitem.IsRefreshMachineSettings','@subitem.IsAuthorisedRole','@subitem.IsPopUpRequired','@subitem.IsCommentRequired','@subitem.IsAuthenticationRequired','@subitem.ViewFieldId','@subitem.RoleNames','@subitem.WriteToPLCIPCMachineParameterId','@subitem.Value','','@subitem.NodeId','@subitem.AttributeId')" class="btn btn-app btn-light @subitem.IsConveyerClass" id="@subitem.ViewFieldId">
+
+
+                    @if (subitem.Value == "0" || string.IsNullOrEmpty(subitem.Value) || subitem.Value == "False")
+                    {
+
+                        <i class="fa fa-play" id="cplioff-@subitem.ViewFieldId"></i>
+                        <span style="font-family:Roboto;width:20px;font-size:16px" id="cmspanoff-@subitem.ViewFieldId">
+                            @subitem.ParameterName
+
+                        </span>
+
+
+                        <div id="cpdivon-@subitem.ViewFieldId" class="sk-wave sk-wave-custom" style="display:none;">
+                            <div class="sk-rect sk-rect1"></div>
+                            <div class="sk-rect sk-rect2"></div>
+                            <div class="sk-rect sk-rect3"></div>
+                            <div class="sk-rect sk-rect4"></div>
+                            <div class="sk-rect sk-rect5"></div>
+                        </div>
+                        <span style="font-family:Roboto;width:20px;font-size:16px;display:none" id="cmspanon-@subitem.ViewFieldId">
+                            @subitem.ParameterName
+
+                        </span>
+
+
+                    }
+                    else
+                    {
+                        <div id="cpdivon-@subitem.ViewFieldId" class="sk-wave sk-wave-custom" style="">
+                            <div class="sk-rect sk-rect1"></div>
+                            <div class="sk-rect sk-rect2"></div>
+                            <div class="sk-rect sk-rect3"></div>
+                            <div class="sk-rect sk-rect4"></div>
+                            <div class="sk-rect sk-rect5"></div>
+                        </div>
+                        <span style="font-family:Roboto;width:20px;font-size:16px" id="cmspanon-@subitem.ViewFieldId">
+                            @subitem.ParameterName
+
+                        </span>
+
+
+                        <i class="fa fa-play" id="cplioff-@subitem.ViewFieldId" style="display:none"></i>
+                        <span id="cmspanoff-@subitem.ViewFieldId" style="font-family:Roboto;width:20px;font-size:16px;display:none">
+                            @subitem.ParameterName
+
+                        </span>
+
+                    }
+                </button>
+            }
+        }
+
+
+
+    }
+</div>
+
+}
+    </div>
+
+    
+<script>
+
+    var CommandPanelOldValue = "";
+    var CommandPanelDefaultValue = "";
+    var SettingsPanelBitMomentaryInterval = "";
+    var nodeId, attributeId = "";
+    function ChangeCommandParamter(paraId, name, Mtype, GetValue, MachineType, DateTypeId, IsRefreshMachineSettings, IsAuthorisedRole, IsPopUpRequired, IsCommentRequired, IsAuthenticationRequired, ViewFieldId, RoleNames, GetWriteToPLCIPCMachineParameterId, OldValue,DefaultValue,NodeId,AttributeId)
+    {
+        debugger;
+        var CommandParamValue = $("#" + ViewFieldId).attr("ParamValue");
+        GetValue = CommandParamValue;
+        CommandPanelDefaultValue = DefaultValue;
+        CancelAjaxRequest = true;
+        RequestPanel = "Command Panel";
+        paraId1 = paraId;
+        name1 = name;
+        Mtype1 = Mtype;
+        GetValue1 = GetValue;
+        MachineType1 = MachineType;
+        DateTypeId1 = DateTypeId;
+        IsRefreshMachineSettings1 = IsRefreshMachineSettings;
+        ViewFieldId1 = ViewFieldId;
+        WriteToPLCIPCMachineParameterId = GetWriteToPLCIPCMachineParameterId;
+        CommandPanelOldValue = OldValue;
+        nodeId = NodeId;
+        attributeId = AttributeId;
+        if (IsPopUpRequired == "True" || IsCommentRequired == "True" || IsAuthenticationRequired == "True")
+        {
+
+           /* if (IsAuthenticationRequired == "True" && IsAuthorisedRole == "False") {        //MT 24-Sept-2019 - Commented as this check is not required here//if (IsAuthenticationRequired == "True" && IsAuthorisedRole == "False") {
+                swal("You are not authorise person");
+                return false;
+
+            }*/
+            if (IsPopUpRequired == "True") {
+
+                CommandPanelConirmationMsg("Are you Sure?", name, IsCommentRequired, IsAuthenticationRequired);
+
+            }
+            else
+            {
+                ClearControls_CommentAuthenticationModal();
+                if (IsCommentRequired == "True" && IsAuthenticationRequired == "True") {
+                    $("#lbl_RoleNamesCommentAuthenticationtModal").text(RoleNames)
+                    $("#divComment_CommentAuthenticationtModal").hide();
+                    return $("#Comment_AuthenticationtModal").modal('show');
+                }
+
+                if (IsCommentRequired == "True") {
+                    $("#divComment_CommentModal").hide();
+                    return $("#CommentModal").modal('show');
+                }
+                if (IsAuthenticationRequired == "True") {
+                    $("#lbl_RoleNamesAuthenticationtModal").text(RoleNames)
+                     return $("#AuthenticationtModal").modal('show');
+
+                 }
+            }
+            
+           
+
+        }
+        else
+        {
+            SendCommandPanelValue(paraId, name, Mtype, GetValue, MachineType, DateTypeId, IsRefreshMachineSettings, false, -2);
+        }
+    }
+
+    function SendCommandPanelValue(paraId, name, Mtype, GetValue, MachineType, DateTypeId, IsRefreshMachineSettings, CallPanel, AuthenticationId) {
+        debugger;
+       
+        var ValueParam = "0";
+        if (DateTypeId == "7") {
+            if (GetValue == "" || GetValue == "0" || GetValue == "False") {
+                ValueParam = "1";
+            }
+            else {
+                ValueParam = "0";
+            }
+        }
+        //else if (DateTypeId == "2") {
+        //    if (GetValue == "" || GetValue == "0" || GetValue == "False") {
+        //        ValueParam = "1";
+        //    }
+        //    else {
+        //        ValueParam = "1";
+        //    }
+        //}
+        //else if (DateTypeId == "4") {
+        //    if (GetValue == "" || GetValue == "0" || GetValue == "False") {
+        //        ValueParam = "1";
+        //    }
+        //    else {
+        //        ValueParam = "1";
+        //    }
+        //}
+        //else if (DateTypeId == "3") {
+        //    if (GetValue == "" || GetValue == "0" || GetValue == "False") {
+        //        ValueParam = "0";
+        //    }
+        //    else {
+        //        ValueParam = "0";
+        //    }
+        //}
+
+
+        // var machine = { "ParamterId": paraId, "Value": ValueParam };
+        debugger;
+        var parameter = "";
+        if (AuthenticationId == -1 || AuthenticationId == -2) {
+            parameter = {
+                "DefaultValue": CommandPanelDefaultValue,
+                "OldValue": CommandPanelOldValue,
+                "RequestPanel": RequestPanel,
+                "ParamterId": paraId, "Value": ValueParam, "Comments": AuthenticationId == -1 ? "IsPopUpRequired" : "", "WriteToPLCIPCMachineParameterId": WriteToPLCIPCMachineParameterId, "DataTypeId": DateTypeId,
+                "NodeId": nodeId, "AttributeId": attributeId
+            };
+        }
+        else {
+            parameter = {
+                "DefaultValue": CommandPanelDefaultValue,
+                "OldValue": CommandPanelOldValue,
+                "RequestPanel": RequestPanel,
+                "ParamterId": paraId, "Value": ValueParam, "AuthenticationId": AuthenticationId == 0 ? null : AuthenticationId,
+                "PickListValueId": CallPanel == true ? $("#ddlPickList_CommentModal :selected").val() : $("#ddlPickList_CommentAuthenticationtModal :selected").val(), "ModuleId": $("#hdnModuleId").val(), "Comments": CallPanel == true ? $("#txtComment_CommentModal").val() : $("#txtComment_CommentAuthenticationtModal").val(), "WriteToPLCIPCMachineParameterId": WriteToPLCIPCMachineParameterId, "DataTypeId": DateTypeId,          
+                     
+                "NodeId": nodeId, "AttributeId": attributeId
+
+            };
+        }
+
+       
+
+       // jQuery.support.cors = true;
+        $.ajax({
+
+            url: Q.resolveUrl('/RenderViewFieldsMachine/ChangeParameter'),
+            data: parameter,
+            type: 'POST',
+            async: true,
+            success: function (data) {
+                CancelAjaxRequest = false;
+                //  Q.notifySuccess(name + " Changed Successfully");
+                //if (IsRefreshMachineSettings == "1")
+                //{
+                //    fillview();
+                //}
+            },
+            error: function (x, y, z) {
+                alert(x + '\n' + y + '\n' + z);
+                CancelAjaxRequest = false;
+            }
+        });
+    }
+
+    function CommandPanelConirmationMsg(title, text, IsCommentRequired, IsAuthenticationRequired) {
+        debugger;
+        swal({
+            title: title,
+            text: text,
+            icon: "warning",
+            buttons: [
+                'No, cancel it!',
+                'Yes, I am sure!'
+            ],
+            dangerMode: true,
+        }).then(function (isConfirm) {
+            if (isConfirm)
+            {
+             
+                if (IsCommentRequired == "True" && IsAuthenticationRequired == "True") {
+                    $("#divComment_CommentAuthenticationtModal").hide();
+                    return $("#Comment_AuthenticationtModal").modal('show');
+                }
+                if (IsCommentRequired == "True") {
+                    $("#divComment_CommentModal").hide();
+                    return $("#CommentModal").modal('show');
+                }
+                if (IsAuthenticationRequired == "True") {
+                    return $("#AuthenticationtModal").modal('show');
+
+                }
+
+                SendCommandPanelValue(paraId1, name1, Mtype1, GetValue1, MachineType1, DateTypeId1, IsRefreshMachineSettings1, false,-1);
+
+            }
+           
+        });
+       
+    }
+
+    function CommandPanelBitMomentaryUp(paraId, name, Mtype, GetValue, MachineType, DateTypeId, IsRefreshMachineSettings, IsAuthorisedRole, IsPopUpRequired, IsCommentRequired, IsAuthenticationRequired, ViewFieldId, RoleNames, GetWriteToPLCIPCMachineParameterId, OldValue, DefaultValue, NodeId, AttributeId)
+    {
+        debugger;
+        nodeId = NodeId;
+        attributeId = AttributeId;
+        $("#" + ViewFieldId).removeClass("pressed");
+        clearInterval(SettingsPanelBitMomentaryInterval);
+        //ChangeCommandParamter(paraId, obj, name, IsAuthorisedRole, IsPopUpRequired, IsCommentRequired, IsAuthenticationRequired, ViewFieldId, GetWriteToPLCIPCMachineParameterId, OldValue, DefaultValue);
+        ChangeCommandParamter(paraId, name, Mtype, GetValue, MachineType, DateTypeId, IsRefreshMachineSettings, IsAuthorisedRole, IsPopUpRequired, IsCommentRequired, IsAuthenticationRequired, ViewFieldId, RoleNames, GetWriteToPLCIPCMachineParameterId, OldValue, DefaultValue, nodeId, attributeId);
+    }
+
+    function CommandPanelBitMomentaryDown(paraId, name, Mtype, GetValue, MachineType, DateTypeId, IsRefreshMachineSettings, IsAuthorisedRole, IsPopUpRequired, IsCommentRequired, IsAuthenticationRequired, ViewFieldId, RoleNames, GetWriteToPLCIPCMachineParameterId, OldValue, DefaultValue, NodeId, AttributeId)
+    {
+        debugger;
+        nodeId = NodeId;
+        attributeId = AttributeId;
+        $("#"+ViewFieldId).addClass("pressed");
+        //  SettingsPanelBitMomentaryInterval = setInterval(ChangeCommandParamter(paraId, obj, name, IsAuthorisedRole, IsPopUpRequired, IsCommentRequired, IsAuthenticationRequired, ViewFieldId, GetWriteToPLCIPCMachineParameterId, OldValue, DefaultValue), 1000);
+        SettingsPanelBitMomentaryInterval = setInterval(ChangeCommandParamter(paraId, name, Mtype, GetValue, MachineType, DateTypeId, IsRefreshMachineSettings, IsAuthorisedRole, IsPopUpRequired, IsCommentRequired, IsAuthenticationRequired, ViewFieldId, RoleNames, GetWriteToPLCIPCMachineParameterId, OldValue, DefaultValue, nodeId, attributeId), 1000);
+    }
+    
+        // var disableCommandPanel = isWriteTerminalType == true ? false : true;
+        // $("#divCommandPanelView").children().prop('disabled', disableCommandPanel);
+        var isWriteTerminalType = @Html.Raw(Json.Encode(Model.isWriteTerminalType));
+
+        if (isWriteTerminalType == false) {
+            $("#divCommandPanelView *").attr("disabled", "disabled").off('click');
+        }
+    
+
+</script>
+
+

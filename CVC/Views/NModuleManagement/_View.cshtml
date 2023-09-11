@@ -1,0 +1,380 @@
+﻿@model CVC.Modules.NModuleManagement.NModuleManagementViewModel
+
+<script>
+    $(document).ready(function () {
+        $('.data-table1').DataTable({
+            responsive: {
+                details: {
+                    type: 'column'
+                }
+            },
+            "language": {
+                "lengthMenu": "_MENU_ records per page",
+            },
+            columnDefs: [{ orderable: false, targets: [-1, -2] }]
+        });
+
+        $('.js-example-basic-single-view').select2();
+    });
+
+    document.getElementById('ViewsFormInfo_IsMachineSettings').addEventListener('change', checkFun);
+    document.getElementById('ViewsFormInfo_IsMachineSummary').addEventListener('change', checkFun);
+    document.getElementById('ViewsFormInfo_IslabelRoll').addEventListener('change', checkFun);
+    document.getElementById('ViewsFormInfo_IsCommandPanel').addEventListener('change', checkFun);
+    document.getElementById('ViewsFormInfo_IsFactorySetting').addEventListener('change', checkFun);
+
+    function checkFun(e) {
+        e.target.value = e.target.checked;
+    }
+
+    function clearViewForm() {
+        var validator = $("#ViewFormId").validate();
+        validator.resetForm();
+        $("#ViewsFormInfo_ViewsId").val(0);
+        $("#ViewsFormInfo_ViewName").val("");
+        $("#ViewsFormInfo_ModuleId").val($("#moduleId").val());
+        //$("#ViewsFormInfo_ModuleId").prop('readonly', false)
+        //$('#ViewsFormInfo_ModuleId').select2().select2("readonly", true);
+        $('#ViewsFormInfo_ModuleId').trigger('change');
+        $("#ViewsFormInfo_StatusId").val(1);
+        $('#ViewsFormInfo_StatusId').trigger('change');
+        $("#ViewsFormInfo_IsMachineSettings").val(false);
+        $("#ViewsFormInfo_IsMachineSettings").prop('checked', false);
+        $("#ViewsFormInfo_IsMachineSummary").val(false);
+        $("#ViewsFormInfo_IsMachineSummary").prop('checked', false);
+        $("#ViewsFormInfo_IslabelRoll").val(false);
+        $("#ViewsFormInfo_IslabelRoll").prop('checked', false);
+        $("#ViewsFormInfo_IsCommandPanel").val(false);
+        $("#ViewsFormInfo_IsCommandPanel").prop('checked', false);
+        $("#ViewsFormInfo_IsFactorySetting").val(false);
+        $("#ViewsFormInfo_IsFactorySetting").prop('checked', false);
+    }
+
+    function setSelectedView(id) {
+      //  alert("selected");
+        var validator = $("#ViewFormId").validate();
+        validator.resetForm();
+        $.ajax({
+            type: "GET",
+            url: "/NModuleManagement/Module/getSelectedView?id=" + id,
+            //data: JSON.stringify(id),
+            dataType: "json",
+            //contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                $("#ViewsFormInfo_ViewsId").val(data.ViewsId);
+                $("#ViewsFormInfo_ViewName").val(data.ViewName);
+                $("#ViewsFormInfo_ModuleId").val(data.ModuleId);
+                $('#ViewsFormInfo_ModuleId').trigger('change');
+                //$("#ViewsFormInfo_ModuleId").prop('readonly', false)
+                //$('#ViewsFormInfo_ModuleId').select2().select2("readonly", true);
+                $("#ViewsFormInfo_StatusId").val(data.StatusId);
+                $('#ViewsFormInfo_StatusId').trigger('change');
+                $("#ViewsFormInfo_IsMachineSettings").val(data.IsMachineSettings);
+                $("#ViewsFormInfo_IsMachineSettings").prop('checked', data.IsMachineSettings);
+                $("#ViewsFormInfo_IsMachineSummary").val(data.IsMachineSummary);
+                $("#ViewsFormInfo_IsMachineSummary").prop('checked', data.IsMachineSummary);
+                $("#ViewsFormInfo_IslabelRoll").val(data.IslabelRoll);
+                $("#ViewsFormInfo_IslabelRoll").prop('checked', data.IslabelRoll);
+                $("#ViewsFormInfo_IsCommandPanel").val(data.IsCommandPanel);
+                $("#ViewsFormInfo_IsCommandPanel").prop('checked', data.IsCommandPanel);
+                $("#ViewsFormInfo_IsFactorySetting").val(data.IsFactorySetting);
+                $("#ViewsFormInfo_IsFactorySetting").prop('checked', data.IsFactorySetting);
+               // $('#ViewsFormInfo_ModuleId').attr('disabled','disabled');
+
+                $("#myView").modal('show');
+            },
+            error: function () {
+                alert("Error occured!!")
+            }
+        });
+    }
+
+    function deleteSelectedView(id) {
+        $.ajax({
+            type: "DELETE",
+            url: "/NModuleManagement/Module/DeleteView?id=" + id,
+            dataType: "json",
+            success: function (response) {
+                if (response == true) {
+                    getPartaiViewsBasedOnModuleId($("#moduleId").val(), $("#machineId").val());
+                    //$("#viewDIV").html("");
+                    //$("#viewfieldDIV").html("");
+                }
+            },
+            error: function () {
+                alert("Error occured!!")
+            }
+        });
+    }
+
+    function addEditView() {
+        if ($("#ViewFormId").valid()) {
+            $.ajax({
+                type: "POST",
+                url: "/NModuleManagement/Module/PostViewForm",
+                data: $("#ViewFormId").serialize(),
+                dataType: "html",
+                success: function (response) {
+                    $("#myView").modal('hide');
+                    setTimeout(() => {
+                        $("#viewDIV").html(response);
+                    }, 1000)
+
+                },
+                error: function () {
+                    alert("Error occured!!")
+                }
+            });
+        }
+    }
+
+    function resetViewForm() {
+        //$("#ViewFormId").formReset();
+    }
+
+    function getPartailViewsBasedOnViewId(id) {
+        $.ajax({
+            type: "POST",
+            url: "/NModuleManagement/Module/getPartailViewsBasedOnViewId?moduleId=" + $("#moduleId").val() + "&viewId=" + id + "&machineId=" + $("#machineId").val(),
+            dataType: "html",
+            success: function (response) {
+                $("#viewfieldDIV").html(response);
+                resetArrow();
+            },
+            error: function () {
+                alert("Error occured!!")
+            }
+        });
+    }
+
+    function deleteConfirmSelectedView(id) {
+        $.ajax({
+            type: "GET",
+            url: "/NModuleManagement/Module/checkViewInViewField?id=" + id,
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                if (data == false) {
+                    var confirmDelete = confirm("Do you really want to delete this record?");
+                    if (confirmDelete) {
+                        deleteSelectedView(id);
+                    }
+                    else {
+                        return false;
+                    }
+                }
+                else {
+                    alert("Please delete Views detail from View Field");
+                }
+            },
+            error: function () {
+                alert("Error occured!!")
+            }
+        });
+    }
+
+    function isFieldExist(param1, param2) {
+        $.ajax({
+            type: "GET",
+            url: "/Common/IsFieldExist",
+            dataType: "json",
+            data: { "param1": param1, "param2": param2, "param3":$("#ViewsFormInfo_ViewsId").val() },
+            success: function (response) {
+               
+
+                if (response) {
+                    $("#infoModalBody").text(param1 + " already exist for selected machine");
+                    $("#modal-info").modal('show');
+                    $('.clsSinglCheck').prop('checked', false);
+
+                }
+               
+
+            },
+            error: function () {
+                alert("Error occured!!")
+            }
+        });
+    }
+
+    $('.clsSinglCheck').click(function () {
+        debugger;
+        $('.clsSinglCheck').not(this).prop('checked', false);
+
+        debugger;
+        var getId = $(this).attr("id").split("_")[1];
+
+        if ($(this).prop("checked") == true) {
+            isFieldExist(getId, $("#ViewsFormInfo_ModuleId")[0].value)
+        }
+       
+    });
+
+    $("#ViewsFormInfo_ModuleId").change(function () {
+        if ($(this)[0].value != "") {
+            $('.clsSinglCheck').prop('checked', false);
+
+            $("#divViewFormCheckBox").attr("style", "display:block;margin-top:25px;margin-left:7px;");
+        }
+        else {
+            $("#divViewFormCheckBox").attr("style", "display:none;margin-top:25px;margin-left:7px;");
+        }
+    });
+
+
+
+</script>
+
+<hr />
+<h3 class="heading-title">View List</h3>
+<br />
+<button type="button" class="btn btn-primary" data-toggle="modal" onclick="javascript: clearViewForm();" data-target="#myView">New View</button>
+<br />
+<br />
+@using (Html.BeginForm("DeleteView", "NModuleManagement", FormMethod.Post, new { id = "ViewListRecords" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="table-sec">
+        <table class="display data-table1" cellspacing="0" width="100%" border="1" cellpadding="0" style="border-collapse:collapse;" bordercolor="#e7eaec">
+            <thead>
+                <tr>
+                    <th align="left">
+                        <label>ID</label>
+                    </th>
+                    @*<th align="left">
+                            <label>Module Module Name</label>
+                        </th>*@
+                    <th align="left">
+                        <label>View Name</label>
+                    </th>
+                    <th align="left">
+                        <label>Status Status Name</label>
+                    </th>
+                    <th>
+                        Actions
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.ViewsColumnsList.Any() && Model.ViewsColumnsList[0] != null)
+                {
+                    foreach (var item in Model.ViewsColumnsList)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ViewsId)
+                            </td>
+                            @*<td>
+                                    @Html.DisplayFor(modelItem => item.ModuleModuleName)
+                                </td>*@
+                            <td>
+                                <a href="javascript:void(0);" onclick="getPartailViewsBasedOnViewId(@item.ViewsId);">@Html.DisplayFor(modelItem => item.ViewName)</a>
+
+
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.StatusStatusName)
+                            </td>
+                            <td align="center">
+                                <span onclick="javascript: setSelectedView(@item.ViewsId)" class="glyphicon glyphicon-pencil" aria-hidden="true"></span>@*|*@
+                                @*<span onclick="javascript: deleteConfirmSelectedView(@item.ViewsId)" class="glyphicon glyphicon-trash" aria-hidden="true"></span>*@
+
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+
+@using (Html.BeginForm("PostViewForm", "NModuleManagement", FormMethod.Post, new { id = "ViewFormId" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="myView">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" onclick="resetViewForm()" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title" id="myLargeModalLabel">View</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">
+                                <sup class="mandatory-lable">*</sup>
+                                View Name:
+                            </label>
+                            @Html.HiddenFor(m => m.ViewsFormInfo.ViewsId)
+                            @Html.TextBoxFor(m => m.ViewsFormInfo.ViewName, new { @class = "form-control", placeholder = "Enter View Name", required = true, @maxlength = "50" })
+                            @*@Html.ValidationMessageFor(model => model.ViewsFormInfo.ViewName, "View Name is required.", new { @class = "error" })*@
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">
+                                <sup class="mandatory-lable">*</sup>
+                                Module:
+                            </label>
+                            @*@Html.HiddenFor(m=>m.ViewsFormInfo.ModuleId)*@
+                            @Html.DropDownListFor(m => m.ViewsFormInfo.ModuleId, new SelectList(Model.ModuleColumnsList, "ModuleId", "ModuleName"), "-- Select --", new { @class = "form-control js-example-basic-single-view", required = true })
+                            @*@Html.ValidationMessageFor(model => model.ViewsFormInfo.ModuleId, "Module Name is required.", new { @class = "error" })*@
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">
+                                <sup class="mandatory-lable">*</sup>
+                                Status:
+                            </label>
+                            @Html.DropDownListFor(m => m.ViewsFormInfo.StatusId, new SelectList(Model.StatusInfoList, "StatusId", "StatusName"), new { @class = "form-control js-example-basic-single-view", required = true })
+                        </div>
+                        <div class="row" id="divViewFormCheckBox" style="margin-top:25px;margin-left:7px;display:none;">
+                            <div class="form-group">
+                                <label for="recipient-name" class="control-label">
+                                    Is Machine Settings:
+                                </label>
+                                @Html.CheckBoxFor(m => m.ViewsFormInfo.IsMachineSettings, new { @class = "clsSinglCheck" })
+                            </div>
+                            <div class="form-group">
+                                <label for="recipient-name" class="control-label">
+                                    Is Machine Summary:
+                                </label>
+                                @Html.CheckBoxFor(m => m.ViewsFormInfo.IsMachineSummary, new { @class = "clsSinglCheck" })
+                            </div>
+                            <div class="form-group">
+                                <label for="recipient-name" class="control-label">
+                                    Is label Roll:
+                                </label>
+                                @Html.CheckBoxFor(m => m.ViewsFormInfo.IslabelRoll, new { @class = "clsSinglCheck" })
+                            </div>
+                            <div class="form-group">
+                                <label for="recipient-name" class="control-label">
+                                    Is Command Panel:
+                                </label>
+                                @Html.CheckBoxFor(m => m.ViewsFormInfo.IsCommandPanel, new { @class = "clsSinglCheck", commandPanelView = Model?.ViewsFormInfo?.IsCommandPanel })
+                            </div>
+                            <div class="form-group">
+                                <label for="recipient-name" class="control-label">
+                                    Is Factory Setting:
+                                </label>
+                                @Html.CheckBoxFor(m => m.ViewsFormInfo.IsFactorySetting, new { @class = "clsSinglCheck" })
+
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" onclick="resetViewForm()" data-dismiss="modal">Close</button>
+                    <button type="button" onclick="addEditView()" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+        $('.clsSinglCheck').click(function () {
+            $('.clsSinglCheck').not(this).prop('checked', false);
+        });
+</script>

@@ -1,0 +1,74 @@
+﻿@model CVC.ViewModels.RenderViewFieldsPageModel
+
+@{
+    Layout = null;
+}
+@*@{ var module = new CVC.Modules.Common.Dashboard.DashboardCommon().GetModule(Model.ModuleId.ToString()); }*@
+@if (Model.ViewId > 0)
+{
+
+
+    <div id="divLabelRoll" class="">
+        <div class="box" style="border-top:0 !important;">
+
+
+            <div class="box-body">
+
+
+               
+
+                <div class="row">
+
+                    <div class="col-lg-12">
+                        @if (new CVC.Modules.Common.Dashboard.DashboardCommon().GetBatchForLebelRoll() != null)
+                        {
+                        <div id="GridDiv"></div>
+
+
+                        }
+                        @*@if (Model.IsLabelRoll == true)
+        {
+            if (new CVC.Modules.Common.Dashboard.DashboardCommon().GetBatchForLebelRoll() != null)
+            {
+
+
+
+            }
+        }*@
+
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script>
+   
+
+    $(document).ready(function () {
+   
+
+        if ($("#GridDiv").length > 0) {
+           
+            //  if ("#CVC_Batch_LabelRollGrid" == undefined) {
+          
+                var LabelRollGrid = new CVC.Batch.LabelRollGrid($('#GridDiv'), {}).init();
+                Q.initFullHeightGridPage($('#GridDiv'));
+           // }
+           //  Commented  on 19 Oct 2018 11.27 am end region
+        }
+        if (isModifyLabelRoll == false) {
+           // $("#divLabelRoll *").attr("disabled", "disabled").off('click');
+
+        }
+
+
+    });
+
+
+</script>
+
+

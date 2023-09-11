@@ -1,0 +1,214 @@
+﻿
+@model CVC.ViewModels.MessageMasterViewModel
+
+@{
+    ViewBag.Title = "Message Master";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Message Master</title>
+</head>
+<body>
+    <div class="container-fluid">
+
+        <div class="dataTable-wrapper" style="width:100%; margin:0 auto;">
+            <div class="row BtnUpdateRow" style="padding-left:15px">
+                <button type="button" id="btnNewMessage" class="btn btn-primary">New Message</button>
+            </div>
+            <div id="divMessageList"></div>
+        </div>
+    </div>
+
+    <ul class="nav nav-tabs" role="tablist" id="messageTab">
+        <li role="presentation" class="active" id="liFirst"><a href="#first" aria-controls="first" role="tab" data-toggle="tab">Details</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="row BtnUpdateRow" style="padding-left:15px">
+            <button type="button" onclick="UpdateMessage();" id="btnUpdateMessage" class="btn btn-primary">Update</button>
+        </div>
+        <div class="machine-tab-links">
+            <a href="">General</a>
+            <a href="">Status</a>
+        </div>
+        <form class="edit-machine-form">
+
+            <div class="edit-machine-title">
+                <h6>General</h6>
+            </div>
+            <div class="row">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="IsWrite"><label style="color:red">*</label>Message Type</label>
+
+                            @Html.DropDownListFor(m => Model.PickListValueId, new SelectList(ViewBag.MessageTypeList, "PickListValueId", "PickListValueName"), new { @id = "UpdatePickListValueId", @class = "form-control js-example-basic-single-view-field" })
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="TerminalTypeName"><label style="color:red">*</label>Message</label>
+                        @Html.HiddenFor(m => Model.MessageMasterId, new { @id = "hdnMessageMasterId" })
+                        @Html.TextAreaFor(m => Model.MessageText, new { @class = "form-control",@id="UpdateMessageText" })
+
+                    </div>
+                </div>
+
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="Description"><label style="color:red">*</label>Description</label>
+                        @Html.TextAreaFor(m => Model.MessageDescription, new { @class = "form-control",@id= "UpdateMessageDescription" })
+
+                    </div>
+                </div>
+
+            <div class="edit-machine-title">
+                <h6>Status</h6>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="Status"><label style="color:red">*</label>Status</label>
+                        <select id="ddlUpdateStatus" class="form-control">
+                            <option value="1">Active</option>
+                            <option value="2">In-Active</option>
+
+                        </select>
+
+                    </div>
+                </div>
+
+
+            </div>
+        </form>
+
+    </div>
+</body>
+</html>
+
+@Html.Partial("~/Views/MessageMaster/NewMessage_PartialView.cshtml")
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        GetAllMessage();
+    });
+
+
+    $("#btnNewMessage").click(function () {
+        ClearControls();
+        $("#newMessageModalPopUp").modal('show');
+    })
+
+    function ClearControls() {
+        $("#MessageText").val("");
+        $("#MessageDescription").val("");
+        $('#ddlStatus').val("1");
+        $("#PickListValueId").val($("#PickListValueId option:first").val());
+    }
+
+    function SaveMessage() {
+        if (Validation("Save") == true) {
+           
+            $.ajax({
+                url: Q.resolveUrl('/MessageMaster/CreateMessageMaster'),
+                type: 'POST',
+                data: {
+                    "MessageText": $("#MessageText").val(), "MessageDescription": $.trim($("#MessageDescription").val()), "PickListValueId": $("#PickListValueId option:selected").val(), "IsActive": $("#ddlStatus option:selected").val() == 1 ? true : false
+                },
+
+                success: function (response) {
+                    if (response.status == true) {
+                        $("#newMessageModalPopUp").modal('hide');
+                        GetAllMessage();
+                    }
+
+                },
+                error: function (x, y, z) {
+
+                }
+            });
+        }
+    }
+
+    function UpdateMessage() {
+        debugger;
+        if (Validation("Update") == true) {
+            $.ajax({
+                url: Q.resolveUrl('/MessageMaster/UpdateMessageMaster'),
+                type: 'POST',
+                data: {
+                    "MessageMasterId": $("#hdnMessageMasterId").val(), "MessageText": $("#UpdateMessageText").val(), "MessageDescription": $.trim($("#UpdateMessageDescription").val()), "PickListValueId": $("#UpdatePickListValueId option:selected").val(), "IsActive": $("#ddlUpdateStatus option:selected").val() == 1 ? true : false
+                },
+                success: function (response) {
+                    alert(response.message);
+                    if (response.status == true) {
+                        GetAllMessage();
+                    }
+
+                },
+                error: function (x, y, z) {
+
+                }
+            });
+        }
+    }
+
+    function GetAllMessage() {
+        $.ajax({
+            url: Q.resolveUrl('/MessageMaster/GetAllMessageMaster'),
+            type: 'GET',
+            success: function (response) {
+                $("#divMessageList").html(response);
+            },
+            error: function (x, y, z) {
+
+            }
+        });
+    }
+
+    function GetMessageDetails(MessageId) {
+        $.ajax({
+            url: Q.resolveUrl('/MessageMaster/GetByIdMessageMaster'),
+            type: 'GET',
+            data: { "MessageMasterId": MessageId },
+            success: function (response) {
+                console.log(response);
+                $("#hdnMessageMasterId").val(response.MessageMasterId);
+                $("#UpdateMessageText").val(response.MessageText);
+                $("#UpdateMessageDescription").val(response.MessageDescription);
+                $("#UpdatePickListValueId").val(response.PickListValueId);
+                $("#ddlUpdateStatus").val(response.IsActive == true ? "1" : "2");
+            },
+            error: function (x, y, z) {
+
+            }
+        });
+    }
+
+    function Validation(actionType) {
+        if (actionType == "Save") {
+            if ($("#MessageText").val().trim() == "") {
+                alert("* marks fields are mandatory");
+                return false;
+            }
+            return true;
+        }
+        else {
+            if ($("#UpdateMessageText").val().trim() == "") {
+                alert("* marks fields are mandatory");
+                return false;
+            }
+            return true;
+        }
+    }
+
+</script>

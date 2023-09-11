@@ -1,0 +1,18 @@
+﻿@{
+    ViewData["Title"] = Serenity.LocalText.Get("Db.Batch.LabelRoll.EntityPlural");
+}
+
+<div id="GridDiv"></div>
+
+<script type="text/javascript">
+   // if ("#CVC_Batch_LabelRollGrid" == undefined) {
+    // Commented  on 19 Oct 2018 11.27 am start region
+        jQuery(function () {
+            new CVC.Batch.LabelRollGrid($('#GridDiv'), {}).init();
+
+            Q.initFullHeightGridPage($('#GridDiv'));
+        });
+     //  Commented  on 19 Oct 2018 11.27 am end region
+
+    //}
+</script>

@@ -1,0 +1,725 @@
+﻿@model CVC.Common.DashboardPageModel
+@{
+    ViewData["Title"] = "Dashboard";
+    ViewData["PageId"] = "Dashboard";
+}
+
+@section Head {
+    @Html.StyleBundle("Pages/Dashboard")
+    @Html.ScriptBundle("Pages/Dashboard")
+}
+
+@section ContentHeader {
+    @*<div class="row">*@
+    @*<div class="col-lg-5"><div style="padding-top:10px;font-size:20px;">Line 1</div></div>*@
+    @*<div class="col-lg-7" style="padding-top:10px;">
+        <div class="pull-right">*@
+    @*<a class="btn icon-btn btn-default" href="#">
+            <span class="glyphicon btn-glyphicon glyphicon-save img-circle text-muted"></span> <!-- defining icon -->
+            Download <!-- defining text -->
+        </a>
+
+        <a class="btn icon-btn btn-muted" href="#">
+            <span class="glyphicon btn-glyphicon glyphicon-remove-circle img-circle text-muted"></span>
+            Unavailable
+        </a>
+
+        <a class="btn icon-btn btn-primary" href="#">
+            <span class="glyphicon btn-glyphicon glyphicon-thumbs-up img-circle text-primary"></span>
+            Like
+        </a>
+
+        <a class="btn icon-btn btn-success" href="#">
+            <span class="glyphicon btn-glyphicon glyphicon-plus img-circle text-success"></span>
+            Add
+        </a>*@
+
+    @*<div class="row">*@
+    @*<div class="col-lg-4 col-xs-8" style="padding-right: 5px;padding-left: 5px;">
+
+            <a class="btn btn-app" href="javascript:void(0)" id="btnNewBatch">
+                <i class="fa fa-plus fa-5x" style="color:white;"></i> New Batch
+            </a>
+        </div>
+        <div class="col-lg-4 col-xs-8" style="padding-right: 5px;padding-left: 5px;">
+            <a class="btn btn-app">
+                <i class="fa fa-play fa-5x" style="color:white;"></i> Start Batch
+            </a>
+        </div>*@
+
+    @*<a class="btn icon-btn btn-warning" href="#">
+            <span class="glyphicon btn-glyphicon glyphicon-minus img-circle text-warning"></span>
+            Remove
+        </a>
+
+        <a class="btn icon-btn btn-danger" href="#">
+            <span class="glyphicon btn-glyphicon glyphicon-trash img-circle text-danger"></span>
+            Delete
+        </a>*@
+    @*</div>
+        </div>*@
+    @*</div>*@
+
+}
+
+<!-- Small boxes (Stat box) -->
+<!-- Small boxes (Stat box) -->
+<div class="row" style="padding:0px;margin-top:20px;margin-left:0px;margin-right:0px;">
+    <div class="row tile_count">
+        <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+            <span class="count_top"><i class="fa fa-cubes"></i> Package Line</span>
+            <div class="count" id="lblPackageLine"></div>
+            <span class="count_top"><i class="fa fa-cube"></i> Pack</span>
+            <div class="count" id="lblPack"></div>
+        </div>
+        <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+            <span class="count_top"><i class="fa fa-cubes"></i> Batch</span>
+            <div class="count" id="lblBatch"></div>
+            <span class="count_top"><i class="fa fa-clock-o"></i> Start Date</span>
+            <div class="count" id="lblStartDate"></div>
+        </div>
+        <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+            <span class="count_top"><i class="fa fa-shopping-cart"></i> Product</span>
+            <div class="count" id="lblProduct"></div>
+            <span class="count_top"><i class="fa fa-clock-o"></i> End Date</span>
+            <div class="count" id="lblEndDate"></div>
+        </div>
+        <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+            <span class="count_top"><i class="fa fa-clock-o"></i> Total Bottles1</span>
+            <div class="count" id="lblTotalBottles"></div>
+            <span class="count_top"><i class="fa fa-hourglass"></i> Production Speed</span>
+            <div class="count" id="lblProductionSpeed"></div>
+        </div>
+
+        <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+            <span class="count_top"><i class="fa fa-check"></i> Total Good</span>
+            <div class="count" id="lblTotalCood"></div>
+            <span class="count_top"><i class="fa fa-ban"></i> Total Reject</span>
+            <div class="count" id="lblTotalReject"></div>
+        </div>
+        <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+            <div class="row">
+                <div class="col-md-10 col-sm-10 col-xs-10 pull-right">
+                    <a href="javascript:void(0)" id="btnNewBatch">
+                        <div class="info-box bg-aqua">
+                            <span class="info-box-icon"><i class="fa fa-plus-circle fa-2x"></i></span>
+                            <div class="info-box-content">
+                                New Batch
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-10 col-sm-10 col-xs-10 pull-right">
+                    <a href="javascript:void(0)" id="btnStartBatch">
+                        <div class="info-box bg-aqua">
+                            <span class="info-box-icon"><i class="fa fa-play-circle fa-2x"></i></span>
+                            <div class="info-box-content">
+                                Start Batch nor
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Main row -->
+<div class="row">
+    <div class="col-md-12">
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+
+        @*<div class="containerdiv">*@
+        
+        <div class="tagONOFFLabeling" style="height:40px;width:200px;"><a href="@Url.Content("LabelingMachine")">
+    <div class="tag">Labeling Machine</div>
+</a></div>
+        <img src="~/Content/site/images/CVCMACHINELINE-LARGE.png" />
+        @*</div>*@
+    </div>
+
+</div>
+@*</div>
+            </div>
+        </div>
+
+    </div>*@
+@*<div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+            <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">Labeling Machine</span>
+                <span class="info-box-number"></span>
+            </div><!-- /.info-box-content -->
+        </div><!-- /.info-box -->
+    </div>
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+            <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">Outserter Machine</span>
+                <span class="info-box-number"></span>
+            </div><!-- /.info-box-content -->
+        </div><!-- /.info-box -->
+    </div>*@
+@*<div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+            <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">CPU Traffic</span>
+                <span class="info-box-number">90<small>%</small></span>
+            </div><!-- /.info-box-content -->
+        </div><!-- /.info-box -->
+    </div>*@
+    @*</div>*@
+
+@section Scripts
+{
+    <script>
+        $(function () {
+
+            var MachineLineId=1;
+            var MachineId;
+            function GetPackageLineDetails() {
+                $.ajax({
+                    async: false,
+                    type: "POST",
+                    url: Q.resolveUrl('~/api/Batch/PackageLineDetails'),
+                    //data: '{}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.LineName != "") {
+                            //var PackageDetails = jQuery.parseJSON(response);
+                            $("#lblPackageLine").html(response.LineName);
+                            MachineLineId = response.MachineLineId;
+                            $.session.set("PackageLineId", MachineLineId);
+                        }
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            }
+            function GetLabelingMachineDetails() {
+                $.ajax({
+                    async: false,
+                    type: "POST",
+                    url: Q.resolveUrl('~/api/Batch/MachineDetails'),
+                    data: '{}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.MachineId > 0) {
+                            //var MachineDetails = jQuery.parseJSON(response);
+                            MachineId = response.MachineId;
+                            $.session.set("MachineId", MachineId);
+                            $.session.set("MachineName", response.MachineName);
+                        }
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            }
+
+
+            //var ddlPacks = $("#ddlPack");
+            //ddlPacks.empty().append('<option selected="selected" value="0" disabled = "disabled">Loading.....</option>');
+            //$.ajax({
+            //    type: "POST",
+            //    url: Q.resolveUrl('~/api/Batch/PackList'),
+            //    data: '{}',
+            //    contentType: "application/json; charset=utf-8",
+            //    dataType: "json",
+            //    success: function (response) {
+            //        ddlPacks.empty().append('<option selected="selected" value="0">Please select</option>');
+            //        $.each(response, function () {
+            //            ddlPacks.append($("<option></option>").html(this['PackId']).html(this['PackName']));
+            //        });
+            //    },
+            //    failure: function (response) {
+            //        alert(response.responseText);
+            //    },
+            //    error: function (response) {
+            //        alert(response.responseText);
+            //    }
+            //});
+
+            var counterOnOff = 0;
+            //var myVar;
+            //myVar = setInterhtml(GetBatchParameter, 500);
+
+            $('#btnSaveBatch').click(function () {
+                var BatchDetails = { "BatchName": $("#txtBatchName").html(), "ProductId": $('#ddlProduct :selected').html(), "PackId": $('#ddlPack :selected').html(), "MachineLineId": 1 };
+
+                //var batchStringify = JSON.stringify(BatchDetails);
+                //var batchArray = JSON.parse(batchStringify);
+
+                $.ajax({
+                    type: "POST",
+                    url: Q.resolveUrl('~/api/Batch/SaveBatch'),
+                    data: JSON.stringify(BatchDetails),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        $("#modalBatch .close").click()
+                        GetBatchetails();
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            });
+
+            $('#btnStartBatch').click(function () {
+                counterOnOff = 1;
+                //CounterOnOffNew = "True";
+                //CounterOnOff(CounterOnOffNew);
+                myVar = setInterval(GetBatchParameter, 500);
+            });
+
+            $('#btnStopBatch').click(function () {
+                counterOnOff = 0;
+                CounterOnOffNew = "False";
+                CounterOnOff(CounterOnOffNew);
+                clearInterval(myVar);
+            });
+
+            function GetBatchDetails() {
+                var machine = {"MachineLineId": MachineLineId};
+                $.ajax({
+                    type: "POST",
+                    url: Q.resolveUrl('~/api/Batch/BatchDetails'),
+                    data: JSON.stringify(machine),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        if (response != null) {
+                            if (response.BatchId > 0) {
+                                //var BatchDetails = jQuery.parseJSON(response);
+                                $("#lblBatch").html(response.BatchName);
+                                $("#lblPack").html(response.Pack.PackName);
+                                $("#lblProduct").html(response.Pack.TabletDetail.TabletName);
+                                if (response.BatchStartDateTime != null) {
+                                    $("#lblStartDate").html(response.BatchStartDateTime);
+                                    if (response.BatchEndDateTime != null) {
+                                        $("#lblEndDate").html(response.BatchEndDateTime);
+
+                                    }
+                                    else {
+                                        $("#lblEndDate").html("Batch Running");
+                                    }
+                                }
+                                else {
+                                    $("#lblStartDate").html("Batch Not Started");
+                                    $("#lblEndDate").html("Batch Not Started");
+                                }
+                                $("#lblTotalBottles").html(response.NumberOfBottles);
+                                if (response.ProductionSpeed != "") {
+                                    $("#lblProductionSpeed").html(response.ProductionSpeed);
+                                }
+                                else {
+                                    $("#lblProductionSpeed").html("0 m/sec");
+                                }
+                                $("#lblTotalCood").html(response.TotalGoodBottles);
+                                $("#lblTotalReject").html(response.TotalRejectedBottles);
+                            }
+                            else {
+                                $("#lblBatch").html("No Batch Found");
+                                $("#lblPack").html("No Pack Found");
+                                $("#lblProduct").html("No Product Found");
+                                $("#lblStartDate").html("No Record Found");
+                                $("#lblEndDate").html("No Record Found");
+                                $("#lblTotalBottles").html("0");
+                                $("#lblProductionSpeed").html("0");
+                                $("#lblTotalCood").html("0");
+                                $("#lblTotalReject").html("0");
+                            }
+                        }
+                        else {
+                            $("#lblBatch").html("No Batch Found");
+                            $("#lblPack").html("No Pack Found");
+                            $("#lblProduct").html("No Product Found");
+                            $("#lblStartDate").html("No Record Found");
+                            $("#lblEndDate").html("No Record Found");
+                            $("#lblTotalBottles").html("0");
+                            $("#lblProductionSpeed").html("0");
+                            $("#lblTotalCood").html("0");
+                            $("#lblTotalReject").html("0");
+                        }
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            }
+
+            //GetBatchParameter();
+
+            function GetBatchParameter() {
+                var machine = '{MachineId:2}';
+
+                jQuery.support.cors = true;
+                $.ajax({
+                    url: Q.resolveUrl('~/api/PLCToHMI/BatchParameter'),
+                    data: machine,
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function (settingsParameter) {
+                        //WriteResponse(data);
+                        //alert(data);
+                        var settingsStringify = JSON.stringify(settingsParameter);
+                        var settingsArray = JSON.parse(settingsStringify);
+                        var settingsLength = settingsArray.length;
+
+                        //alert(settingsLength);
+                        if (settingsLength.length > 0) {
+
+                            $("#lblProductionSpeed").html(settingsArray[0].ParameterValue);
+                            //$("#lblTotalGood").html(settingsArray[4].ParameterValue);
+                            //$("#lblTotalReject").html(settingsArray[6].ParameterValue);
+                            $("#lblTotalBottle").html(settingsArray[1].ParameterValue);
+                            //$("#lblLabelLength").html(settingsArray[8].ParameterValue);
+                            //$("#lblBottleDiameter").html(settingsArray[12].ParameterValue);
+
+                        }
+                        //for (var j = 0; j < settingsLength; j++) {
+                        //clearInterhtml(myVar);
+                        //}
+                    },
+                    error: function (x, y, z) {
+                        alert(x + '\n' + y + '\n' + z);
+                    }
+                });
+            }
+
+            function CounterOnOff(OnOrOff) {
+                //var OnOrOff = "True";
+                //if ($("#btnStart").css("background-color") == "rgb(255, 0, 0)") {
+                //    OnOrOff = "False";
+                //}
+                var machine = { "MachineId": 2, "OnOrOff": OnOrOff };
+                jQuery.support.cors = true;
+                $.ajax({
+                    url: Q.resolveUrl('~/api/PLCToHMI/OnCounterForContinuousRun'),
+                    data: machine,
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function (data) {
+                        //WriteResponse(data);
+                        //alert(data);
+                        //if (data == "True") {
+                        //    $("#btnStart").css("background-color", "red");
+                        //    $("#btnStart").html("<span class='glyphicon btn-glyphicon glyphicon-pause img-circle text-info'></span>Stop Machine");
+
+                        //}
+                        //else {
+                        //    $("#btnStart").css("background-color", "green");
+                        //    $("#btnStart").html("<span class='glyphicon btn-glyphicon glyphicon-off img-circle text-info'></span>Start Machine");
+                        //}
+                    },
+                    error: function (x, y, z) {
+                        alert(x + '\n' + y + '\n' + z);
+                    }
+                });
+            }
+
+            GetPackageLineDetails();
+            GetLabelingMachineDetails();
+            GetBatchDetails();
+        });
+
+        //$(document).ready(function () {
+
+        //    var navListItems = $('div.setup-panel div a'),
+        //        allWells = $('.setup-content'),
+        //        allNextBtn = $('.nextBtn');
+
+        //    allWells.hide();
+
+        //    navListItems.click(function (e) {
+        //        e.preventDefault();
+        //        var $target = $($(this).attr('href')),
+        //            $item = $(this);
+
+        //        if (!$item.hasClass('disabled')) {
+        //            navListItems.removeClass('btn-primary').addClass('btn-default');
+        //            $item.addClass('btn-primary');
+        //            allWells.hide();
+        //            $target.show();
+        //            $target.find('input:eq(0)').focus();
+        //        }
+        //    });
+
+        //    allNextBtn.click(function () {
+        //        var curStep = $(this).closest(".setup-content"),
+        //            curStepBtn = curStep.attr("id"),
+        //            nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().next().children("a"),
+        //            curInputs = curStep.find("input[type='text'],input[type='url']"),
+        //            isValid = true;
+
+        //        $(".form-group").removeClass("has-error");
+        //        for (var i = 0; i < curInputs.length; i++) {
+        //            if (!curInputs[i].validity.valid) {
+        //                isValid = false;
+        //                $(curInputs[i]).closest(".form-group").addClass("has-error");
+        //            }
+        //        }
+
+        //        if (isValid)
+        //            nextStepWizard.removeAttr('disabled').trigger('click');
+        //    });
+
+        //    $('div.setup-panel div a.btn-primary').trigger('click');
+        //});
+
+        jQuery(function () {
+
+            $('#btnNewBatch').click(function () {
+                var dlg = new CVC.Batch.BatchDialog();
+                dlg.dialogTitle = 'New Batch';
+                dlg.dialogOpen();
+            });
+        });
+
+        
+
+    </script>
+
+
+}
+
+@section Style
+{
+    <link rel="stylesheet" type="text/css" href="~/Content/site/custom.min.css" />
+    <style>
+        .ibox-content {
+            clear: both;
+        }
+
+        .ibox-content {
+            background-color: #ffffff;
+            color: inherit;
+            padding: 5px 5px 5px 5px;
+            border-color: #e7eaec;
+            border-image: none;
+            border-style: solid solid none;
+            border-width: 1px 0;
+        }
+
+        .containerdiv {
+            border: 1px solid #DDDDDD;
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .toggle.btn {
+            min-width: 100px;
+            min-height: 30px;
+        }
+
+
+        .tag {
+            float: left;
+            position: absolute;
+            right: 0;
+            padding: 5px;
+            top: 65%;
+            background-color: orange;
+            color: white;
+        }
+
+        .tagONOFFLabeling {
+            float: left;
+            position: absolute;
+            left: 86%;
+            top: 1%;
+            /*background-color: orange;
+            color: white;*/
+        }
+
+        /*.line {
+                        position: absolute;
+                        top: 50%;
+                        width: 100%;
+                        border: 1px solid #000;
+                    }*/
+
+        .stepwizard-step p {
+            margin-top: 10px;
+        }
+
+        .stepwizard-row {
+            display: table-row;
+        }
+
+        .stepwizard {
+            display: table;
+            width: 100%;
+            position: relative;
+        }
+
+        .stepwizard-step button[disabled] {
+            opacity: 1 !important;
+            filter: alpha(opacity=100) !important;
+        }
+
+        .stepwizard-row:before {
+            top: 50px;
+            bottom: 0;
+            position: absolute;
+            content: " ";
+            width: 100%;
+            height: 5px;
+            background-color: #ccc;
+            z-order: 0;
+        }
+
+        .stepwizard-step {
+            display: table-cell;
+            text-align: center;
+            position: relative;
+        }
+
+        .btn-circle {
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            padding: 6px 0;
+            font-size: 12px;
+            line-height: 1.428571429;
+            border-radius: 15px;
+        }
+
+        .boxNew > .icon {
+            text-align: center;
+            position: relative;
+        }
+
+            .boxNew > .icon > .image {
+                position: relative;
+                z-index: 2;
+                margin: auto;
+                width: 200px;
+                height: 30px;
+                border: 2px solid #e4e0e0;
+                line-height: 30px;
+                border-radius: 2%;
+                background: #fff;
+                vertical-align: middle;
+                font-weight: bold;
+            }
+
+            .boxNew > .icon:hover > .image {
+                background: #fff;
+            }
+
+            .boxNew > .icon > .image > i {
+                font-size: 36px !important;
+                color: #fff !important;
+            }
+
+            .boxNew > .icon:hover > .image > i {
+                color: white !important;
+            }
+
+            .boxNew > .icon > .info {
+                margin-top: -24px;
+                background: rgba(0, 0, 0, 0.04);
+                border: 1px solid #e0e0e0;
+                padding: 25px 0px 0px 0px;
+            }
+
+            .boxNew > .icon:hover > .info {
+                background: rgba(0, 0, 0, 0.04);
+                border-color: #e0e0e0;
+            }
+
+            .boxNew > .icon > .info > h3.title {
+                font-family: "Roboto",sans-serif !important;
+                font-size: 16px;
+                color: #222;
+                font-weight: 500;
+            }
+
+            .boxNew > .icon > .info > p {
+                font-family: "Roboto",sans-serif !important;
+                font-size: 13px;
+                color: #666;
+                line-height: 1.5em;
+                margin: 20px;
+            }
+
+            .boxNew > .icon:hover > .info > h3.title, .box > .icon:hover > .info > p, .box > .icon:hover > .info > .more > a {
+                color: #222;
+            }
+
+            .boxNew > .icon > .info > .more a {
+                font-family: "Roboto",sans-serif !important;
+                font-size: 12px;
+                color: #222;
+                line-height: 12px;
+                text-transform: uppercase;
+                text-decoration: none;
+            }
+
+            .boxNew > .icon:hover > .info > .more > a {
+                color: #fff;
+                padding: 6px 8px;
+                background-color: #63B76C;
+            }
+
+        .boxNew .space {
+            height: 0px;
+        }
+        /*.tile_count .tile_stats_count {
+                margin-bottom: 10px;
+                border-bottom: 0;
+                padding-bottom: 10px;
+                padding: 0 10px 0 20px;
+                position: relative;
+            }
+            .tile_count {
+                margin-bottom: 20px;
+                margin-top: 20px;
+            }
+                .tile_count .tile_stats_count:before {
+                    content: "";
+                    position: absolute;
+                    left: 0;
+                    height: 65px;
+                    border-left: 2px solid #ADB2B5;
+                    margin-top: 10px;
+                }
+                .tile_count .tile_stats_count span {
+                    font-size: 13px;
+                }
+                .tile_count .tile_stats_count .count {
+                    font-size: 40px;
+                }
+            .tile_count .tile_stats_count, ul.quick-list li {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }*/
+    </style>
+}

@@ -1,0 +1,17 @@
+﻿@{
+    ViewData["Title"] = Serenity.LocalText.Get("Db.MachineCustomization.DisplayObject.EntityPlural");
+}
+
+<div id="DisplayObject_GridDiv"></div>
+<!-- added by Denis for RS 7.1 and RS 7.2 dated 10/6/2021 -->
+<div id="DisplayObjectField_GridDiv"></div>
+
+@Html.Hidden("DisplayObjectId", "", new { @id = "DisplayObjectId" })
+
+<script type="text/javascript">
+    jQuery(function () {
+        new CVC.MachineCustomization.DisplayObjectGrid($('#DisplayObject_GridDiv'), {}).init();
+
+        Q.initFullHeightGridPage($('#GridDiv'));
+    });
+</script>

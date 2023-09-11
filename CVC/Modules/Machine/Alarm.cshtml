@@ -1,0 +1,141 @@
+﻿@model CVC.Machine.AlarmPageModel
+@{Layout = null;}
+<div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title">Alarms and Messages</h3>
+
+        @*@if (Model.Alarms.Any())
+            {
+                <button id="btncom" type="button" class="btn btn-primary">
+                    <span class="blink_me"><i class="fa fa-bell"></i></span>
+                </button>
+            }*@
+
+    </div><!-- /.box-header -->
+    @if (Model.AlarmsExist != null)
+    {
+    <div class="box-body">
+        @if (Model.AlarmsExist.Any())
+        {
+            <ul class="todo-list ui-sortable" style="max-height:117px" id="ulAlarmPanel">
+
+                @foreach (var item in Model.AlarmsExist)
+                {
+                    <li title="@item.Item2" style="padding: 5px 10px;">
+                        <div style="color: #f1556c;background-color: #fef0f2;border: #f9b3bd 1px solid;padding: 10px;border-radius: 4px;font-weight:normal;font-size:16px;
+    ">
+                            @*<i class="fa fa-exclamation-triangle">
+                            </i>*@  @item.Item1
+                        </div>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <ul class="todo-list ui-sortable" style="max-height:117px" id="ulAlarmPanel">
+                <li title="" style="padding: 5px 10px;">
+                    <div style="color: #f1556c;background-color: #fef0f2;border: #f9b3bd 1px solid;padding: 10px;border-radius: 4px;font-weight:normal;font-size:16px;">
+                        @*<i class="fa fa-exclamation-triangle">
+                        </i>*@
+                    </div>
+                </li>
+
+            </ul>
+
+            if (Model.lstMisssingLabelAlarmModels != null)
+            {
+                if (Model.lstMisssingLabelAlarmModels.Any())
+                {
+                    <ul class="todo-list ui-sortable" style="max-height:117px" id="ulMissingLabelAlarmPanel">
+
+                        @foreach (var item in Model.lstMisssingLabelAlarmModels)
+                        {
+                            <li oldvalue="" title="" style="padding: 5px 10px;display:none" id="limsnglabel-@item.MachineParameterId">
+                                <div style="color: #f1556c;background-color: #fef0f2;border: #f9b3bd 1px solid;padding: 10px;border-radius: 4px;font-weight:normal;font-size:16px;">
+                                    @item.MissingLabelAlarmName
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                }
+            }
+        }
+    </div>
+    }
+    <div class="box-body" style="padding:2px;display:none" id="divMachineCommunicationFailed">
+
+        <ul class="todo-list ui-sortable" style="max-height:117px" id="UlAlarm">
+
+
+            <li ViewStateMode="false" style="color:red" data-toggle="tooltip" title=""><i class="fa fa-fw fa-warning faa-flash animated"></i><span id="spnMachineCommunicationFailed" class="text">Machine Communication Failed</span></li>
+        </ul>
+
+    </div>
+
+    @*@if (Model.Alarms.Any() && Model.Alarms.Any(a => a.Item3 == true))
+        {
+            <input type="hidden" id="hdnval" name="hdnval" value="1" />
+        }
+        else
+        {
+            <input type="hidden" id="hdnval" name="hdnval" value="0" />
+        }*@
+
+</div>
+
+<!-- Modal -->
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+       TimerForAlarm = '@Model.TimerForAlarm';
+
+        var result ='@Model.IsRefreshMachineSettings';
+        if (result == "True") {
+
+            fillview(false);
+        }
+            
+       
+    });
+
+
+    //function funcOpenRoleAccess() {
+    //    //alert('ok');
+    //    //  $("#myModal").dialog();
+    //    //     $('#myModal').dialog('open');
+    //    //alert('ok');
+    //}
+</script>
+
+@*<script type="text/javascript">
+
+    (function blink() {
+        $('.blink_me').fadeOut(500).fadeIn(500, blink);
+    })();
+
+    function funcOpenRoleAccess() {
+        //alert('ok');
+        //$("#myModal").dialog();
+        //$('#myModal').dialog('open');
+        debugger;
+        //alert('ok');
+        $("#divAlarmComment").show();
+    }
+
+
+
+
+
+    //$(document).ajaxStop(function () {
+    //    // place code to be executed on completion of last outstanding ajax call here
+    //    window.setInterval(function () {
+    //        RefreshFields();
+    //    }, 15000);
+    //});
+
+</script>*@
+
+
+

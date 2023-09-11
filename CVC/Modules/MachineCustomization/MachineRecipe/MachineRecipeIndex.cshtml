@@ -1,0 +1,148 @@
+﻿@{
+    ViewData["Title"] = Serenity.LocalText.Get("Db.MachineCustomization.MachineRecipe.EntityPlural");
+}
+
+<div id="GridDiv"></div>
+
+
+<div id="divRecipeReport" style="display:none"></div>
+
+<script type="text/javascript" src="~/Scripts/jspdf.min.js"></script>
+<script type="text/javascript" src="~/Scripts/jspdf.plugin.autotable.min.js"></script>
+
+<script type="text/javascript">
+    jQuery(function () {
+        var dlg = new CVC.MachineCustomization.MachineRecipeGrid($('#GridDiv'), {}).init();
+        dlg.dialogTitle = 'Recipe'; 
+        Q.initFullHeightGridPage($('#GridDiv'));
+    });
+
+
+
+    function DownloadRecipeReport(id) {
+
+        var reportDetails;
+
+        var machine = {};
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: Q.resolveUrl('~/api/Batch/GetReportDetails'),
+            data: JSON.stringify(machine),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                reportDetails = response;
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+
+        $.ajax({
+            url: Q.resolveUrl('/MachineRecipeReport/MachineRecipeReport?id=' + id),
+            type: 'GET',
+            success: function (data) {
+                $("#divRecipeReport").html(data);
+
+
+                var doc = new jsPDF('p', 'pt');
+
+                var autoOptions = $.extend({
+                    margin: { top: 60, left: 25, right: 25 },
+                    startY: 60,
+                    styles: {
+                        fontSize: 8,
+                        overflow: 'linebreak',
+                        cellPadding: 2,
+                        valign: 'middle'
+                    },
+                    createdCell: function (cell, opts) {
+                        if (opts.row.index == 7 || opts.row.index == 12) {
+                            // cell.styles.fillColor = "#20a8d8";
+                           // cell.styles.textColor = "#ffffff";
+                            //cell.styles.textColor = "#3c8dbc";
+                           // cell.styles.fontSize = 10;
+                        }
+                    }
+                });
+
+                var beforePage = function (data) {
+                    doc.setFontStyle('normal');
+                    doc.setFontSize(8);
+                    // Date and time of the report
+                    doc.autoTableText("Machine Name: " + reportDetails.MachineName, doc.internal.pageSize.width - autoOptions.margin.right, 10, {
+                        halign: 'right'
+                    });
+
+                    doc.autoTableText("Equipment ID: " + reportDetails.Serial, doc.internal.pageSize.width - autoOptions.margin.right, 20, {
+                        halign: 'right'
+                    });
+
+                   /* doc.autoTableText("Model Number: " + reportDetails.Model, doc.internal.pageSize.width - autoOptions.margin.right, 30, {
+                        halign: 'right'
+                    });*/
+
+
+
+                    doc.autoTableText(reportDetails.comname, autoOptions.margin.left + 45, 10, {
+                        halign: 'left'
+                    });
+                    doc.autoTableText(reportDetails.address, autoOptions.margin.left + 45, 20, {
+                        halign: 'left'
+                    });
+
+                    //doc.addImage('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3NTc3Nzc3NjU3Ny01Nzc3NzUuNzUrLTc4LS01LzU1ODAvNzY3NS03KzU1KzU3LS0tN//AABEIACgAKAMBEQACEQEDEQH/xAAaAAEBAQADAQAAAAAAAAAAAAAGBQQCAwcB/8QAMxAAAQMCAgcFBwUAAAAAAAAAAQIDBAURABIGBxMhMVGRIkFhcaEUFSMyQmKBFiSxwdH/xAAbAQADAQEAAwAAAAAAAAAAAAAEBQYDAgABB//EAC0RAAEDAgQEBAcBAAAAAAAAAAEAAgMEEQUSITEGEyJRMnGRoRUjM0FhwfAU/9oADAMBAAIRAxEAPwAvpdHdn6XswkO3U7smmwTuQVG393xpiUvLJd9ghKJvywl8fVJBER1EyqSFSiew4ygJSgeKTe/UYh5eJnZ+lmiaCmFrqVI1R1BLlo9WhuI5uNrQegvgtnE8JHUyy4NO4LPN1W1KHS5koymZMhlKVtMRwbuAfPe/fbgBxxtFxBDLK1gFgd146nIChaEry1R5vN2XI5VbmQR/pwzrBduYoCpb0KpWoz9I0xFbmRnpMVCRLaDPC6bJQFn6U57XOCcSc2V74GnVe6L6Qcvg1m6Th8ul2EUE32Xs3ZHhe9/XCY4DRZb5fdGCdyvo1sL91Fxyir9tzZAtK/25Va/HiDbfl3+eFx4bZzNH9PutRUm2ynxtbFXRIC5VOgus33ttZkKt4Ek+owW7h6C1mGxXAqCsmh1OiLm1iXFlKdbjpSmPZOUFtw3ufuFgkjnfjgmunka1jCN/0hJ23icU+j02JUJWxmKKkTaa9GWzySlwEqB7j8T0GMMfnmgqXyAeEjX+8l1QAGJrUMkap6wmZkjT4TkUnc+4VJWB4oANz5HpjNnEVOY7uFndkSad104XoZTf0crR9K8rQ7ftSgMwevfaH87rct2EbcWmNZzyNO34W3KaG5V5yzqy0jXUBGeRGaj37UwOhSLcwn5ieQIHnikdj1I2LMDc9kOIH7J7Op0GlNvMxbJDMGPDQjvtnWvMfE8euE0VVLUuYXdys6zIyItXQxLjQqtAfkvJbIcUjf3hYym/IXsfxi14nijkoyB4kvwpkvNzW6UzffMdhTiWXninds2QCo9SB64+VRRB8gaTZUV+yBVCvUb3jZ7R1oykEo2LzyBvJubtC4Kr772J8cV8OFycnMJ7A+vruvYp2k3Ka0+RJks7WXEVDWrg2twKNu47uHliVqYGRy8tjsy80BQWWoyK1OmFeZL742QO6zaBlT1sT5EYp4GiOmawDZT1a7mS2WbQ2EKnpTDbk/FRmU47n33CUnd1thrE500vXqqqoa2KCwSaLNqOj7T7FSSqY3Bs24Ui72X6XOSkqTY34g3B4XwgxLDWGfK3QnZKWyubquCtZGjiU5i7JSrvBjquMC/A624tt5rv/S1Ea/p9NqclxulBUSBkKM7iRtXOZ+3+cU+EcORNs+fUrKSZ7tlPhVp+O20H0B9u1rk9tI8+/wDONKqkYJHALSehbIxsjRYr/9k=', 'jpg', autoOptions.margin.left, 10, 40, 40);
+                    doc.addImage('data:image/' + reportDetails.logotype + ';base64,' + reportDetails.logo, reportDetails.logotype, autoOptions.margin.left, 10, 40, 40);
+                };
+
+                var afterPage = function (data) {
+                    doc.setFontStyle('normal');
+                    doc.setFontSize(8);
+                    // Date and time of the report
+                    doc.autoTableText("Report Generated By:" + reportDetails.generatedby, autoOptions.margin.left, doc.internal.pageSize.height - 35, {
+                        halign: 'left'
+                    });
+                    doc.autoTableText("Generation Date Time:" + Q.formatDate(new Date(), "dd-MM-yyyy HH:mm"), autoOptions.margin.left, doc.internal.pageSize.height - 20, {
+                        halign: 'left'
+                    });
+
+
+                    doc.autoTableText("Checked By:_________________", doc.internal.pageSize.width - autoOptions.margin.right, doc.internal.pageSize.height - 35, {
+                        halign: 'right'
+                    });
+                    doc.autoTableText("Report Approved By:_________________", doc.internal.pageSize.width - autoOptions.margin.right, doc.internal.pageSize.height - 20, {
+                        halign: 'right'
+                    });
+                };
+
+
+                autoOptions.beforePageContent = beforePage;
+                autoOptions.afterPageContent = afterPage;
+
+
+
+
+
+
+                var res = doc.autoTableHtmlToJson(document.getElementById("tablemachinerecipereport"));
+                doc.autoTable(res.columns, res.data, autoOptions);
+
+
+                var reportTitle = "Recipe Report";
+                doc.autoTableText(reportTitle, doc.internal.pageSize.width / 2, autoOptions.titleTop || 25, { halign: 'center' });
+
+                doc.save("RecipeReport.pdf");
+            },
+            error: function (x, y, z) {
+                console.log(x + '\n' + y + '\n' + z);
+            }
+        });
+
+
+    }
+
+</script>

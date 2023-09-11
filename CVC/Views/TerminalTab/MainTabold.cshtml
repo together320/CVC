@@ -1,0 +1,435 @@
+﻿@model CVC.Models.TerminalMappingVM
+@*CVC.Data.EDMX.MasterTerminal*@
+
+
+@{
+    ViewBag.Title = "MainTab";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<head>
+
+
+</head>
+
+
+<h2>Terminals</h2>
+
+
+<div>
+
+
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        @*<li role="presentation" class="active"><a href="#zero" aria-controls="zero" role="tab" data-toggle="tab">Add Terminal Type</a></li>*@
+        <li role="presentation" class="active" id="liFirst"><a href="#first" aria-controls="first" role="tab" data-toggle="tab">Add Terminals</a></li>
+        <li role="presentation" id="liSecond"><a href="#second" aria-controls="second" role="tab" data-toggle="tab"> Machine - Terminal Mapping </a></li>
+
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        @*<div role="tabpanel" class="tab-pane active" id="zero">
+            @using (Html.BeginForm("mainTab", "terminaltab", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                <div class="form-horizontal" style="padding-top: 25px;">
+                    @Html.HiddenFor(model => model.TerminalType.TerminalTypeId)
+
+                    <div class="form-group">
+                        <label style="color:red">*</label>
+                        @Html.LabelFor(model => model.TerminalType.TerminalTypeName, new { @class = "control-label col-md-2" })
+                        <div class="col-md-6">
+                            @Html.TextBoxFor(model => model.TerminalType.TerminalTypeName, new { @class = "form-control", id = "txtTerminalTypeName" })
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label style="color:red">*</label>
+                        @Html.LabelFor(model => model.AddEditTermial.MacAddress, new { @class = "control-label col-md-2" })
+                        <div class="col-md-6">
+                            @Html.TextBoxFor(model => model.AddEditTermial.MacAddress, new { @style = "text-transform:uppercase;", @class = "form-control", id = "txtMacAddress" })
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+
+                        @Html.LabelFor(model => model.AddEditTermial.IsActive, new { @class = "control-label col-md-2" })
+                        <div class="col-md-6">
+                            @Html.DropDownListFor(m => m.AddEditTermial.IsActive, new SelectList(ViewBag.StatusList, "StatusId", "StatusName"), new { @class = "form-control js-example-basic-single-view-field" })
+
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Submit" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </div>
+            }
+
+            @if (String.IsNullOrEmpty(ViewBag.status))
+            {
+            }
+            else
+            {
+                if (ViewBag.status == "1")
+                {
+                    <div class="alert alert-success col-md-5" style="margin-left:256px">
+                        <strong>Success!</strong> Terminal Added Successfully.
+                    </div>
+                }
+                else
+                {
+                    if (ViewBag.status == "2")
+                    {
+                        <div class="alert alert-success col-md-5" style="margin-left:256px">
+                            <strong>Success!</strong> Terminal Updated Successfully.
+                        </div>
+                    }
+                }
+            }
+
+
+            <hr size="30">
+            <div class="container">
+                @*<a href="/Master/Index" type="button" class="btn btn-primary">Add Terminal</a>*@
+
+
+        <div role="tabpanel" class="tab-pane active" id="first">
+            @using (Html.BeginForm("mainTab", "terminaltab", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                <div class="form-horizontal" style="padding-top: 25px;">
+                    @Html.HiddenFor(model => model.AddEditTermial.ID)
+
+                    <div class="form-group">
+                        <label style="color:red">*</label>
+                        @Html.LabelFor(model => model.AddEditTermial.TerminalName, new { @class = "control-label col-md-2" })
+                        <div class="col-md-6">
+                            @Html.TextBoxFor(model => model.AddEditTermial.TerminalName, new { @class = "form-control", id = "terminalname" })
+                            @*@Html.ValidationMessageFor(model => model.AddEditTermial.TerminalName, "", new { @class = "text-danger" })*@
+                            @*<div class="alert alert-danger anger" role="alert"></div>*@
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label style="color:red">*</label>
+                        @Html.LabelFor(model => model.AddEditTermial.MacAddress, new { @class = "control-label col-md-2" })
+                        <div class="col-md-6">
+                            @Html.TextBoxFor(model => model.AddEditTermial.MacAddress, new { @style = "text-transform:uppercase;", @class = "form-control", id = "txtMacAddress" })
+                            @*@Html.ValidationMessageFor(model => model.AddEditTermial.MacAddress, "", new { @class = "text-danger" })*@
+                            @*<div class="alert alert-danger Mac" role="alert"></div>*@
+                        </div>
+                    </div>
+                    <div class="form-group">
+
+                        @Html.LabelFor(model => model.AddEditTermial.SerialNumber, new { @class = "control-label col-md-2" })
+                        <div class="col-md-6">
+                            @Html.TextBoxFor(model => model.AddEditTermial.SerialNumber, new { @class = "form-control", id = "txtSerialNumber" })
+                            @*@Html.ValidationMessageFor(model => model.AddEditTermial.MacAddress, "", new { @class = "text-danger" })*@
+                            @*<div class="alert alert-danger Mac" role="alert"></div>*@
+                        </div>
+                    </div>
+                    <div class="form-group">
+
+                        @Html.LabelFor(model => model.AddEditTermial.ModelNumber, new { @class = "control-label col-md-2" })
+                        <div class="col-md-6">
+                            @Html.TextBoxFor(model => model.AddEditTermial.ModelNumber, new { @class = "form-control", id = "txtModelNumber" })
+                            @*@Html.ValidationMessageFor(model => model.AddEditTermial.MacAddress, "", new { @class = "text-danger" })*@
+                            @*<div class="alert alert-danger Mac" role="alert"></div>*@
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label style="color:red">*</label>
+                        @Html.LabelFor(model => model.AddEditTermial.TerminalTypeId, new { @class = "control-label col-md-2" })
+                        <div class="col-md-6">
+                            @Html.DropDownListFor(m => m.AddEditTermial.TerminalTypeId, new SelectList(ViewBag.TerminalTypeList, "TerminalTypeId", "TerminalTypeName"), new { @class = "form-control js-example-basic-single-view-field" })
+
+
+                            @*@Html.CheckBoxFor(model => model.AddEditTermial.IsActive, "Active")*@
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        @Html.LabelFor(model => model.AddEditTermial.IsActive, new { @class = "control-label col-md-2" })
+                        <div class="col-md-6">
+                            @Html.DropDownListFor(m => m.AddEditTermial.IsActive, new SelectList(ViewBag.StatusList, "StatusId", "StatusName"), new { @class = "form-control js-example-basic-single-view-field" })
+
+
+                            @*@Html.CheckBoxFor(model => model.AddEditTermial.IsActive, "Active")*@
+
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Submit" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </div>
+            }
+
+            @if (String.IsNullOrEmpty(ViewBag.status))
+            {
+            }
+            else
+            {
+                if (ViewBag.status == "1")
+                {
+                    <div class="alert alert-success col-md-5" style="margin-left:256px">
+                        <strong>Success!</strong> Terminal Added Successfully.
+                    </div>
+                }
+                else
+                {
+                    if (ViewBag.status == "2")
+                    {
+                        <div class="alert alert-success col-md-5" style="margin-left:256px">
+                            <strong>Success!</strong> Terminal Updated Successfully.
+                        </div>
+                    }
+                }
+            }
+
+
+            <hr size="30">
+            <div class="container">
+                @*<a href="/Master/Index" type="button" class="btn btn-primary">Add Terminal</a>*@
+                <div style="width:90%; margin:0 auto;">
+                    <table id="tblTerminalMaster" class="display table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+
+                                <th>Id</th>
+                                <th>Terminal Name</th>
+                                <th>Mac Address</th>
+                                <th>Serial Number</th>
+                                <th>Model Number</th>
+                                <th>Status</th>
+                                <th>Action</th>
+
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div role="tabpanel" class="tab-pane" id="second">
+            <div class="container" style="padding-top: 25px;">
+                <div style="width:90%; margin:0 auto;">
+                    <table id="tblMachine" class="displays table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+
+                                <th>Module Name</th>
+                                <th>Machine Name</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Large modal -->
+            <div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Machine Mapping</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <table id="table3" class="displays table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Terminal Name</th>
+                                        <th>Mac Address</th>
+                                        <th>Is Read</th>
+                                        <th>Is Write</th>
+
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div id="divMachineTerminalMappingList">
+
+</div>
+<input type="hidden" id="hidMachineIdForTerminalMapping" />
+@*<script src="~/Content/JS/Terminals.js"></script>*@
+
+<script type="text/javascript">
+    var dtMachine;
+    var dtMachineTerminalMapping;
+    $(document).ready(function () {
+        debugger;
+        @*var val = '@ViewBag.ActiveTerminalName';
+        if (val=="second") {
+            $("#liSecond").addClass("active");
+        }*@
+        $('#tblTerminalMaster').DataTable({
+
+            "order": [[0, "desc"]],
+            "columnDefs": [
+                { "visible": false, "targets": 0 }
+            ],
+            "ajax": {
+                "url": "/terminaltab/getTerminalmaster",
+                "type": "GET",
+                "datatype": "json"
+            },
+            "columns": [
+
+                { "data": "ID", "autoWidth": true },
+                { "data": "TerminalName", "autoWidth": true },
+                { "data": "MacAddress", "autoWidth": true },
+                { "data": "SerialNumber", "autoWidth": true },
+                { "data": "ModelNumber", "autoWidth": true },
+                { "data": "IsActive", "autoWidth": true },
+                //{ "data": "CreatedOn", "autoWidth": true },
+                {
+                    "data": "ID", "render": function (ID) {
+
+                        var IDs = parseInt(ID);
+                        var returns = "<a class='btn btn-secondary' href='/terminaltab/update-terminal?ID=" + IDs + "'>Edit</a>";
+                        return returns;
+                    }
+                },
+
+            ]
+        });
+
+        dtMachine = $('#tblMachine').DataTable({
+            // "pageLength": 5,
+
+            "ajax": {
+                "url": "/terminaltab/getmachine",
+                "type": "GET",
+                "datatype": "json"
+            },
+            "columns": [
+
+
+                { "data": "ModuleName", "autoWidth": true },
+                { "data": "MachineName", "autoWidth": true },
+                {
+                    "data": "ID", "render": function (ID) {
+                        var IDs = parseInt(ID);
+                        var returns = "<button  href='' machineid='" + ID+"' id='btnMap' type='button' class='btn btn-primary' data-toggle='modal'>Map Terminal</button>"
+                        return returns;
+                    }
+                },
+
+            ]
+        });
+
+        dtMachineTerminalMapping=   $('#table3').DataTable({
+
+            //"columnDefs": [{
+            //    orderable: false,
+            //    className: 'select-checkbox',
+            //    targets: 2
+            //}],
+            //"select": {
+            //    style: 'os',
+            //    selector: 'td:third-child'
+            //},
+
+
+            //"ajax": {
+            //    "url": "/terminaltab/getTerminalmaster1",
+            //    "type": "GET",
+            //    "datatype": "json"
+            //},
+            //"columns": [
+            //    { "data": "TerminalName", "autoWidth": true },
+            //    { "data": "MacAddress", "autoWidth": true },
+            //    {
+            //        "data": "Checkbox", "render": function (ID) {
+            //            var IDs = parseInt(ID);
+            //            var returns = "<input type='checkbox' class='editor-active' id=" + IDs + ">";
+            //            return returns;
+            //        }
+            //    },
+            //    {
+            //        "data": "Checkbox", "render": function (ID) {
+            //            var IDs = parseInt(ID);
+            //            var returns = "<input type='checkbox' class='editor-active' id=" + IDs + ">";
+            //            return returns;
+            //        }
+            //    },
+            //    { "data": "IsActive", "autoWidth": true },
+            //]
+        });
+
+        $('#txtMacAddress').keyup(function () {
+            var macCharacter = $(this).val().split("-").join("");
+            if (macCharacter.length > 0) {
+                macCharacter = macCharacter.match(new RegExp('.{1,2}', 'g')).join("-");
+            }
+            $(this).val(macCharacter);
+        });
+
+        $('#tblMachine').on('click', '#btnMap', function () {
+            var RowIndex = $(this).closest('tr');
+            var data = dtMachine.row(RowIndex).data();
+            $("#hidMachineIdForTerminalMapping").val(data.ID);
+            getMachineTerminalMappingData(data.ID);
+        });
+
+        function getMachineTerminalMappingData(machineId) {
+
+            $.ajax({
+                url: Q.resolveUrl('/terminaltab/GetMachineTerminalMappingData'),
+                type: 'GET',
+                data: { "MachineId": machineId },
+                async: true,
+                success: function (response) {
+
+                    $("#divMachineTerminalMappingList").html(response);
+                    $("#divMachineTerminalMapping").modal('show');
+                },
+                error: function (x, y, z) {
+
+                }
+            });
+
+        }
+
+
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 2000);
+
+    });
+</script>

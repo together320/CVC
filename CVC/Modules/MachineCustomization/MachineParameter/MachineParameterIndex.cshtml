@@ -1,0 +1,16 @@
+﻿@{
+    ViewData["Title"] = Serenity.LocalText.Get("Db.MachineCustomization.MachineParameter.EntityPlural");
+}
+
+<div id="GridDiv"></div>
+@*<input type="hidden" id="hdnMachineParameterImportAccess" />*@
+
+<script type="text/javascript">
+    @*$("#hdnMachineParameterImportAccess").val('@ViewBag.IsModifyPermission')*@
+
+    jQuery(function () {
+        new CVC.MachineCustomization.MachineParameterGrid($('#GridDiv'), {}).init();
+
+        Q.initFullHeightGridPage($('#GridDiv'));
+    });
+</script>

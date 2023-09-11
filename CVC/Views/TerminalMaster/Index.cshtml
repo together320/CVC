@@ -1,0 +1,258 @@
+﻿
+@model CVC.Models.TerminalMappingVM
+
+@{
+    ViewBag.Title = "Terminal Master";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Terminal Master</title>
+</head>
+<body>
+    <div class="container-fluid">
+
+        <div class="dataTable-wrapper" style="width:100%; margin:0 auto;">
+            <div class="row BtnUpdateRow" style="padding-left:15px">
+                <button type="button" id="btnNewTerminal" class="btn btn-primary">New Terminal</button>
+            </div>
+            <div id="divTerminalList"></div>
+        </div>
+    </div>
+
+    <ul class="nav nav-tabs" role="tablist" id="terminalTab">
+        <li role="presentation" class="active" id="liFirst"><a href="#first" aria-controls="first" role="tab" data-toggle="tab">Details</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="row BtnUpdateRow" style="padding-left:15px">
+            <button type="button" onclick="UpdateTerminal();" id="btnUpdateTerminal" class="btn btn-primary">Update</button>
+        </div>
+        <div class="machine-tab-links">
+            <a href="">General</a>
+            <a href="">Status</a>
+        </div>
+        <form class="edit-machine-form">
+
+            <div class="edit-machine-title">
+                <h6>General</h6>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="TerminalTypeName"><label style="color:red">*</label>Terminal Name</label>
+                        @Html.HiddenFor(m => Model.AddEditTermial.ID, new { @id = "hdnTerminalId" })
+                        @Html.TextBoxFor(m => Model.AddEditTermial.TerminalName, new { @class = "form-control", @id = "txtUpdateTerminalName" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="Description"><label style="color:red">*</label>Mac Address</label>
+                        @Html.TextBoxFor(m => Model.AddEditTermial.MacAddress, new { @maxlength = "17", @style = "text-transform: uppercase;", @class = "form-control", @id = "txtUpdateMacAddress" })
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="IsRead">Serial Number</label>
+                        @Html.TextBoxFor(m => Model.AddEditTermial.SerialNumber, new { @class = "form-control", @id = "txtUpdateSerialNumber" })
+
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="IsWrite">Model Number</label>
+                        @Html.TextBoxFor(m => Model.AddEditTermial.ModelNumber, new { @class = "form-control", @id = "txtUpdateModelNumber" })
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="IsWrite"><label style="color:red">*</label>Terminal Type</label>
+
+
+                        @Html.DropDownListFor(m => Model.AddEditTermial.TerminalTypeId, new SelectList(ViewBag.TerminalTypeList, "TerminalTypeId", "TerminalTypeName"), new {@id= "ddlUpdateTerminalType", @class = "form -control js-example-basic-single-view-field" })
+
+
+
+                    </div>
+                </div>
+
+
+            </div>
+
+           
+
+            <div class="edit-machine-title">
+                <h6>Status</h6>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="Status"><label style="color:red">*</label>Status</label>
+                        <select id="ddlUpdateStatus" class="form-control">
+                            <option value="1">Active</option>
+                            <option value="2">In-Active</option>
+
+                        </select>
+
+                    </div>
+                </div>
+
+
+            </div>
+        </form>
+
+    </div>
+</body>
+</html>
+
+@Html.Partial("~/Views/TerminalMaster/NewTerminal_PartialView.cshtml")
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        GetAllTerminal();
+       
+    });
+
+    $('#MacAddress,#txtUpdateMacAddress').keypress(function (e) {
+      
+        var macCharacter = $(this).val().split("-").join("");
+        if (macCharacter.length > 0) {
+            macCharacter = macCharacter.match(new RegExp('.{1,2}', 'g')).join("-");
+        }
+        if ($(this).val().length > 16) {
+            return false;
+        }
+        else {
+            $(this).val(macCharacter);
+
+        }
+    });
+
+    $("#btnNewTerminal").click(function () {
+        ClearControls();
+        $("#newTerminalModalPopUp").modal('show');
+    })
+
+    function ClearControls() {
+        $("#TerminalName").val("");
+        $("#MacAddress").val("");
+        $("#SerialNumber").val("");
+        $("#ModelNumber").val("");
+        $("#ModelNumber").val("");
+        $('#ddlStatus').val("1")
+        $("#TerminalTypeId").val($("#TerminalTypeId option:first").val());
+    }
+
+    function SaveTerminal() {
+        if (Validation("Save") == true) {
+            $.ajax({
+                url: Q.resolveUrl('/TerminalMaster/SaveUpdateTerminal'),
+                type: 'POST',
+                data: {
+                    "TerminalName": $("#TerminalName").val(), "MacAddress": $.trim($("#MacAddress").val()), "SerialNumber": $("#SerialNumber").val(), "ModelNumber": $("#ModelNumber").val(), "TerminalTypeId": $("#TerminalTypeId option:selected").val(), "IsActive": $("#ddlStatus option:selected").val()
+                },
+
+                success: function (response) {
+                    alert(response.message);
+                    if (response.status == true) {
+                        $("#newTerminalModalPopUp").modal('hide');
+                        GetAllTerminal();
+                    }
+
+                },
+                error: function (x, y, z) {
+
+                }
+            });
+        }
+    }
+
+    function UpdateTerminal() {
+        if (Validation("Update") == true) {
+            $.ajax({
+                url: Q.resolveUrl('/TerminalMaster/SaveUpdateTerminal'),
+                type: 'POST',
+                data: {
+                    "ID": $("#hdnTerminalId").val(), "TerminalName": $("#txtUpdateTerminalName").val(), "MacAddress": $.trim($("#txtUpdateMacAddress").val()), "SerialNumber": $("#txtUpdateSerialNumber").val(), "ModelNumber": $("#txtUpdateModelNumber").val(), "TerminalTypeId": $("#ddlUpdateTerminalType option:selected").val(), "IsActive": $("#ddlUpdateStatus option:selected").val()
+                },
+                success: function (response) {
+                    alert(response.message);
+                    if (response.status == true) {
+                        GetAllTerminal();
+                    }
+
+                },
+                error: function (x, y, z) {
+
+                }
+            });
+        }
+    }
+
+    function GetAllTerminal() {
+        debugger;
+        $.ajax({
+            url: Q.resolveUrl('/TerminalMaster/GetAllTerminal'),
+            type: 'GET',
+            success: function (response) {
+                $("#divTerminalList").html(response);
+            },
+            error: function (x, y, z) {
+
+            }
+        });
+    }
+
+    function GetTerminalDetails(TerminalId) {
+        debugger;
+        $.ajax({
+            url: Q.resolveUrl('/TerminalMaster/GetTerminalDetails'),
+            type: 'GET',
+            data: { "ID": TerminalId },
+            success: function (response) {
+                $("#hdnTerminalId").val(response.ID);
+                $("#txtUpdateTerminalName").val(response.TerminalName);
+                $("#txtUpdateMacAddress").val(response.MacAddress);
+                $("#txtUpdateSerialNumber").val(response.SerialNumber);
+                $("#txtUpdateModelNumber").val(response.ModelNumber);
+                $("#ddlUpdateTerminalType").val(response.TerminalTypeId);
+                $("#ddlUpdateStatus").val(response.IsActive == true ? "1" : "2");
+            },
+            error: function (x, y, z) {
+
+            }
+        });
+    }
+
+    function Validation(actionType) {
+        debugger;
+        if (actionType == "Save") {
+            if ($("#TerminalName").val().trim() == "" || $("#MacAddress").val().trim() == "") {
+                alert("* marks fields are mandatory");
+                return false;
+            }
+            return true;
+        }
+        else {
+            if ($("#txtUpdateTerminalName").val().trim() == "" || $("#txtUpdateMacAddress").val().trim() == "") {
+                alert("* marks fields are mandatory");
+                return false;
+            }
+            return true;
+        }
+    }
+
+   
+</script>

@@ -1,0 +1,515 @@
+﻿@model CVC.ViewModels.TerminalViewModel
+
+@{
+    ViewBag.Title = "Terminal View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Machine View</title>
+</head>
+<body>
+    <div class="container-fluid">
+
+        <div class="dataTable-wrapper" style="width:100%; margin:0 auto;">
+            <div class="row BtnUpdateRow" style="padding-left:15px">
+                <button type="button" id="btnNewMachine" class="btn btn-primary">New Machine</button>
+            </div>
+            <table id="tblMachine" class="displays table-striped table-bordered dt-responsive nowrap cell-border" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+
+                        <th>ID</th>
+                        <th>Machine Name</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.machineList)
+                    {
+
+                        <tr>
+
+                            <td>@item.Id</td>
+                            <td>
+                                <a href="javascript:void(0);" onclick="GetMachineDetails(@item.MachineId)">@Html.DisplayFor(modelItem => item.MachineName)</a>
+                            </td>
+                            <td>@item.Status</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <ul class="nav nav-tabs" role="tablist" id="machineTab">
+        <li role="presentation" class="active" id="liFirst"><a name="machine" href="#first" aria-controls="first" role="tab" data-toggle="tab">Details</a></li>
+        <li role="presentation" id="liSecond"><a name="terminal" href="#second" aria-controls="second" role="tab" data-toggle="tab">Terminals </a></li>
+        <li role="presentation" id="liThird"><a name="user" href="#third" aria-controls="third" role="tab" data-toggle="tab">Users </a></li>
+
+    </ul>
+
+    <div class="tab-content">
+        @*<div class="container">*@
+        <div role="tabpanel" class="tab-pane active jnr" id="first">
+            @*<div class="tab-panel-top">
+                    <h6>Edit Machine (<label id="lblMachineName"></label>)</h6>
+                </div>*@
+            <div class="row BtnUpdateRow" style="padding-left:15px">
+                <button type="button" id="btnUpdateMachineDetails" class="btn btn-primary">Update</button>
+            </div>
+            <div class="machine-tab-links">
+                <a href="">General</a>
+                <a href="">PLC</a>
+            </div>
+            <form class="edit-machine-form myform">
+                <div class="edit-machine-title">
+                    <h6>General</h6>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="txtMachineSequence">Machine Name</label>
+                            <input type="hidden" class="form-control" id="hdnMachineId" />
+                            <input type="text" class="form-control" id="txtMachineName" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="txtMachineSequence">Machine Sequence</label>
+                            <input type="hidden" class="form-control" id="hdnMachineId" />
+                            <input type="text" onkeypress="return isNumber(event)"  class="form-control" id="txtMachineSequence" />
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="txtAccessIp">Access Ip Address</label>
+                            <input type="text" class="form-control" id="txtAccessIp" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="txtDescription">Description</label>
+                            <input type="text" class="form-control" id="txtDescription" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="txtModelNumber">Model Number</label>
+                            <input type="text" class="form-control" id="txtModelNumber" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="txtSerialNumber">Serial Number</label>
+                            <input type="text" class="form-control" id="txtSerialNumber" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="txtMake">Make</label>
+                            <input type="text" class="form-control" id="txtMake" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="txtYear">Year</label>
+                            <input type="text" class="form-control" onkeypress="return isNumber(event)" id="txtYear" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+
+                </div>
+                <div class="edit-machine-title">
+                    <h6>PLC</h6>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="txtPLCMake">Plc Make</label>
+                            <input type="text" class="form-control" id="txtPLCMake" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="txtPLCModelNumber">Plc Model Number</label>
+                            <input type="text" class="form-control" id="txtPLCModelNumber" />
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="txtPLCSerialNumber">Plc Serial Number</label>
+                            <input type="text" class="form-control" id="txtPLCSerialNumber" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="txtPLCAddress">Plc Address</label>
+                            <input type="text" class="form-control" id="txtPLCAddress" />
+                        </div>
+                    </div>
+                    <div class="edit-machine-title">
+                        <h6>Status</h6>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="txtPLCSerialNumber"><label style="color:red">*</label>Status</label>
+                                <select id="ddlStatus" class="form-control">
+                                    <option value="1">Active</option>
+                                    <option value="2">In-Active</option>
+
+                                </select>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </form>
+
+
+
+        </div>
+
+        <div role="tabpanel" class="tab-pane" id="second">
+            <div class="row BtnUpdateRow" style="padding-left:15px">
+                <button type="button" id="btnAddMachineTerminalMapping" class="btn btn-primary">Add Terminal</button>
+            </div>
+            <div class="container-fluid" style="padding-top: 25px;">
+                <div id="divTerminalList" style="width:100%; margin:0 auto;">
+                    <div class="container-fluid">
+                        <div class="dataTable-wrapper" style="width:100%; margin:0 auto;" id="divMachineTerminalMappedList">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            @*</div>*@
+        </div>
+
+        <div role="tabpanel" class="tab-pane" id="third">
+            <div class="row BtnUpdateRow" style="padding-left:15px">
+                <button type="button" id="btnAddMachineUserMapping" class="btn btn-primary">Add User</button>
+            </div>
+            <div class="container-fluid" style="padding-top: 25px;">
+                <div id="divTerminalList" style="width:100%; margin:0 auto;">
+                    <div class="container-fluid">
+                        <div class="dataTable-wrapper" style="width:100%; margin:0 auto;" id="divMachineUserMappedList">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            @*</div>*@
+        </div>
+
+
+    </div>
+
+    <div id="divMachineTerminalMappingList"></div>
+    <div id="divMachineUserMappingList"></div>
+
+</body>
+</html>
+@Html.Partial("~/Views/TerminalTab/NewMachine_PartialView.cshtml")
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#tblMachine').DataTable({
+            responsive: {
+                details: {
+                    type: 'column'
+                }
+            },
+
+            "language": {
+                "lengthMenu": "_MENU_ records per page",
+            },
+
+        });
+
+        $('#tblMachine1').DataTable({
+            responsive: {
+                details: {
+                    type: 'column'
+                }
+            },
+
+            "language": {
+                "lengthMenu": "_MENU_ records per page",
+            },
+
+        });
+          var DefaultMachineId = '@ViewBag.DefaultMachineId';
+        if (DefaultMachineId > 0) {
+            GetMachineDetails(DefaultMachineId);
+        }
+
+
+        });
+
+   function GetMachineDetails(MachineId) {
+
+        $.ajax({
+            url: Q.resolveUrl('/terminaltab/GetMachineDetails'),
+            type: 'GET',
+           data: { "MachineId": MachineId },
+          //  async: true,
+            success: function (response) {
+                $("#hdnMachineId").val(response.MachineId);
+                $("#txtMachineName").val(response.MachineName);
+                $("#txtMachineSequence").val(response.MachineSequence);
+                $("#txtAccessIp").val(response.AccessIPAddress);
+                $("#txtDescription").val(response.Description);
+                $("#txtModelNumber").val(response.ModelNumber);
+                $("#txtSerialNumber").val(response.SerialNumber);
+                $("#txtMake").val(response.Make);
+                $("#txtYear").val(response.Year);
+                $("#txtPLCMake").val(response.PlcMake);
+                $("#txtPLCModelNumber").val(response.PlcModelNumber);
+                $("#txtPLCSerialNumber").val(response.PlcSerialNumber);
+                $("#txtPLCAddress").val(response.PLCAddress);
+                getMachineTerminalMappedData();
+                getMachineUserMappedData();
+
+            },
+            error: function (x, y, z) {
+
+            }
+        });
+    } 
+
+    $("#btnSaveMachineDetails").click(function () {
+     
+        if (Validation() == true) {
+            SaveMachineDetails();
+        }   
+    })
+
+    $("#btnUpdateMachineDetails").click(function () {
+        UpdateMachineDetails()
+    })
+
+    function SaveMachineDetails() {
+
+        $.ajax({
+            url: Q.resolveUrl('/terminaltab/SaveMachineDetails'),
+            type: 'POST',
+            data: {
+                "MachineName": $("#txtSaveMachineName").val(), "StatusId": $("#ddlSaveStatus option:selected").val(), "MachineSequence": $("#txtSaveMachineSequence").val(), "AccessIPAddress": $("#txtSaveAccessIp").val(), "Description": $("#txtSaveDescription").val(), "ModelNumber": $("#txtSaveModelNumber").val(), "SerialNumber": $("#txtSaveSerialNumber").val(), "Make": $("#txtSaveMake").val(), "PlcMake": $("#txtSavePLCMake").val(), "Year": $("#txtSaveYear").val(), "PlcModelNumber": $("#txtSavePLCModelNumber").val(), "PLCSerialNumber": $("#txtSavePLCSerialNumber").val(), "PLCAddress": $("#txtSavePLCAddress").val()
+            },
+            //  async: true,
+            success: function (response) {
+                alert(response.message);
+                if (response.status == true) {
+                    $("#newMachineModalPopUp").modal('hide');
+                    window.location.reload(true);
+                }
+
+            },
+            error: function (x, y, z) {
+
+            }
+        });
+    }
+
+    function UpdateMachineDetails() {
+
+        $.ajax({
+            url: Q.resolveUrl('/terminaltab/UpdateMachineDetails'),
+            type: 'POST',
+            data: {
+                "MachineName": $("#txtMachineName").val(), "StatusId": $("#ddlStatus option:selected").val(), "MachineId": $("#hdnMachineId").val(), "MachineSequence": $("#txtMachineSequence").val(), "AccessIPAddress": $("#txtAccessIp").val(), "Description": $("#txtDescription").val(), "ModelNumber": $("#txtModelNumber").val(), "SerialNumber": $("#txtSerialNumber").val(), "Make": $("#txtMake").val(), "PlcMake": $("#txtPLCMake").val(), "Year": $("#txtYear").val(), "PlcModelNumber": $("#txtPLCModelNumber").val(), "PLCSerialNumber": $("#txtPLCSerialNumber").val(), "PLCAddress": $("#txtPLCAddress").val()
+            },
+            //  async: true,
+            success: function (response) {
+                alert(response.message);
+                if (response.status == true) {                 
+                    window.location.reload(true);
+                }
+
+            },
+            error: function (x, y, z) {
+
+            }
+        });
+    }
+
+    function getMachineTerminalMappingData() {
+        debugger;
+        $.ajax({
+            url: Q.resolveUrl('/terminaltab/GetMachineTerminalMappingData'),
+            type: 'GET',
+            data: { "MachineId": $("#hdnMachineId").val() },
+            async: true,
+            success: function (response) {
+                debugger;
+                  $("#divMachineTerminalMappingList").html(response);
+                  $("#divMachineTerminalMapping").modal('show');
+            },
+            error: function (x, y, z) {
+
+            }
+        });
+
+    }
+
+    function getMachineTerminalMappedData() {
+        debugger;
+        $.ajax({
+            url: Q.resolveUrl('/terminaltab/GetMachineTerminalMappedData'),
+            type: 'GET',
+            data: { "MachineId": $("#hdnMachineId").val() },
+            async: true,
+            success: function (response) {
+                debugger;
+                $("#divMachineTerminalMappedList").html(response);
+            },
+            error: function (x, y, z) {
+
+            }
+        });
+
+    }
+
+    function getMachineUserMappingData() {
+        $.ajax({
+            url: Q.resolveUrl('/terminaltab/GetMachineUserMappingData'),
+            type: 'GET',
+            data: { "MachineId": $("#hdnMachineId").val() },
+            async: true,
+            success: function (response) {
+                debugger;
+                $("#divMachineUserMappingList").html(response);
+                $("#divMachineUserMapping").modal('show');
+            },
+            error: function (x, y, z) {
+
+            }
+        });
+
+    }
+
+    function getMachineUserMappedData() {
+        debugger;
+        $.ajax({
+            url: Q.resolveUrl('/terminaltab/GetMachineUserMappedData'),
+            type: 'GET',
+            data: { "MachineId": $("#hdnMachineId").val() },
+            async: true,
+            success: function (response) {
+                debugger;
+                $("#divMachineUserMappedList").html(response);
+            },
+            error: function (x, y, z) {
+
+            }
+        });
+
+    }
+
+    $("#btnNewMachine").click(function () {
+        ClearControls();
+        $("#newMachineModalPopUp").modal('show');
+    })
+
+    function Validation() {
+        var isValid = true;
+        if ($("#txtSaveMachineName").val().trim() == "" || $("#txtSaveMachineSequence").val().trim() == "" || $("#txtSaveAccessIp").val().trim() == "" || $("#txtSavePLCMake").val().trim()== "")
+        {
+            isValid = false;
+            alert("* marks fields are mandatory");         
+        }
+        return isValid;
+    }
+
+    function ClearControls() {
+        $("#txtSaveMachineName").val("");
+        $("#txtSaveMachineSequence").val("");
+        $("#txtSaveAccessIp").val("");
+        $("#txtSaveDescription").val("");
+        $("#txtSaveModelNumber").val("");
+        $("#txtSaveSerialNumber").val("");
+        $("#txtSaveMake").val("");
+        $("#txtSaveYear").val("");
+        $("#txtSavePLCMake").val("");
+        $("#txtSavePLCModelNumber").val("");
+        $("#txtSavePLCSerialNumber").val("");
+        $("#txtSavePLCAddress").val("");
+        $('#ddlSaveStatus').val("1")
+    }
+
+    $("#btnAddMachineTerminalMapping").click(function () {
+        getMachineTerminalMappingData();
+    })
+
+    $("#btnAddMachineUserMapping").click(function () {
+        getMachineUserMappingData();
+    })
+
+
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        var target = $(e.target).attr("name");
+        if (target =="terminal") {
+            getMachineTerminalMappedData();
+        }
+        else if (target == "user") {
+            getMachineUserMappedData();
+        }
+    });
+
+    function isNumber(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    }
+   
+
+    var isModifyMachineDetails = @Html.Raw(Json.Encode(Model.IsModifyMachineDetails));
+    var isModifyMachineTerminalMapping = @Html.Raw(Json.Encode(Model.IsModifyMachineTerminalMapping));
+    var isModifyMachineUserMapping = @Html.Raw(Json.Encode(Model.IsModifyMachineUserMapping));
+
+  
+    if (isModifyMachineDetails == false) {
+        $("#first *").attr("disabled", "disabled").off('click');
+    }
+    if (isModifyMachineTerminalMapping == false) {
+        $("#second *").attr("disabled", "disabled").off('click');
+    }
+    if (isModifyMachineUserMapping == false) {
+        $("#third *").attr("disabled", "disabled").off('click');
+    }
+
+
+</script>

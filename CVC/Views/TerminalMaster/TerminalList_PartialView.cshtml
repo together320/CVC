@@ -1,0 +1,56 @@
+﻿@model IEnumerable<CVC.ViewModels.MasterTerminlsModel>
+<table id="tblTerminal" class="displays table-striped table-bordered dt-responsive nowrap cell-border" width="100%" cellspacing="0">
+    <thead>
+        <tr>
+
+            <th>ID</th>
+            <th>Terminal Name</th>
+            <th>Mac Address</th>
+            <th>Terminal Type</th>
+            <th>Status</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+
+        <tr>
+
+            <td>@item.Index</td>
+            <td>
+                <a href="javascript:void(0);" onclick="GetTerminalDetails(@item.ID)">@Html.DisplayFor(modelItem => item.TerminalName)</a>
+
+            </td>
+            <td>@item.MacAddress</td>
+            <td>@item.TerminalType</td>
+            <td>@(item.IsActive==1?"Active":"In-Active")</td>
+
+        </tr>
+        }
+    </tbody>
+</table>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#tblTerminal').DataTable({
+            responsive: {
+                details: {
+                    type: 'column'
+                }
+            },
+
+            "language": {
+                "lengthMenu": "_MENU_ records per page",
+            },
+
+        });
+        debugger;
+        var DefaultTerminaId = '@ViewBag.DefaultTerminaId';
+        if (DefaultTerminaId > 0) {
+            GetTerminalDetails(DefaultTerminaId);
+        }
+
+    });
+</script>

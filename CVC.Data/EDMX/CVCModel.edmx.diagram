@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="f873180c4ab3494cb0efce85edc8eefe" Name="Diagram1" ZoomLevel="67">
+        <EntityTypeShape EntityType="CVCModel.Alarm" Width="1.5" PointX="3" PointY="133.75" />
+        <EntityTypeShape EntityType="CVCModel.AlarmLog" Width="1.5" PointX="11.25" PointY="132.875" />
+        <EntityTypeShape EntityType="CVCModel.AlarmLogArchive" Width="1.5" PointX="14.25" PointY="137.875" />
+        <EntityTypeShape EntityType="CVCModel.AlarmResetId" Width="1.5" PointX="5.25" PointY="156.125" />
+        <EntityTypeShape EntityType="CVCModel.ApplicationAccess" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="CVCModel.AuditLog" Width="1.5" PointX="14.25" PointY="131.125" />
+        <EntityTypeShape EntityType="CVCModel.AuditLogArchive" Width="1.5" PointX="14.25" PointY="143.125" />
+        <EntityTypeShape EntityType="CVCModel.Batch" Width="1.5" PointX="9" PointY="136.625" />
+        <EntityTypeShape EntityType="CVCModel.BatchArchive" Width="1.5" PointX="6" PointY="137.375" />
+        <EntityTypeShape EntityType="CVCModel.BatchLog" Width="1.5" PointX="11.25" PointY="145.75" />
+        <EntityTypeShape EntityType="CVCModel.BatchMachineWise" Width="1.5" PointX="17.25" PointY="144.875" />
+        <EntityTypeShape EntityType="CVCModel.BatchRecipeModify" Width="1.5" PointX="22.5" PointY="158.25" />
+        <EntityTypeShape EntityType="CVCModel.BatchRunData" Width="1.5" PointX="19.5" PointY="161.25" />
+        <EntityTypeShape EntityType="CVCModel.BatchSetting" Width="1.5" PointX="35.25" PointY="160.875" />
+        <EntityTypeShape EntityType="CVCModel.Bottle" Width="1.5" PointX="6" PointY="131.625" />
+        <EntityTypeShape EntityType="CVCModel.Cap" Width="1.5" PointX="6" PointY="145.875" />
+        <EntityTypeShape EntityType="CVCModel.CityDetail" Width="1.5" PointX="3" PointY="146.125" />
+        <EntityTypeShape EntityType="CVCModel.Company" Width="1.5" PointX="5.25" PointY="151.25" />
+        <EntityTypeShape EntityType="CVCModel.ControlType" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="CVCModel.Cotton" Width="1.5" PointX="19.5" PointY="150.625" />
+        <EntityTypeShape EntityType="CVCModel.Currency" Width="1.5" PointX="13.5" PointY="150.875" />
+        <EntityTypeShape EntityType="CVCModel.DataType" Width="1.5" PointX="13.5" PointY="161.625" />
+        <EntityTypeShape EntityType="CVCModel.DateFormatType" Width="1.5" PointX="11.25" PointY="182.125" />
+        <EntityTypeShape EntityType="CVCModel.Department" Width="1.5" PointX="25.5" PointY="154" />
+        <EntityTypeShape EntityType="CVCModel.Desiccant" Width="1.5" PointX="13.5" PointY="155.25" />
+        <EntityTypeShape EntityType="CVCModel.EndOfLine" Width="1.5" PointX="22.5" PointY="150.375" />
+        <EntityTypeShape EntityType="CVCModel.EnvironmentVariable" Width="1.5" PointX="13.5" PointY="166.75" />
+        <EntityTypeShape EntityType="CVCModel.Exception" Width="1.5" PointX="2.75" PointY="3.75" />
+        <EntityTypeShape EntityType="CVCModel.HourFormatType" Width="1.5" PointX="11.25" PointY="186.875" />
+        <EntityTypeShape EntityType="CVCModel.IPCParameter" Width="1.5" PointX="41.25" PointY="151.875" />
+        <EntityTypeShape EntityType="CVCModel.Label" Width="1.5" PointX="16.5" PointY="157.5" />
+        <EntityTypeShape EntityType="CVCModel.LabelLost" Width="1.5" PointX="19.5" PointY="155.625" />
+        <EntityTypeShape EntityType="CVCModel.LabelReconciliation" Width="1.5" PointX="17.25" PointY="138.625" />
+        <EntityTypeShape EntityType="CVCModel.LabelRoll" Width="1.5" PointX="17.25" PointY="132.625" />
+        <EntityTypeShape EntityType="CVCModel.LineMaintenanceSchedule" Width="1.5" PointX="16.5" PointY="162.625" />
+        <EntityTypeShape EntityType="CVCModel.Machine" Width="1.5" PointX="22.5" PointY="162.375" />
+        <EntityTypeShape EntityType="CVCModel.MachineCommunication" Width="1.625" PointX="24.75" PointY="163.5" />
+        <EntityTypeShape EntityType="CVCModel.MachineHelpFile" Width="1.5" PointX="32.75" PointY="165.625" />
+        <EntityTypeShape EntityType="CVCModel.MachineHistory" Width="1.5" PointX="36" PointY="155.375" />
+        <EntityTypeShape EntityType="CVCModel.MachineLine" Width="1.5" PointX="16.5" PointY="167.375" />
+        <EntityTypeShape EntityType="CVCModel.MachineLineUser" Width="1.5" PointX="24.75" PointY="143.625" />
+        <EntityTypeShape EntityType="CVCModel.MachineMaintenanceSchedule" Width="1.5" PointX="24.75" PointY="148.75" />
+        <EntityTypeShape EntityType="CVCModel.MachineParameter" Width="1.5" PointX="33" PointY="151.25" />
+        <EntityTypeShape EntityType="CVCModel.MachineRecipe" Width="1.5" PointX="27" PointY="159.125" />
+        <EntityTypeShape EntityType="CVCModel.MachineRecipeParameter" Width="1.5" PointX="45.75" PointY="155.5" />
+        <EntityTypeShape EntityType="CVCModel.MachineSparePart" Width="1.5" PointX="30.75" PointY="146.5" />
+        <EntityTypeShape EntityType="CVCModel.MachineSpecification" Width="1.5" PointX="33.75" PointY="146.75" />
+        <EntityTypeShape EntityType="CVCModel.MachineType" Width="1.5" PointX="20.25" PointY="169.625" />
+        <EntityTypeShape EntityType="CVCModel.MachineUser" Width="1.5" PointX="30.75" PointY="151.625" />
+        <EntityTypeShape EntityType="CVCModel.MachineVideo" Width="1.5" PointX="27.75" PointY="145.625" />
+        <EntityTypeShape EntityType="CVCModel.Module" Width="1.5" PointX="29.75" PointY="161.25" />
+        <EntityTypeShape EntityType="CVCModel.ModuleAccess" Width="1.5" PointX="38" PointY="161.5" />
+        <EntityTypeShape EntityType="CVCModel.Outsert" Width="1.5" PointX="16.5" PointY="152.625" />
+        <EntityTypeShape EntityType="CVCModel.Pack" Width="1.5" PointX="11.25" PointY="137.375" />
+        <EntityTypeShape EntityType="CVCModel.Password" Width="1.5" PointX="4.75" PointY="0.75" />
+        <EntityTypeShape EntityType="CVCModel.PickList" Width="1.5" PointX="22.5" PointY="146" />
+        <EntityTypeShape EntityType="CVCModel.PickListValue" Width="1.5" PointX="27.75" PointY="151.25" />
+        <EntityTypeShape EntityType="CVCModel.PickListValueRoleAccess" Width="1.5" PointX="35" PointY="165.5" />
+        <EntityTypeShape EntityType="CVCModel.PLC" Width="1.5" PointX="27.75" PointY="167.5" />
+        <EntityTypeShape EntityType="CVCModel.PLCParameter" Width="1.5" PointX="30" PointY="157" />
+        <EntityTypeShape EntityType="CVCModel.Product" Width="1.5" PointX="4.75" PointY="3.75" />
+        <EntityTypeShape EntityType="CVCModel.ProductType" Width="1.5" PointX="6.75" PointY="0.75" />
+        <EntityTypeShape EntityType="CVCModel.Protocol" Width="1.5" PointX="19.5" PointY="146" />
+        <EntityTypeShape EntityType="CVCModel.RecipeSetting" Width="1.5" PointX="24.75" PointY="158.75" />
+        <EntityTypeShape EntityType="CVCModel.RecipeSettingsParameter" Width="1.5" PointX="43.5" PointY="155.625" />
+        <EntityTypeShape EntityType="CVCModel.RolePermission" Width="1.5" PointX="5.25" PointY="181.375" />
+        <EntityTypeShape EntityType="CVCModel.Role" Width="1.5" PointX="3" PointY="181.25" />
+        <EntityTypeShape EntityType="CVCModel.Screen" Width="1.5" PointX="3" PointY="186.625" />
+        <EntityTypeShape EntityType="CVCModel.ScreenField" Width="1.5" PointX="43.5" PointY="147.25" />
+        <EntityTypeShape EntityType="CVCModel.ScreenModule" Width="1.5" PointX="5.25" PointY="160.625" />
+        <EntityTypeShape EntityType="CVCModel.ScreenSection" Width="1.5" PointX="3" PointY="167" />
+        <EntityTypeShape EntityType="CVCModel.ServerIPCParameter" Width="1.5" PointX="6.75" PointY="3.75" />
+        <EntityTypeShape EntityType="CVCModel.ServerObject" Width="1.5" PointX="8.75" PointY="0.75" />
+        <EntityTypeShape EntityType="CVCModel.Shift" Width="1.5" PointX="3" PointY="141.375" />
+        <EntityTypeShape EntityType="CVCModel.Status" Width="1.5" PointX="0.75" PointY="134.75" />
+        <EntityTypeShape EntityType="CVCModel.Supplier" Width="1.5" PointX="8.25" PointY="147" />
+        <EntityTypeShape EntityType="CVCModel.TabletDetail" Width="1.5" PointX="33" PointY="140.875" />
+        <EntityTypeShape EntityType="CVCModel.TimeFormatType" Width="1.5" PointX="11.25" PointY="184.5" />
+        <EntityTypeShape EntityType="CVCModel.UserLog" Width="1.5" PointX="4.75" PointY="8.75" />
+        <EntityTypeShape EntityType="CVCModel.UserLogArchive" Width="1.5" PointX="13.5" PointY="229" />
+        <EntityTypeShape EntityType="CVCModel.UserLoginDetail" Width="1.5" PointX="13.5" PointY="226" />
+        <EntityTypeShape EntityType="CVCModel.UserPermission" Width="1.5" PointX="8.75" PointY="5.75" />
+        <EntityTypeShape EntityType="CVCModel.UserPreference" Width="1.5" PointX="6.75" PointY="8.75" />
+        <EntityTypeShape EntityType="CVCModel.UserRole" Width="1.5" PointX="5.25" PointY="183.875" />
+        <EntityTypeShape EntityType="CVCModel.User" Width="1.5" PointX="11.25" PointY="150.125" />
+        <EntityTypeShape EntityType="CVCModel.VersionInfo" Width="1.5" PointX="8.75" PointY="8.75" />
+        <EntityTypeShape EntityType="CVCModel.ViewField" Width="1.5" PointX="38.25" PointY="155" />
+        <EntityTypeShape EntityType="CVCModel.ViewFieldAccess" Width="1.5" PointX="43.5" PointY="161.25" />
+        <EntityTypeShape EntityType="CVCModel.ViewFieldAuthentication" Width="1.5" PointX="40.5" PointY="169.5" />
+        <EntityTypeShape EntityType="CVCModel.View" Width="1.5" PointX="36" PointY="149.25" />
+        <EntityTypeShape EntityType="CVCModel.ViewsAccess" Width="1.5" PointX="40.25" PointY="164.125" />
+        <AssociationConnector Association="CVCModel.FK_Alarm_AlarmId" />
+        <AssociationConnector Association="CVCModel.FK_Alarm_Machine" />
+        <AssociationConnector Association="CVCModel.FK_Alarm_MachineParameter" />
+        <AssociationConnector Association="CVCModel.FK_Alarm_MachineStopMachineParameter" />
+        <AssociationConnector Association="CVCModel.FK_Alarm_Status" />
+        <AssociationConnector Association="CVCModel.FK_Alarm_Users" />
+        <AssociationConnector Association="CVCModel.FK_Alarm_Users1" />
+        <AssociationConnector Association="CVCModel.FK_AlarmResetId_Alarm" />
+        <AssociationConnector Association="CVCModel.FK_BatchAlarmLog_Alarm" />
+        <AssociationConnector Association="CVCModel.FK_BatchAlarmLog_Batch" />
+        <AssociationConnector Association="CVCModel.FK_BatchAlarmLog_Machine" />
+        <AssociationConnector Association="CVCModel.FK_BatchAlarmLog_Users" />
+        <AssociationConnector Association="CVCModel.FK_Batch_BatchId" />
+        <AssociationConnector Association="CVCModel.FK_Machine_MachineId" />
+        <AssociationConnector Association="CVCModel.FK_Users_LoggedUserId" />
+        <AssociationConnector Association="CVCModel.FK_AlarmResetId_Roles" />
+        <AssociationConnector Association="CVCModel.FK_AlarmResetId_Status" />
+        <AssociationConnector Association="CVCModel.FK_AlarmResetId_Users" />
+        <AssociationConnector Association="CVCModel.FK_AlarmResetId_Users1" />
+        <AssociationConnector Association="CVCModel.FK_AuditLog_Batch" />
+        <AssociationConnector Association="CVCModel.FK_AuditLog_Machine" />
+        <AssociationConnector Association="CVCModel.FK_AuditLog_PickListValue" />
+        <AssociationConnector Association="CVCModel.FK_AuditLog_Users" />
+        <AssociationConnector Association="CVCModel.FK_AuditLog_UsersAuthenticationId" />
+        <AssociationConnector Association="CVCModel.FK_AuditLogArchive_Batch" />
+        <AssociationConnector Association="CVCModel.FK_AuditLogArchive_Machine" />
+        <AssociationConnector Association="CVCModel.FK_AuditLogArchive_PickListValue" />
+        <AssociationConnector Association="CVCModel.FK_AuditLogArchive_Users" />
+        <AssociationConnector Association="CVCModel.FK_AuditLogArchive_UsersAuthenticationId" />
+        <AssociationConnector Association="CVCModel.FK_Batch_MachineLine" />
+        <AssociationConnector Association="CVCModel.FK_Batch_Pack" />
+        <AssociationConnector Association="CVCModel.FK_Batch_PickListValue" />
+        <AssociationConnector Association="CVCModel.FK_Batch_Status" />
+        <AssociationConnector Association="CVCModel.FK_Batch_Users" />
+        <AssociationConnector Association="CVCModel.FK_Batch_Users1" />
+        <AssociationConnector Association="CVCModel.FK_BatchLog_Batch" />
+        <AssociationConnector Association="CVCModel.FK_BatchMachineWise_Batch" />
+        <AssociationConnector Association="CVCModel.FK_LabelReconciliation_Batch" />
+        <AssociationConnector Association="CVCModel.FK_LabelRoll_Batch" />
+        <AssociationConnector Association="CVCModel.FK_BatchArchive_MachineLine" />
+        <AssociationConnector Association="CVCModel.FK_BatchArchive_Pack" />
+        <AssociationConnector Association="CVCModel.FK_BatchArchive_PickListValue" />
+        <AssociationConnector Association="CVCModel.FK_BatchArchive_Status" />
+        <AssociationConnector Association="CVCModel.FK_BatchArchive_Users" />
+        <AssociationConnector Association="CVCModel.FK_BatchArchive_Users1" />
+        <AssociationConnector Association="CVCModel.FK_BatchLog_Machine" />
+        <AssociationConnector Association="CVCModel.FK_BatchLog_Users" />
+        <AssociationConnector Association="CVCModel.FK_BatchMachineWise_Machine" />
+        <AssociationConnector Association="CVCModel.FK_BatchMachineWise_MachineRecipe" />
+        <AssociationConnector Association="CVCModel.FK_BatchMachineWise_Status" />
+        <AssociationConnector Association="CVCModel.FK_BatchMachineWise_Users" />
+        <AssociationConnector Association="CVCModel.FK_BatchMachineWise_Users1" />
+        <AssociationConnector Association="CVCModel.FK_BatchRecipeModify_BatchMachineWise" />
+        <AssociationConnector Association="CVCModel.FK_BatchRunData_BatchMachineWise" />
+        <AssociationConnector Association="CVCModel.FK_BatchRecipeModify_RecipeSettingsParameter" />
+        <AssociationConnector Association="CVCModel.FK_BatchRecipeModify_Users" />
+        <AssociationConnector Association="CVCModel.FK_BatchRunData_IPCParameter" />
+        <AssociationConnector Association="CVCModel.FK_BatchRunData_Users" />
+        <AssociationConnector Association="CVCModel.FK_BatchSettings_MachineParameter" />
+        <AssociationConnector Association="CVCModel.FK_BatchSettings_MachineParameter1" />
+        <AssociationConnector Association="CVCModel.FK_BatchSettings_MachineParameter2" />
+        <AssociationConnector Association="CVCModel.FK_BatchSettings_MachineParameter3" />
+        <AssociationConnector Association="CVCModel.FK_BatchSettings_MachineParameter4" />
+        <AssociationConnector Association="CVCModel.FK_BatchSettings_MachineParameter5" />
+        <AssociationConnector Association="CVCModel.FK_Bottle_PickListValue" />
+        <AssociationConnector Association="CVCModel.FK_Bottle_Status" />
+        <AssociationConnector Association="CVCModel.FK_Bottle_Supplier" />
+        <AssociationConnector Association="CVCModel.FK_Bottle_Users" />
+        <AssociationConnector Association="CVCModel.FK_Bottle_Users1" />
+        <AssociationConnector Association="CVCModel.FK_Pack_Bottle" />
+        <AssociationConnector Association="CVCModel.FK_Cap_PickListValue" />
+        <AssociationConnector Association="CVCModel.FK_Cap_Status" />
+        <AssociationConnector Association="CVCModel.FK_Cap_Supplier" />
+        <AssociationConnector Association="CVCModel.FK_Cap_Users" />
+        <AssociationConnector Association="CVCModel.FK_Cap_Users1" />
+        <AssociationConnector Association="CVCModel.FK_Pack_Cap" />
+        <AssociationConnector Association="CVCModel.FK_CityDetails_Status" />
+        <AssociationConnector Association="CVCModel.FK_CityDetails_Users" />
+        <AssociationConnector Association="CVCModel.FK_CityDetails_Users1" />
+        <AssociationConnector Association="CVCModel.FK_Company_CityDetails" />
+        <AssociationConnector Association="CVCModel.FK_Supplier_CityDetails" />
+        <AssociationConnector Association="CVCModel.FK_Users_CityDetails" />
+        <AssociationConnector Association="CVCModel.FK_Company_Users" />
+        <AssociationConnector Association="CVCModel.FK_Company_Users1" />
+        <AssociationConnector Association="CVCModel.FK_Cotton_PickListValue" />
+        <AssociationConnector Association="CVCModel.FK_Cotton_Status" />
+        <AssociationConnector Association="CVCModel.FK_Cotton_Supplier" />
+        <AssociationConnector Association="CVCModel.FK_Cotton_Users" />
+        <AssociationConnector Association="CVCModel.FK_Cotton_Users1" />
+        <AssociationConnector Association="CVCModel.FK_Pack_Cotton" />
+        <AssociationConnector Association="CVCModel.FK_Currency_Status" />
+        <AssociationConnector Association="CVCModel.FK_Currency_Users" />
+        <AssociationConnector Association="CVCModel.FK_Currency_Users1" />
+        <AssociationConnector Association="CVCModel.FK_DataType_PickListValue" />
+        <AssociationConnector Association="CVCModel.FK_DataType_Status" />
+        <AssociationConnector Association="CVCModel.FK_DataType_Users" />
+        <AssociationConnector Association="CVCModel.FK_DataType_Users1" />
+        <AssociationConnector Association="CVCModel.FK_MachineParameter_DataType" />
+        <AssociationConnector Association="CVCModel.FK_PLCParameters_DataType" />
+        <AssociationConnector Association="CVCModel.FK_DateFormatType_DateFormatTypeValue" />
+        <AssociationConnector Association="CVCModel.FK_Department_Status" />
+        <AssociationConnector Association="CVCModel.FK_Department_Users" />
+        <AssociationConnector Association="CVCModel.FK_Department_Users1" />
+        <AssociationConnector Association="CVCModel.FK_Users_Department" />
+        <AssociationConnector Association="CVCModel.FK_Desicant_PickListValue" />
+        <AssociationConnector Association="CVCModel.FK_Desicant_Supplier" />
+        <AssociationConnector Association="CVCModel.FK_Desiccant_Status" />
+        <AssociationConnector Association="CVCModel.FK_Desiccant_Users" />
+        <AssociationConnector Association="CVCModel.FK_Desiccant_Users1" />
+        <AssociationConnector Association="CVCModel.FK_Pack_Desicant" />
+        <AssociationConnector Association="CVCModel.FK_EndOfLine_Status" />
+        <AssociationConnector Association="CVCModel.FK_EndOfLine_Users" />
+        <AssociationConnector Association="CVCModel.FK_EndOfLine_Users1" />
+        <AssociationConnector Association="CVCModel.FK_Pack_EndOfLine" />
+        <AssociationConnector Association="CVCModel.FK_EnvironmentVariables_Users" />
+        <AssociationConnector Association="CVCModel.FK_EnvironmentVariables_Users1" />
+        <AssociationConnector Association="CVCModel.FK_HourFormatType_HourFormatTypeValue" />
+        <AssociationConnector Association="CVCModel.FK_TimeFormatType_TimeFormatValue" />
+        <AssociationConnector Association="CVCModel.FK_IPCParameter_Machine" />
+        <AssociationConnector Association="CVCModel.FK_IPCParameter_MachineParameter" />
+        <AssociationConnector Association="CVCModel.FK_IPCParameter_Protocol" />
+        <AssociationConnector Association="CVCModel.FK_IPCParameter_Status" />
+        <AssociationConnector Association="CVCModel.FK_IPCParameter_Users" />
+        <AssociationConnector Association="CVCModel.FK_IPCParameter_Users1" />
+        <AssociationConnector Association="CVCModel.FK_RecipeSettingsParameter_IPCParameter" />
+        <AssociationConnector Association="CVCModel.FK_ScreenField_IPCParameter" />
+        <AssociationConnector Association="CVCModel.FK_Label_Status" />
+        <AssociationConnector Association="CVCModel.FK_Label_Supplier" />
+        <AssociationConnector Association="CVCModel.FK_Label_Users" />
+        <AssociationConnector Association="CVCModel.FK_Label_Users1" />
+        <AssociationConnector Association="CVCModel.FK_Pack_Label" />
+        <AssociationConnector Association="CVCModel.FK_LabelLost_LabelReconciliation" />
+        <AssociationConnector Association="CVCModel.FK_LabelLost_PickListValue" />
+        <AssociationConnector Association="CVCModel.FK_LabelLost_Status" />
+        <AssociationConnector Association="CVCModel.FK_LabelLost_Users" />
+        <AssociationConnector Association="CVCModel.FK_LabelLost_Users1" />
+        <AssociationConnector Association="CVCModel.FK_LabelReconciliation_LabelRoll" />
+        <AssociationConnector Association="CVCModel.FK_LabelReconciliation_Machine" />
+        <AssociationConnector Association="CVCModel.FK_LabelReconciliation_Status" />
+        <AssociationConnector Association="CVCModel.FK_LabelReconciliation_Users" />
+        <AssociationConnector Association="CVCModel.FK_LabelReconciliation_Users1" />
+        <AssociationConnector Association="CVCModel.FK_LabelRoll_Machine" />
+        <AssociationConnector Association="CVCModel.FK_LabelRoll_Status" />
+        <AssociationConnector Association="CVCModel.FK_LabelRoll_Users" />
+        <AssociationConnector Association="CVCModel.FK_LabelRoll_Users1" />
+        <AssociationConnector Association="CVCModel.FK_LineMaintenanceSchedule_MachineLine" />
+        <AssociationConnector Association="CVCModel.FK_LineMaintenanceSchedule_Status" />
+        <AssociationConnector Association="CVCModel.FK_LineMaintenanceSchedule_Users" />
+        <AssociationConnector Association="CVCModel.FK_LineMaintenanceSchedule_Users1" />
+        <AssociationConnector Association="CVCModel.FK_Machine_MachineLine" />
+        <AssociationConnector Association="CVCModel.FK_Machine_MachineType" />
+        <AssociationConnector Association="CVCModel.FK_Machine_Status" />
+        <AssociationConnector Association="CVCModel.FK_Machine_Users" />
+        <AssociationConnector Association="CVCModel.FK_Machine_Users1" />
+        <AssociationConnector Association="CVCModel.FK_MachineCommunication_Machine" />
+        <AssociationConnector Association="CVCModel.FK_MachineHelpFile_Machine" />
+        <AssociationConnector Association="CVCModel.FK_MachineHistory_Machine" />
+        <AssociationConnector Association="CVCModel.FK_MachineMaintenanceSchedule_Machine" />
+        <AssociationConnector Association="CVCModel.FK_MachineParameter_Machine" />
+        <AssociationConnector Association="CVCModel.FK_MachineRecipe_Machine" />
+        <AssociationConnector Association="CVCModel.FK_MachineSparePart_Machine" />
+        <AssociationConnector Association="CVCModel.FK_MachineSpecification_Machine" />
+        <AssociationConnector Association="CVCModel.FK_MachineUser_Machine" />
+        <AssociationConnector Association="CVCModel.FK_MachineVideo_Machine" />
+        <AssociationConnector Association="CVCModel.FK_Module_Machine" />
+        <AssociationConnector Association="CVCModel.FK_Recipe_Machine" />
+        <AssociationConnector Association="CVCModel.FK_MachineCommunication_Protocol" />
+        <AssociationConnector Association="CVCModel.FK_MachineCommunication_Status" />
+        <AssociationConnector Association="CVCModel.FK_MachineCommunication_Users" />
+        <AssociationConnector Association="CVCModel.FK_MachineCommunication_Users1" />
+        <AssociationConnector Association="CVCModel.FK_MachineHelpFile_Status" />
+        <AssociationConnector Association="CVCModel.FK_MachineHelpFile_Users" />
+        <AssociationConnector Association="CVCModel.FK_MachineHelpFile_Users1" />
+        <AssociationConnector Association="CVCModel.FK_MachineHistory_MachineSparePart" />
+        <AssociationConnector Association="CVCModel.FK_MachineHistory_PickListValue" />
+        <AssociationConnector Association="CVCModel.FK_MachineHistory_Status" />
+        <AssociationConnector Association="CVCModel.FK_MachineHistory_Users" />
+        <AssociationConnector Association="CVCModel.FK_MachineHistory_Users1" />
+        <AssociationConnector Association="CVCModel.FK_MachineLine_Status" />
+        <AssociationConnector Association="CVCModel.FK_MachineLine_Users" />
+        <AssociationConnector Association="CVCModel.FK_MachineLine_Users1" />
+        <AssociationConnector Association="CVCModel.FK_MachineLineUser_MachineLine" />
+        <AssociationConnector Association="CVCModel.FK_MachineLineUser_Shift" />
+        <AssociationConnector Association="CVCModel.FK_MachineLineUser_Status" />
+        <AssociationConnector Association="CVCModel.FK_MachineLineUser_Users" />
+        <AssociationConnector Association="CVCModel.FK_MachineLineUser_Users1" />
+        <AssociationConnector Association="CVCModel.FK_MachineLineUser_Users2" />
+        <AssociationConnector Association="CVCModel.FK_MachineMaintenanceSchedule_Status" />
+        <AssociationConnector Association="CVCModel.FK_MachineMaintenanceSchedule_Users" />
+        <AssociationConnector Association="CVCModel.FK_MachineMaintenanceSchedule_Users1" />
+        <AssociationConnector Association="CVCModel.FK_MachineParameter_DisableParameter" />
+        <AssociationConnector Association="CVCModel.FK_MachineParameter_MachineParameter" />
+        <AssociationConnector Association="CVCModel.FK_MachineParameter_MachineParameter11" />
+        <AssociationConnector Association="CVCModel.FK_MachineParameter_PickListValue" />
+        <AssociationConnector Association="CVCModel.FK_MachineParameter_Status" />
+        <AssociationConnector Association="CVCModel.FK_MachineParameter_Users" />
+        <AssociationConnector Association="CVCModel.FK_MachineParameter_Users1" />
+        <AssociationConnector Association="CVCModel.FK_MachineRecipeParameter_MachineParameter" />
+        <AssociationConnector Association="CVCModel.FK_ViewField_MachineParameter" />
+        <AssociationConnector Association="CVCModel.FK_MachineRecipe_Recipe" />
+        <AssociationConnector Association="CVCModel.FK_MachineRecipe_Status" />
+        <AssociationConnector Association="CVCModel.FK_MachineRecipe_Users" />
+        <AssociationConnector Association="CVCModel.FK_MachineRecipe_Users1" />
+        <AssociationConnector Association="CVCModel.FK_MachineRecipeParameter_MachineRecipe" />
+        <AssociationConnector Association="CVCModel.FK_MachineRecipeParameter_RecipeSettingsParameter" />
+        <AssociationConnector Association="CVCModel.FK_MachineRecipeParameter_Status" />
+        <AssociationConnector Association="CVCModel.FK_MachineRecipeParameter_Users" />
+        <AssociationConnector Association="CVCModel.FK_MachineRecipeParameter_Users1" />
+        <AssociationConnector Association="CVCModel.FK_MachineSparePart_Status" />
+        <AssociationConnector Association="CVCModel.FK_MachineSparePart_Users" />
+        <AssociationConnector Association="CVCModel.FK_MachineSparePart_Users1" />
+        <AssociationConnector Association="CVCModel.FK_MachineSpecification_Status" />
+        <AssociationConnector Association="CVCModel.FK_MachineSpecification_Users" />
+        <AssociationConnector Association="CVCModel.FK_MachineSpecification_Users1" />
+        <AssociationConnector Association="CVCModel.FK_PLC_MachineType" />
+        <AssociationConnector Association="CVCModel.FK_MachineUser_Shift" />
+        <AssociationConnector Association="CVCModel.FK_MachineUser_Status" />
+        <AssociationConnector Association="CVCModel.FK_MachineUser_Users" />
+        <AssociationConnector Association="CVCModel.FK_MachineUser_Users1" />
+        <AssociationConnector Association="CVCModel.FK_MachineUser_Users2" />
+        <AssociationConnector Association="CVCModel.FK_MachineVideo_Status" />
+        <AssociationConnector Association="CVCModel.FK_MachineVideo_Users" />
+        <AssociationConnector Association="CVCModel.FK_MachineVideo_Users1" />
+        <AssociationConnector Association="CVCModel.FK_Module_Status" />
+        <AssociationConnector Association="CVCModel.FK_Module_Users" />
+        <AssociationConnector Association="CVCModel.FK_Module_Users1" />
+        <AssociationConnector Association="CVCModel.FK_ModuleAccess_Module" />
+        <AssociationConnector Association="CVCModel.FK_ViewField_Module" />
+        <AssociationConnector Association="CVCModel.FK_Views_Module" />
+        <AssociationConnector Association="CVCModel.FK_ViewsAccess_Module" />
+        <AssociationConnector Association="CVCModel.FK_ModuleAccess_Roles" />
+        <AssociationConnector Association="CVCModel.FK_ModuleAccess_Status" />
+        <AssociationConnector Association="CVCModel.FK_ModuleAccess_Users" />
+        <AssociationConnector Association="CVCModel.FK_ModuleAccess_Users1" />
+        <AssociationConnector Association="CVCModel.FK_Outsert_Status" />
+        <AssociationConnector Association="CVCModel.FK_Outsert_Supplier" />
+        <AssociationConnector Association="CVCModel.FK_Outsert_Users" />
+        <AssociationConnector Association="CVCModel.FK_Outsert_Users1" />
+        <AssociationConnector Association="CVCModel.FK_Pack_Outsert" />
+        <AssociationConnector Association="CVCModel.FK_Pack_Status" />
+        <AssociationConnector Association="CVCModel.FK_Pack_TabletDetails" />
+        <AssociationConnector Association="CVCModel.FK_Pack_Users" />
+        <AssociationConnector Association="CVCModel.FK_Pack_Users1" />
+        <AssociationConnector Association="CVCModel.FK_PickList_Status" />
+        <AssociationConnector Association="CVCModel.FK_PickList_Users" />
+        <AssociationConnector Association="CVCModel.FK_PickList_Users1" />
+        <AssociationConnector Association="CVCModel.FK_PickListValue_PickList" />
+        <AssociationConnector Association="CVCModel.FK_PickListValue_Status" />
+        <AssociationConnector Association="CVCModel.FK_PickListValue_Users" />
+        <AssociationConnector Association="CVCModel.FK_PickListValue_Users1" />
+        <AssociationConnector Association="CVCModel.FK_PickListValueRoleAccess_PickListValue" />
+        <AssociationConnector Association="CVCModel.FK_PLCParameters_PickListValue" />
+        <AssociationConnector Association="CVCModel.FK_TabletDetails_PickListValue" />
+        <AssociationConnector Association="CVCModel.FK_TabletDetails_PickListValue1" />
+        <AssociationConnector Association="CVCModel.FK_TabletDetails_PickListValue2" />
+        <AssociationConnector Association="CVCModel.FK_Users_PickListValue" />
+        <AssociationConnector Association="CVCModel.FK_PickListValueRoleAccess_Roles" />
+        <AssociationConnector Association="CVCModel.FK_PickListValueRoleAccess_Status" />
+        <AssociationConnector Association="CVCModel.FK_PickListValueRoleAccess_Users" />
+        <AssociationConnector Association="CVCModel.FK_PickListValueRoleAccess_Users1" />
+        <AssociationConnector Association="CVCModel.FK_PLCParameters_PLC" />
+        <AssociationConnector Association="CVCModel.FK_Protocol_Status" />
+        <AssociationConnector Association="CVCModel.FK_Protocol_Users" />
+        <AssociationConnector Association="CVCModel.FK_Protocol_Users1" />
+        <AssociationConnector Association="CVCModel.FK_Recipe_Status" />
+        <AssociationConnector Association="CVCModel.FK_RecipeSettings_Users" />
+        <AssociationConnector Association="CVCModel.FK_RecipeSettings_Users1" />
+        <AssociationConnector Association="CVCModel.FK_RecipeSettingsParameter_RecipeSettings1" />
+        <AssociationConnector Association="CVCModel.FK_RecipeSettingsParameter_Status" />
+        <AssociationConnector Association="CVCModel.FK_RecipeSettingsParameter_Users" />
+        <AssociationConnector Association="CVCModel.FK_RecipeSettingsParameter_Users1" />
+        <AssociationConnector Association="CVCModel.FK_RolePermissions_RoleId" />
+        <AssociationConnector Association="CVCModel.FK_Roles_Status" />
+        <AssociationConnector Association="CVCModel.FK_UserRoles_RoleId" />
+        <AssociationConnector Association="CVCModel.FK_Users_Roles" />
+        <AssociationConnector Association="CVCModel.FK_ViewFieldAccess_Roles" />
+        <AssociationConnector Association="CVCModel.FK_ViewFieldAuthentication_Roles" />
+        <AssociationConnector Association="CVCModel.FK_ViewsAccess_Roles" />
+        <AssociationConnector Association="CVCModel.FK_Screen_Status" />
+        <AssociationConnector Association="CVCModel.FK_ScreenModule_Screen" />
+        <AssociationConnector Association="CVCModel.FK_ScreenField_ScreenModule" />
+        <AssociationConnector Association="CVCModel.FK_ScreenField_Status" />
+        <AssociationConnector Association="CVCModel.FK_ScreenModule_Status" />
+        <AssociationConnector Association="CVCModel.FK_ScreenSection_Status" />
+        <AssociationConnector Association="CVCModel.FK_Shift_Status" />
+        <AssociationConnector Association="CVCModel.FK_Supplier_Status" />
+        <AssociationConnector Association="CVCModel.FK_TabletDetails_Status" />
+        <AssociationConnector Association="CVCModel.FK_Users_Status" />
+        <AssociationConnector Association="CVCModel.FK_ViewField_Status" />
+        <AssociationConnector Association="CVCModel.FK_ViewFieldAccess_Status" />
+        <AssociationConnector Association="CVCModel.FK_Views_Status" />
+        <AssociationConnector Association="CVCModel.FK_ViewsAccess_Status" />
+        <AssociationConnector Association="CVCModel.FK_UserLogArchive_Users" />
+        <AssociationConnector Association="CVCModel.FK_UserLoginDetails_Users" />
+        <AssociationConnector Association="CVCModel.FK_ViewField_Users" />
+        <AssociationConnector Association="CVCModel.FK_ViewField_Users1" />
+        <AssociationConnector Association="CVCModel.FK_ViewFieldAccess_Users" />
+        <AssociationConnector Association="CVCModel.FK_ViewFieldAccess_Users1" />
+        <AssociationConnector Association="CVCModel.FK_Views_Users" />
+        <AssociationConnector Association="CVCModel.FK_Views_Users1" />
+        <AssociationConnector Association="CVCModel.FK_ViewsAccess_Users" />
+        <AssociationConnector Association="CVCModel.FK_ViewsAccess_Users1" />
+        <AssociationConnector Association="CVCModel.FK_ViewField_Views" />
+        <AssociationConnector Association="CVCModel.FK_ViewFieldAccess_ViewField" />
+        <AssociationConnector Association="CVCModel.FK_ViewFieldAuthentication_ViewField" />
+        <AssociationConnector Association="CVCModel.FK_ViewsAccess_Views" />
+        <AssociationConnector Association="CVCModel.FK_Outsert_Supplier1" />
+        <EntityTypeShape EntityType="CVCModel.MasterTerminal" Width="1.5" PointX="0.75" PointY="9.75" />
+        <EntityTypeShape EntityType="CVCModel.TerminalMachineMapping" Width="1.5" PointX="24.75" PointY="89.75" />
+        <AssociationConnector Association="CVCModel.FK__TerminalM__Machi__7DEDA633" />
+        <AssociationConnector Association="CVCModel.FK__TerminalM__Termi__7EE1CA6C" />
+        <EntityTypeShape EntityType="CVCModel.TerminalType" Width="1.5" PointX="11.375" PointY="0.75" />
+        <AssociationConnector Association="CVCModel.FK__MasterTer__Termi__222B06A9" />
+        <EntityTypeShape EntityType="CVCModel.UserMachineMapping" Width="1.5" PointX="13.5" PointY="177.375" />
+        <AssociationConnector Association="CVCModel.FK__UserMachi__Creat__11007AA7" />
+        <AssociationConnector Association="CVCModel.FK__UserMachi__UserI__353DDB1D" />
+        <EntityTypeShape EntityType="CVCModel.MessageMaster" Width="1.5" PointX="30" PointY="142.625" />
+        <AssociationConnector Association="CVCModel.FK__MessageMa__PickL__168449D3" />
+        <EntityTypeShape EntityType="CVCModel.Language" Width="1.5" PointX="3.375" PointY="11.75" />
+        <AssociationConnector Association="CVCModel.FK__UserLog__BatchId__3AC1AA49" />
+        <EntityTypeShape EntityType="CVCModel.Attribute" Width="1.5" PointX="11.375" PointY="4.875" />
+        <AssociationConnector Association="CVCModel.FK__IPCParame__Attri__4FBCC72F" />
+        <AssociationConnector Association="CVCModel.FK__MachineCo__Secur__070CFC19" />
+        <AssociationConnector Association="CVCModel.FK__MachineCo__Secur__08012052" />
+        <AssociationConnector Association="CVCModel.FK__MachineCo__Secur__08F5448B" />
+        <AssociationConnector Association="CVCModel.FK__MachineCo__UserI__09E968C4" />
+        <AssociationConnector Association="CVCModel.FK__MachineCo__UserI__0ADD8CFD" />
+        <AssociationConnector Association="CVCModel.FK__MachineCo__UserI__0BD1B136" />
+        <EntityTypeShape EntityType="CVCModel.AccessLevel" Width="1.5" PointX="21.75" PointY="142.375" />
+        <AssociationConnector Association="CVCModel.FK__AccessLev__Proto__1C0818FF" />
+        <EntityTypeShape EntityType="CVCModel.ImportLog" Width="1.5" PointX="13.5" PointY="181.5" />
+        <AssociationConnector Association="CVCModel.FK__ImportLog__UserI__2F1AED73" />
+        <AssociationConnector Association="CVCModel.FK__BatchRunD__ViewF__1A1FD08D" />
+        <AssociationConnector Association="CVCModel.FK_Cotton_Status1" />
+        <AssociationConnector Association="CVCModel.FK__MachineCo__CpuTy__12149A71" />
+        <AssociationConnector Association="CVCModel.FK_MachineParameter_PickList" />
+        <AssociationConnector Association="CVCModel.FK_Views_MachineId" />
+        <EntityTypeShape EntityType="CVCModel.ListDisplay" Width="1.5" PointX="11.375" PointY="7.75" />
+        <AssociationConnector Association="CVCModel.FK_Views_ListDisplayId" />
+        <EntityTypeShape EntityType="CVCModel.FormDisplay" Width="1.5" PointX="7.375" PointY="11.75" />
+        <AssociationConnector Association="CVCModel.FK_Views_FormDisplayId" />
+        <EntityTypeShape EntityType="CVCModel.ButtonDisplay" Width="1.5" PointX="13.375" PointY="1" />
+        <AssociationConnector Association="CVCModel.FK_Views_ButtonDisplayId" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,53 @@
+﻿@model IEnumerable<CVC.ViewModels.TerminalTypeViewModel>
+
+<table id="tblTerminalType" class="displays table-striped table-bordered dt-responsive nowrap cell-border" width="100%" cellspacing="0">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Terminal Type</th>
+            <th>Is Read</th>
+            <th>Is Write</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+
+            <tr>
+
+                <td>@item.Id</td>
+                <td>
+                    <a href="javascript:void(0);" onclick="GetTerminalTypeDetails(@item.TerminalTypeId)">@Html.DisplayFor(modelItem => item.TerminalTypeName)</a>
+                </td>
+                <td><input disabled="disabled" type="checkbox" checked="@item.IsRead" /></td>
+                <td><input disabled="disabled" type="checkbox" checked="@item.IsWrite" /></td>
+                <td>@(item.IsActive==true?"Active":"In-Active")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#tblTerminalType').DataTable({
+            responsive: {
+                details: {
+                    type: 'column'
+                }
+            },
+
+            "language": {
+                "lengthMenu": "_MENU_ records per page",
+            },
+
+        });
+    
+        var DefaultTerminalTypeId = '@ViewBag.DefaultTerminalTypeId';
+        if (DefaultTerminalTypeId > 0) {
+            GetTerminalTypeDetails(DefaultTerminalTypeId);
+        }
+       
+    });
+    </script>

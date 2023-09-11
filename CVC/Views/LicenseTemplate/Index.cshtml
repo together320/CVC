@@ -1,0 +1,1103 @@
+﻿
+@{
+
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<html>
+
+<head>
+    @*<script src="~/Scripts/jquery-3.4.1.min.js"></script>*@
+    @*<script src="~/Scripts/bootstrap.min.js"></script>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />*@
+    <link href="~/Content/css/style.css" rel="stylesheet" />
+    @*<link href="~/Content/css/DataTable/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="~/Scripts/DataTable/jquery.dataTables.min.js"></script>*@
+    <script src="~/Scripts/underscore-min.js"></script>
+</head>
+
+<body>
+
+    @Html.AntiForgeryToken()
+    <div class="container-fluid wrapper">
+        <div class="card">
+            <h3 class="title">License Template Form</h3>
+            <h4 class="sub-title">Manage Template</h4>
+            <button id="ID_Btn_Add_Template" type="button" class="btn btn-big mb-2">Add New Template</button>
+            <div class="table-wrap" id="ID_Div_DataTable_Templates">
+            </div>
+        </div>
+        <div id="ID_Div_New_Template" style="display:none" class="tab-div card">
+            <div class="btn-wrap">
+                <button id="ID_Btn_Cancel_Template" type="submit" class="btn btn-info mb-2">Cancel</button>
+                <button id="ID_Btn_Clear_Template" type="submit" class="btn btn-info mb-2">Clear</button>
+                <button id="ID_Btn_Save_Template" type="submit" class="btn btn-info mb-2">Save</button>
+                <button id="ID_Btn_Update_Template" type="submit" class="btn btn-info mb-2">Update</button>
+            </div>
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs tab-btn">
+                <li class="nav-item active">
+                    <a class="nav-link" data-toggle="tab" href="#tab1">Basic Description</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#tab2">Module</a>
+                </li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content tab-div">
+                <div id="tab1" class="tab-pane active">
+                    <div class="card">
+                        <h4 class="sub-title">Part 1 (Basic Description)</h4>
+                        <form class="form-inline">
+                            <div class="input-group mb-6 mr-sm-6" style="display:none;">
+                                <div class="input-group-text">ID</div>
+                                <input id="ID_Txt_ID" type="text" class="form-control">
+                            </div>
+                            <div class="input-group mb-6 mr-sm-6">
+                                <div class="input-group-text">
+                                    <sup style="color: red;" title="this field is required">*</sup>
+                                    Template Name
+                                </div>
+                                <input id="ID_Txt_Template_Name" type="text" class="form-control">
+                            </div>
+                            <div class="input-group mb-6 mr-sm-6">
+                                <div class="input-group-text">
+                                    @*<sup style="color: red;" title="this field is required">*</sup>*@
+                                    Template Display Text
+                                </div>
+                                <input id="ID_Txt_Template_Display" type="text" class="form-control">
+                            </div>
+                            <div class="input-group mb-12 mr-sm-12 w-100">
+                                <div class="input-group-text">
+                                    @*<sup style="color: red;" title="this field is required">*</sup>*@
+                                Description</div>
+                                <textarea id="ID_Txt_Template_Desc" type="text" class="form-control">
+                                            </textarea>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div id="tab2" class="tab-pane fade">
+                    <div class="mb-0">
+                        <div class="btn-wrap">
+                            <button id="ID_Btn_Add_Module" type="submit" class="btn btn-info mb-2">Add a Module</button>
+                        </div>
+                        <div id="ID_Div_Modules" style="display:none">
+                            <h4 class="sub-title title-align">Part 2 (Adding Modules to Template)</h4>
+                            <div class="btn-wrap">
+                                <button id="ID_Btn_Template_Cancel" type="submit" class="btn btn-info mb-2">
+                                    Cancel
+                                </button>
+                                @* <button id="ID_Btn_Template_Clear" type="submit" class="btn btn-info
+                                    mb-2">Clear</button> *@
+                                <button id="ID_Btn_Template_Update" type="submit" class="btn btn-info mb-2">
+                                    Update
+                                </button>
+                                <button id="ID_Btn_Add_Template_Item" type="submit" class="btn btn-info mb-2">
+                                    Add
+                                </button>
+                            </div>
+                            <form class="form-inline">
+                                <div class="input-group mb-6 mr-sm-6">
+                                    <div class="input-group-text">
+                                        <sup style="color: red;" title="this field is required">*</sup>
+                                    Module Name</div>
+                                    <select id="ID_Drp_Module_Name" class="custom-select form-control"></select>
+                                </div>
+                                <div class="input-group mb-6 mr-sm-6">
+                                    <div class="input-group-text">
+                                        <sup style="color: red;" title="this field is required">*</sup>
+                                    Action Name</div>
+                                    <select id="ID_Drp_Module_Action" class="custom-select form-control"></select>
+                                </div>
+                                <div class="input-group mb-6 mr-sm-6">
+                                    <div class="input-group-text">
+                                        <sup style="color: red;" title="this field is required">*</sup>
+                                    License Type</div>
+                                    <select id="ID_Drp_Module_Type" class="custom-select form-control"></select>
+                                </div>
+                                <div class="input-group mb-6 mr-sm-6">
+                                    <div class="input-group-text">
+                                        <sup style="color: red;" title="this field is required">*</sup>
+                                    License Value</div>
+                                    <input id="ID_Txt_License_Value" type="number" class="form-control numberonly">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="card mt-0">
+                        <h4 class="sub-title">Module Preview</h4>
+                        <div class="table-wrap" id="ID_Div_DataTable_Modules">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+</html>
+@Html.Partial("~/Views/PartialViews/Message_PartialView.cshtml")
+
+<script>
+    var redirectUrlAfterLogin = "";
+    function Validate_Save() {
+        if
+        ($('#ID_Txt_Template_Name').val().length < 1
+        //||
+        //$('#ID_Txt_Template_Display').val().length < 1 ||
+        //    $('#ID_Txt_Template_Desc').val().length < 1
+        ) {
+            messageText = getMessageDetailsById(28);
+            ValidationPopUp("", "");
+            return false;
+        }
+        if (typeof ModuleListByTemplateItem == undefined) {
+            messageText = getMessageDetailsById(26);
+            ValidationPopUp("Name", "Modules");
+            return false;
+        }
+        if (_.isEmpty(ModuleListByTemplateItem)) {
+            messageText = getMessageDetailsById(26);
+            ValidationPopUp("Name", "Modules");
+            return false;
+        }
+        return true;
+    }
+    function Validate_Update() {
+        if
+        ($('#ID_Txt_Template_Name').val().length < 1
+        //||
+        //$('#ID_Txt_Template_Display').val().length < 1 ||
+        //    $('#ID_Txt_Template_Desc').val().length < 1
+        ) {
+            messageText = getMessageDetailsById(28);
+            ValidationPopUp("", "");
+            return false;
+        }
+        if (typeof ModuleListByTemplateItem == undefined) {
+            messageText = getMessageDetailsById(26);
+            ValidationPopUp("Name", "Modules");
+            return false;
+        }
+        if (_.isEmpty(ModuleListByTemplateItem)) {
+            messageText = getMessageDetailsById(26);
+            ValidationPopUp("Name", "Modules");
+            return false;
+        }
+        return true;
+    }
+    function Validate_AddModule() {
+        if
+        (
+            $("#ID_Drp_Module_Name")[0].selectedIndex < 1 ||
+            $("#ID_Drp_Module_Action")[0].selectedIndex < 1 ||
+            $("#ID_Drp_Module_Type")[0].selectedIndex < 1 ||
+            $('#ID_Txt_License_Value').val().length < 1
+        ) {
+            messageText = getMessageDetailsById(28);
+            ValidationPopUp("", "");
+            return false;
+        }
+        return true;
+    }
+    function Validate_UpdateModule() {
+        if
+        (
+            $("#ID_Drp_Module_Name")[0].selectedIndex < 1 ||
+            $("#ID_Drp_Module_Action")[0].selectedIndex < 1 ||
+            $("#ID_Drp_Module_Type")[0].selectedIndex < 1 ||
+            $('#ID_Txt_License_Value').val().length < 1
+        ) {
+            messageText = getMessageDetailsById(28);
+            ValidationPopUp("", "");
+            return false;
+        }
+        return true;
+    }
+
+    function getMessageDetailsById(messageTypeId) {
+        $.ajax({
+            url: Q.resolveUrl('~/Common/GetMessageDetailsById'),
+            type: 'GET',
+            data: { "messageTypeId": messageTypeId },
+            dataType: 'json',
+            success: function (response) {
+                if (response.IsStatus) {
+                    return messageText = response.Data;
+                }
+
+            },
+            error: function (response) {
+            }
+        });
+
+    }
+
+
+    function ValidationPopUp(Basictext, Replacetext) {
+        setTimeout(function () {
+            autoAcceptUntrustedCertificatesForOpcUaClient = false;
+            if (messageText != undefined) {
+                messageText = messageText.replace(Basictext, Replacetext);
+                $("#infoModalBody").text(messageText);
+                $("#modal-info").modal('show');
+            }
+        }, 500);
+    }
+
+    var messageText;
+    $(document).ready(function () {
+        var IsTemplateItemEditable = true, TemplateId, CurrentModuleID = null;
+        var TemplateList, ModuleListByTemplateItem, TemplateListItem, ModuleListItemByTemplateItem, TemplateItem;
+        var ModuleListNewItem = [];
+        Reset();
+        BindDropDownswithAPI('ID_Drp_Module_Name', 'GetAllModules', 'ModuleID', 'ModuleName');
+        $("#ID_Drp_Module_Name").change(function () {
+            var ModuleID = $('#ID_Drp_Module_Name option:selected').val();
+            BindDropDownswithAPI('ID_Drp_Module_Action', 'GetActionsByModuleID?ModuleID=' + ModuleID, 'ActionID', 'ActionName')
+        });
+        $("#ID_Drp_Module_Action").change(function () {
+            var ModuleID = $('#ID_Drp_Module_Name option:selected').val();
+            var ActionID = $('#ID_Drp_Module_Action option:selected').val();
+            BindDropDownswithAPI('ID_Drp_Module_Type', "GetLicenseType?ModuleID=" + ModuleID + "&ActionId=" + ActionID, 'LICENSETYPEID', 'LICENSETYPE')
+        });
+        $("#ID_Drp_Module_Type").change(function () {
+            var ModuleID = $('#ID_Drp_Module_Name option:selected').val();
+            var ActionID = $('#ID_Drp_Module_Action option:selected').val();
+            var LicenseTypeId = $('#ID_Drp_Module_Type option:selected').val();
+            GetLicenseValue(ModuleID, ActionID, LicenseTypeId);
+        });
+        $("#ID_Btn_Add_Template").click(function () {
+            ShowNewTemplate();
+            $("#ID_Div_DataTable_Templates").hide();
+        });
+        $("#ID_Btn_Cancel_Template").click(function () {
+            if (confirm("Do you want to cancel?")) {
+                Reset();
+            }
+        });
+        $("#ID_Btn_Clear_Template").click(function () {
+            if (confirm("Do you want to clear?")) {
+                ClearNewTemplate();
+            }
+        });
+        $("#ID_Btn_Save_Template").click(function () {
+            if (confirm("Do you want to save?")) {
+                if (Validate_Save()) {
+                    SaveTemplate();
+                }
+            }
+        });
+        $("#ID_Btn_Add_Module").click(function () {
+            AddNewModules();
+        });
+        $("#ID_Btn_Template_Cancel").click(function () {
+            CancelNewModule();
+        });
+        $("#ID_Btn_Template_Clear").click(function () {
+            ClearNewModule();
+        });
+        $("#ID_Btn_Template_Update").click(function () {
+            if (Validate_UpdateModule()) {
+                UpdateNewModule();
+            }
+        });
+        $("#ID_Btn_Add_Template_Item").click(function () {
+            if (Validate_AddModule()) {
+                AddNewModule();
+            }
+        });
+        $("#ID_Btn_Update_Template").click(function () {
+            if (confirm("Do you want to update?")) {
+                if (Validate_Update()) {
+                    UpdateTemplate();
+                }
+            }
+        });
+        $("#ID_Txt_Template_Name").change(function () {
+            var TemplateName = $('#ID_Txt_Template_Name').val();
+            if (IsValueUnique(TemplateName, 'TEMPLATENAME')) {
+                console.log("Template name is already used.")
+                $("#ID_Txt_Template_Name").val("");
+                $("#ID_Txt_Template_Name").focus();
+            }
+        });
+        $('.numberonly').keypress(function (e) {
+
+            if (e.which != 46 && e.which != 45 && e.which != 46 &&
+                !(e.which >= 48 && e.which <= 57)) {
+                return false;
+            }
+            //var charCode = (e.which) ? e.which : event.keyCode
+
+            //if (String.fromCharCode(charCode).match(/[^0-9]/g))
+
+            //    return false;
+
+        });    
+    });
+    function ClearNewModule() {
+        $("#ID_Txt_License_Value").val("");
+        $('#ID_Drp_Module_Name').prop('selectedIndex', 0);
+        $('#ID_Drp_Module_Action').prop('selectedIndex', 0);
+        $('#ID_Drp_Module_Type').prop('selectedIndex', 0);
+    }
+    function CancelNewModule() {
+        $("#ID_Txt_License_Value").val("");
+        $('#ID_Drp_Module_Name').prop('selectedIndex', 0);
+        $('#ID_Drp_Module_Action').prop('selectedIndex', 0);
+        $('#ID_Drp_Module_Type').prop('selectedIndex', 0);
+        $("#ID_Drp_Module_Name").prop("disabled", false);
+        $("#ID_Drp_Module_Action").prop("disabled", false);
+        $('#ID_Drp_Module_Type').prop("disabled", false);
+        $('#ID_Div_Modules').hide();
+    }
+    function AddNewModule() {
+        var ModuleID = $('#ID_Drp_Module_Name option:selected').val();
+        var ModuleText = $('#ID_Drp_Module_Name option:selected').text();
+        var ActionID = $('#ID_Drp_Module_Action option:selected').val();
+        var ActionText = $('#ID_Drp_Module_Action option:selected').text();
+        var LicenseTypeId = $('#ID_Drp_Module_Type option:selected').val();
+        var LicenseTypeText = $('#ID_Drp_Module_Type option:selected').text();
+        var LicenseValue = $('#ID_Txt_License_Value').val();
+        ModuleListNewItem = undefined;
+        if (typeof ModuleListNewItem === "undefined") {
+            ModuleListNewItem = new Array();
+        }
+        ModuleListNewItem.push
+            ({
+                'ACTIONID': parseInt(ActionID),
+                'ACTIONNAME': ActionText,
+                'MODULEID': parseInt(ModuleID),
+                'MODULENAME': ModuleText,
+                'ID': 0,
+                'LICENSETYPE': LicenseTypeText,
+                'LICENSETYPEID': parseInt(LicenseTypeId),
+                'LICENSEVALUE': LicenseValue,
+                'ItemStatus': "Added",
+                'Status':"Active"
+            });
+        var FilteredItem = _.findWhere(ModuleListByTemplateItem, {
+            ACTIONID: parseInt(ActionID), MODULEID: parseInt(ModuleID)
+        });
+        if (typeof FilteredItem != "undefined") {
+            if (!_.isNull(FilteredItem)) {
+                alert("Duplicate Alert,");
+            }
+        }
+        else {
+            ModuleListByTemplateItem = _.union(ModuleListNewItem, ModuleListByTemplateItem);
+            CancelNewModule();
+        }
+        RefreshDTModuleList(ModuleListByTemplateItem);
+    }
+    function RefreshDTModuleList(data) {
+        $("#ID_Div_DataTable_Modules").html('<table id="ID_DataTable_Modules" class="displays table-striped table-bordered nowrap cell-border" width="100%" cellspacing="0">' +
+            '<thead>' +
+            '<tr><th>ModuleName</th> ' +
+            '<th>ActionName</th>' +
+            '<th>LicenseType</th>' +
+            '<th>LicenseValue</th>' +
+            '<th>UpdatedDate</th>' +
+            //'<th>Edit</th> ' +
+            '<th>Delete</th> </tr>' +
+            '</thead> ' +
+            '<tbody id="ID_DataTable_Modules_Items"></table>');
+        var content = '';
+        var contentall = '';
+        var results;
+        if (data != null) {
+            results = data;
+            for (var i = 0; i < results.length; i++) {
+                //Content appending
+                content = '<tr>' +
+                    '<td>' + results[i].MODULENAME + '</td>' +
+                    '<td>' + results[i].ACTIONNAME + '</td>' +
+                    '<td>' + results[i].LICENSETYPE + '</td>' +
+                    '<td>' + results[i].LICENSEVALUE + '</td>' +
+                    '<td>' + results[i].UD + '</td>' +
+                    //'<td>' + '<a onclick=UpdateModuleListItem(' + results[i].MODULEID + ',' + results[i].ACTIONID + ',' + TemplateId + ',' + results[i].LICENSETYPEID + '); class="CLS_DT_MODULE_ITEM_EDIT CLS_DT_MODULE_ITEM" >Edit</a>' + '</td>' +
+                    '<td>' + '<a onclick=DeleteModuleListItem(' + results[i].MODULEID + ',' + results[i].ACTIONID + ',' + TemplateId + ',' + results[i].LICENSETYPEID + '); class="CLS_DT_MODULE_ITEM_DELETE CLS_DT_MODULE_ITEM" >Delete</a>' + '</td>' +
+                    '</tr>';
+                contentall = contentall + content;
+                content = '';
+            }
+            $("#ID_DataTable_Modules_Items").html(contentall);
+        }
+        $("#ID_DataTable_Modules").DataTable({
+            stateSave: true,
+            "columnDefs": [
+                {
+                    "targets": [4],
+                    "visible": false,
+                    "searchable": false
+                }
+            ],
+            "order": [[4, "desc"]]
+        });
+    }
+    function UpdateNewModule() {
+        if (!_.isUndefined(CurrentModuleID)) {
+            if (!_.isNull(CurrentModuleID)) {
+                if (_.isNumber(CurrentModuleID)) {
+                    if (CurrentModuleID > 0) {
+                        var ModuleID = $('#ID_Drp_Module_Name option:selected').val();
+                        var ActionID = $('#ID_Drp_Module_Action option:selected').val();
+                        var LicenseTypeId = $('#ID_Drp_Module_Type option:selected').val();
+                        var LicenseTypeText = $('#ID_Drp_Module_Type option:selected').text();
+                        var LicenseValue = $('#ID_Txt_License_Value').val();
+                        ModuleListByTemplateItem = _.without(ModuleListByTemplateItem, _.findWhere(ModuleListByTemplateItem, {
+                            ACTIONID: parseInt(ModuleListItemByTemplateItem[0].ACTIONID)
+                            , MODULEID: parseInt(ModuleListItemByTemplateItem[0].MODULEID)
+                            , LICENSETYPEID: parseInt(ModuleListItemByTemplateItem[0].LICENSETYPEID)
+                        }));
+                        ModuleListItemByTemplateItem[0]["LICENSETYPE"] = LicenseTypeText;
+                        ModuleListItemByTemplateItem[0]["LICENSETYPEID"] = parseInt(LicenseTypeId);
+                        ModuleListItemByTemplateItem[0]["LICENSEVALUE"] = LicenseValue;
+                        ModuleListItemByTemplateItem[0]["ItemStatus"] = "Updated";
+                        // Checking for duplicate
+                        var FilteredItem = _.findWhere(ModuleListByTemplateItem, {
+                            ACTIONID: parseInt(ModuleListItemByTemplateItem[0].ACTIONID)
+                            , MODULEID: parseInt(ModuleListItemByTemplateItem[0].MODULEID)
+                        });
+                        if (typeof FilteredItem != "undefined") {
+                            if (!_.isNull(FilteredItem)) {
+                                alert("Duplicate Alert,");
+                            }
+                        }
+                        else {
+                            ModuleListByTemplateItem.push(ModuleListItemByTemplateItem[0]);
+                            CancelNewModule();
+                            RefreshDTModuleList(ModuleListByTemplateItem);
+                            CurrentModuleID = null;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    function AddNewModules() {
+        $('#ID_Div_Modules').show();
+        $('#ID_Btn_Add_Template_Item').show();
+        $('#ID_Btn_Template_Update').hide();
+        $('#ID_Drp_Module_Name').prop('selectedIndex', 0);
+        $('#ID_Drp_Module_Action').prop('selectedIndex', 0);
+        $('#ID_Drp_Module_Type').prop('selectedIndex', 0);
+        $("#ID_Drp_Module_Name").prop("disabled", false);
+        $("#ID_Drp_Module_Action").prop("disabled", false);
+    }
+    function SaveTemplate() {
+        var ID_Txt_ID = $("#ID_Txt_ID").val();
+        var ID_Txt_Template_Name = $("#ID_Txt_Template_Name").val();
+        var ID_Txt_Template_Display = $("#ID_Txt_Template_Display").val();
+        var ID_Txt_Template_Desc = $("#ID_Txt_Template_Desc").val();
+        TemplateItem = new Array();
+        var ModelLicenseModules1 = ModuleListByTemplateItem;
+        var BasicInfo = { ModelLicenseModules: ModelLicenseModules1, ID: ID_Txt_ID, TemplateName: ID_Txt_Template_Name, TemplateDisplayText: ID_Txt_Template_Display, TemplateDescription: ID_Txt_Template_Desc };
+        TemplateItem.push(BasicInfo);
+        var apiPath = "TemplateCreate";
+        $.ajax({
+            method: "POST",
+            //url: Q.resolveUrl('/LicenseTemplate/TemplateCreate'),
+            url: apiPath,
+            data: { __RequestVerificationToken: $('[name=__RequestVerificationToken]').val(), TemplateValue: JSON.stringify(BasicInfo) },
+            headers: {
+                Accept: "application/json;odata=verbose"
+            },
+            async: false,
+            success: function (data) {
+                if (data.IsStatus) {
+                    ShowMessage(data);
+                }
+                else {
+                    Reset();
+                }
+            },
+            eror: function (data) {
+                console.log("An error occurred. Please try again.");
+            }
+        });
+    }
+    function ClearNewTemplate() {
+        $("#ID_Txt_ID").val("");
+        $("#ID_Txt_Template_Name").val("");
+        $("#ID_Txt_Template_Display").val("");
+        $("#ID_Txt_Template_Desc").val("");
+        $("#ID_Txt_License_Value").val("");
+        $('#ID_Drp_Module_Name').prop('selectedIndex', 0);
+        $('#ID_Drp_Module_Action').prop('selectedIndex', 0);
+        $('#ID_Drp_Module_Type').prop('selectedIndex', 0);
+        $('#ID_Div_Modules').hide();
+        LoadDtAllModules();
+    }
+    function LoadDtAllModules(TemplateId) {
+        if (TemplateId == 0 || typeof TemplateId === "undefined") {
+            var apiPath = "GetAllModulesData";
+        } else {
+            var apiPath = "GetAllModulesByTemplateID?TemplateID=" + TemplateId;
+        }
+        $("#ID_Div_DataTable_Modules").html('<table id="ID_DataTable_Modules" class="displays table-striped table-bordered nowrap cell-border" width="100%" cellspacing="0">' +
+            '<thead>' +
+            '<tr><th>ModuleName</th> ' +
+            '<th>ActionName</th>' +
+            '<th>LicenseType</th>' +
+            '<th>LicenseValue</th>' +
+            '<th>UpdatedDate</th>' +
+            //'<th>Edit</th> ' +
+            '<th>Delete</th> </tr>' +
+            '</thead> ' +
+            '<tbody id="ID_DataTable_Modules_Items"></table>');
+        $.ajax({
+            url: apiPath,
+            headers: {
+                Accept: "application/json;odata=verbose"
+            },
+            async: false,
+            success: function (data) {
+                var content = '';
+                var contentall = '';
+                var items; // Data will have user object
+                var results;
+                if (data != null) {
+                    items = data;
+                    if (items != null) {
+                        results = items;
+                        ModuleListByTemplateItem = results;
+                        for (var i = 0; i < ModuleListByTemplateItem.length; i++) {
+                            //Content appending
+                            content = '<tr>' +
+                                '<td>' + ModuleListByTemplateItem[i].MODULENAME + '</td>' +
+                                '<td>' + ModuleListByTemplateItem[i].ACTIONNAME + '</td>' +
+                                '<td>' + ModuleListByTemplateItem[i].LICENSETYPE + '</td>' +
+                                '<td>' + ModuleListByTemplateItem[i].LICENSEVALUE + '</td>' +
+                                '<td>' + ModuleListByTemplateItem[i].UD + '</td>' +
+                                //'<td>' + '<a onclick=UpdateModuleListItem(' + results[i].MODULEID + ',' + results[i].ACTIONID + ',' + TemplateId + ',' + results[i].LICENSETYPEID + '); class="CLS_DT_MODULE_ITEM_EDIT CLS_DT_MODULE_ITEM" >Edit</a>' + '</td>' +
+                                '<td>' + '<a onclick=DeleteModuleListItem(' + results[i].MODULEID + ',' + results[i].ACTIONID + ',' + TemplateId + ',' + results[i].LICENSETYPEID + '); class="CLS_DT_MODULE_ITEM_DELETE CLS_DT_MODULE_ITEM" >Delete</a>' + '</td>' +
+                                '</tr>';
+                            contentall = contentall + content;
+                            content = '';
+                        }
+                        $("#ID_DataTable_Modules_Items").html(contentall);
+                    }
+                }
+            },
+            eror: function (data) {
+                console.log("An error occurred. Please try again.");
+            }
+        });
+        $("#ID_DataTable_Modules").DataTable({
+            stateSave: true,
+            "columnDefs": [
+                {
+                    "targets": [4],
+                    "visible": false,
+                    "searchable": false
+                }
+            ],
+            "order": [[4, "desc"]]
+        });
+    }
+    //function LoadDTAllTemplate() {
+    //    var apiPath = "GetAllTemplates";
+    //    $("#ID_Div_DataTable_Templates").html('<table id="ID_DataTable_Templates" class="displays table-striped table-bordered nowrap cell-border" width="100%" cellspacing="0">' +
+    //        '<thead>' +
+    //        '<tr>' +
+    //        '<th>TemplateName</th>' +
+    //        '<th>UpdatedDate</th>' +
+    //        '<th>CreatedDate</th>' +
+    //        '<th>UpdatedDateHidden</th>' +
+    //        '<th>Edit</th>' +
+    //        '<th>Delete</th>' +
+    //        '</tr>' +
+    //        '</thead>' +
+    //        '<tbody id="ID_DataTable_Template_Items">' +
+    //        '</table>');
+    //    $.ajax({
+    //        url: apiPath,
+    //        headers: {
+    //            Accept: "application/json;odata=verbose"
+    //        },
+    //        async: false,
+    //        success: function (data) {
+    //            var content = '';
+    //            var contentall = '';
+    //            var items; // Data will have user object
+    //            var results;
+    //            if (data != null) {
+    //                items = data;
+    //                if (items != null) {
+    //                    results = items;
+    //                    TemplateList = results;
+    //                    for (var i = 0; i < TemplateList.length; i++) {
+    //                        //Content appending
+    //                        content = '<tr>' +
+    //                            '<td>' + TemplateList[i].TemplateName + '</td>' +
+    //                            '<td>' + TemplateList[i].UpdatedDate + '</td>' +
+    //                            '<td>' + TemplateList[i].CreatedDate + '</td>' +
+    //                            '<td>' + TemplateList[i].UD + '</td>' +
+    //                            '<td>' + '<a class="CLS_DT_TEMPLATE_ITEM_EDIT CLS_DT_TEMPLATE_ITEM" onclick=UpdateTemplateListItem(' + TemplateList[i].Id + '); >Edit</a>' + '</td>' +
+    //                            '<td>' + '<a class="CLS_DT_TEMPLATE_ITEM_EDIT CLS_DT_TEMPLATE_ITEM" onclick=DeleteTemplateListItem(' + TemplateList[i].Id + '); >Delete</a>' + '</td>' +
+    //                            '</tr>';
+    //                        contentall = contentall + content;
+    //                        content = '';
+    //                    }
+    //                    $("#ID_DataTable_Template_Items").html(contentall);
+    //                }
+    //            }
+    //        },
+    //        eror: function (data) {
+    //            console.log("An error occurred. Please try again.");
+    //        }
+    //    });
+    //    $("#ID_DataTable_Templates").DataTable({
+    //        "columnDefs": [
+    //            {
+    //                "targets": [3],
+    //                "visible": false,
+    //                "searchable": false
+    //            }
+    //        ],
+    //        "order": [[3, "desc"]]
+    //    });
+    //}
+    function LoadDTAllTemplate() {
+        var apiPath = "GetAllTemplates";
+        $("#ID_Div_DataTable_Templates").html('<table id="ID_DataTable_Templates" class="display" style="width:100%">' +
+            '<thead>' +
+            '<tr>' +
+            '<th>TemplateName</th>' +
+            '<th>UpdatedDate</th>' +
+            '<th>CreatedDate</th>' +
+            '<th>UpdatedDateHidden</th>' +
+            //'<th>Edit</th>' +
+            //'<th>Delete</th>' +
+            '</tr>' +
+            '</thead>' +
+            '<tbody id="ID_DataTable_Template_Items">' +
+            '</table>');
+        $.ajax({
+            url: apiPath,
+            headers: {
+                Accept: "application/json;odata=verbose"
+            },
+            async: false,
+            success: function (data) {
+                if (data.type == 'Notification') {
+                    ServerNotification(data);
+                }
+                var content = '';
+                var contentall = '';
+                var items; // Data will have user object
+                var results;
+                if (data != null) {
+                    items = data;
+                    if (items != null) {
+                        results = items;
+                        TemplateList = results;
+                        for (var i = 0; i < TemplateList.length; i++) {
+                            //Content appending
+                            content = '<tr>' +
+                                '<td><a class="CLS_DT_TEMPLATE_ITEM_EDIT CLS_DT_TEMPLATE_ITEM" onclick=UpdateTemplateListItem(' + TemplateList[i].Id + '); >'
+                                + TemplateList[i].TemplateName + '</a></td>' +
+                                '<td>' + TemplateList[i].UpdatedDate + '</td>' +
+                                '<td>' + TemplateList[i].CreatedDate + '</td>' +
+                                '<td>' + TemplateList[i].UD + '</td>' +
+                                //'<td>' + '<a class="CLS_DT_TEMPLATE_ITEM_EDIT CLS_DT_TEMPLATE_ITEM" onclick=UpdateTemplateListItem(' + TemplateList[i].Id + '); >Edit</a>' + '</td>' +
+                                //'<td>' + '<a class="CLS_DT_TEMPLATE_ITEM_EDIT CLS_DT_TEMPLATE_ITEM" onclick=DeleteTemplateListItem(' + TemplateList[i].Id + '); >Delete</a>' + '</td>' +
+                                '</tr>';
+                            contentall = contentall + content;
+                            content = '';
+                        }
+                        $("#ID_DataTable_Template_Items").html(contentall);
+                    }
+                }
+            },
+            eror: function (data) {
+                console.log("An error occurred. Please try again.");
+            }
+        });
+        $("#ID_DataTable_Templates").DataTable({
+            "columnDefs": [
+                {
+                    "targets": [3],
+                    "visible": false,
+                    "searchable": false
+                }
+            ],
+            "order": [[3, "desc"]]
+        });
+    }
+    function Reset() {
+        $("#ID_Btn_Add_Template").show();
+        $("#ID_Div_New_Template").hide();
+        $("#ID_Btn_Update_Template").hide();
+        $("#ID_Btn_Clear_Template").show();
+        $("#ID_Btn_Save_Template").show();
+        $("#ID_Txt_ID").val("");
+        $("#ID_Txt_Template_Name").val("");
+        $("#ID_Txt_Template_Display").val("");
+        $("#ID_Txt_Template_Desc").val("");
+        $("#ID_Txt_License_Value").val("");
+        $("#ID_Div_DataTable_Templates").show();
+        $('#ID_Drp_Module_Name').prop('selectedIndex', 0);
+        $('#ID_Drp_Module_Action').prop('selectedIndex', 0);
+        $('#ID_Drp_Module_Type').prop('selectedIndex', 0);
+        $("#ID_Drp_Module_Name").prop("disabled", false);
+        $("#ID_Drp_Module_Action").prop("disabled", false);
+        $('#ID_Div_Modules').hide();
+        TemplateId = 0;
+        LoadDTAllTemplate();
+    }
+    function ShowNewTemplate() {
+        $("#ID_Div_New_Template").show();
+        $("#ID_Btn_Add_Template").hide();
+
+        LoadDtAllModules();
+    }
+    function GetLicenseValue(ModuleId, ActionId, LicenseTypeId) {
+        if (typeof TemplateId === "undefined") {
+            TemplateId = 0;
+        }
+        var apiPath = "GetLicenseValue?ModuleID=" + ModuleId + "&ActionId=" + ActionId + "&LicenseTypeID=" + LicenseTypeId + "&TemplateID=0";
+        $.ajax({
+            url: apiPath,
+            headers: {
+                Accept: "application/json;odata=verbose"
+            },
+            async: false,
+            success: function (data) {
+                var items; // Data will have user object
+                var results;
+                if (data != null) {
+                    if (data.length > 0) {
+                        items = data;
+                        if (items != null) {
+                            results = items;
+                            for (var i = 0; i < results.length; i++) {
+                                $('#ID_Txt_License_Value').val(results[i].LICENSEVALUE);
+                                break;
+                            }
+                        }
+                    } else {
+                        $('#ID_Txt_License_Value').val("");
+                    }
+                }
+            },
+            eror: function (data) {
+                console.log("An error occurred. Please try again.");
+            }
+        });
+    }
+    function ShowTemplateItem(data) {
+        $("#ID_Div_New_Template").show();
+        $("#ID_Btn_Save_Template").hide();
+        $("#ID_Btn_Update_Template").show();
+        $("#ID_Btn_Clear_Template").hide();
+        $("#ID_Txt_ID").val("");
+        $("#ID_Txt_Template_Name").val("");
+        $("#ID_Txt_Template_Display").val("");
+        $("#ID_Txt_Template_Desc").val("");
+        $("#ID_Txt_License_Value").val("");
+        $('#ID_Drp_Module_Name').prop('selectedIndex', 0);
+        $('#ID_Drp_Module_Action').prop('selectedIndex', 0);
+        $('#ID_Drp_Module_Type').prop('selectedIndex', 0);
+        for (var i = 0; i < data.length; i++) {
+            $("#ID_Txt_ID").val(data[i].ID);
+            $("#ID_Txt_Template_Name").val(data[i].TEMPLATENAME);
+            $("#ID_Txt_Template_Display").val(data[i].TEMPLATEDISPLAYTEXT);
+            $("#ID_Txt_Template_Desc").val(data[i].TEMPLATEDESCRIPTION);
+        }
+        LoadDtAllModules(TemplateId);
+    }
+    function UpdateTemplateListItem(ID) {
+        TemplateId = ID;
+        var apiPath = "GetTemplateById?TemplateID=" + TemplateId;
+        $.ajax({
+            url: apiPath,
+            headers: {
+                Accept: "application/json;odata=verbose"
+            },
+            async: false,
+            success: function (data) {
+                var items; // Data will have user object
+                var results;
+                if (data != null) {
+                    debugger;
+                    items = data;
+                    if (items != null) {
+                        results = items;
+                        TemplateListItem = results;
+                        ShowTemplateItem(TemplateListItem);
+                    }
+                }
+            },
+            eror: function (data) {
+                console.log("An error occurred. Please try again.");
+            }
+        });
+    }
+    function IsValueUnique(value, name) {
+        var Content = false;
+        var apiPath = "CheckValueIsUnique?value=" + value + "&name=" + name;
+        $.ajax({
+            url: apiPath,
+            headers: {
+                Accept: "application/json;odata=verbose"
+            },
+            async: false,
+            success: function (data) {
+                if (data != null) {
+                    if (data.length > 0) {
+                        Content = data[0].IsUsed;
+                    }
+                }
+
+            },
+            eror: function (data) {
+                console.log("An error occurred. Please try again.");
+            }
+        });
+        return Content;
+    }
+    function ShowModuleItem(data) {
+        $('#ID_Btn_Add_Template_Item').hide();
+        $('#ID_Btn_Template_Update').show();
+        $('#ID_Div_Modules').show();
+        $('#ID_Drp_Module_Name').prop('selectedIndex', 0);
+        $('#ID_Drp_Module_Action').prop('selectedIndex', 0);
+        $('#ID_Drp_Module_Type').prop('selectedIndex', 0);
+        $('#ID_Txt_License_Value').val("");
+        for (var i = 0; i < data.length; i++) {
+            $("#ID_Drp_Module_Name").val(data[i].MODULEID);
+            var ModuleID = $('#ID_Drp_Module_Name option:selected').val();
+            BindDropDownswithAPI('ID_Drp_Module_Action', 'GetActionsByModuleID?ModuleID=' + ModuleID, 'ActionID', 'ActionName')
+            $('#ID_Drp_Module_Action').val(data[i].ACTIONID);
+            var ModuleID = $('#ID_Drp_Module_Name option:selected').val();
+            var ActionID = $('#ID_Drp_Module_Action option:selected').val();
+            BindDropDownswithAPI('ID_Drp_Module_Type', "GetLicenseType?ModuleID=" + ModuleID + "&ActionId=" + ActionID, 'LICENSETYPEID', 'LICENSETYPE')
+            $('#ID_Drp_Module_Type').val(data[i].LICENSETYPEID);
+            var ModuleID = $('#ID_Drp_Module_Name option:selected').val();
+            var ActionID = $('#ID_Drp_Module_Action option:selected').val();
+            var LicenseTypeId = $('#ID_Drp_Module_Type option:selected').val();
+            $('#ID_Txt_License_Value').val(data[i].LICENSEVALUE);
+        }
+        $("#ID_Drp_Module_Name").prop("disabled", true);
+        $("#ID_Drp_Module_Action").prop("disabled", true);
+    }
+    function UpdateModuleListItem(MID, AID, TID, TYPID) {
+        CurrentModuleID = MID;
+        if (typeof TID === "undefined") {
+            TID = 0;
+        }
+        var apiPath = "GetModuleById?ModuleID=" + CurrentModuleID + "&ActionId=" + AID + "&TemplateID=" + TID;
+        $.ajax({
+            url: apiPath,
+            headers: {
+                Accept: "application/json;odata=verbose"
+            },
+            async: false,
+            success: function (data) {
+                var items; // Data will have user object
+                var results;
+                if (data != null) {
+                    if (data.length > 0) {
+                        items = data;
+                        if (items != null) {
+                            results = items;
+                            ModuleListItemByTemplateItem = results;
+                            var ItemStatus = ModuleListItemByTemplateItem[0];
+                            ItemStatus["ItemStatus"] = "Updating";
+                            ShowModuleItem(ModuleListItemByTemplateItem);
+                        }
+                    }
+                }
+            },
+            eror: function (data) {
+                console.log("An error occurred. Please try again.");
+            }
+        });
+    }
+    function DeleteTemplateListItem(ID) {
+        if (confirm("Are You sure to delete the template?")) {
+            var BasicInfo = { ID: ID };
+            var apiPath = "TemplateDelete";
+            $.ajax({
+                method: "POST",
+                url: apiPath,
+                data: { __RequestVerificationToken: $('[name=__RequestVerificationToken]').val(), TemplateValue: JSON.stringify(BasicInfo) },
+                headers: {
+                    Accept: "application/json;odata=verbose"
+                },
+                async: false,
+                success: function (data) {
+                    Reset();
+                },
+                eror: function (data) {
+                    console.log("An error occurred. Please try again.");
+                }
+            });
+        }
+    }
+    function DeleteModuleListItem(MID, AID, TID, TYPID) {
+        if (!_.isUndefined(MID)) {
+            if (!_.isNull(MID)) {
+                if (_.isNumber(MID)) {
+                    if (MID > 0) {
+                        ModuleListByTemplateItem = _.without(ModuleListByTemplateItem,
+                            _.findWhere(ModuleListByTemplateItem, {
+                                ACTIONID: parseInt(AID), MODULEID: parseInt(MID), LICENSETYPEID: parseInt(TYPID)
+                            }));
+                        RefreshDTModuleList(ModuleListByTemplateItem);
+                        CurrentModuleID = null;
+                    }
+                }
+            }
+        }
+    }
+    function BindTemplateItemReadonly() {
+        $("#ID_Div_New_Template :input").attr("disabled", true);
+        $('.CLS_DT_MODULE_ITEM').prop('onclick', null);
+    }
+    function BindTemplateItemEditable() {
+        $("#ID_Div_New_Template :input").attr("disabled", false);
+    }
+    function UpdateTemplate() {
+        var ID_Txt_ID = $("#ID_Txt_ID").val();
+        var ID_Txt_Template_Name = $("#ID_Txt_Template_Name").val();
+        var ID_Txt_Template_Display = $("#ID_Txt_Template_Display").val();
+        var ID_Txt_Template_Desc = $("#ID_Txt_Template_Desc").val();
+        TemplateItem = new Array();
+        console.log(ModuleListByTemplateItem);
+        var ModelLicenseModules1 = ModuleListByTemplateItem;
+        var BasicInfo = { ModelLicenseModules: ModelLicenseModules1, ID: ID_Txt_ID, TemplateName: ID_Txt_Template_Name, TemplateDisplayText: ID_Txt_Template_Display, TemplateDescription: ID_Txt_Template_Desc };
+        TemplateItem.push(BasicInfo);
+        var apiPath = "TemplateUpdate";
+        $.ajax({
+            method: "POST",
+            url: apiPath,
+            data: { __RequestVerificationToken: $('[name=__RequestVerificationToken]').val(), TemplateValue: JSON.stringify(BasicInfo) },
+            headers: {
+                Accept: "application/json;odata=verbose"
+            },
+            async: false,
+            success: function (data) {
+                if (data.IsStatus) {
+                    ShowMessage(data);
+                }
+                else {
+                    Reset();
+                }
+            },
+            eror: function (data) {
+                console.log("An error occurred. Please try again.");
+            }
+        });
+    }
+    function ServerNotification(data) {
+        $("#ID_Body_ServerNotification").html("");
+        $("#ID_Body_ServerNotification").html(data.Body);
+        $("#ID_Error_Message").html(data.ErrorMessage);
+        $('#ID_ServerNotification').modal('show');
+    }
+    function ShowMessage(data)
+    {
+        debugger;
+        if (data != null)
+        {
+            $("#successModalBody").text(data.Data);
+            $("#modal-success").modal('show');
+        }
+    }
+    // New Code
+    // Reusable functions
+    // Binding DropDown based on Ajax
+    function BindDropDownswithAPI(ControlId, APIPath, Id, Title, DefaultText = "Please Select", DefaultValue = "-1", IsAsync = false) {
+        var apiPath = APIPath;
+        var content = "<option selected=" + DefaultValue + ">" + DefaultText + "</option>";
+        $.ajax({
+            url: apiPath,
+            headers: {
+                Accept: "application/json;odata=verbose"
+            },
+            async: IsAsync,
+            success: function (data) {
+                if (typeof data != "undefined") {
+                    if (data != null) {
+                        results = data;
+                        for (var i = 0; i < results.length; i++) {
+                            content += "<option value=" + results[i][Id] + ">" + results[i][Title] + "</option>";
+                        }
+                    }
+                }
+            },
+            eror: function (data) {
+                console.log("An error occurred. Please try again.");
+            }
+        });
+        $('#' + ControlId).html(content);
+    }
+    // Binding DropDown based on Data array
+    function BindDropDownsWithData(ControlId, Data, Id, Title, DefaultText = "Please Select", DefaultValue = "-1") {
+        var content = "<option selected=" + DefaultValue + ">" + DefaultText + "</option>";
+        if (typeof Data != "undefined") {
+            if (Data != null) {
+                results = Data;
+                for (var i = 0; i < results.length; i++) {
+                    content += "<option value=" + results[i][Id] + ">" + results[i][Title] + "</option>";
+                }
+            }
+        }
+        $('#' + ControlId).html(content);
+    }
+    // Binding Data Table using API end point, no need to mention column names (Auto detection enabled)
+    function BindDataTablewithAPI(ControlId, APIPath, IsAsync = false) {
+        var apiPath = APIPath;
+        $.ajax({
+            url: apiPath,
+            headers: {
+                Accept: "application/json;odata=verbose"
+            },
+            async: IsAsync,
+            success: function (data) {
+                if (typeof data != "undefined") {
+                    if (data != null) {
+                        BindDataTablewithData(ControlId, data);
+                    }
+                }
+            },
+            eror: function (data) {
+                console.log("An error occurred. Please try again.");
+            }
+        });
+    }
+    //Binding Data Table using Data and control id , No need to mention columns (Auto detection is enabled)
+    function BindDataTablewithData(ControlId, data) {
+        var my_columns = [];
+        $.each(data, function (key, value) {
+            var my_item = {};
+            my_item.data = key;
+            my_item.title = key;
+            my_columns.push(my_item);
+        });
+        if (typeof my_columns != "undefined") {
+            if (my_columns != null) {
+                if (typeof data != "undefined") {
+                    if (data != null) {
+                        $('#' + ControlId).DataTable({
+                            data: data,
+                            "columns": my_columns
+                        });
+                        return true;
+                    }
+                }
+            }
+        }
+        console.log("An error occurred. BindDataTablewithData()");
+    }
+</script>
+

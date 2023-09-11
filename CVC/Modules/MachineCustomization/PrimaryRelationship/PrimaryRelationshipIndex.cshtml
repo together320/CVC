@@ -1,0 +1,17 @@
+﻿@{
+    ViewData["Title"] = Serenity.LocalText.Get("Db.MachineCustomization.PrimaryRelationship.EntityPlural");
+}
+
+<div id="Primary_GridDiv"></div>
+<!-- added by Denis for RS 8.3 dated 9/7/2021 -->
+<div id="Secondary_GridDiv"></div>
+
+@Html.Hidden("PrimaryRelationshipId", "", new { @id = "PrimaryRelationshipId" })
+
+<script type="text/javascript">
+    jQuery(function () {
+        new CVC.MachineCustomization.PrimaryRelationshipGrid($('#Primary_GridDiv'), {}).init();
+
+        Q.initFullHeightGridPage($('#Primary_GridDiv'));
+    });
+</script>

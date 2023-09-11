@@ -1,0 +1,693 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+license
+<html>
+
+<head>
+     
+    <link href="~/Content/css/style.css" rel="stylesheet" />
+  
+    <script src="~/Scripts/underscore-min.js"></script>
+ 
+</head>
+
+<body>
+    @Html.AntiForgeryToken()
+    <div class="container-fluid wrapper">
+        <div class="card">
+            <h3 class="title">License Renewing Form</h3>
+            <h4 class="sub-title" style="border-bottom:none">UID</h4>
+            <div class="uid-text">
+                @* <span class="uid-label">UID:</span>>*@
+                <span class="uidCode" id="ID_SPAN_UID"></span>
+                <button class="btn uid-btn" id="ID_BTN_COPY_UID">Copy</button>
+            </div>
+            <h4 class="sub-title" style="border-bottom:none">Upload Renewed License</h4>
+            <form class="form-inline upload-form">
+                <div style="display:none" class="input-group mb-6 mr-sm-6">
+                    <div class="input-group-text">Action Type</div>
+                    <span class="CLS_Activation">
+                        <input type="radio" id="activation" name="actionType" value="activation">
+                        <label for="activation">Activation</label>
+                    </span>
+                    <span class="CLS_License">
+                        <input type="radio" id="licence" name="actionType" value="license">
+                        <label for="licence">License</label>
+                    </span>
+
+                </div>
+                <div class="input-group mb-6 mr-sm-6 CLS_License" id="ID_Div_Upload" style="display: none;">
+                    <div class="input-group-text">Upload</div>
+                    <input type="file" id="LicenseFile" accept=".lic">
+                    <button type="button" id="uploadbutton" class="btn btn-big mb-2 upload-btn">Upload</button>
+                </div>
+                <div class="input-group mb-6 mr-sm-6 CLS_Activation" id="ID_Div_Act_Key" style="display: none;">
+                    <div class="input-group-text">
+                        <sup style="color: red;" title="this field is required">*</sup>
+                        Activation Key
+                    </div>
+                    <textarea id="ID_Txt_Act_Key" class="text-field act-key"></textarea>
+                    <button type="button" id="ID_Btn_Activate" class="btn btn-big mb-2 upload-btn">Activate</button>
+                </div>
+                <div class="input-group mb-6 mr-sm-6">
+                    <div class="input-group-text">Status</div>
+                    <span id="ID_SPAN_STATUS" class="status">Waiting for Activation</span>
+                </div>
+
+            </form>
+            <div id="ID_Div_Module_Preview" style="display: none;">
+                <h4 class="sub-title">Module Preview</h4>
+                <div class="table-wrap" id="ID_Div_DataTable_Modules">
+                    Data table
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>
+@Html.Partial("~/Views/PartialViews/Message_PartialView.cshtml")
+<script>
+    var redirectUrlAfterLogin = "";
+    function getMessageDetailsById(messageTypeId) {
+        $.ajax({
+            url: Q.resolveUrl('~/Common/GetMessageDetailsById'),
+            type: 'GET',
+            data: { "messageTypeId": messageTypeId },
+            dataType: 'json',
+            success: function (response) {
+                if (response.IsStatus) {
+                    return messageText = response.Data;
+                }
+
+            },
+            error: function (response) {
+            }
+        });
+
+    }
+
+
+    function ValidationPopUp(Basictext, Replacetext) {
+        setTimeout(function () {
+            autoAcceptUntrustedCertificatesForOpcUaClient = false;
+            if (messageText != undefined) {
+                messageText = messageText.replace(Basictext, Replacetext);
+                $("#infoModalBody").text(messageText);
+                $("#modal-info").modal('show');
+            }
+        }, 500);
+    }
+
+    var messageText;
+    $(document).ready(function () {
+        GetNotification();
+        $('input[name="actionType"]').click(function () {
+            if ($('#licence').prop('checked')) {
+                $('#ID_Div_Act_Key').hide();
+                $('#ID_Div_Upload').show();
+                $('#ID_SPAN_STATUS').text("Waiting for License");
+
+            } else {
+                $('#ID_Div_Upload').hide();
+                $('#ID_Div_Module_Preview').hide();
+                $('#ID_Div_Act_Key').show();
+                $('#ID_SPAN_STATUS').text("Waiting for Activation");
+
+            }
+        });
+        $('#uploadbutton').click(function () {
+            $("#ID_SPAN_STATUS").text("Waiting for License");
+            var type = $('input[name="actionType"]:checked').val();
+            if (typeof type != 'undefined') {
+                // Checking whether FormData is available in browser
+                if (window.FormData !== undefined) {
+
+                    var fileUpload = $("#LicenseFile").get(0);
+                    var files = fileUpload.files;
+                    if (files.length > 0) {
+                    // Create FormData object
+                        var fileData = new FormData();
+                        var FileName = files[0];                      
+                        //var extension = FileName.replace(/^.*\./, '');
+                        //if (extension != 'lic') {
+                        //    messageText = getMessageDetailsById(33);
+                        //    ValidationPopUp("Data", "License File ");
+                        //    return false;
+                        //}
+                    // Looping over all files and add it to FormData object
+                        for (var i = 0; i < files.length; i++) {
+                        
+                        fileData.append(files[i].name, files[i]);
+                    }
+
+                    // Adding one more key to FormData object
+                    fileData.append('type', type);
+                    fileData.append('__RequestVerificationToken', $('[name=__RequestVerificationToken]').val());
+
+                    $.ajax({
+                        url: '@Url.Action("UploadLicenseFile", "LicenseUpload")',
+                        type: "POST",
+                        contentType: false, // Not to set any content header
+                        processData: false, // Not to process data
+                        data:  fileData  ,
+                        success: function (result) {
+                            if (result.IsStatus) {
+                                ShowMessage(result);
+                                $("#LicenseFile").val(null);
+                                $("#ID_SPAN_STATUS").text("License is Invalid");
+                            }
+                            else {
+                                //FillDataTable(result);
+                                FillLicenseDataTable(result);
+                                $('#ID_Div_Module_Preview').show();
+                                $("#LicenseFile").val(null);
+                                $("#ID_SPAN_STATUS").text("License is Implemented");
+                            }
+
+                        },
+                        error: function (err) {
+                            alert(err.statusText);
+                        }
+                        });
+                    }
+                    else {
+                        messageText = getMessageDetailsById(33);
+                        ValidationPopUp("Data", "License File ");
+                        //alert("License File is inValid");
+                    }
+                } else {
+                    messageText = getMessageDetailsById(33);
+                    ValidationPopUp("Data", "FormData");
+                    //alert("FormData is not supported.");
+                }
+            } else {
+                messageText = getMessageDetailsById(33);
+                ValidationPopUp("Data", "type");
+                //alert("Select type");
+            }
+
+        });
+        $('#ID_Btn_Activate').click(function () {
+            var Act_Key = $('#ID_Txt_Act_Key').val();
+            if (Act_Key == null || Act_Key.length < 1) {
+                messageText = getMessageDetailsById(28);
+                ValidationPopUp("", "");
+                //console.log("Fill All fields");
+                return false;
+            }
+            $.ajax({
+                url: '@Url.Action("UploadActivationKey", "LicenseUpload")',
+                type: "POST",
+                data: { __RequestVerificationToken: $('[name=__RequestVerificationToken]').val(), "Key": Act_Key },
+                success: function (result) {
+                    if (result) {
+                        $("#ID_SPAN_STATUS").text("Activation Completed");
+                        reset_Activation();
+                    }
+                    else {
+                        $("#ID_SPAN_STATUS").text("Invalid Activation key");
+                    }
+                    },
+                error: function (err) {
+                        alert(err.statusText);
+                    }
+                });
+        });
+        $('#ID_BTN_COPY_UID').click(function () {
+            copy_UID();
+        });
+        DefaultLoad();
+        GetGUID();
+    });
+    function ValidationPopUpwithText(Message) {
+        setTimeout(function () {
+            autoAcceptUntrustedCertificatesForOpcUaClient = false;
+            if (Message != undefined) {
+                $("#infoModalBody").text(Message);
+                $("#modal-info").modal('show');
+            }
+        }, 500);
+    }
+    function GetNotification() {
+        debugger;
+        $.ajax({
+            url: Q.resolveUrl('~/Common/GetNotification'),
+            type: 'GET',
+            async: false,
+            success: function (response) {
+                if (response.IsStatus) {
+                    ValidationPopUpwithText(response.Data);
+                }
+            },
+            error: function (response) {
+            }
+        });
+
+    }
+    function ShowMessage(data) {
+        debugger;
+        if (data != null) {
+            $("#successModalBody").text(data.Data);
+            $("#modal-success").modal('show');
+        }
+    }
+    function ServerNotification(data) {
+        $("#ID_Body_ServerNotification").html("");
+        $("#ID_Body_ServerNotification").html(data.Body);
+        $("#ID_Error_Message").html(data.ErrorMessage);
+        $('#ID_ServerNotification').modal('show');
+
+    }
+    function reset_Activation() {
+        $('#ID_Txt_Act_Key').val("");
+        GetGUID();
+    }
+    function DefaultLoad() {
+        $(".CLS_Activation").show();
+        $(".CLS_License").hide();
+        $('#licence').prop('checked', false);
+        $('#activation').prop('checked', true);
+        $('#ID_SPAN_STATUS').text("Waiting for Activation");
+    }
+    @*function GetGUID() {
+        $.ajax({
+            url: '@Url.Action("GetUID", "LicenseUpload")',
+            type: "GET",
+            contentType: false, // Not to set any content header
+            processData: false, // Not to process data
+            success: function (result) {
+                if (typeof result != 'undefined') {
+                    if (result != null) {
+                        $('#ID_SPAN_UID').text(result.UID);
+                        if (result.IsActivated != null) {
+                            if (result.IsActivated == false) {
+                                $(".CLS_Activation").show();
+                                $(".CLS_License").hide();
+                                $('#licence').prop('checked', false);
+                                $('#activation').prop('checked', true);
+                                $('#ID_SPAN_STATUS').text("Waiting for Activation");
+                            }
+                            else if (result.IsActivated == true) {
+                                $(".CLS_Activation").hide();
+                                $(".CLS_License").show();
+                                $('#activation').prop('checked', false);
+                                $('#licence').prop('checked', true);
+                                $('#ID_SPAN_STATUS').text("Waiting for License");
+                            }
+                        }
+                    }
+                }
+            },
+            error: function (err) {
+                alert(err.statusText);
+            }
+        });
+    }
+    function FillDataTable(data) {
+        $("#ID_Div_DataTable_Modules").html('<table id="ID_DataTable_Modules" class="display" style="width:100%">' +
+            '<thead>' +
+            '<tr><th>ModuleName</th> ' +
+            '<th>ActionName</th>' +
+            '<th>License Type</th>' +
+            '<th>License Value</th>' +
+            '</thead> ' +
+            '<tbody id="ID_DataTable_Modules_Items"></table>');
+        var content = '';
+        var contentall = '';
+        if (data != null) {
+            for (var i = 0; i < data.length; i++) {
+                //Content appending
+                content = '<tr>' +
+                    '<td>' + data[i].ModuleName + '</td>' +
+                    '<td>' + data[i].ActionName + '</td>' +
+                    '<td>' + data[i].LicenseType + '</td>' +
+                    '<td>' + data[i].LicenseValue + '</td>' +
+                    '</tr>';
+                contentall = contentall + content;
+                content = '';
+            }
+            $("#ID_DataTable_Modules_Items").html(contentall);
+        }
+        $("#ID_DataTable_Modules").DataTable();
+        $("#ID_SPAN_STATUS").text("License Applied");
+    }*@
+        function GetGUID() {
+        $.ajax({
+            url: '@Url.Action("GetUID", "LicenseUpload")',
+            type: "GET",
+            contentType: false, // Not to set any content header
+            processData: false, // Not to process data
+            success: function (result) {
+                if (typeof result != 'undefined') {
+                    if (result != null) {
+                        $('#ID_SPAN_UID').text(result.UID);
+                        if (result.IsActivated != null) {
+                            if (result.IsActivated == false) {
+                                $(".CLS_Activation").show();
+                                $(".CLS_License").hide();
+                                $('#licence').prop('checked', false);
+                                $('#activation').prop('checked', true);
+                                $('#ID_SPAN_STATUS').text("Waiting for Activation");
+                            }
+                            else if (result.IsActivated == true) {
+                                $(".CLS_Activation").hide();
+                                $(".CLS_License").show();
+                                $('#activation').prop('checked', false);
+                                $('#licence').prop('checked', true);
+                                $('#ID_SPAN_STATUS').text("Waiting for License");
+                            }
+                        }
+                        //if (result.isLicenseFileValid != null) {
+                        //    if (result.isLicenseFileValid == true) {
+                                GetLicenseInfo();
+                        //    }
+                        //}
+                    }
+                }
+            },
+            error: function (err) {
+                alert(err.statusText);
+            }
+        });
+    }
+    function GetLicenseInfo() {
+        $.ajax({
+            url: '@Url.Action("GetCurrentLicenseInfo", "LicenseUpload")',
+            type: "GET",
+            contentType: false, // Not to set any content header
+            processData: false, // Not to process data
+            success: function (result) {
+                if (typeof result != 'undefined') {
+                    if (result != null) {
+                        FillLicenseDataTable(result);
+                        $('#ID_Div_Module_Preview').show();
+                    }
+                }
+            },
+            error: function (err) {
+                console.log(err.statusText);
+            }
+        });
+    }
+    function GetLicenseExpiryCount() {
+        $.ajax({
+            url: '@Url.Action("GetLicenseExpiryCount", "LicenseUpload")',
+            type: "GET",
+            contentType: false, // Not to set any content header
+            processData: false, // Not to process data
+            success: function (result) {
+                if (typeof result != 'undefined') {
+                    if (result != null) {
+                        if (result != 0) {
+                            ServerNotificationLite(result);
+                        }
+                    }
+                }
+            },
+            error: function (err) {
+                alert(err.statusText);
+            }
+        });
+    }
+    function FillDataTable(data) {
+        $("#ID_Div_DataTable_Modules").html('<table id="ID_DataTable_Modules" class="display" style="width:100%">' +
+            '<thead>' +
+            '<tr><th>Module Name</th> ' +
+            '<th>Action Name</th>' +
+            '<th>License Type</th>' +
+            '<th>License Value</th>' +
+            '</thead> ' +
+            '<tbody id="ID_DataTable_Modules_Items"></table>');
+        var content = '';
+        var contentall = '';
+        if (data != null) {
+            for (var i = 0; i < data.length; i++) {
+                //Content appending
+                content = '<tr>' +
+                    '<td>' + data[i].ModuleName + '</td>' +
+                    '<td>' + data[i].ActionName + '</td>' +
+                    '<td>' + data[i].LicenseType + '</td>' +
+                    '<td>' + data[i].LicenseValue + '</td>' +
+                    '</tr>';
+                contentall = contentall + content;
+                content = '';
+            }
+            $("#ID_DataTable_Modules_Items").html(contentall);
+        }
+        $("#ID_DataTable_Modules").DataTable();
+        $("#ID_SPAN_STATUS").text("License Applied");
+    }
+    function FillLicenseDataTable(data) {
+        $("#ID_Div_DataTable_Modules").html('<table id="ID_DataTable_Modules" class="display" style="width:100%">' +
+            '<thead>' +
+            '<tr><th>Module Name</th> ' +
+            '<th>Action Name</th>' +
+            '<th>License Type</th>' +
+            '<th>License Value</th>' +
+            '</thead> ' +
+            '<tbody id="ID_DataTable_Modules_Items"></table>');
+        var content = '';
+        var contentall = '';
+
+        if (data != null) {
+            for (var i = 0; i < data.length; i++) {
+                var CurrentVal = 0;
+                if (data[i].LicenseType == 'Pack' && typeof data[i].LicenseValue != 'undefined' && typeof data[i].LicenseCurrentValue != 'undefined') {
+                    CurrentVal = parseInt(data[i].LicenseValue) - parseInt(data[i].LicenseCurrentValue);
+                }
+                else {
+                    CurrentVal = data[i].LicenseValue;
+                }
+
+                //Content appending
+                if (typeof data[i].Controller != 'undefined' && typeof data[i].Action != 'undefined' && typeof data[i].LicenseType != 'undefined' ) {
+                    content = '<tr>' +
+                        '<td>' + data[i].Controller + '</td>' +
+                        '<td>' + data[i].Action + '</td>' +
+                        '<td>' + data[i].LicenseType + '</td>' +
+                        '<td>' + CurrentVal + '</td>' +
+                        '</tr>';
+                    contentall = contentall + content;
+                    content = '';
+                }
+            }
+            $("#ID_DataTable_Modules_Items").html(contentall);
+        }
+        $("#ID_DataTable_Modules").DataTable();
+        $("#ID_DataTable_Modules").show();
+        $("#ID_Div_DataTable_Modules").show();
+    }
+    function copy_UID() {
+        var copyText = document.getElementById("ID_SPAN_UID");
+        var textArea = document.createElement("textarea");
+        textArea.value = copyText.textContent;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("Copy");
+        textArea.remove();
+    }
+</script>
+@*<script>
+var messageText;
+$(document).ready(function () {
+    $('input[name="actionType"]').click(function () {
+        if ($('#licence').prop('checked')) {
+            $('#ID_Div_Act_Key').hide();
+            $('#ID_Div_Upload').show();
+            $('#ID_SPAN_STATUS').text("Waiting for License");
+
+        } else {
+            $('#ID_Div_Upload').hide();
+            $('#ID_Div_Module_Preview').hide();
+            $('#ID_Div_Act_Key').show();
+            $('#ID_SPAN_STATUS').text("Waiting for Activation");
+
+        }
+    });
+    $('#uploadbutton').click(function () {
+
+        var type = $('input[name="actionType"]:checked').val();
+        if (typeof type != 'undefined') {
+            // Checking whether FormData is available in browser
+            if (window.FormData !== undefined) {
+
+                var fileUpload = $("#LicenseFile").get(0);
+                var files = fileUpload.files;
+
+                // Create FormData object
+                var fileData = new FormData();
+
+                // Looping over all files and add it to FormData object
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+
+                // Adding one more key to FormData object
+                fileData.append('type', type);
+
+                $.ajax({
+                    url: 'UploadLicenseFile',
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function (result) {
+                        FillDataTable(result);
+                        $('#ID_Div_Module_Preview').show();
+
+                    },
+                    error: function (err) {
+                        alert(err.statusText);
+                    }
+                });
+            } else {
+                alert("FormData is not supported.");
+            }
+        } else {
+            alert("Select type");
+        }
+
+    });
+    $('#ID_Btn_Activate').click(function () {
+        var Act_Key = $('#ID_Txt_Act_Key').val();
+        if (Validation_Activation()) {
+            $.ajax({
+                url: '@Url.Action("UploadActivationKey", "LicenseUpload")',
+                type: "POST",
+                data: { __RequestVerificationToken: $('[name=__RequestVerificationToken]').val(), "Key": Act_Key },
+                success: function (result) {
+                    $("#ID_SPAN_STATUS").text("Activation Completed");
+                },
+                error: function (err) {
+                    alert(err.statusText);
+                }
+            });
+        }
+    });
+    $('#ID_BTN_COPY_UID').click(function () {
+        copy_UID();
+    });
+    DefaultLoad();
+    GetGUID();
+});
+function DefaultLoad() {
+    $(".CLS_Activation").show();
+    $(".CLS_License").hide();
+    $('#licence').prop('checked', false);
+    $('#activation').prop('checked', true);
+    $('#ID_SPAN_STATUS').text("Waiting for Activation");
+}
+function Validation_Activation() {
+
+    var Act_Key = $('#ID_Txt_Act_Key').val();
+    if (Act_Key == null || Act_Key.length < 1) {
+        messageText = getMessageDetailsById(26);
+        ValidationPopUp("Name", "Activation Key");
+
+        return false;
+    }
+    return true;
+
+
+}
+function ValidationPopUp(Basictext, Replacetext) {
+    setTimeout(function () {
+        autoAcceptUntrustedCertificatesForOpcUaClient = false;
+        if (messageText != undefined) {
+            messageText = messageText.replace(Basictext, Replacetext);
+            $("#infoModalBody").text(messageText);
+            $("#modal-info").modal('show');
+        }
+    }, 500);
+}
+function GetGUID() {
+    $.ajax({
+        url: '@Url.Action("GetUID", "LicenseUpload")',
+        type: "GET",
+        contentType: false, // Not to set any content header
+        processData: false, // Not to process data
+        success: function (result) {
+            if (typeof result != 'undefined') {
+                if (result != null) {
+                    $('#ID_SPAN_UID').text(result.UID);
+                    if (result.IsActivated != null) {
+                        if (result.IsActivated == false) {
+                            $(".CLS_Activation").show();
+                            $(".CLS_License").hide();
+                            $('#licence').prop('checked', false);
+                            $('#activation').prop('checked', true);
+                            $('#ID_SPAN_STATUS').text("Waiting for Activation");
+                        }
+                        else if (result.IsActivated == true) {
+                            $(".CLS_Activation").hide();
+                            $(".CLS_License").show();
+                            $('#activation').prop('checked', false);
+                            $('#licence').prop('checked', true);
+                            $('#ID_SPAN_STATUS').text("Waiting for License");
+                        }
+                    }
+                }
+            }
+        },
+        error: function (err) {
+            alert(err.statusText);
+        }
+    });
+}
+function FillDataTable(data) {
+    $("#ID_Div_DataTable_Modules").html('<table id="ID_DataTable_Modules"  class="displays table-striped table-bordered nowrap cell-border" width="100%" cellspacing="0">' +
+        '<thead>' +
+        '<tr><th>ModuleName</th> ' +
+        '<th>ActionName</th>' +
+        '</thead> ' +
+        '<tbody id="ID_DataTable_Modules_Items"></table>');
+    var content = '';
+    var contentall = '';
+    if (data != null) {
+        for (var i = 0; i < data.length; i++) {
+            //Content appending
+            content = '<tr>' +
+                '<td>' + data[i].ModuleName + '</td>' +
+                '<td>' + data[i].ActionName + '</td>' +
+                '</tr>';
+            contentall = contentall + content;
+            content = '';
+        }
+        $("#ID_DataTable_Modules_Items").html(contentall);
+    }
+    $("#ID_DataTable_Modules").DataTable();
+    $("#ID_SPAN_STATUS").text("License Applied");
+}
+function copy_UID() {
+    var copyText = document.getElementById("ID_SPAN_UID");
+    var textArea = document.createElement("textarea");
+    textArea.value = copyText.textContent;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand("Copy");
+    textArea.remove();
+}
+function getMessageDetailsById(messageTypeId) {
+    $.ajax({
+        url: Q.resolveUrl('~/Common/GetMessageDetailsById'),
+        type: 'GET',
+        data: { "messageTypeId": messageTypeId },
+        dataType: 'json',
+        success: function (response) {
+            if (response.IsStatus) {
+                return messageText = response.Data;
+            }
+
+        },
+        error: function (response) {
+        }
+    });
+
+}
+
+</script>*@

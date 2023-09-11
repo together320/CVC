@@ -1,0 +1,421 @@
+﻿@model CVC.Machine.SettingsPageModel
+<div class="modal fade" id="CommentModal" role="dialog" data-backdrop="static" style="top:150px">
+    <div class="modal-dialog modal-sm">
+
+        <div class="modal-content" style="width:500px">
+            <div class="modal-header">
+                <h4 class="modal-title;" style="text-align: center;background-color: #3c8dbc;color: white;margin: 0;padding: 10px;"><span style="font-size:medium;text-align:center ">Comment</span></h4>
+            </div>
+            <div class="modal-body" style="width:500px">
+                <div class="form-group-wrap">
+                    <div class="form-group">
+                        <label> Reason :</label>  @Html.DropDownListFor(m => Model.ModuleId, new SelectList(ViewBag.pick, "PickListValueId", "PickListValueName"), "-- Select --", new { @id = "ddlPickList_CommentModal", @class = "form-control" })
+
+                    </div>
+                    <div class="form-group" id="divComment_CommentModal" style="display:none">
+                        <label>Comment :</label>
+                        <textarea id="txtComment_CommentModal" class="form-control AddKeypad" style="display:none"></textarea>
+                        @*<input type="text"id="txtComment_CommentModal"  class="form-control"/>*@
+
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnSave_CommentModal" class="btn btn-primary">Submit</button>
+                <button type="button" id="btnCancel_CommentModal" class="btn btn-danger" data-dismiss="modal" onclick="CancelModalPopUp_CommentAuthentication();">Cancel</button>
+
+                @*<a href="@Url.Action("SaveComments", "AlarmMachine")" class="btn btn-default graybtn backbtn">Save</a>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="AuthenticationtModal" role="dialog" data-backdrop="static" style="top:150px">
+    <div class="modal-dialog modal-sm">
+
+        <div class="modal-content" style="width:500px">
+            <div class="modal-header">
+                <h4 class="modal-title" style="text-align:center; background-color:#3c8dbc; color:white;margin:0;padding:10px;"><span style="font-size:medium;text-align:center ">Authentication</span></h4>
+
+            </div>
+            <div class="modal-body" style="width:500px">
+                <div class="form-group-wrap">
+                    <div class="form-group" id="div_RoleNamesAuthenticationtModal">
+                        Role : <label id="lbl_RoleNamesAuthenticationtModal"></label>
+                    </div>
+                    <div class="form-group">
+                        <label>User Name :</label> <input type="text" id="txtUserName_AuthenticationtModal" class="form-control AddKeypad" />
+                    </div>
+                    <div class="form-group">
+                        <label>Password :</label>    <input type="password" id="txtPassword_AuthenticationtModal" class="form-control AddKeypad" />
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnSave_AuthenticationtModal" class="btn btn-primary">Authenticate</button>
+                <button type="button" id="btnCancel_AuthenticationtModal" class="btn btn-danger" data-dismiss="modal" onclick="CancelModalPopUp_CommentAuthentication();">Cancel</button>
+
+
+                @*<a href="@Url.Action("SaveComments", "AlarmMachine")" class="btn btn-default graybtn backbtn">Save</a>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Comment_AuthenticationtModal" role="dialog" data-backdrop="static" style="top:150px">
+    <div class="modal-dialog modal-sm">
+
+        <div class="modal-content" style="width:500px">
+            <div class="modal-header">
+                <h4 class="modal-title" style="text-align:center; background-color:#3c8dbc; color:white;margin:0;padding:10px;"><span style="font-size:medium;text-align:center ">Comment</span></h4>
+            </div>
+            <div class="modal-body" style="width:500px">
+                <div class="form-group-wrap">
+                    <div class="form-group">
+                        <label>Reason :</label>  @Html.DropDownListFor(m => Model.ModuleId, new SelectList(ViewBag.pick, "PickListValueId", "PickListValueName"), "-- Select --", new { @id = "ddlPickList_CommentAuthenticationtModal", @class = "form-control js-example-basic-single" })
+                    </div>
+                    <div class="form-group" id="divComment_CommentAuthenticationtModal" style="display:none">
+                        <label>Comment :</label>  
+                        <textarea id="txtComment_CommentAuthenticationtModal" class="form-control AddKeypad"></textarea>
+                        @*<input type="" id="txtComment_CommentAuthenticationtModal"  class="form-control AddKeypad"/>*@
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="modal-header">
+                <h4 class="modal-title" style="text-align:center; background-color:#3c8dbc; color:white;margin:0;padding:10px;"><span style="font-size:medium;text-align:center ">Authentication</span></h4>
+            </div>
+            <div class="modal-body" style="width:500px">
+                <div class="form-group-wrap">
+                    <div class="form-group" id="div_RoleNamesCommentAuthenticationtModal">
+                        Role : <label id="lbl_RoleNamesCommentAuthenticationtModal"></label>
+                    </div>
+                    <div class="form-group">
+                        <label>User Name :</label> <input type="text" id="txtUserName_CommentAuthenticationtModal" class="form-control AddKeypad" />
+                    </div>
+                    <div class="form-group">
+                        <label>Password :</label>    <input type="password" id="txtPassword_CommentAuthenticationtModal" class="form-control AddKeypad" />
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnSave_CommentAuthenticationtModal" class="btn btn-primary">Save</button>
+                <button type="button" id="btnCancel_CommentAuthenticationtModal" class="btn btn-danger" data-dismiss="modal" onclick="CancelModalPopUp_CommentAuthentication();">Cancel</button>
+
+                @*<a href="@Url.Action("SaveComments", "AlarmMachine")" class="btn btn-default graybtn backbtn">Save</a>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+     
+
+        //$('#txtComment_CommentModal,#txtComment_CommentAuthenticationtModal,txtUserName_AuthenticationtModal,txtPassword_AuthenticationtModal,txtUserName_CommentAuthenticationtModal,txtPassword_CommentAuthenticationtModal')
+        $('.AddKeypad')   
+            .keyboard({
+                usePreview: false,
+                layout: 'custom',
+                customLayout: {
+                    'normal': [
+                        '` 1 2 3 4 5 6 7 8 9 0 - = {bksp}',
+                        '{tab} q w e r t y u i o p [ ] \\',
+                        'a s d f g h j k l ; \' {accept}',
+                        '{shift} z x c v b n m , . / {shift}',
+                        ' {space} {left} {right}'
+                    ],
+                    'shift': [
+                        '~ ! @@ # $ % ^ & * ( ) _ + {bksp}',
+                        '{tab} Q W E R T Y U I O P { } |',
+                        'A S D F G H J K L : " {accept}',
+                        '{shift} Z X C V B N M < > ? {shift}',
+                        ' {space} {left} {right}'
+                    ]
+                }
+            })
+            .addTyping({
+                        showTyping: true,
+                        delay: 250
+                    })
+            .addCaret({
+                caretClass: '',
+                // *** for future use ***
+                // data-attribute containing the character(s) next to the caret
+                charAttr: 'data-character',
+                // # character(s) next to the caret (can be negative for RTL)
+                // default is 1 which shows the character to the right of the caret
+                // setting this to -1 shows the character to the left
+                charIndex: -1,
+                // tweak caret position & height
+                offsetX: 0,
+                offsetY: 0,
+                adjustHt: 0
+            });
+    });
+
+
+    $('#ddlPickList_CommentModal').change(function () {
+        var PickListValue = $("#ddlPickList_CommentModal :selected").text();
+
+        if (PickListValue.toUpperCase() == "OTHER") {
+            $("#divComment_CommentModal").show();
+        }
+        else {
+            $("#divComment_CommentModal").hide();
+
+        }
+    });
+
+    $('#ddlPickList_CommentAuthenticationtModal').change(function () {
+        var PickListValue = $("#ddlPickList_CommentAuthenticationtModal :selected").text();
+
+        if (PickListValue.toUpperCase() == "OTHER") {
+            $("#divComment_CommentAuthenticationtModal").show();
+        }
+        else {
+            $("#divComment_CommentAuthenticationtModal").hide();
+
+        }
+    });
+
+    $('#btnSave_CommentModal').click(function () {
+
+        if ($("#ddlPickList_CommentModal :selected").val() == "") {
+            alert("Please select Reason");
+            return false;
+        }
+
+        var PickListValue = $("#ddlPickList_CommentModal :selected").text();
+
+        if (PickListValue.toUpperCase() == "OTHER") {
+            if ($("#txtComment_CommentModal").val().trim() == "") {
+                alert("Please enter Comment");
+                return false;
+            }
+        }
+        //SaveCommentsToAuditLog(true, RequestPanel, name1);
+        $("#CommentModal").modal('hide');
+        if (RequestPanel == "Command Panel") {
+
+            SendCommandPanelValue(paraId1, name1, Mtype1, GetValue1, MachineType1, DateTypeId1, IsRefreshMachineSettings1, true, 0);
+
+        }
+        else if (RequestPanel == "Settings Panel") {
+            SendSettingsPanelValue(paraId1, obj1, name1, true, 0);
+        }
+
+        else if (RequestPanel == "End Batch") {
+            ViewFieldId1 = 0;
+           // SendSettingsPanelValue(paraId1, obj1, name1, true, 0);
+        }
+
+    });
+
+    $('#btnSave_AuthenticationtModal').click(function () {
+        if ($("#txtUserName_AuthenticationtModal").val().trim() == "") {
+            alert("Please enter UserName");
+            return false;
+        }
+        if ($("#txtPassword_AuthenticationtModal").val().trim() == "") {
+            alert("Please enter Password");
+            return false;
+        }
+        SaveAuthenticationToAuditLog(true, RequestPanel, name1, ViewFieldId1);
+
+    });
+
+    $('#btnSave_CommentAuthenticationtModal').click(function () {
+
+        if ($("#ddlPickList_CommentAuthenticationtModal :selected").val() == "") {
+            alert("Please select Reason");
+            return false;
+        }
+
+        var PickListValue = $("#ddlPickList_CommentAuthenticationtModal :selected").text();
+
+        if (PickListValue.toUpperCase() == "OTHER") {
+            if ($("#txtComment_CommentAuthenticationtModal").val().trim() == "") {
+                alert("Please enter Comment")
+                return false;
+            }
+        }
+
+
+        if ($("#txtUserName_CommentAuthenticationtModal").val().trim() == "") {
+            alert("Please enter UserName");
+            return false;
+        }
+        if ($("#txtPassword_CommentAuthenticationtModal").val().trim() == "") {
+            alert("Please enter Password");
+            return false;
+        }
+        // SaveCommentsToAuditLog(false, RequestPanel, name1);
+        if (RequestPanel == "End Batch") {
+            ViewFieldId1 = 0;
+        }
+        SaveAuthenticationToAuditLog(false, RequestPanel, name1, ViewFieldId1);
+
+    });
+
+    function SaveCommentsToAuditLog(CallPanel, RequestPanel, FieldName) {
+
+        var parameter = {
+            "PickListValueId": CallPanel == true ? $("#ddlPickList_CommentModal :selected").val() : $("#ddlPickList_CommentAuthenticationtModal :selected").val(), "Action": RequestPanel, "FieldName": FieldName, "ModuleId": $("#hdnModuleId").val(), "Comments": CallPanel == true ? $("#txtComment_CommentModal").val() : $("#txtComment_CommentAuthenticationtModal").val()
+        };
+        $.ajax({
+            url: Q.resolveUrl('~/Common/AddAuditLog'),
+            type: 'POST',
+            async: true,
+            data: parameter,
+            success: function (data) {
+                debugger;
+                $("#CommentModal").modal('hide');
+                if (CallPanel == true) {
+                    if (RequestPanel == "Command Panel") {
+                        SendCommandPanelValue(paraId1, name1, Mtype1, GetValue1, MachineType1, DateTypeId1, IsRefreshMachineSettings1);
+
+                    }
+                    else if (RequestPanel == "Settings Panel") {
+                        SendSettingsPanelValue(paraId1, obj1, name1, 0);
+                    }
+                    else if (RequestPanel == "End Batch") {
+                        OpenEndBatchDialog();
+                    }
+
+                }
+
+            },
+            error: function (x, y, z) {
+                $("#CommentModal").modal('hide');
+            }
+        });
+    }
+
+    function SaveAuthenticationToAuditLog(CallPanel, RequestPanel, FieldName, ViewFieldId) {
+        ViewFieldId = RequestPanel == ("End Batch" || "Edit Batch" || "Select Recipe" || "Save Recipe" || "Update Recipe" )? 0 : ViewFieldId;
+        var parameter = {
+            "BatchId": $("#hdnBatchId").val(),"Comments": $("#txtComment_CommentAuthenticationtModal").val(),  "Action": RequestPanel, "FieldName": FieldName, "ModuleId": $("#hdnModuleId").val(), "IsAuthentication": true, "ViewFieldId": ViewFieldId, "UserName": CallPanel == true ? $("#txtUserName_AuthenticationtModal").val() : $("#txtUserName_CommentAuthenticationtModal").val(), "Password": CallPanel == true ? $("#txtPassword_AuthenticationtModal").val() : $("#txtPassword_CommentAuthenticationtModal").val()
+        };
+        $.ajax({
+            url: Q.resolveUrl('~/Common/AddAuditLog'),
+            type: 'POST',
+            async: true,
+            data: parameter,
+            success: function (data) {
+                debugger;
+                if (data == "Invalid") {
+                   // swal("Incorrect UserName, Password or Role!!!");
+                    swal("You are not authorized person");
+
+                }
+                else {
+                    if (CallPanel == true) {
+                        $("#AuthenticationtModal").modal('hide');
+                        if (RequestPanel == "Command Panel") {
+
+                            SendCommandPanelValue(paraId1, name1, Mtype1, GetValue1, MachineType1, DateTypeId1, IsRefreshMachineSettings1, true, data);
+
+                        }
+                        else if (RequestPanel == "Settings Panel") {
+                            SendSettingsPanelValue(paraId1, obj1, name1, true, data);
+
+                        }
+                        else if (RequestPanel == "End Batch") {
+                            OpenEndBatchDialog();
+                        }
+                        else if (RequestPanel == "Select Recipe") {
+                            SelectRecipe();
+                        }
+                        else if (RequestPanel == "Save Recipe") {
+                            SaveRecipe();
+                        }
+                        else if (RequestPanel == "Update Recipe") {
+                            UpdateRecipe();
+                        }
+                        //else if (RequestPanel == "Edit Batch") {
+                        //    OpenEditBatchDialog();
+                        //}
+
+                    }
+                    else if (CallPanel == false) {
+                        $("#CommentModal").modal('hide');
+                        $("#Comment_AuthenticationtModal").modal('hide');
+                        if (RequestPanel == "Command Panel") {
+                            SendCommandPanelValue(paraId1, name1, Mtype1, GetValue1, MachineType1, DateTypeId1, IsRefreshMachineSettings1, false, data);
+
+                        }
+                        else if (RequestPanel == "Settings Panel") {
+                            SendSettingsPanelValue(paraId1, obj1, name1, false, data);
+                        }
+                        else if (RequestPanel == "End Batch") {
+                            OpenEndBatchDialog();
+                        }
+                        else if (RequestPanel == "Edit Batch") {
+                            OpenEditBatchDialog();
+                        }
+                    }
+
+
+                }
+
+            },
+            error: function (x, y, z) {
+                $("#AuthenticationtModal").modal('hide');
+            }
+        });
+    }
+
+    function ClearControls_CommentAuthenticationModal() {
+        $('#ddlPickList_CommentModal').val('');
+        $('#ddlPickList_CommentAuthenticationtModal').val('');
+        $("#txtComment_CommentModal").val('');
+        $("#txtComment_CommentAuthenticationtModal").val('');
+        $("#txtUserName_AuthenticationtModal").val('');
+        $("#txtUserName_CommentAuthenticationtModal").val('');
+        $("#txtPassword_AuthenticationtModal").val('');
+        $("#txtPassword_CommentAuthenticationtModal").val('');
+    }
+
+    function CancelModalPopUp_CommentAuthentication() {
+
+        if (RequestPanel == "Settings Panel") {
+            if (IsPlusMinusClick == false) {
+                var InputType = $(obj1).attr('type');
+                var Id = $(obj1).prop("id");
+                if (InputType == "checkbox") {
+                    if ($(obj1).prop("checked")) {
+
+                        IsExecuteChangeParmeter = false;
+                        $('#' + Id).bootstrapToggle('off')
+
+                        return false;
+                    }
+                    else {
+
+                        IsExecuteChangeParmeter = false;
+                        $('#' + Id).bootstrapToggle('on')
+
+                        return false;
+                    }
+                }
+                else if (InputType == "text") {
+                    var OldValue = $(obj1).attr("oldvalue")
+                    $('#' + Id).val(OldValue)
+                }
+
+            }
+        }
+
+    }
+
+</script>

@@ -1,0 +1,70 @@
+﻿@model  CVC.ViewModels.ViewFieldAccessViewModel
+
+
+<style>
+    .error {
+        color: red;
+    }
+</style>
+<table class="display data-table2 responsive nowrap" id="DataTableViewFieldAccessList" cellspacing="0" width="100%" border="1" cellpadding="0" style="border-collapse:collapse;" bordercolor="#e7eaec">
+    <thead>
+        <tr>
+
+            <th align="left">
+                <label>View Field Name</label>
+            </th>
+            <th align="left">
+                <label>Is View</label>
+            </th>
+            <th align="left">
+                <label>Is Modify</label>
+            </th>
+            @*<th align="left">
+                    <label>Status</label>
+                </th>*@
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.lstViewFieldViewModel)
+        {
+            <tr>
+
+                <td>
+                    @item.ViewFieldName
+                </td>
+                <td>
+                    @(item.IsView == true ? "Yes" : "No")
+
+                </td>
+                <td>
+                    @(item.IsModify == true ? "Yes" : "No")
+
+
+                </td>
+                @*<td>
+                       @item.StatusName
+
+                    </td>*@
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#DataTableViewFieldAccessList').DataTable({
+            responsive: {
+                details: {
+                    type: 'column'
+                }
+            },
+            "language": {
+                "lengthMenu": "_MENU_ records per page",
+            },
+
+        });
+
+    });
+
+</script>

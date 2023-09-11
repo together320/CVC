@@ -1,0 +1,78 @@
+﻿@model  IEnumerable<CVC.ViewModels.MachineTerminalMapping>
+
+
+  <table class="display" id="dtTerminalList" cellspacing="0" width="100%" border="1" cellpadding="0" style="border-collapse:collapse;" bordercolor="#e7eaec">
+                    <thead>
+                        <tr>
+
+                            <th align="left">
+                                <label>Terminal Name</label>
+                            </th>
+                            <th align="left">
+                                <label>Mac Address</label>
+                            </th>
+                            <th align="left">
+                                <label>Is Write</label>
+                            </th>
+
+                            <th align="left">
+                                <label>Is Read</label>
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+
+                            <tr>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TerminalName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.MacAddress)
+                                </td>
+                                <td>
+                                    @if (@item.IsDisableWrite == true)
+                                    {
+                                        <input type="checkbox" class="clsWriteDisable" id="chkIsWriteDisable" checked="@item.IsDisableWrite" value="@item.TerminalId" disabled="@item.IsDisableWrite" />
+
+                                    }
+                                    else
+                                    { <input type="checkbox" class="clsWrite" id="chkIsWrite" checked="@item.IsWrite" value="@item.TerminalId" disabled="@item.IsDisableWrite" />
+
+                                    }
+
+                                </td>
+
+                                <td>
+                                    <input type="checkbox" class="clsRead" id="chkIsRead" checked="@item.IsRead" value="@item.TerminalId" />
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#dtMachineTerminalMapping').DataTable({
+            responsive: {
+                details: {
+                    type: 'column'
+                }
+            },
+
+            "language": {
+                "lengthMenu": "_MENU_ records per page",
+            },
+
+        });
+
+    });
+
+    
+
+</script>

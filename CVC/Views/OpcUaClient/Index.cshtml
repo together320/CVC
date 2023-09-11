@@ -1,0 +1,234 @@
+﻿
+@model CVC.Models.TerminalMappingVM
+
+@{
+    ViewBag.Title = "Address Space";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Address Space</title>
+</head>
+<body>
+    <div class="container-fluid">
+
+        <div class="dataTable-wrapper" style="width:100%; margin:0 auto;">
+
+            <div id="divAddressSpace"></div>
+        </div>
+    </div>
+
+    <div class="row BtnUpdateRow" style="padding-left:35px">
+        <button type="button" onclick="saveAddressSpace()" id="btnSave" style="width:125px; font-size:16px" class="btn btn-primary">Save</button>
+    </div>
+
+
+    <ul class="nav nav-tabs" role="tablist" id="terminalTab">
+        <li role="presentation" class="active" id="liFirst"><a href="#first" aria-controls="first" role="tab" data-toggle="tab">Details</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="row BtnUpdateRow" style="padding-left:15px">
+        </div>
+        <div class="machine-tab-links">
+            <a href="">General</a>
+        </div>
+        <form class="edit-machine-form">
+
+            <div class="edit-machine-title">
+                <h6>General</h6>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label for="">Display Name : </label>
+                        <label id="lblDisplayName" style="text-align:left"></label>
+
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label for="">Browse Name : </label>
+                        <label id="lblBrowseName" style="text-align:left"></label>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label for="">Description : </label>
+                        <label id="lblDescription" style="text-align:left"></label>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label for="">Node Id : </label>
+                        <label id="lblNodeId" style="text-align:left"></label>
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label for="">Access Restriction : </label>
+                        <label id="lblAccessRestriction" style="text-align:left"></label>
+
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label for="">Handle : </label>
+                        <label id="lblHandle" style="text-align:left"></label>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label for="">Node Class : </label>
+                        <label id="lblNodeClass" style="text-align:left"></label>
+
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label for="">References : </label>
+                        <label id="lblReferences" style="text-align:left"></label>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label for="">Role Permissions : </label>
+                        <label id="lblRolePermissions" style="text-align:left"></label>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label for="">User Role Permissions : </label>
+                        <label id="lblUserRolePermissions" style="text-align:left"></label>
+
+                    </div>
+                </div>
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+</body>
+</html>
+@Html.Partial("~/Views/PartialViews/Message_PartialView.cshtml")
+
+
+<script type="text/javascript">
+    var machineId = 0;
+
+    $(document).ready(function () {
+        var url = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        for (var i = 0; i < url.length; i++) {
+            var urlparam = url[i].split('=');
+            if (urlparam[0] == "id") {
+                machineId = urlparam[1];
+            }
+        }
+        loadParentObject(machineId);
+        //$(document).ajaxComplete(function () {
+        //    $('.js-example-basic-single-view-field').select2();
+        //});
+
+    });
+
+    function loadParentObject(machineId) {
+        $('.loader').removeClass('hidden');
+
+        $.ajax({
+            url: Q.resolveUrl('~/OpcUaClient/GetAddressSpace'),
+            data: {
+                machineId: machineId
+            },
+            type: 'GET',
+            success: function (data) {
+                debugger;
+                $("#divAddressSpace").html(data);
+                $('.loader').addClass('hidden');
+                $('.machineParameter').select2();
+            },
+
+            error: function (jqXHR, exception, data) {
+                debugger;
+                $('.loader').addClass('hidden');
+
+                var msg = '';
+                if (jqXHR.status === 0) {
+                    msg = 'Not connect.\n Verify Network.';
+                } else if (jqXHR.status == 404) {
+                    msg = 'Requested page not found. [404]';
+                } else if (jqXHR.status == 500) {
+                    msg = 'Internal Server Error [500].';
+                   // $("#infoModalBody").text("Invalid username or password!!!");
+                  //  $("#modal-info").modal('show');
+                
+
+                } else if (exception === 'parsererror') {
+                    msg = 'Requested JSON parse failed.';
+                } else if (exception === 'timeout') {
+                    msg = 'Time out error.';
+                } else if (exception === 'abort') {
+                    msg = 'Ajax request aborted.';
+                } else {
+                    msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                }
+            },
+        });
+
+    }
+
+    function saveAddressSpace() {
+        autoAcceptUntrustedCertificatesForOpcUaClient = false;
+        redirectUrlAfterLogin = "";
+        debugger;
+        if (nodeArray.length <= 0) {
+            $("#infoModalBody").text("Please select atleast one node!!!");
+            $("#modal-info").modal('show');
+        }
+        else {
+            debugger;
+            if (nodeArray.length != machineParameterArray.length) {
+                $("#infoModalBody").text("Please select proper machine parameter for selected node!!!");
+                $("#modal-info").modal('show');
+            }
+            else
+            {
+                debugger;
+               $('.loader').removeClass('hidden');
+
+              $.ajax({
+              url: Q.resolveUrl('~/OpcUaClient/SaveAddressSpace'),
+              data: { "machineId": machineId, "nodeModelList": nodeArray, "machineParameterList": machineParameterArray},
+               type: 'POST',
+               success: function (data) {
+                   $('.loader').addClass('hidden');
+                   alert("Data Added Successfully");
+                   location.reload();
+            }
+                });
+            }
+
+          
+        }   
+        
+    }
+</script>
+

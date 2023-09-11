@@ -1,0 +1,191 @@
+﻿    @model  CVC.ViewModels.ArchivalViewModel
+@{
+    //
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <link href="~/Content/adminlte2/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+    <script src="~/Scripts/datepicker/bootstrap-datepicker.js"></script>
+    <meta name="viewport" content="width=device-width" />
+    <title> Index</title>
+    <style>
+        .archive-div .form-control, .restore-div .form-control {
+            height: 34px;
+            padding: 5px 12px;
+        }
+
+        .datepicker .today {
+            color: #fff !important;
+            background-color: #3c8dbc !important;
+            background-image: -webkit-gradient(linear,0 0,0 100%,from(#3c8dbc),to(#3c8dbc)) !important;
+        }
+
+        .datepicker {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px #ccc;
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+    @using (Html.BeginForm("Archive", "ArchivalRestore", FormMethod.Post, new { @id = "frmArchival" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => Model.MachineName)
+
+        <div class="archive-div">
+            <h3 class="title">Archive DataBase</h3>
+            <div class="row">
+                <div class=" form-group col-md-3">
+                    <label>From Date </label>
+                    <div class='input-group date datetimepicker' data-format="dd/MM/yyyy">
+
+                        @Html.TextBoxFor(model => model.FromDate, new { @class = "form-control", @readonly = "readonly" })
+                        <span class="input-group-addon"> <span class="fa fa-calendar"></span></span>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label>To Date </label>
+                    <div class='input-group date datetimepicker' data-format="dd/MM/yyyy">
+
+                        @Html.TextBoxFor(model => model.ToDate, new { @class = "form-control", @readonly = "readonly" })
+                        <span class="input-group-addon"> <span class="fa fa-calendar"></span></span>
+
+
+                    </div>
+                </div>
+
+                <div class=" form-group col-md-3">
+                    <label>Machine </label>
+                    @Html.DropDownListFor(m => Model.MachineId, new SelectList(ViewBag.MachineList, "MachineId", "MachineName"), "-- Select --", new { @id = "ddlMachine", @class = "form-control js-example-basic-single" })
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label>Archive Data </label><br />
+                    <input type="submit" id="btnArchive" class="btn btn-primary" value="Archive" />
+                </div>
+
+            </div>
+        </div>
+    }
+    <br />
+    <hr />
+    @using (Html.BeginForm("Restore", "ArchivalRestore", FormMethod.Post, new { enctype = "multipart/form-data", @id = "frmRestore" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="restore-div">
+            <h3 class="title">Restore DataBase</h3>
+            <div class="row">
+                <div class=" form-group col-md-3">
+
+                    <label>Browse Archive File </label>
+                    <input id="FileUploadArchive" class="form-control" name="FileUploadArchive" type="file" multiple="multiple">
+
+                </div>
+                <div class=" form-group col-md-3">
+                    <label>Browse Miscellaneous File </label>
+
+                    <input id="FileUploadMiscellaneous" class="form-control" name="FileUploadMiscellaneous" type="file">
+
+                </div>
+
+
+
+                <div class="form-group col-md-3">
+                    <label>Restore Data </label><br />
+                    <input type="submit" id="btnRestore" class="btn btn-primary" value="Restore" />
+                </div>
+
+            </div>
+        </div>
+    }
+</body>
+</html>
+
+<script type="text/javascript">
+
+    function ShowMessage()
+    {
+        var Message = '@TempData["Message"]'
+        if (Message != "")
+        {
+            swal(Message);
+        }
+
+    }
+
+    $(document).ready(function () {
+        ShowMessage();
+
+        $(function () {
+            $('.datetimepicker').datepicker({
+                changeMonth: true,
+                changeYear: true,
+                todayHighlight: true,
+                format: "dd/mm/yyyy",
+                language: "tr",
+                //startDate: new Date('2018-1-5'),
+                endDate: new Date('@ViewBag.EndDate')
+        });
+
+        });
+
+
+    });
+
+    $("#FromDate,#ToDate").change(function () {
+
+
+
+    });
+
+
+    $("#frmArchival").submit(function (e) {
+        var IsValid = true;
+        if ($("#FromDate").val().trim() == "")
+        {
+          
+          
+            IsValid = false;
+            alert("From Date is Mandatory");
+        }
+        if ($("#ToDate").val().trim() == "") {
+            IsValid = false;
+            alert("To Date is Mandatory");
+        }
+        if ($("#ddlMachine").val().trim() == "") {
+            IsValid = false;
+            alert("Select Machine for archive data");
+        }
+        if ($("#FromDate").val().trim() != "" && $("#ToDate").val().trim() != "") {
+            var FromDate = $("#FromDate").val();
+            var ToDate = $("#ToDate").val();
+            if ($.datepicker.parseDate('dd/mm/yy', FromDate) <= $.datepicker.parseDate('dd/mm/yy', ToDate)) {
+
+            }
+            else {
+                IsValid = false;
+                alert("From Date should be less than or equalto To Date");
+
+            }
+        }
+        if (IsValid == false)
+        {
+            e.preventDefault(e);
+        }
+        else
+        {
+            $("#MachineName").val($("#ddlMachine :selected").text());
+        }
+
+    });
+
+</script>
+
+
+

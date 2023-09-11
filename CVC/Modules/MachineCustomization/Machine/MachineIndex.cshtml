@@ -1,0 +1,274 @@
+﻿@{
+    ViewData["Title"] = Serenity.LocalText.Get("Db.MachineCustomization.Machine.EntityPlural");
+}
+@section Head
+{
+    @Html.Script("dynamic://Lookup.Configuration.State")
+
+}
+<style>
+    .edit-machine-form .form-group label {
+    }
+
+
+    .slickgrid-row-selected {
+        background-color: #02c0ce;
+    }
+
+    #divMachineDetailsDisplay {
+        height: 570px;
+    }
+
+    .labelclass {
+        text-align: left !important;
+        padding-left: 10px
+    }
+</style>
+
+@*<div class="grid-title">
+        <div class="title-text">Browse and Upload View</div>
+        <ul class="breadcrumb-list">
+            <li><a href="">@ViewBag.FormName</a></li>
+            <li><a href="">Browse and Upload View</a></li>
+        </ul>
+    </div>*@
+
+<div class="grid-title" id="divBreadCrumb">
+    <div class="title-text">Business Entity</div>
+    <ul class="breadcrumb-list">
+        <li><a>Business Entity</a></li>
+        <li><a id="anchrMachineBreadCrumb">Business Entity Details</a></li>
+    </ul>
+</div>
+
+<div id="GridDiv" style="height:540px !important"></div>
+<input type="hidden" id="hdnMachineImportAccess" />
+
+
+<!--<div id="divMachineDetailsDisplay" style="display:none; margin-bottom: 50px">
+    <div class="tab-content">
+        @*<div class="container">*@
+        <div role="tabpanel" class="tab-pane active jnr" id="first">
+            @*<div class="tab-panel-top">
+                    <h6>Edit Machine (<label id="lblMachineName"></label>)</h6>
+                </div>*@
+            <div class="row BtnUpdateRow" style="padding-left:15px">
+            </div>
+            <div class="machine-tab-links">
+                <a href="">General</a>
+                <a href="">PLC</a>
+            </div>
+            <form class="edit-machine-form myform">
+                <div class="edit-machine-title">
+                    <h6>General</h6>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="txtMachineSequence">Machine Name</label><span style="color:#d99000"> : </span>
+                            <label id="lblMachineName" class="labelclass" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="txtMachineSequence">Machine Sequence</label><span style="color:#d99000"> : </span>
+                            <label id="lblMachineSequence" class="labelclass" />
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Access Ip Address</label><span style="color:#d99000"> : </span>
+                            <label id="lblAccessIp" class="labelclass" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Description</label><span style="color:#d99000"> : </span>
+                            <label id="lblDescription" class="labelclass" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="txtModelNumber">Model Number</label><span style="color:#d99000"> : </span>
+                            <label id="lblModelNumber" class="labelclass" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="txtSerialNumber">Serial Number</label><span style="color:#d99000"> : </span>
+                            <label id="lblSerialNumber" class="labelclass" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="txtMake">Make</label><span style="color:#d99000"> : </span>
+                            <label id="lblMake" class="labelclass" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="txtYear">Year</label><span style="color:#d99000"> : </span>
+                            <label id="lblYear" class="labelclass" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+
+                </div>
+                <div class="edit-machine-title">
+                    <h6>PLC</h6>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="txtPLCMake">Plc Make</label><span style="color:#d99000"> : </span>
+                            <label id="lblPLCMake" class="labelclass" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="txtPLCModelNumber">Plc Model Number</label><span style="color:#d99000"> : </span>
+                            <label id="lblPLCModelNumber" class="labelclass" />
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="txtPLCSerialNumber">Plc Serial Number</label><span style="color:#d99000"> : </span>
+                            <label id="lblPLCSerialNumber" class="labelclass" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="txtPLCAddress">Plc Address</label><span style="color:#d99000"> : </span>
+                            <label id="lblPLCAddress" class="labelclass" />
+                        </div>
+                    </div>
+                    <div class="edit-machine-title">
+                        <h6>Status</h6>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Status</label>
+                                <label id="lblStatus" class="labelclass" />
+
+
+                                @*@Html.DropDownListFor(m => Model.StatusId, new SelectList(ViewBag.StatusList, "StatusId", "StatusName"), "-- Select --", new { @id = "ddlStatus", @class = "form-control js-example-basic-single" })*@
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </form>
+
+
+
+        </div>
+
+        <div role="tabpanel" class="tab-pane" id="second">
+            <div class="row BtnUpdateRow" style="padding-left:15px">
+                gg
+            </div>
+            <div class="container-fluid" style="padding-top: 25px;">
+                <div id="divTerminalList" style="width:100%; margin:0 auto;">
+                    <div class="container-fluid">
+                        <div class="dataTable-wrapper" style="width:100%; margin:0 auto;" id="divMachineTerminalMappedList">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            @*</div>*@
+        </div>
+
+        <div role="tabpanel" class="tab-pane" id="third">
+            <div class="row BtnUpdateRow" style="padding-left:15px">
+                <button type="button" id="btnAddMachineUserMapping" class="btn btn-primary">Add User</button>
+            </div>
+            <div class="container-fluid" style="padding-top: 25px;">
+                <div id="divTerminalList" style="width:100%; margin:0 auto;">
+                    <div class="container-fluid">
+                        <div class="dataTable-wrapper" style="width:100%; margin:0 auto;" id="divMachineUserMappedList">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @*</div>*@
+        </div>
+    </div>
+</div>
+        </div>
+    </div>-->
+
+<div id="divMachineDetails" style="display:none"></div>
+
+
+
+<script type="text/javascript">
+$("#hdnMachineImportAccess").val('@ViewBag.IsModifyPermission')
+
+jQuery(function () {
+    new CVC.MachineCustomization.MachineGrid($('#GridDiv'), {}).init();
+    Q.initFullHeightGridPage($('#GridDiv'));
+});
+
+//$("#btnUpdateMachineDetails").click(function () {
+//    UpdateMachineDetails()
+//})
+
+//function UpdateMachineDetails() {
+
+//    $.ajax({
+//        url: Q.resolveUrl('/terminaltab/UpdateMachineDetails'),
+//        type: 'POST',
+//        data: {
+//            "MachineName": $("#txtMachineName").val(), "StatusId": $("#ddlStatus option:selected").val(), "MachineId": $("#hdnMachineId").val(), "MachineSequence": $("#txtMachineSequence").val(), "AccessIPAddress": $("#txtAccessIp").val(), "Description": $("#txtDescription").val(), "ModelNumber": $("#txtModelNumber").val(), "SerialNumber": $("#txtSerialNumber").val(), "Make": $("#txtMake").val(), "PlcMake": $("#txtPLCMake").val(), "Year": $("#txtYear").val(), "PlcModelNumber": $("#txtPLCModelNumber").val(), "PLCSerialNumber": $("#txtPLCSerialNumber").val(), "PLCAddress": $("#txtPLCAddress").val()
+//        },
+//        //  async: true,
+//        success: function (response) {
+//            alert(response.message);
+//            if (response.status == true) {
+//                window.location.reload(true);
+//            }
+
+//        },
+//        error: function (x, y, z) {
+
+//        }
+//    });
+//}
+
+
+</script>
+
+<style>
+    #GridDiv {
+        height: 570px !important;
+    }
+
+    .grid-container {
+        height: 350px !important;
+    }
+</style>

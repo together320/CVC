@@ -1,0 +1,34 @@
+﻿@model int?
+
+@{
+    ViewData["Title"] = Serenity.LocalText.Get("Db.Configuration.Company.EntityPlural");
+}
+
+<div class="s-DataGrid require-layout route-handler responsive-heights-DataGrid require-layout route-handler responsive-height" style="height:auto;">
+    <div class="grid-title"><div class="title-text">Company</div></div>
+    <div id="DialogDiv"></div>
+    </div>
+
+
+    <script type="text/javascript">
+    var myDialogAsPanel;
+    jQuery(function () {
+        // first create a new dialog
+        myDialogAsPanel = new CVC.Configuration.CompanyDialog();
+        // load a new entity if url doesn't contain an ID, or load order with ID specified in page URL
+        // here we use done event in second parameter, to be sure operation succeeded before showing the panel
+        myDialogAsPanel.load(@Html.Raw(1) || {}, function() {
+            // if we didn't reach here, probably there is no order with specified ID in url
+            myDialogAsPanel.element.removeClass('hidden').appendTo('#DialogDiv');
+            myDialogAsPanel.arrange();
+        });
+
+    });
+        //jQuery(function () {
+        //    var dlg = new CVC.Configuration.CompanyDialog();
+        //    dlg.dialogOpen();
+        //});
+
+      
+    </script>
+

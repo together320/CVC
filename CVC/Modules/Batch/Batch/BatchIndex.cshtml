@@ -1,0 +1,421 @@
+﻿@{
+    ViewData["Title"] = Serenity.LocalText.Get("Db.Batch.Batch.EntityPlural");
+}
+<style>
+    #chartdiv {
+        width: 100%;
+        height: 500px;
+    }
+</style>
+<div id="GridDiv"></div>
+
+
+
+
+<div id="divbatchReport" style="display:none"></div>
+<div class="modal fade" id="CommentModal" role="dialog" data-backdrop="static" style="top:150px">
+    <div class="modal-dialog modal-sm">
+
+        <div class="modal-content" style="width:500px">
+            <div class="modal-header">
+                <h4 class="modal-title;" style="text-align: center;background-color: #3c8dbc;color: white;margin: 0;padding: 10px;"><span style="font-size:medium;text-align:center ">Authentication And Comment</span></h4>
+            </div>
+            <div class="modal-body" style="width:500px">
+
+                <div class="form-group-wrap">
+
+                    <div class="form-group">
+                        <label>User Name :</label> <input type="text" id="txtBatchUserName" class="form-control AddKeypad" />
+                    </div>
+                    <div class="form-group">
+                        <label>Password :</label>    <input type="password" id="txtPassword" class="form-control AddKeypad" />
+                    </div>
+                </div>
+
+
+
+
+                <div class="form-group-wrap">
+
+                    <div class="form-group" id="divComment_CommentModal">
+                        <label>Comment :</label>
+                        <textarea id="txtComment_CommentModal" class="form-control AddKeypad"></textarea>
+                        @*<input type="text"id="txtComment_CommentModal"  class="form-control"/>*@
+
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnSave_CommentModal" class="btn btn-primary">Submit</button>
+                <button type="button" id="btnCancel_CommentModal" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+
+                @*<a href="@Url.Action("SaveComments", "AlarmMachine")" class="btn btn-default graybtn backbtn">Save</a>*@
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="~/Scripts/jspdf.min.js"></script>
+<script type="text/javascript" src="~/Scripts/jspdf.plugin.autotable.min.js"></script>
+@*@Html.Partial("~/Views/PartialViews/Comments_AuthenticationPartialView.cshtml")*@
+<script type="text/javascript">
+    var BatchId;
+    var RepackId;
+    "use strict";
+    jQuery(function () {
+        new CVC.Batch.BatchGrid($('#GridDiv'), {}).init();
+
+        Q.initFullHeightGridPage($('#GridDiv'));
+    });
+
+   function DownloadBatchReport(id)
+    {
+       var para = { "BatchId" : id};
+
+    $.ajax({
+           url: Q.resolveUrl('~/api/Batch/GetBatchDetailsByBatchId'),
+           data: para,
+            type: 'POST',
+            success: function (data) {
+             DisplayDoughnutChartOfBatch(id,data.Good,data.Reject,data.Reject);
+              }
+    });
+
+    }
+
+    function DownloadPdfOfBatchReport(id) {
+        var reportDetails;
+
+        var machine = {};
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: Q.resolveUrl('~/api/Batch/GetReportDetails'),
+            data: JSON.stringify(machine),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+    debugger;
+                reportDetails = response;
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+
+        $.ajax({
+            url: Q.resolveUrl('/Batchreport/BatchReport?id=' + id),
+            type: 'GET',
+            success: function (data) {
+                $("#divbatchReport").html(data);
+
+
+                var doc = new jsPDF('p', 'pt');
+
+                var autoOptions = $.extend({
+                    margin: { top: 60, left: 25, right: 25 },
+                    startY: 60,
+                    styles: {
+                        fontSize: 8,
+                        overflow: 'linebreak',
+                        cellPadding: 2,
+                        valign: 'middle'
+                    },
+                    createdCell: function (cell, opts) {
+                        if (opts.row.index == 9 || opts.row.index == 14) {
+
+                           // cell.styles.textColor = "#000";
+                           // cell.styles.fontSize = 10;
+
+                        }
+                    },
+                    drawHeaderCell: function (cell, data) {
+                        doc.setFillColor(255);
+                        doc.setTextColor(60, 141, 188);
+                        doc.setFontSize(10);
+                        doc.setFontStyle('normal');
+                        //doc.styles.textColor = "#3c8dbc";
+                        //doc.styles.fontSize = 10;
+                    }
+                });
+
+                var beforePage = function (data) {
+                    doc.setFontStyle('normal');
+                    doc.setFontSize(8);
+                    // Date and time of the report
+                    doc.autoTableText("Equipment Name: " + reportDetails.MachineName, doc.internal.pageSize.width - autoOptions.margin.right, 10, {
+                        halign: 'right'
+                    });
+
+                    //doc.autoTableText("Serial Number: " + reportDetails., doc.internal.pageSize.width - autoOptions.margin.right, 20, {
+                    //    halign: 'right'
+                    //});
+                    // EquipmentId
+                    //doc.autoTableText("Model Number: " + reportDetails.Model, doc.internal.pageSize.width - autoOptions.margin.right, 30, {
+                    //    halign: 'right'
+                    //});
+
+                    //doc.autoTableText("Equipment ID: " + reportDetails.EquipmentId, doc.internal.pageSize.width - autoOptions.margin.right, 20, {
+                    //    halign: 'right'
+                    //});
+
+                    doc.autoTableText("Equipment ID: " + reportDetails.Serial, doc.internal.pageSize.width - autoOptions.margin.right, 20, {
+                        halign: 'right'
+                    });
+
+                    doc.autoTableText(reportDetails.comname, autoOptions.margin.left + 45, 10, {
+                        halign: 'left'
+                    });
+                    //doc.autoTableText(reportDetails.address, autoOptions.margin.left + 45, 20, {
+                    //    halign: 'left'
+                    //});
+
+                    //doc.addImage('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3NTc3Nzc3NjU3Ny01Nzc3NzUuNzUrLTc4LS01LzU1ODAvNzY3NS03KzU1KzU3LS0tN//AABEIACgAKAMBEQACEQEDEQH/xAAaAAEBAQADAQAAAAAAAAAAAAAGBQQCAwcB/8QAMxAAAQMCAgcFBwUAAAAAAAAAAQIDBAURABIGBxMhMVGRIkFhcaEUFSMyQmKBFiSxwdH/xAAbAQADAQEAAwAAAAAAAAAAAAAEBQYDAgABB//EAC0RAAEDAgQEBAcBAAAAAAAAAAEAAgMEEQUSITEGEyJRMnGRoRUjM0FhwfAU/9oADAMBAAIRAxEAPwAvpdHdn6XswkO3U7smmwTuQVG393xpiUvLJd9ghKJvywl8fVJBER1EyqSFSiew4ygJSgeKTe/UYh5eJnZ+lmiaCmFrqVI1R1BLlo9WhuI5uNrQegvgtnE8JHUyy4NO4LPN1W1KHS5koymZMhlKVtMRwbuAfPe/fbgBxxtFxBDLK1gFgd146nIChaEry1R5vN2XI5VbmQR/pwzrBduYoCpb0KpWoz9I0xFbmRnpMVCRLaDPC6bJQFn6U57XOCcSc2V74GnVe6L6Qcvg1m6Th8ul2EUE32Xs3ZHhe9/XCY4DRZb5fdGCdyvo1sL91Fxyir9tzZAtK/25Va/HiDbfl3+eFx4bZzNH9PutRUm2ynxtbFXRIC5VOgus33ttZkKt4Ek+owW7h6C1mGxXAqCsmh1OiLm1iXFlKdbjpSmPZOUFtw3ufuFgkjnfjgmunka1jCN/0hJ23icU+j02JUJWxmKKkTaa9GWzySlwEqB7j8T0GMMfnmgqXyAeEjX+8l1QAGJrUMkap6wmZkjT4TkUnc+4VJWB4oANz5HpjNnEVOY7uFndkSad104XoZTf0crR9K8rQ7ftSgMwevfaH87rct2EbcWmNZzyNO34W3KaG5V5yzqy0jXUBGeRGaj37UwOhSLcwn5ieQIHnikdj1I2LMDc9kOIH7J7Op0GlNvMxbJDMGPDQjvtnWvMfE8euE0VVLUuYXdys6zIyItXQxLjQqtAfkvJbIcUjf3hYym/IXsfxi14nijkoyB4kvwpkvNzW6UzffMdhTiWXninds2QCo9SB64+VRRB8gaTZUV+yBVCvUb3jZ7R1oykEo2LzyBvJubtC4Kr772J8cV8OFycnMJ7A+vruvYp2k3Ka0+RJks7WXEVDWrg2twKNu47uHliVqYGRy8tjsy80BQWWoyK1OmFeZL742QO6zaBlT1sT5EYp4GiOmawDZT1a7mS2WbQ2EKnpTDbk/FRmU47n33CUnd1thrE500vXqqqoa2KCwSaLNqOj7T7FSSqY3Bs24Ui72X6XOSkqTY34g3B4XwgxLDWGfK3QnZKWyubquCtZGjiU5i7JSrvBjquMC/A624tt5rv/S1Ea/p9NqclxulBUSBkKM7iRtXOZ+3+cU+EcORNs+fUrKSZ7tlPhVp+O20H0B9u1rk9tI8+/wDONKqkYJHALSehbIxsjRYr/9k=', 'jpg', autoOptions.margin.left, 10, 40, 40);
+                    doc.addImage('data:image/' + reportDetails.logotype + ';base64,' + reportDetails.logo, reportDetails.logotype, autoOptions.margin.left, 10, 40, 40);
+                   doc.addImage('data:image/' + 'png' + ';base64,' + reportDetails.BatchGraph,'png' , autoOptions.margin.left, doc.internal.pageSize.height -300 , 400, 400);
+
+                };
+
+                var afterPage = function (data) {
+                    doc.setFontStyle('normal');
+                    doc.setFontSize(8);
+
+                    // Date and time of the report
+                    doc.autoTableText("Report Generated By:" + reportDetails.generatedby, autoOptions.margin.left, doc.internal.pageSize.height - 35, {
+                        halign: 'left'
+                    });
+                    doc.autoTableText("Generation Date Time:" + Q.formatDate(new Date(), "dd-MM-yyyy HH:mm"), autoOptions.margin.left, doc.internal.pageSize.height - 20, {
+                        halign: 'left'
+                    });
+
+
+                    doc.autoTableText("Checked By:_________________", doc.internal.pageSize.width - autoOptions.margin.right, doc.internal.pageSize.height - 35, {
+                        halign: 'right'
+                    });
+                    doc.autoTableText("Report Approved By:_________________", doc.internal.pageSize.width - autoOptions.margin.right, doc.internal.pageSize.height - 20, {
+                        halign: 'right'
+                    });
+                };
+
+
+                autoOptions.beforePageContent = beforePage;
+                autoOptions.afterPageContent = afterPage;
+
+
+
+
+
+
+                var res = doc.autoTableHtmlToJson(document.getElementById("tablebatchinfo"));
+                doc.autoTable(res.columns, res.data, autoOptions);
+
+                //var autoOptions1 = $.extend({
+                //    margin: { top: 60, left: 25, right: 25 },
+                //    startY: 240,
+                //    styles: {
+                //        fontSize: 8,
+                //        overflow: 'linebreak',
+                //        cellPadding: 2,
+                //        valign: 'middle'
+                //    }
+                //});
+                ////tt.rows = document.getElementById("tablebatchsummary").rows;
+                //var res1 = doc.autoTableHtmlToJson(tt);
+                //doc.autoTable(res1.columns, res1.data, autoOptions1);
+
+                //autoOptions1.startY = 360;
+                //var res2 = doc.autoTableHtmlToJson(document.getElementById("tablerejsummary"));
+                //doc.autoTable(res2.columns, res2.data, autoOptions1);
+
+                var reportTitle = "Production Report";
+                doc.autoTableText(reportTitle, doc.internal.pageSize.width / 2, autoOptions.titleTop || 25, { halign: 'center' });
+
+                doc.save("BatchReport.pdf");
+            },
+            error: function (x, y, z) {
+                console.log(x + '\n' + y + '\n' + z);
+            }
+        });
+
+
+    }
+
+    function Repack(batchId, repackId) {
+        debugger;
+        BatchId = batchId;
+        RepackId = repackId;
+        $("#txtComment_CommentModal").val("");
+        $("#txtBatchUserName").val("");
+        $("#txtPassword").val("");
+        $("#CommentModal").modal('show');
+    }
+
+    $('#btnSave_CommentModal').click(function () {
+
+        if ($("#txtBatchUserName").val().trim() == "") {
+            alert("Please enter UserName");
+            return false;
+        }
+        if ($("#txtPassword").val().trim() == "") {
+            alert("Please enter Password");
+            return false;
+        }
+
+        if ($("#txtComment_CommentModal").val().trim() == "") {
+            alert("Please enter Comment");
+            return false;
+        }
+        UpdateRepackStatus();
+
+
+    });
+
+    function UpdateRepackStatus() {
+        debugger;
+        repackStatus = RepackId == 1 ? "Taken for Repack" : "Not Repacked";
+
+        $.ajax({
+            url: Q.resolveUrl('~/api/Batch/UpdateRepackStatus'),
+            data: {
+                "UserName": $("#txtBatchUserName").val(), "Password": $("#txtPassword").val(), "BatchId": BatchId, "RepackStatus": repackStatus, "Comments": $("#txtComment_CommentModal").val()
+            },
+            type: 'POST',
+            // async: true,
+            dataType: 'json',
+            success: function (data) {
+                if (data == "Invalid User") {
+                    swal("You are not authorized person");
+                }
+                else {
+                    $("#CommentModal").modal('hide');
+                   // location.reload();
+                   // window.location.href = "http://localhost:54100/Batch/Batch";
+                    window.location.reload()
+                }
+            },
+            error: function (x, y, z) {
+            }
+        });
+
+    }
+
+
+
+</script>
+
+<div id="chartdiv" style="visibility:hidden"></div>
+
+@*<script src="https://www.amcharts.com/lib/4/core.js"></script>
+    <script src="https://www.amcharts.com/lib/4/charts.js"></script>
+    <script src="https://www.amcharts.com/lib/4/plugins/forceDirected.js"></script>
+    <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>*@
+
+
+<script src="~/Content/JS/core.js"></script>
+<script src="~/Content/JS/charts.js"></script>
+<script src="~/Content/JS/animated.js"></script>
+
+
+
+<script>
+
+    function DisplayDoughnutChartOfBatch(id,goodBottle,rejectBottle,totalBottle){
+    debugger;
+    am4core.ready(function() {
+
+// Themes begin
+am4core.useTheme(am4themes_animated);
+// Themes end
+
+// Create chart instance
+var chart = am4core.create("chartdiv", am4charts.PieChart);
+
+// Add data
+chart.data = [
+  { "viewFieldName": "Good Bottles", "viewFieldValue": goodBottle,"color":"#00a65a" },
+  { "viewFieldName":"Reject Bottles", "viewFieldValue": rejectBottle,"color":"#dd4b39" },
+
+];
+
+// Add label
+chart.innerRadius = 100;
+var label = chart.seriesContainer.createChild(am4core.Label);
+//label.text ="Total Bottle";
+label.horizontalCenter = "middle";
+label.verticalCenter = "middle";
+        label.fontSize = 25;
+        label.fontWeight = "bold";
+
+var codeBlock = '<div >' +
+                        '<p>'+totalBottle+'</p><br/>' +
+                        '<p>Total Bottles</p>' +
+                    '</div>';
+ label.text=totalBottle;
+
+ var label1 = chart.seriesContainer.createChild(am4core.Label);
+//label.text ="Total Bottle";
+label1.horizontalCenter = "bottom";
+        label1.verticalCenter = "bottom";
+        label1.fontSize = 20;
+
+        label1.fontWeight = "bold";
+label1.x=-60;
+label1.y=65;
+label1.text="Total Bottles";
+//label.align = "center";
+// Add and configure Series
+var pieSeries = chart.series.push(new am4charts.PieSeries());
+pieSeries.dataFields.value = "viewFieldValue";
+pieSeries.dataFields.category = "viewFieldName";
+var sliceTemplate = pieSeries.slices.template;
+    sliceTemplate.propertyFields.fill = "color";
+    var title = chart.titles.create();
+        title.text = "Statistics";
+        title.textAlign = "middle";
+        title.fontSize = 30;
+        title.fontWeight = "bold";
+        title.cssClass="box-title";
+        chart.legend = new am4charts.Legend();
+        chart.legend.fontSize = 25;
+   // chart.labels.template.disabled = true;
+
+     function exportPNG() {
+
+        chart.exporting.getImage("png").then(function (imgData) {
+            $.ajax({
+                url: '/Common/SaveBatchGraph',
+                type: 'POST',
+                data: { base64: imgData,batchId:id,width:1600,height:400,xaxis:-400,yaxis:0
+ },
+                success: function (data) {
+                    if (data != "") {
+                      DownloadPdfOfBatchReport(id);
+                    }
+                    else {
+                      //  alert("file not saved.")
+                    }
+                    // do something here.
+                },
+                error: function (r, s, e) {
+                    alert("Unexpected error:" + e);
+
+                }
+            });
+        });
+    }
+    var options = chart.exporting.getFormatOptions("png");
+    options.keepTainted = true;
+    chart.exporting.setFormatOptions("png", options);
+        exportPNG();
+
+});
+    // end am4core.ready()
+
+
+    }
+
+</script>

@@ -1,0 +1,1161 @@
+﻿@model CVC.Common.MachineDashboardPageModel
+@{
+    ViewData["Title"] = "Dashboard";
+    ViewData["PageId"] = "Dashboard";
+}
+
+
+@section Head {
+    @Html.StyleBundle("Pages/MachineDashboard")
+    @Html.ScriptBundle("Pages/MachineDashboard")
+}
+
+<!-- Small boxes (Stat box) -->
+<!-- Small boxes (Stat box) -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">Line Summary:</h3>
+                <div class="box-tools pull-right">
+                    <button id="btnStartBatch" class="btn btn-primary">New Batch</button>
+                        <button id="btnStopBatch" class="btn btn-primary">Start Batch</button>
+                        <button class="btn btn-primary">Stop Batch</button>
+                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    <div class="btn-group">
+                        <button class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown"><i class="fa fa-wrench"></i></button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="#">Action</a></li>
+                            <li><a href="#">Another action</a></li>
+                            <li><a href="#">Something else here</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#">Separated link</a></li>
+                        </ul>
+                    </div>
+                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                </div>
+            </div><!-- /.box-header -->
+            <div class="box-body" style="padding:0px;">
+                <div class="col-sm-3" style="padding:0px;">
+                    <div class="form-horizontal">
+                        <label class="col-xs-6 control-label" style="padding-right:10px;">Batch:</label>
+                        <p class="form-control-static">Batch 1</p>
+
+                    </div>
+
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-horizontal">
+                        <label class="col-xs-5 control-label">Product: </label>
+                        <p class="form-control-static">ABC Product</p>
+                    </div>
+                </div>
+                <div class="col-sm-3" style="padding-right:0px;">
+                    <div class="form-horizontal">
+                        <label class="col-xs-6 control-label">Start Date: </label>
+                        <p class="form-control-static">12/11/17 10:56 AM</p>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-horizontal">
+                        <label class="col-xs-5 control-label">End Date: </label>
+                        <p class="form-control-static">12/11/17 10:56 AM</p>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="ibox float-e-margins">
+                        @*<div class="ibox-title">
+                               <span class="form-control">Batch Name : </span>
+                               <span class="form-control">Product Name : </span>
+                            </div>*@
+                        <div class="ibox-content" style="padding:0px;">
+                            <div class="row">
+                                <div class="col-xs-2">
+                                    <small class="stats-label">Production Speed</small>
+                                    <h4 style="align-content:center;">0</h4>
+                                </div>
+
+                                <div class="col-xs-2">
+                                    <small class="stats-label">Total Good</small>
+                                    <h4>0</h4>
+                                </div>
+                                <div class="col-xs-2">
+                                    <small class="stats-label">Total Reject</small>
+                                    <h4>0</h4>
+                                </div>
+                                <div class="col-xs-2">
+                                    <small class="stats-label">Total Bottles</small>
+                                    <h4>0</h4>
+                                </div>
+                                <div class="col-xs-2">
+                                    <small class="stats-label">Label Length</small>
+                                    <h4>0</h4>
+                                </div>
+                                <div class="col-xs-2">
+                                    <small class="stats-label">Bottle Diameter </small>
+                                    <h4>0</h4>
+                                </div>
+                            </div>
+                        </div>
+                        @*<div class="ibox-content" style="padding:0px;">
+                                <div class="row">
+
+
+
+                                </div>
+                            </div>*@
+
+                    </div>
+                </div>
+
+            </div><!-- ./box-body -->
+
+        </div><!-- /.box -->
+    </div><!-- /.col -->
+    @*<div class="col-md-5" style="padding-left:3px;">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Alarm:</h3>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        <div class="btn-group">
+                            <button class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown"><i class="fa fa-wrench"></i></button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="#">Action</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">Separated link</a></li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="box-body table-responsive no-padding">
+                        <table class="table table-hover">
+                            <tr>
+                                <th>No</th>
+                                <th>Date & Time</th>
+                                <th>Message</th>
+
+                            </tr>
+                            <tr>
+                                <td>183</td>
+
+                                <td>16-11-2017 02:10 PM</td>
+
+                                <td>Rejection On.</td>
+                            </tr>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+</div>
+<!-- Main row -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#labelingmachine" data-toggle="tab">Labeling Machine</a></li>
+                <li><a href="#timeline" data-toggle="tab">Outserter Machine</a></li>
+                <li><a href="#settings" data-toggle="tab">Capper Machine</a></li>
+                
+    
+    
+    @*<li><a href="#settings" data-toggle="tab">Capacity</a></li>*@
+            </ul>
+            <div class="tab-content">
+                <div class="active tab-pane" id="labelingmachine">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="box">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">Batch & Couter Details:</h3>
+                                    <div class="box-tools pull-right">
+                                        <button class="btn btn-primary">Set</button>
+                                        <button class="btn btn-primary">Reset</button>
+                                        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                        <div class="btn-group">
+                                            <button class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown"><i class="fa fa-wrench"></i></button>
+                                            <ul class="dropdown-menu" role="menu">
+                                                <li><a href="#">Action</a></li>
+                                                <li><a href="#">Another action</a></li>
+                                                <li><a href="#">Something else here</a></li>
+                                                <li class="divider"></li>
+                                                <li><a href="#">Separated link</a></li>
+                                            </ul>
+                                        </div>
+                                        <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                                    </div>
+                                </div><!-- /.box-header -->
+                                <div class="box-body">
+                                    <div class="col-sm-3" style="padding:0px;">
+                                        <div class="form-horizontal">
+                                            <label class="col-xs-6 control-label" style="padding-right:10px;">Batch:</label>
+                                            <p class="form-control-static">Batch 1</p>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-horizontal">
+                                            <label class="col-xs-5 control-label">Product: </label>
+                                            <p class="form-control-static">ABC Product</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3" style="padding-right:0px;">
+                                        <div class="form-horizontal">
+                                            <label class="col-xs-6 control-label">Start Date: </label>
+                                            <p class="form-control-static">12/11/17 10:56 AM</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-horizontal">
+                                            <label class="col-xs-5 control-label">End Date: </label>
+                                            <p class="form-control-static">12/11/17 10:56 AM</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="ibox float-e-margins">
+
+                                            <div class="ibox-content" style="padding:0px;">
+                                                <div class="row">
+                                                    <div class="col-xs-2">
+                                                        <small class="stats-label">Production Speed</small>
+                                                        <h4 style="align-content:center;">0</h4>
+                                                    </div>
+
+                                                    <div class="col-xs-2">
+                                                        <small class="stats-label">Total Good</small>
+                                                        <h4>0</h4>
+                                                    </div>
+                                                    <div class="col-xs-2">
+                                                        <small class="stats-label">Total Reject</small>
+                                                        <h4>0</h4>
+                                                    </div>
+                                                    <div class="col-xs-2">
+                                                        <small class="stats-label">Total Bottles</small>
+                                                        <h4>0</h4>
+                                                    </div>
+                                                    <div class="col-xs-2">
+                                                        <small class="stats-label">Label Length</small>
+                                                        <h4>0</h4>
+                                                    </div>
+                                                    <div class="col-xs-2">
+                                                        <small class="stats-label">Bottle Diameter </small>
+                                                        <h4>0</h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="ibox-content" style="padding:0px;">
+                                                <div class="row">
+                                                    <div class="col-xs-2">
+                                                        <small class="stats-label">Label Remaining</small>
+                                                        <h4 style="align-content:center;">0</h4>
+                                                    </div>
+
+                                                    <div class="col-xs-2">
+                                                        <small class="stats-label">No Label</small>
+                                                        <h4>0</h4>
+                                                    </div>
+                                                    <div class="col-xs-2">
+                                                        <small class="stats-label">Barcode</small>
+                                                        <h4>0</h4>
+                                                    </div>
+                                                    <div class="col-xs-2">
+                                                        <small class="stats-label">Datacheck</small>
+                                                        <h4>0</h4>
+                                                    </div>
+                                                    <div class="col-xs-2">
+                                                        <small class="stats-label">Label Verify</small>
+                                                        <h4>0</h4>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div><!-- ./box-body -->
+
+                            </div><!-- /.box -->
+                        </div><!-- /.col -->
+                        @*<div class="col-md-5" style="padding-left:3px;">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Counter Details:</h3>
+                        <div class="box-tools pull-right">
+                            <button class="btn btn-primary">Set</button>
+                            <button class="btn btn-primary">Reset</button>
+
+                            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                            <div class="btn-group">
+                                <button class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown"><i class="fa fa-wrench"></i></button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="#">Action</a></li>
+                                    <li><a href="#">Another action</a></li>
+                                    <li><a href="#">Something else here</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="#">Separated link</a></li>
+                                </ul>
+                            </div>
+                            <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+                    <div class="box-body">
+
+                        <div class="col-lg-12">
+                            <div class="ibox float-e-margins">
+
+                                <div class="ibox-content" style="padding:0px;">
+                                    <div class="row">
+                                        <div class="col-xs-4">
+                                            <small class="stats-label">Label Remaining</small>
+                                            <h4 style="align-content:center;">0</h4>
+                                        </div>
+
+                                        <div class="col-xs-3">
+                                            <small class="stats-label">No Label</small>
+                                            <h4>0</h4>
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <small class="stats-label">Barcode</small>
+                                            <h4>0</h4>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                <div class="ibox-content" style="padding:0px;">
+                                    <div class="row">
+
+                                        <div class="col-xs-4">
+                                            <small class="stats-label">Datacheck</small>
+                                            <h4>0</h4>
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <small class="stats-label">Label Verify</small>
+                                            <h4>0</h4>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>*@
+                    </div>
+                    <div class="row">
+                        <section class="col-lg-12">
+                            <div class="box">
+
+                                <div class="box-body">
+
+                                    <a class="btn btn-app" style="background-color:green;color:white;font-weight:bold;" href="javascript:void(0)" id="btnStart">
+                                        <i class="fa fa-power-off" style="color:white;"></i> Start Machine
+                                    </a>
+                                    @*<a class="btn btn-app" style="background-color:orange;color:white;font-weight:bold;">
+                                            <i class="fa fa-pause"></i> Pause Machine
+                                        </a>*@
+                                    @*<a class="btn btn-app" style="background-color:red;color:white;font-weight:bold;">
+                                            <i class="fa fa-stop"></i> Stop Machine
+                                        </a>*@
+                                    <a class="btn btn-app" style="background-color:deepskyblue;color:white;font-weight:bold;">
+                                        <i><input id="btnHeaderOnOff" type="checkbox" data-toggle="toggle" /></i>
+                                        Machine Header
+                                    </a>
+                                    <a class="btn btn-app" style="background-color:darkgoldenrod;color:white;font-weight:bold;">
+                                        <input id="btnSeparatorOnOff" type="checkbox" data-toggle="toggle" /> Separator
+                                    </a>
+
+                                    <a class="btn btn-app" style="background-color:coral;color:white;font-weight:bold;">
+                                        <i class="fa fa-refresh"></i> Reject Reset
+                                    </a>
+                                    <a class="btn btn-app" style="background-color:lightseagreen;color:white;font-weight:bold;">
+                                        <i class="fa fa-envelope"></i> Clear Message
+                                    </a>
+                                    @*<a class="btn btn-app" style="background-color:lightslategray;color:white;font-weight:bold;">
+                                            <i class="fa fa-bell"></i> Alarm
+                                        </a>*@
+                                </div>
+                            </div>
+                        </section>
+                    </div><!-- /.row -->
+                    <!-- Main row -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="nav-tabs-custom">
+                                <ul class="nav nav-tabs">
+                                    <li class="active"><a href="#activity" data-toggle="tab">Settings</a></li>
+                                    <li><a href="#timeline" data-toggle="tab">Manual</a></li>
+                                    <li><a href="#settings" data-toggle="tab">Memory</a></li>
+                                    <li><a href="#settings" data-toggle="tab">Capacity</a></li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="active tab-pane" id="activity">
+                                        @*<div class="col-md-12">*@
+                                        @*<div class="row">*@
+                                        <div class="well well-sm">
+
+                                            <div class="col-sm-6">
+                                                <form class="form-horizontal">
+                                                    <div class="form-group">
+                                                        <label for="txtRecipeName" class="col-sm-2 control-label">Recipe Name</label>
+                                                        <div class="col-sm-4">
+                                                            <input type="text" class="form-control" id="txtRecipeName" />
+                                                        </div>
+                                                        <label for="txtProduct" class="col-sm-2 control-label">Product</label>
+                                                        <div class="col-sm-4">
+                                                            <input type="text" class="form-control" id="txtProduct" />
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="pull-right">
+                                                    <button class="btn btn-primary" data-toggle="modal" data-target="#myModal">Select Recipe</button>
+                                                    <button class="btn btn-primary">Selfset</button>
+                                                    <button class="btn btn-primary">Load Recipe</button>
+                                                    <button class="btn btn-primary">Save Recipe</button>
+                                                </div>
+                                            </div>
+                                            <hr />
+                                        </div>
+                                        <div id="myModal" class="modal fade" role="dialog">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                        <h4 class="modal-title">Recipe</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        @*<div class="container">*@
+                                                            <div class="row clearfix">
+                                                                <div class="col-md-12 column">
+                                                                    <table class="table table-bordered table-hover" id="tab_logic">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th class="text-center">
+                                                                                    #
+                                                                                </th>
+                                                                                <th class="text-center">
+                                                                                    Recipe
+                                                                                </th>
+                                                                                <th class="text-center">
+                                                                                    Product
+                                                                                </th>
+                                                                                <th class="text-center">
+                                                                                    Length Of Lable
+                                                                                </th>
+                                                                                <th class="text-center">
+                                                                                    Bottle Diameter
+                                                                                </th>
+                                                                                <th class="text-center">
+                                                                                    Bottle CC
+                                                                                </th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr id='addr0'>
+                                                                                <td>
+                                                                                    1
+                                                                                </td>
+                                                                                <td>
+                                                                                    <input type="text" name='name0' placeholder='Name' class="form-control" />
+                                                                                </td>
+                                                                                <td>
+                                                                                    <input type="text" name='mail0' placeholder='Mail' class="form-control" />
+                                                                                </td>
+                                                                                <td>
+                                                                                    <input type="text" name='mobile0' placeholder='Mobile' class="form-control" />
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr id='addr1'></tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                           
+                                                        @*</div>*@
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                                                        <a id="add_row" class="btn btn-default pull-left">Add Row</a><a id='delete_row' class="pull-right btn btn-default">Delete Row</a>
+                                                        @*<button type="button" class="btn btn-primary">Save changes</button>*@
+                                                    </div>
+                                                </div><!-- /.modal-content -->
+                                            </div><!-- /.modal-dialog -->
+                                        </div><!-- /.modal -->
+                                        @*</div>*@<!-- /.example-modal -->
+                                        @*</div>*@
+                                        <div class="row">
+                                            <div class="col-lg-7">
+                                                <form class="form-horizontal">
+                                                    <div class="box-body">
+                                                        <div class="form-group">
+                                                            <label for="lblLengthAndGap" class="col-sm-2 control-label">Length & Gap</label>
+                                                            <div class="col-sm-2">
+                                                                <label class="form-control" id="lblLengthAndGap"></label>
+                                                            </div>
+                                                            <label for="lblLabelToOut" class="col-sm-2 control-label">Label To Out</label>
+                                                            <div class="col-sm-2">
+                                                                <label class="form-control" id="lblLabelToOut"></label>
+                                                            </div>
+                                                            <label for="lblDiameter" class="col-sm-2 control-label">Diameter</label>
+                                                            <div class="col-sm-2">
+                                                                <label class="form-control" id="lblDiameter"></label>
+                                                            </div>
+                                                        </div>
+                                                        @*<div class="form-group">
+
+                                                            </div>*@
+                                                        @*<div class="form-group">
+
+                                                            </div>*@
+                                                        <div class="form-group">
+                                                            <label for="txtProductionSpeed" class="col-sm-3 control-label">Production Speed</label>
+                                                            <div class="col-sm-3">
+                                                                <input type="text" class="form-control" id="txtProductionSpeed" />
+                                                            </div>
+                                                            <label for="txtExtension" class="col-sm-3 control-label">Extension</label>
+                                                            <div class="col-sm-3">
+                                                                <input type="text" class="form-control" id="txtExtension" />
+                                                            </div>
+                                                        </div>
+                                                        @*<div class="form-group">
+                                                                <label for="txtExtension" class="col-sm-4 control-label">Extension</label>
+                                                                <div class="col-sm-3">
+                                                                    <input type="text" class="form-control" id="txtExtension" />
+                                                                </div>
+                                                            </div>*@
+                                                        <div class="form-group">
+                                                            <label for="txtStartPosition" class="col-sm-3 control-label">Start Position</label>
+                                                            <div class="col-sm-3">
+                                                                <input type="text" class="form-control" id="txtStartPosition" />
+                                                            </div>
+                                                            <label for="txtDispenserSpeed" class="col-sm-3 control-label">Dispenser Speed</label>
+                                                            <div class="col-sm-3">
+                                                                <input type="text" class="form-control" id="txtDispenserSpeed" />
+                                                            </div>
+                                                        </div>
+                                                        @*<div class="form-group">
+                                                                <label for="txtDispenserSpeed" class="col-sm-4 control-label">Dispenser Speed</label>
+                                                                <div class="col-sm-3">
+                                                                    <input type="text" class="form-control" id="txtDispenserSpeed" />
+                                                                </div>
+                                                            </div>*@
+                                                        <div class="form-group">
+                                                            <label for="txtLabelingRestTime" class="col-sm-3 control-label">Labeling Rest Time</label>
+                                                            <div class="col-sm-3">
+                                                                <input type="text" class="form-control" id="txtLabelingRestTime" />
+                                                            </div>
+                                                            <label for="txtOtherPharmaDigit" class="col-sm-3 control-label">Other Pharma Digit</label>
+                                                            <div class="col-sm-3">
+                                                                <input type="text" class="form-control" id="txtOtherPharmaDigit" />
+                                                            </div>
+                                                        </div>
+                                                        @*<div class="form-group">
+                                                                <label for="txtOtherPharmaDigit" class="col-sm-4 control-label">Other Pharma Digit</label>
+                                                                <div class="col-sm-3">
+                                                                    <input type="text" class="form-control" id="txtOtherPharmaDigit" />
+                                                                </div>
+                                                            </div>*@
+                                                        <div class="form-group">
+                                                            <label for="txtCamera1QueueSize" class="col-sm-3 control-label">Camera 1 Queue Size</label>
+                                                            <div class="col-sm-3">
+                                                                <input type="text" class="form-control" id="txtCamera1QueueSize" />
+                                                            </div>
+                                                            <label for="txtCamera2QueueSize" class="col-sm-3 control-label">Camera 2 Queue Size</label>
+                                                            <div class="col-sm-3">
+                                                                <input type="text" class="form-control" id="txtCamera2QueueSize" />
+                                                            </div>
+                                                        </div>
+                                                        @*<div class="form-group">
+                                                                <label for="txtCamera2QueueSize" class="col-sm-4 control-label">Camera 2 Queue Size</label>
+                                                                <div class="col-sm-3">
+                                                                    <input type="text" class="form-control" id="txtCamera2QueueSize" />
+                                                                </div>
+                                                            </div>*@
+                                                        <div class="form-group">
+                                                            <label for="txtPrinterTime" class="col-sm-3 control-label">Printer Time</label>
+                                                            <div class="col-sm-3">
+                                                                <input type="text" class="form-control" id="txtPrinterTime" />
+                                                            </div>
+                                                            <label for="txtPrinterTemprature" class="col-sm-3 control-label">Printer Temperature</label>
+                                                            <div class="col-sm-3">
+                                                                <input type="text" class="form-control" id="txtPrinterTemprature" />
+                                                            </div>
+                                                        </div>
+                                                        @*<div class="form-group">
+                                                                <label for="txtPrinterTemprature" class="col-sm-4 control-label">Printer Temperature</label>
+                                                                <div class="col-sm-3">
+                                                                    <input type="text" class="form-control" id="txtPrinterTemprature" />
+                                                                </div>
+                                                            </div>*@
+                                                        <div class="form-group">
+                                                            <label for="txtPharmaNumberOfDigit" class="col-sm-3 control-label">Pharma Number Of Digit</label>
+                                                            <div class="col-sm-3">
+                                                                <input type="text" class="form-control" id="txtPharmaNumberOfDigit" />
+                                                            </div>
+                                                            <label for="txtBuzzAlarmOrMessage" class="col-sm-3 control-label">Buzz Alarm/Message</label>
+                                                            <div class="col-sm-3">
+                                                                <input type="text" class="form-control" id="txtBuzzAlarmOrMessage" />
+                                                            </div>
+                                                        </div>
+                                                        @*<div class="form-group">
+                                                                <label for="txtBuzzAlarmOrMessage" class="col-sm-3 control-label">Buzz Alarm/Message</label>
+                                                                <div class="col-sm-3">
+                                                                    <input type="text" class="form-control" id="txtBuzzAlarmOrMessage" />
+                                                                </div>
+                                                            </div>*@
+                                                        <div class="form-group">
+                                                            <label for="txtNumberOfBeep" class="col-sm-3 control-label">Number of Beep</label>
+                                                            <div class="col-sm-3">
+                                                                <input type="text" class="form-control" id="txtNumberOfBeep" />
+                                                            </div>
+                                                            <label for="txtBottleJamDetectNearOfDiameter" class="col-sm-3 control-label">Bottle Jam Detect Near Of Diameter</label>
+                                                            <div class="col-sm-3">
+                                                                <input type="text" class="form-control" id="txtBottleJamDetectNearOfDiameter" />
+                                                            </div>
+                                                        </div>
+                                                        @*<div class="form-group">
+                                                                <label for="txtBottleJamDetectNearOfDiameter" class="col-sm-4 control-label">Bottle Jam Detect Near Of Diameter</label>
+                                                                <div class="col-sm-3">
+                                                                    <input type="text" class="form-control" id="txtBottleJamDetectNearOfDiameter" />
+                                                                </div>
+                                                            </div>*@
+                                                        <div class="form-group">
+                                                            <label for="txtContinuousRejectsLimit" class="col-sm-3 control-label">Continuous Rejects Limit</label>
+                                                            <div class="col-sm-3">
+                                                                <input type="text" class="form-control" id="txtContinuousRejectsLimit" />
+                                                            </div>
+                                                            <label for="txtDistanceESToRejection" class="col-sm-3 control-label">Distance ES To Rejection</label>
+                                                            <div class="col-sm-3">
+                                                                <input type="text" class="form-control" id="txtDistanceESToRejection" />
+                                                            </div>
+                                                        </div>
+                                                        @*<div class="form-group">
+                                                                <label for="txtDistanceESToRejection" class="col-sm-3 control-label">Distance ES To Rejection</label>
+                                                                <div class="col-sm-3">
+                                                                    <input type="text" class="form-control" id="txtDistanceESToRejection" />
+                                                                </div>
+                                                            </div>*@
+                                                        <div class="form-group">
+                                                            <label for="txtRejectionTime" class="col-sm-3 control-label">Rejection Time</label>
+                                                            <div class="col-sm-3">
+                                                                <input type="text" class="form-control" id="txtRejectionTime" />
+                                                            </div>
+                                                        </div>
+
+                                                    </div><!-- /.box-body -->
+                                                </form>
+                                            </div>
+                                            <div class="col-lg-5">
+                                                <form class="form-horizontal">
+                                                    <div class="box-body">
+                                                        <div class="form-group">
+                                                            <label for="chkBarCode" class="col-sm-3 control-label">Barcode</label>
+                                                            <div class="col-sm-3">
+                                                                <input type="checkbox" id="chkBarCode" checked data-toggle="toggle" data-on="Enable" data-off="Disable" data-onstyle="success" data-offstyle="danger">
+                                                            </div>
+                                                            <label for="chkDatacheck" class="col-sm-3 control-label">Datacheck</label>
+                                                            <div class="col-sm-3">
+                                                                <input type="checkbox" id="chkDatacheck" checked data-toggle="toggle" data-on="Enable" data-off="Disable" data-onstyle="success" data-offstyle="danger">
+                                                            </div>
+                                                        </div>
+                                                        @*<div class="form-group">
+                                                                <label for="chkDatacheck" class="col-sm-2 control-label">Datacheck</label>
+                                                                <div class="col-sm-3">
+                                                                    <input type="checkbox" id="chkDatacheck" checked data-toggle="toggle" data-on="Enable" data-off="Disable" data-onstyle="success" data-offstyle="danger">
+                                                                </div>
+                                                            </div>*@
+                                                        <div class="form-group">
+                                                            <label for="chkPrinter" class="col-sm-3 control-label">Printer</label>
+                                                            <div class="col-sm-3">
+                                                                <input type="checkbox" id="chkPrinter" checked data-toggle="toggle" data-on="Enable" data-off="Disable" data-onstyle="success" data-offstyle="danger">
+                                                            </div>
+                                                            <label for="chkContinuousRead" class="col-sm-3 control-label">Continuous Read</label>
+                                                            <div class="col-sm-3">
+                                                                <input type="checkbox" id="chkContinuousRead" checked data-toggle="toggle" data-on="Enable" data-off="Disable" data-onstyle="success" data-offstyle="danger">
+                                                            </div>
+                                                        </div>
+                                                        @*<div class="form-group">
+                                                                <label for="chkContinuousRead" class="col-sm-2 control-label">Continuous Read</label>
+                                                                <div class="col-sm-4">
+                                                                    <input type="checkbox" id="chkContinuousRead" checked data-toggle="toggle" data-on="Enable" data-off="Disable" data-onstyle="success" data-offstyle="danger">
+                                                                </div>
+                                                            </div>*@
+                                                        <div class="form-group">
+                                                            <label for="chkSingleRead" class="col-sm-3 control-label">Single Red</label>
+                                                            <div class="col-sm-3">
+                                                                <input type="checkbox" id="chkSingleRead" checked data-toggle="toggle" data-on="Enable" data-off="Disable" data-onstyle="success" data-offstyle="danger">
+                                                            </div>
+                                                            <label for="chkBarcodeMode" class="col-sm-3 control-label">Barcode Mode</label>
+                                                            <div class="col-sm-3">
+                                                                <input type="checkbox" id="chkBarcodeMode" checked data-toggle="toggle" data-on="Other" data-off="Pharma" data-onstyle="success" data-offstyle="danger">
+                                                            </div>
+                                                        </div>
+                                                        @*<div class="form-group">
+                                                                <label for="chkBarcodeMode" class="col-sm-3 control-label">Barcode Mode</label>
+                                                                <div class="col-sm-3">
+                                                                    <input type="checkbox" id="chkBarcodeMode" checked data-toggle="toggle" data-on="Other" data-off="Pharma" data-onstyle="success" data-offstyle="danger">
+                                                                </div>
+                                                            </div>*@
+                                                        <div class="form-group">
+                                                            <label for="chkBarcodeOrCCD" class="col-sm-3 control-label">Barcode /CCD</label>
+                                                            <div class="col-sm-3">
+                                                                <input type="checkbox" id="chkBarcodeOrCCD" checked data-toggle="toggle" data-on="Enable" data-off="Disable" data-onstyle="success" data-offstyle="danger">
+                                                            </div>
+                                                            <label for="chkLabelVerify" class="col-sm-3 control-label">Label Verify</label>
+                                                            <div class="col-sm-3">
+                                                                <input type="checkbox" id="chkLabelVerify" checked data-toggle="toggle" data-on="Enable" data-off="Disable" data-onstyle="success" data-offstyle="danger">
+                                                            </div>
+                                                        </div>
+                                                        @*<div class="form-group">
+                                                                <label for="chkLabelVerify" class="col-sm-3 control-label">Label Verify</label>
+                                                                <div class="col-sm-3">
+                                                                    <input type="checkbox" id="chkLabelVerify" checked data-toggle="toggle" data-on="Enable" data-off="Disable" data-onstyle="success" data-offstyle="danger">
+                                                                </div>
+                                                            </div>*@
+                                                        <div class="form-group">
+                                                            <label for="chkRejectionVerify" class="col-sm-3 control-label">Rejection Verify</label>
+                                                            <div class="col-sm-3">
+                                                                <input type="checkbox" id="chkRejectionVerify" checked data-toggle="toggle" data-on="Enable" data-off="Disable" data-onstyle="success" data-offstyle="danger">
+                                                            </div>
+                                                            <label for="chkLabeling" class="col-sm-3 control-label">Labeling</label>
+                                                            <div class="col-sm-3">
+                                                                <input type="checkbox" id="chkLabeling" checked data-toggle="toggle" data-on="Enable" data-off="Disable" data-onstyle="success" data-offstyle="danger">
+                                                            </div>
+                                                        </div>
+                                                        @*<div class="form-group">
+                                                                <label for="chkLabeling" class="col-sm-3 control-label">Labeling</label>
+                                                                <div class="col-sm-3">
+                                                                    <input type="checkbox" id="chkLabeling" checked data-toggle="toggle" data-on="Enable" data-off="Disable" data-onstyle="success" data-offstyle="danger">
+                                                                </div>
+                                                            </div>*@
+                                                        <div class="form-group">
+                                                            <label for="chkReject" class="col-sm-3 control-label">Reject</label>
+                                                            <div class="col-sm-3">
+                                                                <input type="checkbox" id="chkReject" checked data-toggle="toggle" data-on="Enable" data-off="Disable" data-onstyle="success" data-offstyle="danger">
+                                                            </div>
+                                                            <label for="chkSeparator" class="col-sm-3 control-label">Separator</label>
+                                                            <div class="col-sm-3">
+                                                                <input type="checkbox" id="chkSeparator" checked data-toggle="toggle" data-on="Enable" data-off="Disable" data-onstyle="success" data-offstyle="danger">
+                                                            </div>
+                                                        </div>
+                                                        @*<div class="form-group">
+                                                                <label for="chkSeparator" class="col-sm-3 control-label">Separator</label>
+                                                                <div class="col-sm-3">
+                                                                    <input type="checkbox" id="chkSeparator" checked data-toggle="toggle" data-on="Enable" data-off="Disable" data-onstyle="success" data-offstyle="danger">
+                                                                </div>
+                                                            </div>*@
+                                                        <div class="form-group">
+                                                            <label for="chkQcSystem" class="col-sm-3 control-label">QC System</label>
+                                                            <div class="col-sm-3">
+                                                                <input type="checkbox" id="chkQcSystem" checked data-toggle="toggle" data-on="Enable" data-off="Disable" data-onstyle="success" data-offstyle="danger">
+                                                            </div>
+                                                            <label for="chkMarkSensor" class="col-sm-3 control-label">
+                                                                Mark Sensor
+                                                            </label>
+                                                            <div class="col-sm-3">
+                                                                <input type="checkbox" id="chkMarkSensor" checked data-toggle="toggle" data-on="Enable" data-off="Disable" data-onstyle="success" data-offstyle="danger">
+                                                            </div>
+                                                        </div>
+                                                        @*<div class="form-group">
+                                                                <label for="chkMarkSensor" class="col-sm-3 control-label">
+                                                                    Mark Sensor
+                                                                </label>
+                                                                <div class="col-sm-3">
+                                                                    <input type="checkbox" id="chkMarkSensor" checked data-toggle="toggle" data-on="Enable" data-off="Disable" data-onstyle="success" data-offstyle="danger">
+                                                                </div>
+                                                            </div>*@
+                                                        <div class="form-group">
+                                                            <label for="chkDiameterCheck" class="col-sm-3 control-label">Diameter Check</label>
+                                                            <div class="col-sm-3">
+                                                                <input type="checkbox" id="chkDiameterCheck" checked data-toggle="toggle" data-on="Enable" data-off="Disable" data-onstyle="success" data-offstyle="danger">
+                                                            </div>
+                                                            <label for="chkMissingLabelStop" class="col-sm-3 control-label">Missing Label Stop</label>
+                                                            <div class="col-sm-3">
+                                                                <input type="checkbox" id="chkMissingLabelStop" checked data-toggle="toggle" data-on="Enable" data-off="Disable" data-onstyle="success" data-offstyle="danger">
+                                                            </div>
+                                                        </div>
+                                                        @*<div class="form-group">
+                                                                <label for="chkMissingLabelStop" class="col-sm-3 control-label">Missing Label Stop</label>
+                                                                <div class="col-sm-3">
+                                                                    <input type="checkbox" id="chkMissingLabelStop" checked data-toggle="toggle" data-on="Enable" data-off="Disable" data-onstyle="success" data-offstyle="danger">
+                                                                </div>
+                                                            </div>*@
+                                                        <div class="form-group">
+                                                            <label for="chkPRTAdvance" class="col-sm-3 control-label">PRT Advance</label>
+                                                            <div class="col-sm-3">
+                                                                <input type="checkbox" id="chkPRTAdvance" checked data-toggle="toggle" data-on="Enable" data-off="Disable" data-onstyle="success" data-offstyle="danger">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        @*</div>*@
+                                    </div>
+                                    <!-- /.tab-pane -->
+                                    <div class="tab-pane" id="timeline">
+
+                                    </div>
+                                    <!-- /.tab-pane -->
+                                    <div class="tab-pane" id="settings">
+
+                                    </div>
+                                    <!-- /.tab-pane -->
+                                </div>
+                                <!-- /.tab-content -->
+                            </div>
+                            <!-- /.nav-tabs-custom -->
+                        </div>
+                    </div><!-- /.row (main row) -->
+                </div>
+                <!-- /.tab-pane -->
+                <div class="tab-pane" id="timeline">
+
+                </div>
+                <!-- /.tab-pane -->
+                <div class="tab-pane" id="settings">
+
+                </div>
+                <!-- /.tab-pane -->
+            </div>
+            <!-- /.tab-content -->
+        </div>
+        <!-- /.nav-tabs-custom -->
+    </div>
+</div><!-- /.row (main row) -->
+
+@section Scripts
+{
+    <script src="~/Scripts/SlickGrid/slick.grid.js"></script>
+    <script src="~/Scripts/SlickGrid/slick.core.js"></script>
+    <script src="~/Scripts/SlickGrid/slick.groupitemmetadataprovider.js"></script>
+    <script src="~/Scripts/SlickGrid/Plugins/slick.autotooltips.js"></script>
+    <script src="~/Scripts/SlickGrid/Plugins/slick.headerbuttons.js"></script>
+    <script src="~/Scripts/SlickGrid/Plugins/slick.rowselectionmodel.js"></script>
+    <script src="~/Scripts/SlickGrid/Plugins/slick.rowmovemanager.js"></script>
+
+    <script>
+        //$(function(){
+        //   alert("All good");
+        //});
+
+        $(document).ready(function () {
+            var i = 1;
+            $("#add_row").click(function () {
+                $('#addr' + i).html("<td>" + (i + 1) + "</td><td><input name='name" + i + "' type='text' placeholder='Name' class='form-control input-md'  /> </td><td><input  name='mail" + i + "' type='text' placeholder='Mail'  class='form-control input-md'></td><td><input  name='mobile" + i + "' type='text' placeholder='Mobile'  class='form-control input-md'></td>");
+
+                $('#tab_logic').append('<tr id="addr' + (i + 1) + '"></tr>');
+                i++;
+            });
+            $("#delete_row").click(function () {
+                if (i > 1) {
+                    $("#addr" + (i - 1)).html('');
+                    i--;
+                }
+            });
+
+            
+
+            
+                
+
+
+
+        });
+
+        $(function () {
+
+            var counterOnOff = 0;
+            var myVar;
+
+            $('#btnStartBatch').click(function () {
+                counterOnOff = 1;
+                myVar = setInterval(GetSettings, 500);
+            });
+
+            $('#btnStopBatch').click(function () {
+                counterOnOff = 0;
+                clearInterval(myVar);
+            });
+
+            $('#btnHeaderOnOff').change(function () {
+                //alert('Toggle: ' + $(this).prop('checked'))
+                HeaderOnOff($(this).prop('checked'));
+            })
+
+            $('#btnSeparatorOnOff').change(function () {
+                //alert('Toggle: ' + $(this).prop('checked'))
+                SeparatorOnOff($(this).prop('checked'));
+            })
+
+            function MachineOnOff() {
+                var OnOrOff = "True";
+                if ($("#btnStart").css("background-color") == "rgb(255, 0, 0)") {
+                    OnOrOff = "False";
+                }
+                var machine = {"MachineId":2,"OnOrOff":OnOrOff};
+                jQuery.support.cors = true;
+                $.ajax({
+                    url: Q.resolveUrl('~/api/PLCToHMI/MachineOnOff',
+                    data: machine,
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function (data) {
+                        //WriteResponse(data);
+                        //alert(data);
+                        if (data == "True") {
+                            $("#btnStart").css("background-color", "red");
+                            $("#btnStart").html("<i class='fa fa-stop' style='color:white;'></i>Stop Machine");
+
+                        }
+                        else {
+                            $("#btnStart").css("background-color", "green");
+                            $("#btnStart").html("<i class='fa fa-power-off' style='color:white;'></i>Start Machine");
+                        }
+                    },
+                    error: function (x, y, z) {
+                        alert(x + '\n' + y + '\n' + z);
+                    }
+                });
+            }
+
+            function HeaderOnOff(OnOrOff) {
+                //var OnOrOff = "True";
+                //if ($("#btnStart").css("background-color") == "rgb(255, 0, 0)") {
+                //    OnOrOff = "False";
+                //}
+                var machine = { "MachineId": 2, "OnOrOff": OnOrOff };
+                jQuery.support.cors = true;
+                $.ajax({
+                    url: Q.resolveUrl('~/api/PLCToHMI/HeaderOnOff',
+                    data: machine,
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function (data) {
+                        //WriteResponse(data);
+                        //alert(data);
+                        //if (data == "True") {
+                        //    $("#btnStart").css("background-color", "red");
+                        //    $("#btnStart").html("<i class='fa fa-stop' style='color:white;'></i>Stop Machine");
+
+                        //}
+                        //else {
+                        //    $("#btnStart").css("background-color", "green");
+                        //    $("#btnStart").html("<i class='fa fa-power-off' style='color:white;'></i>Start Machine");
+                        //}
+                    },
+                    error: function (x, y, z) {
+                        alert(x + '\n' + y + '\n' + z);
+                    }
+                });
+            }
+
+            function SeparatorOnOff(OnOrOff) {
+                //var OnOrOff = "True";
+                //if ($("#btnStart").css("background-color") == "rgb(255, 0, 0)") {
+                //    OnOrOff = "False";
+                //}
+                var machine = { "MachineId": 2, "OnOrOff": OnOrOff };
+                jQuery.support.cors = true;
+                $.ajax({
+                    url: Q.resolveUrl('~/api/PLCToHMI/SeparatorOnOff',
+                    data: machine,
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function (data) {
+                        //WriteResponse(data);
+                        //alert(data);
+                        //if (data == "True") {
+                        //    $("#btnStart").css("background-color", "red");
+                        //    $("#btnStart").html("<i class='fa fa-stop' style='color:white;'></i>Stop Machine");
+
+                        //}
+                        //else {
+                        //    $("#btnStart").css("background-color", "green");
+                        //    $("#btnStart").html("<i class='fa fa-power-off' style='color:white;'></i>Start Machine");
+                        //}
+                    },
+                    error: function (x, y, z) {
+                        alert(x + '\n' + y + '\n' + z);
+                    }
+                });
+            }
+
+            function GetSettings() {
+                var machine = '{MachineId:2}';
+                jQuery.support.cors = true;
+                $.ajax({
+                    url: Q.resolveUrl('~/api/PLCToHMI/Settings',
+                    data: machine,
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function (settingsParameter) {
+                        //WriteResponse(data);
+                        //alert(data);
+                        var settingsStringify = JSON.stringify(settingsParameter);
+                        var settingsArray = JSON.parse(settingsStringify);
+                        var settingsLength = settingsArray.length;
+
+                        //alert(settingsLength);
+
+                        $("#txtProductionSpeed").val(settingsArray[2].ParameterValue);
+                        $("#txtStartPosition").val(settingsArray[4].ParameterValue);
+                        $("#txtExtension").val(settingsArray[6].ParameterValue);
+                        $("#txtDispenserSpeed").val(settingsArray[7].ParameterValue);
+                        $("#lblLengthAndGap").val(settingsArray[8].ParameterValue);
+                        $("#txtPrinterTemprature").val(settingsArray[12].ParameterValue);
+                        $("#txtPrinterTime").val(settingsArray[5].ParameterValue);
+                        $("#txtCamera1QueueSize").val(settingsArray[13].ParameterValue);
+                        $("#txtCamera2QueueSize").val(settingsArray[14].ParameterValue);
+                        
+
+                        //for (var j = 0; j < settingsLength; j++) {
+
+                        //}
+                    },
+                    error: function (x, y, z) {
+                        alert(x + '\n' + y + '\n' + z);
+                    }
+                });
+            }
+
+            $('#btnStart').click(function () {
+                MachineOnOff();
+            });
+
+
+            function GetMachineStatus() {
+                var machine = '{MachineId:2}';
+                jQuery.support.cors = true;
+                $.ajax({
+                    url: Q.resolveUrl('~/api/PLCToHMI/MachineStatus',
+                    data: machine,
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function (data) {
+                        //WriteResponse(data);
+                        //alert(data);
+                        if (data == "True")
+                        {
+                            $("#btnStart").css("background-color", "red");
+                            $("#btnStart").html("<i class='fa fa-stop' style='color:white;'></i>Stop Machine");
+                            
+                        }
+                        else
+                        {
+                            $("#btnStart").css("background-color", "green");
+                            $("#btnStart").html("<i class='fa fa-power-off' style='color:white;'></i>Start Machine");
+                        }
+                    },
+                    error: function (x, y, z) {
+                        alert(x + '\n' + y + '\n' + z);
+                    }
+                });
+            }
+
+            function GetHeaderStatus() {
+                var machine = '{MachineId:2}';
+                jQuery.support.cors = true;
+                $.ajax({
+                    url: Q.resolveUrl('~/api/PLCToHMI/HeaderStatus',
+                    data: machine,
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function (data) {
+                        //WriteResponse(data);
+                        //alert(data);
+                        if (data == "True")
+                        {
+                            //$("#btnStart").css("background-color", "red");
+                            //$("#btnStart").html("<i class='fa fa-stop' style='color:white;'></i>Stop Machine");
+                            $('#btnHeaderOnOff').bootstrapToggle('On')
+                        }
+                        else
+                        {
+                            $('#btnHeaderOnOff').bootstrapToggle('Off')
+                            //$("#btnStart").css("background-color", "green");
+                            //$("#btnStart").html("<i class='fa fa-power-off' style='color:white;'></i>Start Machine");
+                        }
+                    },
+                    error: function (x, y, z) {
+                        alert(x + '\n' + y + '\n' + z);
+                    }
+                });
+            }
+
+            function GetSeparatorStatus() {
+                var machine = '{MachineId:2}';
+                jQuery.support.cors = true;
+                $.ajax({
+                    url: Q.resolveUrl('~/api/PLCToHMI/SeparatorStatus',
+                    data: machine,
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function (data) {
+                        //WriteResponse(data);
+                        //alert(data);
+                        if (data == "True") {
+                            //$("#btnStart").css("background-color", "red");
+                            //$("#btnStart").html("<i class='fa fa-stop' style='color:white;'></i>Stop Machine");
+                            $('#btnSeparatorOnOff').bootstrapToggle('On')
+                        }
+                        else {
+                            $('#btnSeparatorOnOff').bootstrapToggle('Off')
+                            //$("#btnStart").css("background-color", "green");
+                            //$("#btnStart").html("<i class='fa fa-power-off' style='color:white;'></i>Start Machine");
+                        }
+                    },
+                    error: function (x, y, z) {
+                        alert(x + '\n' + y + '\n' + z);
+                    }
+                });
+            }
+
+            GetHeaderStatus();
+            GetSeparatorStatus();
+            GetMachineStatus();
+            GetSettings();
+        });
+
+    </script>
+}
+
+@section Style
+{
+    <link href="~/Content/slick.grid.css" rel="stylesheet" />
+    <link href="~/Content/serenity/serenity.css" rel="stylesheet" />
+    <link href="~/Content/slick.headerbuttons.css" rel="stylesheet" />
+    <style>
+        .ibox-content {
+            clear: both;
+        }
+
+        .ibox-content {
+            background-color: #ffffff;
+            color: inherit;
+            padding: 5px 5px 5px 5px;
+            border-color: #e7eaec;
+            border-image: none;
+            border-style: solid solid none;
+            border-width: 1px 0;
+        }
+
+        .toggle.btn {
+            min-width: 100px;
+            min-height: 30px;
+        }
+    </style>
+}

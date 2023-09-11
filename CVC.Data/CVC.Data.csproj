@@ -1,0 +1,490 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--Project was exported from assembly: D:\Anil\CVC\bin\CVC.Data.dll-->
+  <Import Project="..\packages\Microsoft.TypeScript.MSBuild.3.7.6\build\Microsoft.TypeScript.MSBuild.props" Condition="Exists('..\packages\Microsoft.TypeScript.MSBuild.3.7.6\build\Microsoft.TypeScript.MSBuild.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D998632A-B99D-43A2-A2FF-104F6B839FE6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AssemblyName>CVC.Data</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <ApplicationVersion>1.0.0.0</ApplicationVersion>
+    <FileAlignment>512</FileAlignment>
+    <RootNamespace>CVC.Data</RootNamespace>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="MySql.Data.Entity.EF6">
+      <HintPath>lib\MySql.Data.Entity.EF6.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CVCDaoFactory.cs" />
+    <Compile Include="DTO\BatchDTO.cs" />
+    <Compile Include="DTO\PackDTO.cs" />
+    <Compile Include="DTO\ReportDetails.cs" />
+    <Compile Include="DTO\TabletDTO.cs" />
+    <Compile Include="EDMX\AccessLevel.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\Alarm.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\AlarmLog.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\AlarmLogArchive.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\AlarmResetId.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\ApplicationAccess.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\Attribute.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\AuditLog.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\AuditLogArchive.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\BackupData_Result.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\Batch.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\BatchArchive.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\BatchLog.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\BatchMachineWise.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\BatchRecipeModify.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\BatchRunData.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\BatchSetting.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\Bottle.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\ButtonDisplay.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\Cap.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\CityDetail.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\Company.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\ControlType.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\Cotton.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\CS_SP_GET_ALL_TABLE_OBJECTIDS_Result.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\Currency.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\CVCModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CVCModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\CVCModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\CVCModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CVCModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="EDMX\DataType.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\DateFormatType.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\Department.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\Desiccant.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\EndOfLine.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\EnvironmentVariable.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\Exception.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\FormDisplay.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\HourFormatType.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\ImportLog.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\IPCParameter.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\Label.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\LabelLost.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\LabelReconciliation.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\LabelRoll.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\Language.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\LineMaintenanceSchedule.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\ListDisplay.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\Machine.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\MachineCommunication.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\MachineHelpFile.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\MachineHistory.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\MachineLine.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\MachineLineUser.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\MachineMaintenanceSchedule.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\MachineParameter.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\MachineRecipe.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\MachineRecipeParameter.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\MachineSparePart.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\MachineSpecification.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\MachineType.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\MachineUser.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\MachineVideo.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\MasterTerminal.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\MessageMaster.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\Module.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\ModuleAccess.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\Outsert.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\Pack.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\Password.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\PickList.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\PickListValue.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\PickListValueRoleAccess.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\PLC.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\PLCParameter.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\Product.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\ProductType.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\Protocol.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\RecipeSetting.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\RecipeSettingsParameter.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\Role.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\RolePermission.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\Screen.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\ScreenField.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\ScreenModule.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\ScreenSection.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\ServerIPCParameter.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\ServerObject.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\Shift.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\Sp_ArchiveData_Result.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\sp_helpdiagramdefinition_Result.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\sp_helpdiagrams_Result.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\Status.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\Supplier.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\TabletDetail.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\TerminalMachineMapping.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\TerminalType.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\TimeFormatType.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\User.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\UserLog.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\UserLogArchive.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\UserLoginDetail.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\UserMachineMapping.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\UserPermission.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\UserPreference.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\UserRole.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\VersionInfo.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\View.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\ViewField.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\ViewFieldAccess.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\ViewFieldAuthentication.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDMX\ViewsAccess.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EntityDeploy Include="EDMX\CVCModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>CVCModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="ClassDiagram1.cd" />
+    <None Include="EDMX\CVCModel.edmx.diagram">
+      <DependentUpon>CVCModel.edmx</DependentUpon>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="EDMX\CVCModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>CVCModel.Context.cs</LastGenOutput>
+      <DependentUpon>CVCModel.edmx</DependentUpon>
+    </Content>
+    <Content Include="EDMX\CVCModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>CVCModel.edmx</DependentUpon>
+      <LastGenOutput>CVCModel.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.TypeScript.MSBuild.3.7.6\build\Microsoft.TypeScript.MSBuild.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.TypeScript.MSBuild.3.7.6\build\Microsoft.TypeScript.MSBuild.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.TypeScript.MSBuild.3.7.6\build\Microsoft.TypeScript.MSBuild.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.TypeScript.MSBuild.3.7.6\build\Microsoft.TypeScript.MSBuild.targets'))" />
+  </Target>
+  <Import Project="..\packages\Microsoft.TypeScript.MSBuild.3.7.6\build\Microsoft.TypeScript.MSBuild.targets" Condition="Exists('..\packages\Microsoft.TypeScript.MSBuild.3.7.6\build\Microsoft.TypeScript.MSBuild.targets')" />
+</Project>
