@@ -460,7 +460,7 @@ namespace CVC.Membership.Pages
             //    ViewFieldList=dashBoardFields
             //};
 
-            //var result= new ClsSiemensS7Net( ).Read(dashBoardViewModel);
+            //var result= new ClsSiemensS7Net().Read(dashBoardViewModel);
             this.ViewData["Activated"] = (object)activated;
             this.ViewData["HideLeftNavigation"] = (object)true;
             if (AccountController.UseAdminLTELoginBox)

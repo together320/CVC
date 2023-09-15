@@ -494,6 +494,7 @@ var LoginPanel = (function (_super) {
                         }
                         
                         if (response.MessageType == "Alert Message") {
+                            debugger;
                             $("#infoModalBody").text(response.Message);
                             $("#modal-info").modal('show');
                         }
