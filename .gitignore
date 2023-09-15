@@ -262,3 +262,19 @@ __pycache__/
 
 .svn
 *.bak
+CVC.AlarmWindowsService/App.config
+CVC.AlarmWindowsService/CVC.AlarmWindowsService.csproj
+CVC.BusinessServices/App.config
+CVC.Data/App.Config
+CVC.Data/CVC.Data.csproj
+CVC.Data/packages.config
+CVC.License/packages.config
+CVC.SiemensS7Net/CVC.SiemensS7Net.csproj
+CVC.sln
+CVC/Content/site/jsguru.site.css
+CVC/CVC.Web.csproj
+CVC/Modules/Membership/Account/AccountLogin.cshtml
+CVC/Modules/Membership/Account/ChangePassword/AccountPage.ChangePassword.cs
+CVC/packages.config
+CVC/Scripts/_references.js
+CVC/Web.config
