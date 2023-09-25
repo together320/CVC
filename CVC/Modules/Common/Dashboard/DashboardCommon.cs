@@ -2405,6 +2405,32 @@ namespace CVC.Modules.Common.Dashboard
         //    }
         //}
 
+        public int? GetMachineIdFromViewId(int viewId)
+        {
+            var machineId = 0;
+            using (CVCEntities cvcEntities = new CVCEntities())
+            {
+                machineId = cvcEntities?.Views?.FirstOrDefault(a => a.ViewsId == viewId)?.MachineId ?? 0;
+            }
+            if(machineId == 0 || machineId == null){
+                int? moduleId = 0;
+                using (CVCEntities cvcEntities = new CVCEntities())
+                {
+                    moduleId = cvcEntities?.Views?.FirstOrDefault(a => a.ViewsId == viewId)?.ModuleId;
+                }
+                return GetMachineId(moduleId);
+            }
+            return machineId;
+        }
+
+        public int? GetMachineId(int? ModuleId)
+        {
+            using (CVCEntities cvcEntities = new CVCEntities())
+            {
+                return cvcEntities?.Modules?.FirstOrDefault(a => a.ModuleId == ModuleId)?.MachineId ?? 0;
+            }
+        }
+
         public int? GetMachineId(string ModuleId)
         {
             using (CVCEntities cvcEntities = new CVCEntities())

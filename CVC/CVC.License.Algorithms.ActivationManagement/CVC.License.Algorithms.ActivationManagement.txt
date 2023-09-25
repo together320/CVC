@@ -1,0 +1,6 @@
+GetActivationKey
+CreateActivationKey
+Equals
+GetHashCode
+GetType
+ToString

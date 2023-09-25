@@ -8571,6 +8571,7 @@ var CVC;
                     var record = grid.getDataItem(selectedRow);
                     // Set the value of hidden tag with id 'DisplayObjectId'
                     $("#DisplayObjectId").val(record.ViewsId);
+                    $("#DisplayObjectType").val(record.DisplayObjectTypeId);
                     // added by Denis for RS 7.2 dated 10/6/2021
                     // Get DisplayObjectField Widget and destroy it if it exists.
                     var widget = $('#DisplayObjectField_GridDiv').tryGetWidget(MachineCustomization.DisplayObjectFieldGrid);
@@ -8590,6 +8591,14 @@ var CVC;
             DisplayObjectGrid.prototype.getColumns = function () {
                 var re = /Id/gi;
                 var columns = _super.prototype.getColumns.call(this);
+                columns.unshift({
+                    field: 'Design Mode',
+                    name: 'Design Mode',
+                    format: function (ctx) { return '<button type="button" class="btn btn-primary design-mode"><i class="fa fa-th" aria-hidden="true"></i></button>'; },
+                    width: 50,
+                    minWidth: 50,
+                    maxWidth: 50
+                });
                 var dos_col = Q.first(columns, function (x) { return x.field === "DisplayObjectStyle" /* DisplayObjectStyle */; });
                 dos_col.referencedFields = ["DisplayObjectStyle" /* DisplayObjectStyle */];
                 dos_col.format = function (ctx) {
@@ -8621,12 +8630,21 @@ var CVC;
                 opt.enableTextSelectionOnCells = true;
                 opt.selectedCellCssClass = "slick-row-selected";
                 opt.enableCellNavigation = true;
+                opt.rowHeight = 40;
                 return opt;
             };
             DisplayObjectGrid.prototype.createSlickGrid = function () {
                 var grid = _super.prototype.createSlickGrid.call(this);
                 grid.setSelectionModel(new Slick.RowSelectionModel());
                 return grid;
+            };
+            DisplayObjectGrid.prototype.onClick = function (e, row, cell) {
+                _super.prototype.onClick.call(this, e, row, cell);
+                if (e.isDefaultPrevented())
+                    return;
+                if ($(e.target).hasClass("design-mode")) {
+                    Q.notifyInfo("Design Mode selected");
+                }
             };
             DisplayObjectGrid = __decorate([
                 Serenity.Decorators.registerClass()
