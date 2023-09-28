@@ -34,13 +34,13 @@ namespace CVC.Machine.Pages
             var aa = (Request.QueryString["module"]);
             var module = new CVC.Modules.Common.Dashboard.DashboardCommon().GetModule(Request.QueryString["module"]);
             var model = new SettingsPageModel();
-            model.ModuleId = module.CurrentModule;
+            model.ModuleId = module.CurrentModule;      //labeling machine mdouel id : 5
             model.Views = new DashboardCommon().GetViewsByModule(model.ModuleId);
             var MachineId = 0;
             //changes added By Vinayak On 07.08.2018
             using (CVCEntities cvcEntities = new CVCEntities())
             {
-                MachineId = cvcEntities.Modules?.FirstOrDefault(a => a.ModuleId == model.ModuleId)?.MachineId.Value ?? 0;
+                MachineId = cvcEntities.Modules?.FirstOrDefault(a => a.ModuleId == model.ModuleId)?.MachineId.Value ?? 0;   //labeling machine id : 8
 
             }
             model.Alarms = new DashboardCommon().GetAlarmByModule(model.ModuleId);
@@ -67,7 +67,7 @@ namespace CVC.Machine.Pages
 
                 var ProtocolName = cvcEntities.MachineCommunications?.FirstOrDefault(mc => mc.MachineId == MachineId)?.Protocol?.ProtocolName ?? null;
 
-                if (ProtocolName != null)
+                if (ProtocolName != null)   //127.0.0.1, 502 port, 500 poll rate, protocol type : 1 -> Modbus TCP/IP
                 {
                     //if (ProtocolName.ToUpper() == "MDB")
                     //{

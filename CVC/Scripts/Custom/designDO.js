@@ -6,7 +6,54 @@ var newChart;
 var chart_labels = [];
 
 $(document).ready(function () {
+    console.log("asdfasdfasdfasdf");
+    GetCustomizeRealdata(5, 22)
+        .then(data => {
+            console.log("data");
+            setTimeout(() => {
+                connectToSocket();
+            }, 3000);
+        });
 });
+
+function connectToSocket() {
+    var socket = $.connection.socketHub;
+    socket.client.addNewMessageToPage = function (data, message) {
+        var result = JSON.parse(data);
+        switch (result.type) {
+            case 'customizePreview':
+                setTimeout(() => {
+                    socket.server.send('customizePreview', '');
+                }, 300);
+                processMachineSummary(result.data);
+                break;
+            default:
+        }
+
+        result = null;
+
+    };
+
+    //bind CustomizePreview Data
+    function processCustomizePreview(data) {
+        console.log("updating machine summary");
+        console.log(data);
+        alert("hurray");
+        data = null;
+    }
+
+    $.connection.hub.start().done(function () {
+        socket.server.send('commandpanel', '');
+        socket.server.send('machinesummary', '');
+        socket.server.send('raisealarm-' + $("#hdnModuleId").val(), '');
+    });
+
+    $.connection.hub.disconnected(function () {
+        setTimeout(function () {
+            $.connection.hub.start();
+        }, 3000); // Restart connection after 3 seconds.
+    });
+}
 
 var formCount = 0; var initFormCount = 0;
 var rowCount = 0; var componentCount = 0;
@@ -47,6 +94,8 @@ function saveDO() {
     AddUpdateDOF(parameterList).then(function (data) {
     });
 }
+
+
 
 function dragDO(event) {                   //when dragging main display object
     var newId = `parent_do_element_${$("#DisplayObjectId").val()}`;
@@ -135,7 +184,7 @@ function dragClonedGrid(event) {
     event.dataTransfer.setData('dropped-id', $(event.target).attr('id'));
 }
 
-function toggleHeader(index) { // search, if exist empty, else insert
+function toggleHeader(index) { // search, if exist empty, else
     let dataTable = $("#do_element_table_" + $("#DisplayObjectId").val()).DataTable();
     let column = dataTable.column(index);
     column.visible(!column.visible());
@@ -171,6 +220,7 @@ function toggleHeader(index) { // search, if exist empty, else insert
 }
 
 function updateChart() {
+
     var newData = [];
     newChart.data.labels = chart_labels;
     for (var i = 0; i < chart_labels.length; i++)

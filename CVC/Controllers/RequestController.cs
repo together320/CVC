@@ -3,6 +3,7 @@ using CVC.ModuleManagement.Entities;
 using CVC.Modules.Common.Dashboard;
 using CVC.Modules.NModuleManagement;
 using CVC.Service;
+using CVC.ViewModels;
 
 using Serenity.Web;
 using System;
@@ -38,10 +39,9 @@ namespace CVC.Controllers
         public async Task<ActionResult> getTableDataFromDisplayObject(int displayObjectId) //getAllData
         {
             var machineId = 0;
-            if(displayObjectId>0)
             {
                 DashboardCommon dashboardCommon = new DashboardCommon();
-                machineId=(int)dashboardCommon.GetMachineIdFromViewId(displayObjectId);
+                machineId = (int)dashboardCommon.GetMachineIdFromViewId(displayObjectId);
             }
 
             var TableName = _repo.getTableNamefromMachine(machineId);
@@ -62,10 +62,8 @@ namespace CVC.Controllers
         public JsonResult GetEFsFromDOId(int displayObjectId) //getAllData
         {
             var machineId = 0;
-            if(displayObjectId>0)
             {
                 DashboardCommon dashboardCommon = new DashboardCommon();
-                machineId=(int)dashboardCommon.GetMachineIdFromViewId(displayObjectId);
             }
             return Json(_repo.getMachineParameterDropDown(machineId), JsonRequestBehavior.AllowGet);
         }

@@ -16,31 +16,31 @@
 <script type="text/javascript">
     var efDataList = [];
     var efStr = "<div class='row' style='padding:1px;display:flex;padding-left:30px;padding-right:30px;'>" +
-                               "<div ondragstart='dragEF(event);' draggable='true' class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='background-color: #50c72d; border-radius: 8px;display: flex;' machineId='xxId' columnName='xxColumn'>" +
-                               "xxName" +
-                               "</div>" +
-                               "</div>";
+        "<div ondragstart='dragEF(event);' draggable='true' class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='background-color: #50c72d; border-radius: 8px;display: flex;' machineId='xxId' columnName='xxColumn'>" +
+        "xxName" +
+        "</div>" +
+        "</div>";
     jQuery(function () {
         new CVC.MachineCustomization.DisplayObjectGrid($('#DisplayObject_GridDiv'), {}).init();
         Q.initFullHeightGridPage($('#GridDiv'));
     });
 
-    $(document).on('click', '.design-mode', function() {
+    $(document).on('click', '.design-mode', function () {
         $("#modal-design").css({
-            "padding-top" : '30px',
-            "display" : 'flex',
-            "justify-content" : 'center'
+            "padding-top": '30px',
+            "display": 'flex',
+            "justify-content": 'center'
         });
         $("#modal-design").modal();
         $(`.workSpace`).empty();
         $("#idWorkSpace").attr('id', `WorkSpace_${$("#DisplayObjectId").val()}`);
-        getMachineParametersFromDisplayObject($("#DisplayObjectId").val()).then(function(data){
+        getMachineParametersFromDisplayObject($("#DisplayObjectId").val()).then(function (data) {
             efDataList = data;
             console.log(efDataList);
             $("#efList").empty();
-            for(var i = 0; i < efDataList.length; i++){
+            for (var i = 0; i < efDataList.length; i++) {
                 $("#efList").append(efStr.replace('xxId', efDataList[i].MachineParameterId).replace('xxName', efDataList[i].ParameterName).replace('xxColumn', efDataList[i].ColumnName));
-            }            
+            }
         });
     });
 </script>

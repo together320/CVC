@@ -1867,6 +1867,42 @@
                 data = null;
             }
 
+              //bind CustomizePreview Data
+            function processCustomizePreview(data) {
+                console.log("updating machine summary");
+                $(data).each(function (i, item) {
+                    if (item.Value != "True" && item.Value != "False") {
+                        if (item.IsMissingLabelCounter == true) {
+                            var oldValue = $("#limsnglabel-" + item.MachineParameterId).attr("oldvalue");
+                            if (oldValue == item.Value) {
+                                //  $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:none");
+                                // console.log(new Date());
+                            }
+                            else {
+                                if (initialMissingLabelValue != 0) {
+                                    AlarmCounter(item);
+                                    
+                                    AddToAuditLog();
+                                    AddToAlarmLog(item.AlarmId);
+                                }
+
+                            }
+                            $("#limsnglabel-" + item.MachineParameterId).attr("oldvalue", item.Value);
+
+                            // item.OldValue = item.Value;
+                            initialMissingLabelValue = 1;
+                        }
+
+                        // part to customize
+                        $("#h2-" + item.ViewFieldId).text(item.Value);
+                        $("#lbl-" + item.ViewFieldId).text(item.Value);
+                        $("#div-" + item.ViewFieldId).removeClass("bg-green bg-red bg-yellow bg-blue").addClass("bg-" + item.BackgroundColor);
+                        // 
+                    }
+                });
+                data = null;
+            }
+
             function AddToAuditLog() {
                 var parameter = {
                     "ModuleId": $("#hdnModuleId").val(), "Action": "Counter Alarm Detected", "BatchId": $("#hdnBatchId").val(), "UserName": $("#lblUserName").text()
@@ -2273,6 +2309,13 @@
                                 socket.server.send('raisealarm-' + $("#hdnModuleId").val(), '');
                             }, 1000);
                             processRaiseAlarm(result.data);
+                            break;
+
+                        case 'customizePreview':
+                            setTimeout(() => {
+                                socket.server.send('customizePreview', '');
+                            }, 300);
+                            processCustomizePreview(result.data);
                             break;
                         //case 'sendheartbeat':
 

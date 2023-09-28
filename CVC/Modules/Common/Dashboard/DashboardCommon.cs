@@ -238,7 +238,6 @@ namespace CVC.Modules.Common.Dashboard
                         {
                             isFirstValue = false;
                             isWriteToPLCData = cvcEntities.IPCParameters.Where(i => i.MachineId == getMachineId && i.IsWriteToPLC == true)?.ToList();
-                            
                         }
 
                         // var aa=item.MachineParameter.IPCParameters.fi
@@ -297,19 +296,17 @@ namespace CVC.Modules.Common.Dashboard
                             {
                                 foreach (var items in isWriteToPLCData)
                                 {
-                                                                      
-                                     dashBoardField = new DashBoardField
                                     {
                                         IPCAddress = items.IPCAddress,
                                         Value = "1",
-                                        DataTypeName=item?.MachineParameter?.DataType?.DataTypeName
-                                        
+                                        DataTypeName = item?.MachineParameter?.DataType?.DataTypeName
+
                                     };
-                                   
+
                                     lstDashBoardFields.Add(dashBoardField);
                                     objDashBoardViewModel = new bs.CommonServices().GetDashBoardViewModel(items?.Machine.MachineCommunications.FirstOrDefault());
                                     objDashBoardViewModel.ViewFieldList = lstDashBoardFields;
-                                     clsSiemensS7Net.Write(objDashBoardViewModel);
+                                    clsSiemensS7Net.Write(objDashBoardViewModel);
                                 }
                             }
 
@@ -317,7 +314,7 @@ namespace CVC.Modules.Common.Dashboard
                             {
                                 IPCAddress = item.MachineParameter?.Machine?.IPCParameters?.FirstOrDefault().IPCAddress,
                                 Value = item.MachineParameterValue,
-                                DataTypeName=item?.MachineParameter?.DataType?.DataTypeName
+                                DataTypeName = item?.MachineParameter?.DataType?.DataTypeName
                             };
 
                             lstDashBoardFields.Add(dashBoardField);
@@ -991,7 +988,7 @@ namespace CVC.Modules.Common.Dashboard
                         DashBoardViewModel dashBoardViewModel = new bs.CommonServices().GetDashBoardViewModel(machineComunicaation);
                         DashBoardField dashBoardField = new DashBoardField();
                         List<DashBoardField> lstDashBoardFields = new List<DashBoardField>();
-                        
+
 
                         if (batchSettings.BottleCounterParaId != null)
                         {
@@ -1003,7 +1000,7 @@ namespace CVC.Modules.Common.Dashboard
                             };
                             lstDashBoardFields.Add(dashBoardField);
                             dashBoardViewModel.ViewFieldList = lstDashBoardFields;
-                            var value = mdb.Read(batchSettings.BottleCounterParaId.Value,dashBoardViewModel);
+                            var value = mdb.Read(batchSettings.BottleCounterParaId.Value, dashBoardViewModel);
                             //int i;
                             if (int.TryParse(value.Replace(".00", ""), out int i))
                                 entity.BottleCounter = i;
@@ -1848,16 +1845,16 @@ namespace CVC.Modules.Common.Dashboard
                             {
                                 IPCAddress = item?.IPCParameters?.FirstOrDefault()?.IPCAddress,
                                 DataTypeName = item?.DataType?.DataTypeName,
-                                Value="1"
+                                Value = "1"
                             };
                             lstDashBoardFields.Add(dashBoardField);
                             dashBoardViewModel.ViewFieldList = lstDashBoardFields;
                             var machineparaid = item.MachineParameterId;
                             if (item.ReadMachineParameterId != null)
                                 machineparaid = item.ReadMachineParameterId.Value;
-                            if (connect.Read(machineparaid,dashBoardViewModel) == "1") // Check if Conveyor Running
+                            if (connect.Read(machineparaid, dashBoardViewModel) == "1") // Check if Conveyor Running
                             {
-                                connect.Write(item.MachineParameterId, "1",dashBoardViewModel);
+                                connect.Write(item.MachineParameterId, "1", dashBoardViewModel);
                                 System.Threading.Thread.Sleep(500);
                             }
                         }
@@ -1938,7 +1935,7 @@ namespace CVC.Modules.Common.Dashboard
         public async Task<List<DashBoardField>> GetDashBoardFieldAsync(int ModuleId, int ViewId)
         {
             List<DashBoardField> fields = new List<DashBoardField>();
-            
+
             int alarmCounterSequence = 1, readValueSequence = 0;
 
             using (CVCEntities cvcEntities = new CVCEntities())
@@ -2003,7 +2000,7 @@ namespace CVC.Modules.Common.Dashboard
                                 if (protocolName.ToUpper() == ProtocolType.SiemensS7Net.ToUpper())
                                 {
                                     dashBoardViewModel = new bs.CommonServices().GetDashBoardViewModel(item?.MachineParameter?.Machine?.MachineCommunications?.FirstOrDefault());
-                                   
+
                                 }
 
                             }
@@ -2072,7 +2069,7 @@ namespace CVC.Modules.Common.Dashboard
                                 }
 
                                 // else if (item.MachineParameter.Machine.MachineCommunications.Any(a => a.ProtocolTypeId == 1 && a.StatusId == 1))
-                                else if (protocolName.ToString().Contains(ProtocolType.Modbus.ToUpper()))
+                                else if (protocolName.ToUpper().Contains(ProtocolType.Modbus.ToUpper()))
 
                                 {
                                     addItem.Value = connect.Read(machineparaId.Value);
@@ -2091,12 +2088,12 @@ namespace CVC.Modules.Common.Dashboard
                                 else if (protocolName.ToUpper() == ProtocolType.SiemensS7Net.ToUpper())
                                 {
                                     addItem.IPCAddress = item?.MachineParameter?.IPCParameters?.FirstOrDefault()?.IPCAddress;
-                                     
+
                                     dashBoardField.IPCAddress = item?.MachineParameter?.IPCParameters?.FirstOrDefault()?.IPCAddress;
                                     dashBoardField.DataTypeName = item?.MachineParameter?.DataType?.DataTypeName;
                                     lstDashBoardField.Add(dashBoardField);
                                     dashBoardViewModel.ViewFieldList = lstDashBoardField;
-                                    addItem.Value =await clsSiemensS7Net.Read(dashBoardViewModel);
+                                    addItem.Value = await clsSiemensS7Net.Read(dashBoardViewModel);
                                 }
                             }
 
@@ -2412,7 +2409,8 @@ namespace CVC.Modules.Common.Dashboard
             {
                 machineId = cvcEntities?.Views?.FirstOrDefault(a => a.ViewsId == viewId)?.MachineId ?? 0;
             }
-            if(machineId == 0 || machineId == null){
+            if (machineId == 0 || machineId == null)
+            {
                 int? moduleId = 0;
                 using (CVCEntities cvcEntities = new CVCEntities())
                 {
@@ -2545,14 +2543,13 @@ namespace CVC.Modules.Common.Dashboard
                                 MachineCommunicationViewModel machineCommunicationViewModel = new MachineCommunicationViewModel
                                 {
                                     ProtocolTypeName = machineCommunication?.Protocol?.ProtocolName,
-                                    IPAddress=machineCommunication.IPAddress,
-                                    TCPIPPort=machineCommunication.TCPIPPort,
                                     MDBPath=machineCommunication.MDBPath,
-                                    UserName=machineCommunication.UserName,
-                                    Password=machineCommunication.Password,
-                                    Rack=machineCommunication.Rack,
                                     Slot=machineCommunication.Slot,
-                                    CpuType=machineCommunication?.PickListValue6?.PickList?.PickListName
+                                    IPAddress = machineCommunication.IPAddress,
+                                    TCPIPPort = machineCommunication.TCPIPPort,
+                                    UserName = machineCommunication.UserName,
+                                    Password = machineCommunication.Password,
+                                    Slot = machineCommunication.Slot,
 
                                 };
 
@@ -2685,7 +2682,7 @@ namespace CVC.Modules.Common.Dashboard
                             // If disabled is set disable field
                             if (item.MachineParameter.DisableParameterId != null)
                             {
-                                if (connect.Read(item.MachineParameter.DisableParameterId.Value,dashBoardViewModel) == item.MachineParameter.DisableParameterValue)
+                                if (connect.Read(item.MachineParameter.DisableParameterId.Value, dashBoardViewModel) == item.MachineParameter.DisableParameterValue)
                                     addItem.IsDisabled = true;
                             }
                             if (item.MachineParameter.AllowDecimalPoint != null)
@@ -2926,7 +2923,7 @@ namespace CVC.Modules.Common.Dashboard
             try
             {
 
-                 return WriteHeartBeat(Value.ToString());
+                return WriteHeartBeat(Value.ToString());
 
             }
             catch
@@ -3006,11 +3003,11 @@ namespace CVC.Modules.Common.Dashboard
                             //   CommandPanel = (CommandPanelPageModel)HttpContext.Current.Cache["CommandPanel"];
                             // CommandPanel = (CommandPanelPageModel)HttpRuntime.Cache["CommandPanel"];
                             bs.CommonServices commonServices = new bs.CommonServices();
-                            machineCommunication =commonServices.GetCacheData(ClsCacheConfig.CacheKeys.MachineCommunication);
+                            machineCommunication = commonServices.GetCacheData(ClsCacheConfig.CacheKeys.MachineCommunication);
 
                             modbusTCP.IPAddress = machineCommunication.IPAddress;
                             modbusTCP.TcpipPort = ushort.Parse(machineCommunication.TCPIPPort.ToString());
-                            modbusTCP.PollRateOverride = machineCommunication?.PollRate??0;
+                            modbusTCP.PollRateOverride = machineCommunication?.PollRate ?? 0;
                             Value = Value == "-1" ? Convert.ToString(sendHeartBeatViewModel.StartNumber) : Value;
                             modbusTCP.Write(address, Value);
                         }
@@ -3023,13 +3020,13 @@ namespace CVC.Modules.Common.Dashboard
 
                     else if (protocolType == ProtocolType.SiemensS7Net.ToUpper())
                     {
-                        var getMachineCommunication =new bs.CommonServices().GetCacheData(ClsCacheConfig.CacheKeys.MachineCommunication);
+                        var getMachineCommunication = new bs.CommonServices().GetCacheData(ClsCacheConfig.CacheKeys.MachineCommunication);
 
                         DashBoardField dashBoardField = new DashBoardField
                         {
-                             IPCAddress=sendHeartBeatViewModel.IPCAddress,
-                             DataTypeName=sendHeartBeatViewModel.DataTypeName,
-                             Value=sendHeartBeatViewModel?.Value?.ToString()
+                            IPCAddress = sendHeartBeatViewModel.IPCAddress,
+                            DataTypeName = sendHeartBeatViewModel.DataTypeName,
+                            Value = sendHeartBeatViewModel?.Value?.ToString()
                         };
                         List<DashBoardField> lstDashBoardFields = new List<DashBoardField>();
                         lstDashBoardFields.Add(dashBoardField);
@@ -3042,6 +3039,13 @@ namespace CVC.Modules.Common.Dashboard
                             Slot=machineCommunication.Slot,
                             ViewFieldList=lstDashBoardFields
                             
+                            IPAddress = machineCommunication.IPAddress,
+                            TCPIPPort = machineCommunication.TCPIPPort,
+                            CpuType = machineCommunication.CpuType,
+                            Rack = machineCommunication.Rack,
+                            Slot = machineCommunication.Slot,
+                            ViewFieldList = lstDashBoardFields
+
                         };
                         ClsSiemensS7Net clsSiemensS7Net = new ClsSiemensS7Net();
                         clsSiemensS7Net.Write(dashBoardViewModel);
