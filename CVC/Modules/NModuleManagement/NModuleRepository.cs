@@ -88,29 +88,33 @@ namespace CVC.Modules.NModuleManagement
 
         public bool AddUpdateViewField(NViewFieldForm ViewFieldFormInfo)
         {
-            ViewField vf = ViewFieldFormInfo.ViewField != 0 ? cvcEntities.ViewFields.First(vvf => vvf.ViewField1 == ViewFieldFormInfo.ViewField) : new ViewField();
+            bool isUpdate = cvcEntities.ViewFields.Any(a => a.ViewFieldName == ViewFieldFormInfo.ViewFieldName
+            && a.ViewsId == ViewFieldFormInfo.ViewsId && a.MachineParameterId == ViewFieldFormInfo.MachineParameterId);
+            ViewField vf = isUpdate ? cvcEntities.ViewFields.First(a => a.ViewFieldName == ViewFieldFormInfo.ViewFieldName
+            && a.ViewsId == ViewFieldFormInfo.ViewsId && a.MachineParameterId == ViewFieldFormInfo.MachineParameterId) : new ViewField();
             vf.ViewFieldName = ViewFieldFormInfo.ViewFieldName;
             vf.ViewsId = ViewFieldFormInfo.ViewsId;
             vf.StatusId = ViewFieldFormInfo.StatusId;
             vf.Sequence = ViewFieldFormInfo.Sequence;
             vf.MachineParameterId = ViewFieldFormInfo.MachineParameterId;
-            vf.ModuleId = ViewFieldFormInfo.ModuleId;
+            vf.ModuleId = null;
+            // vf.ModuleId = ViewFieldFormInfo.ModuleId;
             vf.IsPopUpRequired = ViewFieldFormInfo.IsPopUpRequired;
             vf.IsCommentRequired = ViewFieldFormInfo.IsCommentRequired;
             vf.IsAuthenticationRequired = ViewFieldFormInfo.IsAuthenticationRequired;
-            var loggedUserIdCache = commonServices.GetCacheData(ClsCacheConfig.CacheKeys.LoggedUserId);
-
-            if (ViewFieldFormInfo.ViewField == 0)
+            // var loggedUserIdCache = commonServices.GetCacheData(ClsCacheConfig.CacheKeys.LoggedUserId);
+            
+            if (!isUpdate)
             {
                 vf.CreatedDate = DateTime.Now;
-                vf.CreatedBy = loggedUserIdCache;
+                // vf.CreatedBy = loggedUserIdCache;
                 cvcEntities.ViewFields.Add(vf);
                 cvcEntities.SaveChanges();
             }
             else
             {
                 vf.UpdatedDate = DateTime.Now;
-                vf.UpdatedBy = loggedUserIdCache;
+                // vf.UpdatedBy = loggedUserIdCache;
                 cvcEntities.SaveChanges();
             }
             AddUpdateViewFieldAuthentication(vf.ViewField1, ViewFieldFormInfo.RoleIds);
@@ -179,12 +183,15 @@ namespace CVC.Modules.NModuleManagement
                               select new StatusInfo { StatusId = s.StatusId, StatusName = s.StatusName }).DefaultIfEmpty();
             return statusdata.ToList();
         }
+        public string getTableNamefromMachine(int id){
+            return cvcEntities.Machines.FirstOrDefault(a => a.MachineId == id).TableName;
+        }
         public List<NMachineParameterInfo> getMachineParameterDropDown(int id)
         {
             var machineParameterdata = (from mp in cvcEntities.MachineParameters
                                             where mp.MachineId == id && mp.StatusId== (int)ClsConstants.StatusType.Active
                                             orderby mp.ParameterName
-                                        select new NMachineParameterInfo { MachineParameterId = mp.MachineParameterId, ParameterName = mp.ParameterName }).DefaultIfEmpty();
+                                        select new NMachineParameterInfo { MachineParameterId = mp.MachineParameterId, ParameterName = mp.ParameterName, ColumnName = mp.ColumnName, PickListId = (int)(mp.PickListId == null ? -1 : mp.PickListId) }).DefaultIfEmpty();
             return machineParameterdata.ToList();
         }
         public NModuleForm getSelectedModule(int id)

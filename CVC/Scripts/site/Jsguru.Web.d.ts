@@ -15412,6 +15412,7 @@ declare namespace CVC.MachineCustomization {
         protected getColumns(): Slick.Column[];
         protected getSlickOptions(): Slick.GridOptions;
         protected createSlickGrid(): Slick.Grid;
+        protected onClick(e: JQueryEventObject, row: number, cell: number): void;
     }
 }
 declare namespace CVC.MachineCustomization {
