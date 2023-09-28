@@ -43,9 +43,7 @@ function connectToSocket() {
     }
 
     $.connection.hub.start().done(function () {
-        socket.server.send('commandpanel', '');
-        socket.server.send('machinesummary', '');
-        socket.server.send('raisealarm-' + $("#hdnModuleId").val(), '');
+        socket.server.send('customizePreview', '');
     });
 
     $.connection.hub.disconnected(function () {
