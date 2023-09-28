@@ -238,6 +238,7 @@ namespace CVC.Modules.Common.Dashboard
                         {
                             isFirstValue = false;
                             isWriteToPLCData = cvcEntities.IPCParameters.Where(i => i.MachineId == getMachineId && i.IsWriteToPLC == true)?.ToList();
+
                         }
 
                         // var aa=item.MachineParameter.IPCParameters.fi
@@ -296,6 +297,8 @@ namespace CVC.Modules.Common.Dashboard
                             {
                                 foreach (var items in isWriteToPLCData)
                                 {
+
+                                    dashBoardField = new DashBoardField
                                     {
                                         IPCAddress = items.IPCAddress,
                                         Value = "1",
@@ -2543,13 +2546,14 @@ namespace CVC.Modules.Common.Dashboard
                                 MachineCommunicationViewModel machineCommunicationViewModel = new MachineCommunicationViewModel
                                 {
                                     ProtocolTypeName = machineCommunication?.Protocol?.ProtocolName,
-                                    MDBPath=machineCommunication.MDBPath,
-                                    Slot=machineCommunication.Slot,
                                     IPAddress = machineCommunication.IPAddress,
                                     TCPIPPort = machineCommunication.TCPIPPort,
+                                    MDBPath = machineCommunication.MDBPath,
                                     UserName = machineCommunication.UserName,
                                     Password = machineCommunication.Password,
+                                    Rack = machineCommunication.Rack,
                                     Slot = machineCommunication.Slot,
+                                    CpuType = machineCommunication?.PickListValue6?.PickList?.PickListName
 
                                 };
 
@@ -3032,13 +3036,6 @@ namespace CVC.Modules.Common.Dashboard
                         lstDashBoardFields.Add(dashBoardField);
                         DashBoardViewModel dashBoardViewModel = new DashBoardViewModel
                         {
-                            IPAddress=machineCommunication.IPAddress,
-                            TCPIPPort=machineCommunication.TCPIPPort,
-                            CpuType=machineCommunication.CpuType,
-                            Rack=machineCommunication.Rack,
-                            Slot=machineCommunication.Slot,
-                            ViewFieldList=lstDashBoardFields
-                            
                             IPAddress = machineCommunication.IPAddress,
                             TCPIPPort = machineCommunication.TCPIPPort,
                             CpuType = machineCommunication.CpuType,

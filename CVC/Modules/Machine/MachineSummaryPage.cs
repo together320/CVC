@@ -220,6 +220,8 @@ namespace CVC.Machine.Pages
 
             CommonServices objCommonServices = new CommonServices();
 
+            var ModuleId = new CVCEntities().Modules.FirstOrDefault(a => a.MachineId == MachineId).ModuleId;
+            var Model = new MachineSummaryPageModel() { ViewFieldList = new List<DashBoardField>() };
             Model.ViewFieldList = new List<DashBoardField>();
             Model.ViewFieldList = await new DashboardCommon().GetDashBoardFieldAsync(ModuleId, ViewId);
             // var batchForLabel = new DashboardCommon().GetBatchForLebelRoll();
@@ -227,6 +229,8 @@ namespace CVC.Machine.Pages
             var LabelRoll = new LabelRoll();
 
             if (objCommonServices.CheckIsLabelRoll(ModuleId) == true)
+            {
+                Model.IsLabelRoll = true;
                 int? machineId = 0;
                 if (Session["ModuleId"] != null)
                 {
@@ -234,6 +238,7 @@ namespace CVC.Machine.Pages
                     machineId = new DashboardCommon().GetMachineId(moduleId);
                     LabelRoll = objCommonServices.GetLabelRollDetails(machineId);
                     if (LabelRoll != null)
+                    {
                         Model.ViewFieldList.Add(new DashBoardField() { ParameterName = "Label Roll", Value = LabelRoll.LabelRollNumber.ToString(), IPCAddress = "NA" });
                         System.Web.HttpContext.Current.Cache["LabelRollNumber"] = LabelRoll.LabelRollNumber;
                         System.Web.HttpContext.Current.Cache["NumberOfLabels"] = LabelRoll.NumberOfLabels;
@@ -241,6 +246,8 @@ namespace CVC.Machine.Pages
                         //  Model.ViewFieldList.Add(new DashBoardField() { ParameterName = "Label On Rolls", Value = LabelRoll.NumberOfLabels.ToString(), IPCAddress = "NA" });
                     }
                 }
+            }
+            Model.ViewFieldList = Model.ViewFieldList.Where(a => a.IPCAddress != null).ToList();
 
 
             // Model.ViewFieldList = Model.ViewFieldList.Where(a => a.IPCAddress != null).OrderByDescending(a => a.IsMachineSpeed).ToList();

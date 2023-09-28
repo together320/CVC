@@ -39,6 +39,7 @@ namespace CVC.Controllers
         public async Task<ActionResult> getTableDataFromDisplayObject(int displayObjectId) //getAllData
         {
             var machineId = 0;
+            if (displayObjectId > 0)
             {
                 DashboardCommon dashboardCommon = new DashboardCommon();
                 machineId = (int)dashboardCommon.GetMachineIdFromViewId(displayObjectId);
@@ -62,8 +63,10 @@ namespace CVC.Controllers
         public JsonResult GetEFsFromDOId(int displayObjectId) //getAllData
         {
             var machineId = 0;
+            if (displayObjectId > 0)
             {
                 DashboardCommon dashboardCommon = new DashboardCommon();
+                machineId = (int)dashboardCommon.GetMachineIdFromViewId(displayObjectId);
             }
             return Json(_repo.getMachineParameterDropDown(machineId), JsonRequestBehavior.AllowGet);
         }
