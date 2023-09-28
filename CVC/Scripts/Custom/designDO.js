@@ -65,6 +65,13 @@ var do_element;
 
 $("#draggable").draggable();
 
+function undoDoEdit() {
+    if (undoStack.length > 1) {
+        undoStack.pop(); // Remove the latest state from the stack
+        $('.workSpace').html(undoStack[undoStack.length - 1]);
+    }
+}
+
 function saveDO() {
     let dataTable = $("#do_element_table_" + $("#DisplayObjectId").val()).DataTable();
     var data = dataTable.row(dataTable.page.info().page).data();
@@ -91,11 +98,8 @@ function saveDO() {
         }
     }
 
-    AddUpdateDOF(parameterList).then(function (data) {
-    });
+    AddUpdateDOF(parameterList);
 }
-
-
 
 function dragDO(event) {                   //when dragging main display object
     var newId = `parent_do_element_${$("#DisplayObjectId").val()}`;
@@ -114,6 +118,13 @@ function dragDO(event) {                   //when dragging main display object
     else if (doType == 5 || doType == 6) {  //linechart display
         res = `<div style='width:90%; margin:0 auto;'><canvas id='do_element_${$("#DisplayObjectId").val()}' style='display:block;width:100%;max-width:600px;' width='400' height='400'></canvas><table id='do_element_table_${$("#DisplayObjectId").val()}' class='displays table-striped table-bordered dt-responsive nowrap' width='100' cellspacing='0'></table></div>`;
     }
+    else if (doType == 7) {
+        res = `<div style='width:90%; margin:0 auto;'><div id='do_element_${$("#DisplayObjectId").val()}' style='color:black;display:block;width:100%;max-width:600px;'></div><table id='do_element_table_${$("#DisplayObjectId").val()}' class='displays table-striped table-bordered dt-responsive nowrap' width='100' cellspacing='0'></table></div>`;
+    }
+    else if (doType == 9 || doType == 10) {
+        res = `<div style='width:90%; margin:0 auto;'><ul id='do_element_${$("#DisplayObjectId").val()}' style='color:black;display:block;width:100%;max-width:600px;' class='todo-list ui-sortable'></ul><table id='do_element_table_${$("#DisplayObjectId").val()}' class='displays table-striped table-bordered dt-responsive nowrap' width='100' cellspacing='0'></table></div>`;
+    }
+
     var nodeCopy = $(res).attr('id', newId).addClass('clones');
     nodeCopy.addClass('my-dragging-class');  // Apply the CSS class with reduced opacity
     $('body').append(nodeCopy);
@@ -127,9 +138,11 @@ function dragEF(event) {                   //when dragging main display object
     event.dataTransfer.setData('dragging', 'no-clone');
     event.dataTransfer.setData('dropped-id', 'ef');
     event.dataTransfer.setData('columnName', $(event.target).attr('columnname'));
+    event.dataTransfer.setData('pickListId', $(event.target).attr('pickListId'));
 
     if ($("#DisplayObjectType").val() == 3 || $("#DisplayObjectType").val() == 4 || $("#DisplayObjectType").val() == 5
-        || $("#DisplayObjectType").val() == 6) { //if button, realtime format, then the columnName does not exist, so parameterName will use
+        || $("#DisplayObjectType").val() == 6 || $("#DisplayObjectType").val() == 7 || $("#DisplayObjectType").val() == 9
+        || $("#DisplayObjectType").val() == 10) { //if button, realtime format, then the columnName does not exist, so parameterName will use
         event.dataTransfer.setData('columnName', $(event.target).text());
     }
 }
@@ -166,7 +179,7 @@ function dragComponent(event, type) {            //when dragging sample componen
     else if (type == 3)
         res = "<input type='button' value='Sample button' style='color:black'/>";
 
-    var nodeCopy = $(res).attr('id', newId).addClass('clones');
+    var nodeCopy = $(res).attr('id', newId).addClass('clones').addClass('component');
     //alert($(nodeCopy).prop('outerHTML'));
     nodeCopy.addClass('my-dragging-class');  // Apply the CSS class with reduced opacity
     //$(nodeCopy).draggable({
@@ -184,13 +197,15 @@ function dragClonedGrid(event) {
     event.dataTransfer.setData('dropped-id', $(event.target).attr('id'));
 }
 
-function toggleHeader(index) { // search, if exist empty, else
+function toggleHeader(index) {
     let dataTable = $("#do_element_table_" + $("#DisplayObjectId").val()).DataTable();
     let column = dataTable.column(index);
     column.visible(!column.visible());
 
     if ($("#DisplayObjectType").val() == 1)
         return;
+
+    undoStack.push($('.workSpace').html());
 
     let mainDoElement = $("#do_element_" + $("#DisplayObjectId").val());
     mainDoElement.empty();
@@ -210,17 +225,28 @@ function toggleHeader(index) { // search, if exist empty, else
                 mainDoElement.append(`<button type="button" class="btn btn-app btn-light"><i class="fa fa-play" style="display:block"></i><span style="display:block">${$(column.header()).text().substring(0, 5) + "..."}</span></button>`);
             if ($("#DisplayObjectType").val() == 4)
                 mainDoElement.append(`<div class="card-box widget-flat text-white bg-blue" style="background-color:aqua;height:inherit"><i class="fi-tag"></i><span>${$(column.header()).text().substring(0, 5) + "..."}</span></div>`);
-            console.log("inserting to chart_label");
+            if ($("#DisplayObjectType").val() == 9)
+                mainDoElement.append(`<li style="padding: 5px 10px;"><div style="color:#f1556c; background-color:#fef0f2; border:#f9b3bd 1px solid; padding:10px; border-radius:4px; font-weight:normal;font-size:16px;">${$(column.header()).text()}</div></li>`);
+            if ($("#DisplayObjectType").val() == 10)
+                mainDoElement.append(`<li style="padding: 5px 10px;"><div style="color:#169F85; background-color:#b1f3e5; border:#75c7b6 1px solid; padding:10px; border-radius:4px; font-weight:normal;font-size:16px;">${$(column.header()).text()}</div></li>`);
             chart_labels.push($(column.header()).text());
         }
     }
 
     if ($("#DisplayObjectType").val() == 2)
         mainDoElement.insertBefore($("#do_element_table_" + $("#DisplayObjectId").val()));
+
+    if ($("#DisplayObjectType").val() == 7) { //tree view                            
+        tree_nodes = [];
+        for (var i = 0; i < chart_labels.length; i++) {
+            tree_nodes.push({ text: chart_labels[i] });
+        }
+        console.log(tree_nodes);
+        $("#do_element_" + $("#DisplayObjectId").val()).treeview({ data: [{ text: $("#DisplayObjectName").val(), nodes: tree_nodes }] });
+    }
 }
 
 function updateChart() {
-
     var newData = [];
     newChart.data.labels = chart_labels;
     for (var i = 0; i < chart_labels.length; i++)
@@ -230,6 +256,33 @@ function updateChart() {
 }
 
 $(function () {
+    $(document).on("drop", ".component", function (event) {
+        var isClone = event.originalEvent.dataTransfer.getData('dragging');
+        var droppedId = event.originalEvent.dataTransfer.getData('dropped-id');
+        if (droppedId.includes('ef')) {
+            var pickListId = event.originalEvent.dataTransfer.getData('pickListId');
+            var columnName = event.originalEvent.dataTransfer.getData('columnName');
+
+            if (pickListId == "-1") {
+                console.log("picklist id is -1, so setting value");
+                $(event.target).text(columnName);
+                $(event.target).val(columnName);
+            }
+            else {
+                GetDropdownListfromPickListId(pickListId).then(function (data) {
+                    $(event.target).empty();
+                    data.forEach(function (item) {
+                        var newOption = $('<option>', {
+                            value: item,
+                            text: item
+                        });
+                        $(event.target).append(newOption);
+                    });
+                });
+            }
+        }
+        event.preventDefault();
+    });
     $(document).on("drop", ".rowContainerElement", function (event) {
         var isClone = event.originalEvent.dataTransfer.getData('dragging');
         var droppedId = event.originalEvent.dataTransfer.getData('dropped-id');
@@ -237,15 +290,21 @@ $(function () {
             var columnName = event.originalEvent.dataTransfer.getData('columnName');
             var dataTable = $('#do_element_table_' + $("#DisplayObjectId").val()).DataTable();
             let columnIndex = dataTable.columns().header().map(c => $(c).text()).indexOf(columnName);
+
+            console.log('columnName :', columnName, 'columnIndex :', columnIndex);
             toggleHeader(columnIndex);
             return;
         }
         var nodeCopy = $("#" + droppedId);
         var nodeValue = nodeCopy.is('input, select, textarea') ? nodeCopy.val() : nodeCopy.text();
         if (droppedId.includes('componentId') == 1) {
+            undoStack.push($('.workSpace').html());
+
             $(this).append(nodeCopy);
         }
         if (droppedId.includes('do_element') == 1) {
+            undoStack.push($('.workSpace').html());
+
             $(this).append(nodeCopy);
             if ($("#DisplayObjectType").val() == 1) { //in case of table
                 getTableDataFromDisplayObject($("#DisplayObjectId").val()).then(function (data) {
@@ -361,7 +420,8 @@ $(function () {
                 });
             }
             if ($("#DisplayObjectType").val() == 3 || $("#DisplayObjectType").val() == 4 || $("#DisplayObjectType").val() == 5
-                || $("#DisplayObjectType").val() == 6) { //in case of button format
+                || $("#DisplayObjectType").val() == 6 || $("#DisplayObjectType").val() == 7 || $("#DisplayObjectType").val() == 9
+                || $("#DisplayObjectType").val() == 10) { //in case of button format
                 $("#do_element_" + $("#DisplayObjectId").val()).empty();
                 $("#do_element_table_" + $("#DisplayObjectId").val()).empty();
 
@@ -379,7 +439,7 @@ $(function () {
                     }),
                     "initComplete": function (settings, json) {
                         $("#do_element_table_" + $("#DisplayObjectId").val() + "_wrapper").css('display', 'none');
-                        if ($("#DisplayObjectType").val() == 5 || $("#DisplayObjectType").val() == 6) {
+                        if ($("#DisplayObjectType").val() == 5 || $("#DisplayObjectType").val() == 6) { //chart view
                             var xValues = [];
                             var yValues = [];
                             var barColors = ["red", "green", "blue", "orange", "brown"];
@@ -404,6 +464,7 @@ $(function () {
 
                             setInterval(updateChart, 1000);
                         }
+
                     }
                 });
             }
@@ -411,10 +472,14 @@ $(function () {
     });
 
     $(document).on("click", ".removeButton", function () {      //when click xremove button
+        undoStack.push($('.workSpace').html());
+
         $(this).parent().parent().remove();
     });
     ///Clear all
     $("#idDeleteMain").on("click", function (event) {       //delete all button
+        undoStack.push($('.workSpace').html());
+
         $("main").empty();
         rowCount = 0;
     });
@@ -424,12 +489,14 @@ $(function () {
     });
 
     $('.workSpace').on("drop", function (event) {
-        console.log("inserting");
         var isClone = event.originalEvent.dataTransfer.getData('dragging');
         var droppedId = event.originalEvent.dataTransfer.getData('dropped-id');
         if (droppedId != "" && droppedId.includes("formId") == 0) {
             var nodeCopy = $("#" + droppedId);
             var nodeValue = nodeCopy.is('input, select, textarea') ? nodeCopy.val() : nodeCopy.text();
+
+            undoStack.push($('.workSpace').html());
+
             $(this).append(nodeCopy);
         } else {
         }

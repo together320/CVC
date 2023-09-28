@@ -103,7 +103,7 @@ namespace CVC.Modules.NModuleManagement
             vf.IsCommentRequired = ViewFieldFormInfo.IsCommentRequired;
             vf.IsAuthenticationRequired = ViewFieldFormInfo.IsAuthenticationRequired;
             // var loggedUserIdCache = commonServices.GetCacheData(ClsCacheConfig.CacheKeys.LoggedUserId);
-            
+
             if (!isUpdate)
             {
                 vf.CreatedDate = DateTime.Now;
@@ -183,15 +183,16 @@ namespace CVC.Modules.NModuleManagement
                               select new StatusInfo { StatusId = s.StatusId, StatusName = s.StatusName }).DefaultIfEmpty();
             return statusdata.ToList();
         }
-        public string getTableNamefromMachine(int id){
+        public string getTableNamefromMachine(int id)
+        {
             return cvcEntities.Machines.FirstOrDefault(a => a.MachineId == id).TableName;
         }
         public List<NMachineParameterInfo> getMachineParameterDropDown(int id)
         {
             var machineParameterdata = (from mp in cvcEntities.MachineParameters
-                                            where mp.MachineId == id && mp.StatusId== (int)ClsConstants.StatusType.Active
-                                            orderby mp.ParameterName
-                                        select new NMachineParameterInfo { MachineParameterId = mp.MachineParameterId, ParameterName = mp.ParameterName, ColumnName = mp.ColumnName }).DefaultIfEmpty();
+                                        where mp.MachineId == id && mp.StatusId == (int)ClsConstants.StatusType.Active
+                                        orderby mp.ParameterName
+                                        select new NMachineParameterInfo { MachineParameterId = mp.MachineParameterId, ParameterName = mp.ParameterName, ColumnName = mp.ColumnName, PickListId = (int)(mp.PickListId == null ? -1 : mp.PickListId) }).DefaultIfEmpty();
             return machineParameterdata.ToList();
         }
         public NModuleForm getSelectedModule(int id)
@@ -338,9 +339,9 @@ namespace CVC.Modules.NModuleManagement
 
         public bool CheckMachineAlreadyMappedToModule(int machineId)
         {
-            using(CVCEntities cVCEntities=new CVCEntities())
+            using (CVCEntities cVCEntities = new CVCEntities())
             {
-             var modules= cVCEntities?.Modules?.FirstOrDefault(m => m.MachineId == machineId);
+                var modules = cVCEntities?.Modules?.FirstOrDefault(m => m.MachineId == machineId);
                 if (modules != null)
                     return true;
                 else

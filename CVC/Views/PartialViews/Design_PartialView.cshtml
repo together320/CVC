@@ -3,8 +3,9 @@
     Layout = null;
 }
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-<link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+<link
+    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    rel="stylesheet">
 <!-- Custom styles for this template-->
 <script src="~/Scripts/Components/formComponent20.js"></script>
 <script src="~/Scripts/Components/rowComponent7.js"></script>
@@ -14,9 +15,11 @@
 <script src="~/Scripts/Communication/RequestData6.js"></script>
 <script src="~/Scripts/Custom/designDO.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-treeview/1.2.0/bootstrap-treeview.min.js"></script>
 <style>
     .my-dragging-class {
-        opacity: 1; /* 50% opacity */
+        opacity: 1;
+        /* 50% opacity */
     }
 
     .rowcontainer {
@@ -39,10 +42,10 @@
         font-size: 20px;
     }
 
-        .circleNumber:hover {
-            transform: scale(1.05);
-            box-shadow: 0px 20px 30px rgba(0,0,0,0.2);
-        }
+    .circleNumber:hover {
+        transform: scale(1.05);
+        box-shadow: 0px 20px 30px rgba(0, 0, 0, 0.2);
+    }
 
     .dragButton {
         display: inline-block;
@@ -60,15 +63,15 @@
         margin-right: 8px;
     }
 
-        .dragButton:hover {
-            background-color: #3e8e41
-        }
+    .dragButton:hover {
+        background-color: #3e8e41
+    }
 
-        .dragButton:active {
-            background-color: #3e8e41;
-            box-shadow: 0 5px #666;
-            transform: translateY(4px);
-        }
+    .dragButton:active {
+        background-color: #3e8e41;
+        box-shadow: 0 5px #666;
+        transform: translateY(4px);
+    }
 
     .removeButton {
         display: inline-block;
@@ -85,15 +88,15 @@
         text-align: center;
     }
 
-        .removeButton:hover {
-            background-color: #7e0e01
-        }
+    .removeButton:hover {
+        background-color: #7e0e01
+    }
 
-        .removeButton:active {
-            background-color: #601010;
-            box-shadow: 0 5px #666;
-            transform: translateY(4px);
-        }
+    .removeButton:active {
+        background-color: #601010;
+        box-shadow: 0 5px #666;
+        transform: translateY(4px);
+    }
 
 
     .forFix tr:nth-child(4n+1) {
@@ -122,8 +125,8 @@
         background: #ccc;
     }
 
-    tbody{
-        color : black;
+    tbody {
+        color: black;
     }
 </style>
 
@@ -134,11 +137,16 @@
             <div class="modal-body" style="padding : 0px!important;">
                 <!-- Page Wrapper -->
                 <div id="main-content" style="display:flex">
-                    <!-- Sidebar --> 
-                    <ul style="background-image: linear-gradient(180deg,#363a45 10%,#224abe 100%); width : 30rem!important; padding-inline-start:0px; margin-bottom:0px; list-style:none;" id="accordionSidebar">
+                    <!-- Sidebar -->
+                    <ul style="background-image: linear-gradient(180deg,#363a45 10%,#224abe 100%); width : 30rem!important; padding-inline-start:0px; margin-bottom:0px; list-style:none;"
+                        id="accordionSidebar">
                         <!-- Sidebar - Brand -->
-                        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="@Url.Action("Index", "Home", new { area = "" })" style="border:0px;margin:0px;padding:0px;">
-                            <img draggable="true" style="filter: brightness(80%); border: 0px; margin: 0px; padding: 0px; overflow: auto; width : 100%;" src="~/Content/images/cvc-pharma.bmp" alt="Image description" />
+                        <a class="sidebar-brand d-flex align-items-center justify-content-center"
+                            href="@Url.Action("Index", "Home", new { area = "" })"
+                            style="border:0px;margin:0px;padding:0px;">
+                            <img draggable="true"
+                                style="filter: brightness(80%); border: 0px; margin: 0px; padding: 0px; overflow: auto; width : 100%;"
+                                src="~/Content/images/cvc-pharma.bmp" alt="Image description" />
                         </a>
                         <!-- Divider -->
                         <hr class="sidebar-divider my-0">
@@ -149,12 +157,13 @@
                         <!-- Nav Item - Pages Collapse Menu -->
                         <li class="nav-item" style="padding: 10px 0px 10px 20px;">
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#separator12"
-                            aria-expanded="true" aria-controls="separator12">
+                                aria-expanded="true" aria-controls="separator12">
                                 <i class="fas fa-fw fa-gavel"></i>
                                 <span>Grid System</span>
                             </a>
-                            <div id="separator12" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar"
-                            style="padding:0.5rem; margin:1rem 1rem 1rem 0; background-color: white; border-radius : 10px; border : 1px solid gray;">
+                            <div id="separator12" class="collapse" aria-labelledby="headingTwo"
+                                data-parent="#accordionSidebar"
+                                style="padding:0.5rem; margin:1rem 1rem 1rem 0; background-color: white; border-radius : 10px; border : 1px solid gray;">
                                 <div class="bg-white py-2 collapse-inner rounded">
                                     @Html.Raw(DragContainer.GetRowStrs("12"))
                                     @Html.Raw(DragContainer.GetRowStrs("6 6"))
@@ -167,16 +176,19 @@
                         <!-- Nav Item - Pages Collapse Menu -->
                         <li class="nav-item" style="padding: 10px 0px 10px 20px;">
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#displayForms"
-                            aria-expanded="true" aria-controls="displayForms">
+                                aria-expanded="true" aria-controls="displayForms">
                                 <i class="fas fa-fw fa-magic"></i>
                                 <span>Display Object</span>
                             </a>
-                            <div id="displayForms" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar"
-                            style="padding:0.5rem; margin:1rem 1rem 1rem 0; background-color: white; border-radius : 10px; border : 1px solid gray;">
+                            <div id="displayForms" class="collapse" aria-labelledby="headingPages"
+                                data-parent="#accordionSidebar"
+                                style="padding:0.5rem; margin:1rem 1rem 1rem 0; background-color: white; border-radius : 10px; border : 1px solid gray;">
                                 <div class="bg-white py-2 collapse-inner rounded">
-                                    <div class="row" style="padding:1px;display:flex;padding-left:30px;padding-right:30px;">
-                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="background-color: #50c72d;border-radius: 8px;display: flex;/* justify-content: center; */"
-                                        ondragstart='dragDO(event);' draggable='true'>
+                                    <div class="row"
+                                        style="padding:1px;display:flex;padding-left:30px;padding-right:30px;">
+                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+                                            style="background-color: #50c72d;border-radius: 8px;display: flex;/* justify-content: center; */"
+                                            ondragstart='dragDO(event);' draggable='true'>
                                             Drag this display object to the place you want
                                         </div>
                                     </div>
@@ -186,34 +198,43 @@
 
                         <li class="nav-item" style="padding: 10px 0px 10px 20px;">
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseModal"
-                            aria-expanded="true" aria-controls="collapseModal">
+                                aria-expanded="true" aria-controls="collapseModal">
                                 <i class="fas fa-fw fa-filter"></i>
                                 <span>Component Lists</span>
                             </a>
-                            <div id="collapseModal" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar"
-                            style="padding:0.5rem; margin:1rem 1rem 1rem 0; background-color: white; border-radius : 10px; border : 1px solid gray;">
+                            <div id="collapseModal" class="collapse" aria-labelledby="headingPages"
+                                data-parent="#accordionSidebar"
+                                style="padding:0.5rem; margin:1rem 1rem 1rem 0; background-color: white; border-radius : 10px; border : 1px solid gray;">
                                 <div class="bg-white py-2 collapse-inner rounded">
-                                    <div class="row" style="padding:1px;display:flex;padding-left:30px;padding-right:30px;">
-                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="background-color: #50c72d;border-radius: 8px;display: flex;/* justify-content: center; */"
-                                        ondragstart='dragComponent(event, 0);' draggable='true'>
+                                    <div class="row"
+                                        style="padding:1px;display:flex;padding-left:30px;padding-right:30px;">
+                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+                                            style="background-color: #50c72d;border-radius: 8px;display: flex;/* justify-content: center; */"
+                                            ondragstart='dragComponent(event, 0);' draggable='true'>
                                             TextBox
                                         </div>
                                     </div>
-                                    <div class="row" style="padding:1px;display:flex;padding-left:30px;padding-right:30px;">
-                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="background-color: #50c72d;border-radius: 8px;display: flex;/* justify-content: center; */"
-                                        ondragstart='dragComponent(event, 1);' draggable='true'>
+                                    <div class="row"
+                                        style="padding:1px;display:flex;padding-left:30px;padding-right:30px;">
+                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+                                            style="background-color: #50c72d;border-radius: 8px;display: flex;/* justify-content: center; */"
+                                            ondragstart='dragComponent(event, 1);' draggable='true'>
                                             Label
                                         </div>
                                     </div>
-                                    <div class="row" style="padding:1px;display:flex;padding-left:30px;padding-right:30px;">
-                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="background-color: #50c72d;border-radius: 8px;display: flex;/* justify-content: center; */"
-                                        ondragstart='dragComponent(event, 2);' draggable='true'>
+                                    <div class="row"
+                                        style="padding:1px;display:flex;padding-left:30px;padding-right:30px;">
+                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+                                            style="background-color: #50c72d;border-radius: 8px;display: flex;/* justify-content: center; */"
+                                            ondragstart='dragComponent(event, 2);' draggable='true'>
                                             Dropdown
                                         </div>
                                     </div>
-                                    <div class="row" style="padding:1px;display:flex;padding-left:30px;padding-right:30px;">
-                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="background-color: #50c72d;border-radius: 8px;display: flex;/* justify-content: center; */"
-                                        ondragstart='dragComponent(event, 3);' draggable='true'>
+                                    <div class="row"
+                                        style="padding:1px;display:flex;padding-left:30px;padding-right:30px;">
+                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+                                            style="background-color: #50c72d;border-radius: 8px;display: flex;/* justify-content: center; */"
+                                            ondragstart='dragComponent(event, 3);' draggable='true'>
                                             Button
                                         </div>
                                     </div>
@@ -222,13 +243,14 @@
                         </li>
                         <!-- Nav Item - Pages Collapse Menu -->
                         <li class="nav-item" style="padding: 10px 0px 10px 20px;">
-                            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseComponent"
-                            aria-expanded="true" aria-controls="collapseComponent">
+                            <a class="nav-link collapsed" href="#" data-toggle="collapse"
+                                data-target="#collapseComponent" aria-expanded="true" aria-controls="collapseComponent">
                                 <i class="fas fa-fw fa-cog"></i>
                                 <span>Entity Field Lists</span>
                             </a>
-                            <div id="collapseComponent" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar"
-                            style="padding:0.5rem; margin:1rem 1rem 1rem 0; background-color: white; border-radius : 10px; border : 1px solid gray;overflow-y:auto;overflow-x:hidden;height:500px!important;">
+                            <div id="collapseComponent" class="collapse" aria-labelledby="headingTwo"
+                                data-parent="#accordionSidebar"
+                                style="padding:0.5rem; margin:1rem 1rem 1rem 0; background-color: white; border-radius : 10px; border : 1px solid gray;overflow-y:auto;overflow-x:hidden;height:500px!important;">
                                 <div class="bg-white py-2 collapse-inner rounded" id="efList">
                                 </div>
                             </div>
@@ -249,9 +271,12 @@
                                 <!-- <button type="button" class="btn btn-success">
                                     Preview
                                 </button> -->
-                                <button type="button" class="btn btn-warning">
-                                    Undo
-                                </button>
+                                <<<<<<< HEAD <button type="button" class="btn btn-warning">
+                                    =======
+                                    <button type="button" class="btn btn-warning" onclick="undoDoEdit();">
+                                        >>>>>>> origin/yuzhe
+                                        Undo
+                                    </button>
                             </div>
                             <!-- End of Topbar -->
                             <!-- Begin Page Content -->

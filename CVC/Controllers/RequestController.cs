@@ -13,6 +13,14 @@ using System.Web;
 using System.Web.Mvc;
 using System.Threading.Tasks;
 
+using CVC.BusinessServices.DAL;
+using CVC.BusinessServices.Interface;
+
+using CVC.Modules.MachineCustomization.Message;
+using CVC.Modules.MachineCustomization.TerminalType;
+using CVC.ViewModels;
+using Serenity.Web;
+
 namespace CVC.Controllers
 {
     [RoutePrefix("Request")]
@@ -23,6 +31,7 @@ namespace CVC.Controllers
         NModuleManagementViewModel _objNModuleManagementViewModel;
         NModuleRepository _repo;
         CustomRepository repository = new CustomRepository();
+        CVC.BusinessServices.Common.CommonServices commonServices = new BusinessServices.Common.CommonServices();
 
         public RequestController()
         {
@@ -60,6 +69,21 @@ namespace CVC.Controllers
         }
 
         [HttpPost]
+        public JsonResult GetDropdownListfromPickListId(int pickListId) //getAllData
+        {
+            CVC.Data.EDMX.PickList pickList = new Data.EDMX.PickList();
+            pickList.PickListId = pickListId;
+            List<CVC.Data.EDMX.PickListValue> pickValueList = commonServices.GetPickListValue_ByPickListId(pickList);
+            List<string> values = new List<string>();
+
+            foreach (CVC.Data.EDMX.PickListValue pickValue in pickValueList)
+            {
+                values.Add(pickValue.PickListValueName);
+            }
+            return Json(values, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
         public JsonResult GetEFsFromDOId(int displayObjectId) //getAllData
         {
             var machineId = 0;
@@ -67,12 +91,14 @@ namespace CVC.Controllers
             {
                 DashboardCommon dashboardCommon = new DashboardCommon();
                 machineId = (int)dashboardCommon.GetMachineIdFromViewId(displayObjectId);
+
             }
             return Json(_repo.getMachineParameterDropDown(machineId), JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        public void AddUpdateDOF(List<NViewFieldForm> parameterList){
+        public void AddUpdateDOF(List<NViewFieldForm> parameterList)
+        {
             foreach (var parameter in parameterList)
             {
                 try

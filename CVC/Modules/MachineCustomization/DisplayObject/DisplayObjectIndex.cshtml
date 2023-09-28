@@ -11,12 +11,15 @@
 
 @Html.Hidden("DisplayObjectId", "", new { @id = "DisplayObjectId" })
 @Html.Hidden("DisplayObjectType", "", new { @id = "DisplayObjectType" })
+@Html.Hidden("DisplayObjectName", "", new { @id = "DisplayObjectName" })
 @Html.Partial("~/Views/PartialViews/Design_PartialView.cshtml")
 
 <script type="text/javascript">
     var efDataList = [];
+    var undoStack = [];
+
     var efStr = "<div class='row' style='padding:1px;display:flex;padding-left:30px;padding-right:30px;'>" +
-        "<div ondragstart='dragEF(event);' draggable='true' class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='background-color: #50c72d; border-radius: 8px;display: flex;' machineId='xxId' columnName='xxColumn'>" +
+        "<div ondragstart='dragEF(event);' draggable='true' class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='background-color: #50c72d; border-radius: 8px;display: flex;' machineId='xxId' columnName='xxColumn' pickListId='xxPickList'>" +
         "xxName" +
         "</div>" +
         "</div>";
@@ -39,7 +42,7 @@
             console.log(efDataList);
             $("#efList").empty();
             for (var i = 0; i < efDataList.length; i++) {
-                $("#efList").append(efStr.replace('xxId', efDataList[i].MachineParameterId).replace('xxName', efDataList[i].ParameterName).replace('xxColumn', efDataList[i].ColumnName));
+                $("#efList").append(efStr.replace('xxId', efDataList[i].MachineParameterId).replace('xxName', efDataList[i].ParameterName).replace('xxColumn', efDataList[i].ColumnName).replace('xxPickList', efDataList[i].PickListId));
             }
         });
     });

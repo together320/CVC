@@ -7661,17 +7661,17 @@ var CVC;
             opt.title = Q.text('Site.BasicProgressDialog.PleaseWait');
             opt.width = 600;
             opt.buttons = [{
-                    text: Q.text('Dialogs.CancelButton'),
-                    click: function () {
-                        _this.cancelled = true;
-                        _this.element.closest('.ui-dialog')
-                            .find('.ui-dialog-buttonpane .ui-button')
-                            .attr('disabled', 'disabled')
-                            .css('opacity', '0.5');
-                        _this.element.dialog('option', 'title', Q.trimToNull(_this.cancelTitle) ||
-                            Q.text('Site.BasicProgressDialog.CancelTitle'));
-                    }
-                }];
+                text: Q.text('Dialogs.CancelButton'),
+                click: function () {
+                    _this.cancelled = true;
+                    _this.element.closest('.ui-dialog')
+                        .find('.ui-dialog-buttonpane .ui-button')
+                        .attr('disabled', 'disabled')
+                        .css('opacity', '0.5');
+                    _this.element.dialog('option', 'title', Q.trimToNull(_this.cancelTitle) ||
+                        Q.text('Site.BasicProgressDialog.CancelTitle'));
+                }
+            }];
             return opt;
         };
         BasicProgressDialog.prototype.initDialog = function () {
@@ -8012,16 +8012,16 @@ var CVC;
             GridEditorBase.prototype.getButtons = function () {
                 var _this = this;
                 return [{
-                        title: this.getAddButtonCaption(),
-                        cssClass: 'add-button',
-                        onClick: function () {
-                            _this.createEntityDialog(_this.getItemType(), function (dlg) {
-                                var dialog = dlg;
-                                dialog.onSave = function (opt, callback) { return _this.save(opt, callback); };
-                                dialog.loadEntityAndOpenDialog(_this.getNewEntity());
-                            });
-                        }
-                    }];
+                    title: this.getAddButtonCaption(),
+                    cssClass: 'add-button',
+                    onClick: function () {
+                        _this.createEntityDialog(_this.getItemType(), function (dlg) {
+                            var dialog = dlg;
+                            dialog.onSave = function (opt, callback) { return _this.save(opt, callback); };
+                            dialog.loadEntityAndOpenDialog(_this.getNewEntity());
+                        });
+                    }
+                }];
             };
             GridEditorBase.prototype.editItem = function (entityOrId) {
                 var _this = this;
@@ -8090,8 +8090,10 @@ var CVC;
                     columns.unshift({
                         field: 'Delete Row',
                         name: '',
-                        format: function (ctx) { return '<a class="inline-action delete-row" title="delete">' +
-                            '<i class="fa fa-trash-o text-red"></i></a>'; },
+                        format: function (ctx) {
+                            return '<a class="inline-action delete-row" title="delete">' +
+                                '<i class="fa fa-trash-o text-red"></i></a>';
+                        },
                         width: 24,
                         minWidth: 24,
                         maxWidth: 24
@@ -8572,6 +8574,7 @@ var CVC;
                     // Set the value of hidden tag with id 'DisplayObjectId'
                     $("#DisplayObjectId").val(record.ViewsId);
                     $("#DisplayObjectType").val(record.DisplayObjectTypeId);
+                    $("#DisplayObjectName").val(record.ViewName);
                     // added by Denis for RS 7.2 dated 10/6/2021
                     // Get DisplayObjectField Widget and destroy it if it exists.
                     var widget = $('#DisplayObjectField_GridDiv').tryGetWidget(MachineCustomization.DisplayObjectFieldGrid);

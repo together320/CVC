@@ -1,5 +1,4 @@
-﻿
-namespace CVC.MachineCustomization {
+﻿namespace CVC.MachineCustomization {
 
     import fld = DisplayObjectRow.Fields;
     @Serenity.Decorators.registerClass()
@@ -32,6 +31,7 @@ namespace CVC.MachineCustomization {
                 // Set the value of hidden tag with id 'DisplayObjectId'
                 $("#DisplayObjectId").val(record.ViewsId)
                 $("#DisplayObjectType").val(record.DisplayObjectTypeId)
+                $("#DisplayObjectName").val(record.ViewName)
                 // added by Denis for RS 7.2 dated 10/6/2021
                 // Get DisplayObjectField Widget and destroy it if it exists.
                 var widget = $('#DisplayObjectField_GridDiv').tryGetWidget<DisplayObjectFieldGrid>(DisplayObjectFieldGrid);
@@ -39,10 +39,10 @@ namespace CVC.MachineCustomization {
 
                 // Init DisplayObjectFieldGrid widget in the element with id 'DisplayObjectField_GridDiv'
                 new CVC.MachineCustomization.DisplayObjectFieldGrid($('#DisplayObjectField_GridDiv')).init();
-                
+
                 $(".quick-filters-bar").hide();
             });
-            
+
         }
 
         protected getColumns() {
@@ -57,10 +57,10 @@ namespace CVC.MachineCustomization {
                 minWidth: 50,
                 maxWidth: 50
             });
-            
+
             var dos_col = Q.first(columns, x => x.field === fld.DisplayObjectStyle);
             dos_col.referencedFields = [fld.DisplayObjectStyle];
-            
+
             dos_col.format = ctx => {
                 var doTypeId = ctx.item[fld.DisplayObjectTypeId];
                 var field = Q.tryFirst(CVC.Common.CustomEditors.DOTypeLookup, x => x.id == doTypeId)?.field
@@ -77,7 +77,7 @@ namespace CVC.MachineCustomization {
                     var col = Q.tryFirst(columns, x => x.field === colName);
                     col.headerCssClass = "CVC_Hidden";
                     col.cssClass = "CVC_Hidden";
-                }   
+                }
             });
 
             return columns;

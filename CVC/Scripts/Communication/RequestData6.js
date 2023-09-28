@@ -32,6 +32,23 @@ function AddUpdateDOF(parameterList) {
     });
 }
 
+function GetDropdownListfromPickListId(pickListId) {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: Q.resolveUrl('~/Request/GetDropdownListfromPickListId'),
+            type: 'POST',
+            dataType: 'json',
+            data: { pickListId: pickListId },
+            success: function (data) {
+                resolve(data);
+            },
+            error: function (error) {
+                reject(error);
+            }
+        });
+    });
+}
+
 function getMachineParametersFromDisplayObject(displayObjectId) {
     return new Promise(function (resolve, reject) {
         $.ajax({

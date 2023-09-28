@@ -10,5 +10,6 @@ namespace CVC.Modules.NModuleManagement
         public int MachineParameterId { get; set; }
         public string ParameterName { get; set; }
         public string ColumnName { get; set; }
+        public int PickListId { get; set; }
     }
 }
