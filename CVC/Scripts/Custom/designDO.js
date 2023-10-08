@@ -283,6 +283,9 @@ function updateChart() { //
     newChart.data.datasets[0].data = newData;
     newChart.data.datasets[0].backgroundColor = getChartColorArray(newData);
 
+    if (colorList != null || colorList.length > 0) {
+        newChart.data.datasets[0].backgroundColor = getChartColorArray(newData);
+    }
     console.log("chart" + newChart);
     newChart.update();
 }
