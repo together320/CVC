@@ -308,7 +308,6 @@ function updateChartByParameters(labels, dataList) {//function updateChart(label
         }
     }
     newChart.data.datasets[0].data = values;
-    newChart.data.datasets[0].backgroundColor = getChartColorArray(values);
     newChart.update();
 }
 
