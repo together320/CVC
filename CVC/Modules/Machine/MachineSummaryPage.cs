@@ -26,6 +26,7 @@ using System.Web.Mvc;
 using System.Web.SessionState;
 using static CVC.BusinessServices.Common.ClsConstants;
 using Newtonsoft.Json;
+using System.Data.Entity;
 
 namespace CVC.Machine.Pages
 {
@@ -219,7 +220,7 @@ namespace CVC.Machine.Pages
         }
 
         [HttpPost]
-        public async Task<ActionResult> GetCustomizePreviewDataAsync(int MachineID, int ViewId)
+        public async Task<ActionResult> GetCustomizePreviewDataAsync(int ViewId)
         {
 
             CommonServices objCommonServices = new CommonServices();
@@ -227,9 +228,8 @@ namespace CVC.Machine.Pages
             var Model = new MachineSummaryPageModel() { ViewFieldList = new List<DashBoardField>() };
             using (CVCEntities cvcEntities = new CVCEntities())
             {
-
-                int MachineId = MachineID;
-                var module = cvcEntities.Modules.FirstOrDefault(a => a.MachineId == MachineId);
+                var moduleId = cvcEntities?.Views?.FirstOrDefault(a => a.ViewsId == ViewId)?.ModuleId ?? 0;
+                var module = cvcEntities.Modules.FirstOrDefault(a => a.ModuleId == ModuleId);
                 ModuleId = module.ModuleId;
 
                 Model.ViewFieldList = await new DashboardCommon().GetDashBoardFieldAsync(ModuleId, ViewId);

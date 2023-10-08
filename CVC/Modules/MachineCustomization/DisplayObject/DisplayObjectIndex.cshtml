@@ -40,8 +40,8 @@
             }`);
         var viewsId = $("#DisplayObjectId").val();
         getMachineRealTimeDataFromViewsId(viewsId).then(function (data) {
-            machineId = data.machineId;
-            moduleId = data.moduleId == null ? -1 : data.moduleId;
+            machineId = data.machineId == null ? -1 : parseInt(data.machineId);
+            moduleId = data.moduleId == null ? -1 : parseInt(data.moduleId);
             isRTMachine = false;
             if (data.isRealTime != null)
                 isRTMachine = data.isRealTime;

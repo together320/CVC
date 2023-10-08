@@ -102,18 +102,14 @@ function getTableDataFromDisplayObject(displayObjectId) {
 
 
 // demand a hand for delete
-function GetCustomizeRealData(machineId, viewId) {
-    console.log("GetCustomizeRealdata called");
+function GetCustomizeRealData(viewId) {
     return new Promise(function (resolve, reject) {
         $.ajax({
             url: Q.resolveUrl('/MachineSummaryMachine/GetCustomizePreviewDataAsync'),
             type: 'POST',
             async: true,
             dataType: 'json',
-            data: {
-                MachineID: machineId,
-                ViewId: viewId
-            },
+            data: { ViewId: viewId },
             success: function (data) {
                 resolve(data);
             },

@@ -14,7 +14,7 @@ var doTypeId = -1; // DisplayObjectTypeId  if >0, there is dotype, if <0, not.
 var colorRowHtml = `<div id="color-row" class="col-md-12" style="display:flex;align-items:center;gap:10px;">
                         <p style="margin:0px;">From : </p><input id="color-from" type="number" class="col-md-2" required />
                         <p style="margin:0px;">To : </p><input id="color-to" type="number" class="col-md-2" required />
-                        <p style="margin:0px;">Color : </p><input type="color" id="color-pick" class="form-control col-md-1"  data-prefered-format = "hex" required />
+                        <p style="margin:0px;">Color : </p><input type="color" id="color-pick" class="color-hex col-md-1"  data-prefered-format = "hex" required />
                         <a class="pull-right btn btn-primary save-color"><i class="fas fa-database" style="pointer-events:none"></i></a>
                         <a class="pull-right btn btn-danger delete-color"><i class="fas fa-eraser" style="pointer-events:none"></i></a>
                     </div>`;
@@ -58,14 +58,14 @@ function processCustomizePreview(dataList) { // datalist is just ViewFieldList
             if (element.Value == null)
                 datum.push(0);
             else
-                datum.push(element.value);
+                datum.push(parseFloat(element.value));
             // colors.push(element.)
         });
         updateChartByParameters(labels, datum);
     }
 }
 
-function getChartColorArray(valueArr) {
+function getChartColorArray(valueArr) { // valueArr is float array
     if (colorList == null || colorList.lenth == 0) return;
     var colors = [];
     valueArr.forEach(element => {
@@ -74,7 +74,7 @@ function getChartColorArray(valueArr) {
     return colors;
 }
 
-function calculateBackgroundColor(value) {
+function calculateBackgroundColor(value) { // value is float
     for (var i = 0; i < colorList.length; i++) {
         if (value >= colorList[i].RangeFrom && value <= colorList[i].RangeTo) {
             return colorList[i].color;
@@ -307,7 +307,7 @@ function updateChartByParameters(labels, dataList) {//function updateChart(label
     }
     newChart.data.datasets[0].data = values;
     if (colorList != null || colorList.length > 0) {
-        newChart.data.datasets[0].backgroundColor = getChartColorArray(newData);
+        newChart.data.datasets[0].backgroundColor = getChartColorArray(values);
     }
     newChart.update();
 }
@@ -369,9 +369,8 @@ $(function () {
                     }
                     var viewsId = $("#DisplayObjectId").val();
                     showLoader();
-                    GetCustomizeRealData(machineId, viewsId)     // save the Http Cache
+                    GetCustomizeRealData(viewsId)     // save the Http Cache
                         .then(data => { // machineData
-                            console.log('GetCustomizeRealData is called data = ' + data); // data is the array as [{ParameterName, Value},{}...]
                             processCustomizePreview(data);
                             hideLoader();
                             // setTimeout(() => {
@@ -394,6 +393,7 @@ $(function () {
 
             $(this).append(nodeCopy);
         }
+
         if (droppedId.includes('do_element') == 1) {
             undoStack.push($('.workSpace').html());
 
@@ -654,7 +654,7 @@ $(function () {
         }
     });
 
-    $(document).on("focus", ".form-control", function () {
+    $(document).on("focus", ".color-hex", function () {
         var preferredFormat = $(this).data("preferred-format") || "hex";
 
         $(this).spectrum({
@@ -673,7 +673,7 @@ $(function () {
         if (from == "" || to == "" || pick == "") {
             Q.notifyWarning("There is Empty Field. Pleasse Insert Value.");
             return;
-        } else if (from > to) {
+        } else if (parseFloat(from) > parseFloat(to)) {
             Q.notifyWarning("The Maximum Value of Setting Range is smaller than the Minimum. Please try again.");
             return;
         }
