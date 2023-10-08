@@ -5,10 +5,20 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web;
 using System.Web.Mvc;
 using CVC.ViewModels;
 using bs = CVC.BusinessServices.Common;
+using System.Web.Helpers;
+using CVC.MachineCustomization.Entities;
+using Serenity.Data;
+using Serenity.Services;
+using System.Data;
+using CVC.MachineCustomization.Repositories;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
 
 namespace CVC.Modules.NModuleManagement
 {
@@ -187,7 +197,7 @@ namespace CVC.Modules.NModuleManagement
         {
             return cvcEntities.Machines.FirstOrDefault(a => a.MachineId == id).TableName;
         }
-        public List<NMachineParameterInfo> getMachineParameterDropDown(int id)
+        public List<NMachineParameterInfo> getMachineParameterDropDown(int id) // id: machineId
         {
             var machineParameterdata = (from mp in cvcEntities.MachineParameters
                                         where mp.MachineId == id && mp.StatusId == (int)ClsConstants.StatusType.Active
@@ -349,5 +359,92 @@ namespace CVC.Modules.NModuleManagement
 
             }
         }
+
+        public List<DisplayObjectColor> GetDOColors(int viewsId)
+        {
+            List<DisplayObjectColor> colors = new List<DisplayObjectColor>();
+
+            using (CVCEntities cVCEntities = new CVCEntities())
+            {
+                colors = cVCEntities.DisplayObjectColors.Where(a => a.ViewsId == viewsId).ToList();
+            }
+            return colors;
+        }
+
+        public SaveResponse AddDOColor(int viewsId, JObject RowData)
+        {
+            var request = new SaveRequest<DisplayObjectColorRow>();
+            var repo = new DisplayObjectColorRepository();
+            var data = new SaveResponse();
+            IDbConnection connection = SqlConnections.NewFor<DisplayObjectColorRow>();
+            using (var uow = new UnitOfWork(connection))
+            {
+                if (RowData.Value<string>("ColorId") == "new")
+                { // add
+                    request = new SaveRequest<DisplayObjectColorRow>()
+                    {
+                        // EntityId = 100000,
+                        Entity = new DisplayObjectColorRow()
+                        {
+                            //ColorId = 100,
+                            RangeFrom = float.Parse(RowData["RangeFrom"].ToString()),
+                            RangeTo = float.Parse(RowData["RangeTo"].ToString()),
+                            Color = RowData["Color"].ToString(),
+                            ViewsId = int.Parse(RowData["ViewsId"].ToString())
+                        }
+                    };
+                    data = repo.Create(uow, request);
+                    uow.Commit();
+                }
+                else
+                { // update
+
+                    var entityId = int.Parse(RowData["ColorId"].ToString());
+                    var retreviewReqeust = new RetrieveRequest()
+                    {
+                        EntityId = entityId
+                    };
+                    var updateRow = repo.Retrieve(connection, retreviewReqeust);
+                    updateRow.Entity = new DisplayObjectColorRow()
+                    {
+                        //ColorId = 100,
+                        RangeFrom = float.Parse(RowData["RangeFrom"].ToString()),
+                        RangeTo = float.Parse(RowData["RangeTo"].ToString()),
+                        Color = RowData["Color"].ToString(),
+                        ViewsId = int.Parse(RowData["ViewsId"].ToString())
+                    };
+                    request.EntityId = entityId;
+                    request.Entity = updateRow.Entity;
+                    data = repo.Update(uow, request);
+                    uow.Commit();
+                }
+
+            }
+            return data;
+        }
+
+        public DeleteResponse DeleteDOColor(int colorId)
+        {
+            DeleteResponse data = new DeleteResponse();
+            var repo = new DisplayObjectColorRepository();
+            IDbConnection connection = SqlConnections.NewFor<DisplayObjectColorRow>();
+            using (var uow = new UnitOfWork(connection))
+            {
+                var deleteRequest = new DeleteRequest();
+                deleteRequest.EntityId = colorId;
+                data = repo.Delete(uow, deleteRequest);
+                uow.Commit();
+            }
+            return data;
+        }
+
+        public int? GetDisplayObjectTypeIdByViewsId(int viewsId)
+        {
+            var cvcEntities = new CVCEntities();
+            var jdata = cvcEntities.Views.FirstOrDefault(a => a.ViewsId == viewsId);
+            int? dotype = jdata.DisplayObjectTypeId;
+            return dotype;
+        }
+
     }
 }

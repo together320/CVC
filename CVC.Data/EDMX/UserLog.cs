@@ -20,7 +20,11 @@ namespace CVC.Data.EDMX
         public string Action { get; set; }
         public Nullable<System.DateTime> ChangedOn { get; set; }
         public Nullable<int> BatchId { get; set; }
+        public Nullable<int> TerminalTypeId { get; set; }
+        public Nullable<int> MachineId { get; set; }
     
         public virtual Batch Batch { get; set; }
+        public virtual Machine Machine { get; set; }
+        public virtual TerminalType TerminalType { get; set; }
     }
 }

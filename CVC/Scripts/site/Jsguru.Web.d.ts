@@ -6265,6 +6265,111 @@ declare namespace CVC.MachineCustomization {
     }
 }
 declare namespace CVC.MachineCustomization {
+    class DisplayObjectColorForm extends Serenity.PrefixedContext {
+        static formKey: string;
+    }
+    interface DisplayObjectColorForm {
+        RangeFrom: Serenity.DecimalEditor;
+        RangeTo: Serenity.DecimalEditor;
+        Color: Serenity.StringEditor;
+        ViewsId: Serenity.IntegerEditor;
+    }
+}
+declare namespace CVC.MachineCustomization {
+    interface DisplayObjectColorRow {
+        ColorId?: number;
+        RangeFrom?: number;
+        RangeTo?: number;
+        Color?: string;
+        ViewsId?: number;
+        ViewsModuleId?: number;
+        ViewsViewName?: string;
+        ViewsIsAccessFieldWise?: boolean;
+        ViewsStatusId?: number;
+        ViewsCreatedBy?: number;
+        ViewsCreatedDate?: string;
+        ViewsUpdatedBy?: number;
+        ViewsUpdatedDate?: string;
+        ViewsIsMachineSettings?: boolean;
+        ViewsIsMachineSummary?: boolean;
+        ViewsIslabelRoll?: boolean;
+        ViewsIsCommandPanel?: boolean;
+        ViewsIsFactorySetting?: boolean;
+        ViewsDisplayObjectTypeId?: number;
+        ViewsMachineId?: number;
+        ViewsListDisplayId?: number;
+        ViewsFormDisplayId?: number;
+        ViewsButtonDisplayId?: number;
+        ViewsRealtimeParameterDisplayId?: number;
+        ViewsLineChartDisplayId?: number;
+        ViewsPieChartDisplayId?: number;
+        ViewsTreeDisplayId?: number;
+        ViewsAttachmentDisplayId?: number;
+        ViewsAlarmDisplayId?: number;
+        ViewsNotificationDisplayId?: number;
+        ViewsContainerDisplayId?: number;
+    }
+    namespace DisplayObjectColorRow {
+        const idProperty = "ColorId";
+        const nameProperty = "Color";
+        const localTextPrefix = "MachineCustomization.DisplayObjectColor";
+        const deletePermission = "Administration:General";
+        const insertPermission = "Administration:General";
+        const readPermission = "Administration:General";
+        const updatePermission = "Administration:General";
+        namespace Fields {
+            const ColorId: any;
+            const RangeFrom: any;
+            const RangeTo: any;
+            const Color: any;
+            const ViewsId: any;
+            const ViewsModuleId: any;
+            const ViewsViewName: any;
+            const ViewsIsAccessFieldWise: any;
+            const ViewsStatusId: any;
+            const ViewsCreatedBy: any;
+            const ViewsCreatedDate: any;
+            const ViewsUpdatedBy: any;
+            const ViewsUpdatedDate: any;
+            const ViewsIsMachineSettings: any;
+            const ViewsIsMachineSummary: any;
+            const ViewsIslabelRoll: any;
+            const ViewsIsCommandPanel: any;
+            const ViewsIsFactorySetting: any;
+            const ViewsDisplayObjectTypeId: any;
+            const ViewsMachineId: any;
+            const ViewsListDisplayId: any;
+            const ViewsFormDisplayId: any;
+            const ViewsButtonDisplayId: any;
+            const ViewsRealtimeParameterDisplayId: any;
+            const ViewsLineChartDisplayId: any;
+            const ViewsPieChartDisplayId: any;
+            const ViewsTreeDisplayId: any;
+            const ViewsAttachmentDisplayId: any;
+            const ViewsAlarmDisplayId: any;
+            const ViewsNotificationDisplayId: any;
+            const ViewsContainerDisplayId: any;
+        }
+    }
+}
+declare namespace CVC.MachineCustomization {
+    namespace DisplayObjectColorService {
+        const baseUrl = "MachineCustomization/DisplayObjectColor";
+        function Create(request: Serenity.SaveRequest<DisplayObjectColorRow>, onSuccess?: (response: Serenity.SaveResponse) => void, opt?: Q.ServiceOptions<any>): JQueryXHR;
+        function Update(request: Serenity.SaveRequest<DisplayObjectColorRow>, onSuccess?: (response: Serenity.SaveResponse) => void, opt?: Q.ServiceOptions<any>): JQueryXHR;
+        function Delete(request: Serenity.DeleteRequest, onSuccess?: (response: Serenity.DeleteResponse) => void, opt?: Q.ServiceOptions<any>): JQueryXHR;
+        function Retrieve(request: Serenity.RetrieveRequest, onSuccess?: (response: Serenity.RetrieveResponse<DisplayObjectColorRow>) => void, opt?: Q.ServiceOptions<any>): JQueryXHR;
+        function List(request: Serenity.ListRequest, onSuccess?: (response: Serenity.ListResponse<DisplayObjectColorRow>) => void, opt?: Q.ServiceOptions<any>): JQueryXHR;
+        namespace Methods {
+            const Create: string;
+            const Update: string;
+            const Delete: string;
+            const Retrieve: string;
+            const List: string;
+        }
+    }
+}
+declare namespace CVC.MachineCustomization {
 }
 declare namespace CVC.MachineCustomization {
 }
@@ -15420,6 +15525,30 @@ declare namespace CVC.MachineCustomization {
         constructor(container: JQuery, opt: Serenity.LookupEditorOptions);
         protected getLookupKey(): string;
         protected getItems(lookup: Q.Lookup<any>): any;
+    }
+}
+declare namespace CVC.MachineCustomization {
+    class DisplayObjectColorDialog extends Serenity.EntityDialog<DisplayObjectColorRow, any> {
+        protected getFormKey(): string;
+        protected getIdProperty(): string;
+        protected getLocalTextPrefix(): string;
+        protected getNameProperty(): string;
+        protected getService(): string;
+        protected getDeletePermission(): string;
+        protected getInsertPermission(): string;
+        protected getUpdatePermission(): string;
+        protected form: DisplayObjectColorForm;
+    }
+}
+declare namespace CVC.MachineCustomization {
+    class DisplayObjectColorGrid extends Serenity.EntityGrid<DisplayObjectColorRow, any> {
+        protected getColumnsKey(): string;
+        protected getDialogType(): typeof DisplayObjectColorDialog;
+        protected getIdProperty(): string;
+        protected getInsertPermission(): string;
+        protected getLocalTextPrefix(): string;
+        protected getService(): string;
+        constructor(container: JQuery);
     }
 }
 declare namespace CVC.MachineCustomization {

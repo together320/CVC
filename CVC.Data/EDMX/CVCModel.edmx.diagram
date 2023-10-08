@@ -439,6 +439,12 @@
         <AssociationConnector Association="CVCModel.FK_Views_FormDisplayId" />
         <EntityTypeShape EntityType="CVCModel.ButtonDisplay" Width="1.5" PointX="13.375" PointY="1" />
         <AssociationConnector Association="CVCModel.FK_Views_ButtonDisplayId" />
+        <EntityTypeShape EntityType="CVCModel.DisplayObjectColor" Width="1.5" PointX="38.25" PointY="151.625" />
+        <AssociationConnector Association="CVCModel.FK_DisplayObjectColor_Views" />
+        <AssociationConnector Association="CVCModel.FK_ListDisplay_ViewId" />
+        <AssociationConnector Association="CVCModel.FK__UserLog__Machine__5BCD9859" />
+        <AssociationConnector Association="CVCModel.FK__UserLog__Termina__2AAB3E11" />
+        <AssociationConnector Association="CVCModel.FK_Views_Views" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

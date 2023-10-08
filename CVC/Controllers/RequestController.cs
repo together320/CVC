@@ -18,8 +18,10 @@ using CVC.BusinessServices.Interface;
 
 using CVC.Modules.MachineCustomization.Message;
 using CVC.Modules.MachineCustomization.TerminalType;
-using CVC.ViewModels;
-using Serenity.Web;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+// using CVC.ViewModels;
+// using Serenity.Web;
 
 namespace CVC.Controllers
 {
@@ -84,7 +86,7 @@ namespace CVC.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetEFsFromDOId(int displayObjectId) //getAllData
+        public JsonResult GetEFsFromDOId(int displayObjectId) //getAllData\
         {
             var machineId = 0;
             if (displayObjectId > 0)
@@ -94,6 +96,18 @@ namespace CVC.Controllers
 
             }
             return Json(_repo.getMachineParameterDropDown(machineId), JsonRequestBehavior.AllowGet);
+        }
+
+        // 2023.9.30 added by Denis
+        [HttpPost]
+        public JsonResult GetMachineRealTimeDataFromViewsId(int viewsId) //return machineId, isRealTime
+        {
+            DashboardCommon dashboardCommon = new DashboardCommon();
+            var machineId = (int)dashboardCommon.GetMachineIdFromViewId(viewsId);
+            var isRealTime = dashboardCommon.GetMachineRealTimeFromMachineId(machineId);
+            var moduleId = dashboardCommon.GetModuleIdFromMachineId(machineId);
+            var jRealTimeData = new { machineId = machineId, isRealTime = isRealTime, moduleId = moduleId };
+            return Json(jRealTimeData, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -121,6 +135,46 @@ namespace CVC.Controllers
             //ModuleFormInfo.SerialNumber = new DashboardCommon().GetSerialNumber(ModuleFormInfo.MachineId);//ModuleFormInfo.SerialNumber ?? new DashboardCommon().GetSerialNumber(ModuleFormInfo.MachineId);
             //ModuleFormInfo.EquipmentId = new DashboardCommon().GetEquipmentId(ModuleFormInfo.MachineId);//ModuleFormInfo.EquipmentId ?? new DashboardCommon().GetEquipmentId(ModuleFormInfo.MachineId);
             return Json(ModuleFormInfo, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult GetDisplayObjectColors(int ViewsId)
+        {
+            var colors = new List<CVC.Data.EDMX.DisplayObjectColor>();
+            colors = _repo.GetDOColors(ViewsId);
+            var doType = _repo.GetDisplayObjectTypeIdByViewsId(ViewsId);
+            JArray jArr = new JArray();
+            foreach (CVC.Data.EDMX.DisplayObjectColor color in colors)
+            {
+                JObject jObj = new JObject {
+                    {"ColorId", color.ColorId},
+                    {"Color", color.Color},
+                    {"RangeFrom", color.RangeFrom},
+                    {"RangeTo", color.RangeTo},
+                    {"ViewsId", color.ViewsId}
+                };
+                jArr.Add(jObj);
+            }
+            JObject jdata = new JObject() {
+                {"DisplayObjectTypeId", doType},
+                {"DisplayObjectColors", jArr}
+            };
+            return Json(jdata.ToString(), JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult SaveDisplayObjectColor(int ViewsId, string RowData) // add a new color row and update existing row
+        {
+            JObject jdata = JObject.Parse(RowData.ToString());
+            var addResult = _repo.AddDOColor(ViewsId, jdata);
+            return Json(addResult, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult DeleteDisplayObjectColor(int ColorId)
+        {
+            var deleteResult = _repo.DeleteDOColor(ColorId);
+            return Json(deleteResult, JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -22,7 +22,7 @@
         "<div ondragstart='dragEF(event);' draggable='true' class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='background-color: #50c72d; border-radius: 8px;display: flex;' machineId='xxId' columnName='xxColumn' pickListId='xxPickList'>" +
         "xxName" +
         "</div>" +
-        "</div>";
+        "</div>";  // this machineId is really machineParameterId.
     jQuery(function () {
         new CVC.MachineCustomization.DisplayObjectGrid($('#DisplayObject_GridDiv'), {}).init();
         Q.initFullHeightGridPage($('#GridDiv'));
@@ -36,7 +36,16 @@
         });
         $("#modal-design").modal();
         $(`.workSpace`).empty();
-        $("#idWorkSpace").attr('id', `WorkSpace_${$("#DisplayObjectId").val()}`);
+        $("#idWorkSpace").attr('id', `WorkSpace_${$("#DisplayObjectId").val()
+            }`);
+        var viewsId = $("#DisplayObjectId").val();
+        getMachineRealTimeDataFromViewsId(viewsId).then(function (data) {
+            machineId = data.machineId;
+            moduleId = data.moduleId == null ? -1 : data.moduleId;
+            isRTMachine = false;
+            if (data.isRealTime != null)
+                isRTMachine = data.isRealTime;
+        });
         getMachineParametersFromDisplayObject($("#DisplayObjectId").val()).then(function (data) {
             efDataList = data;
             console.log(efDataList);

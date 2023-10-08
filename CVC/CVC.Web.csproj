@@ -1233,6 +1233,12 @@
     <Compile Include="Modules\MachineCustomization\ScreenViews\ScreenViewsPage.cs" />
     <Compile Include="Modules\MachineCustomization\ScreenViews\ScreenViewsColumns.cs" />
     <Compile Include="Modules\MachineCustomization\ScreenViews\ScreenViewsForm.cs" />
+    <Compile Include="Modules\MachineCustomization\DisplayObjectColor\DisplayObjectColorRow.cs" />
+    <Compile Include="Modules\MachineCustomization\DisplayObjectColor\DisplayObjectColorRepository.cs" />
+    <Compile Include="Modules\MachineCustomization\DisplayObjectColor\DisplayObjectColorEndpoint.cs" />
+    <Compile Include="Modules\MachineCustomization\DisplayObjectColor\DisplayObjectColorPage.cs" />
+    <Compile Include="Modules\MachineCustomization\DisplayObjectColor\DisplayObjectColorColumns.cs" />
+    <Compile Include="Modules\MachineCustomization\DisplayObjectColor\DisplayObjectColorForm.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\upload\CompanyImage\00000\00000001_4b2hcztsutbhu.jpg">
@@ -11718,6 +11724,12 @@
     <TypeScriptCompile Include="Imports\ServerTypings\MachineCustomization.ScreenViewsForm.ts">
       <DependentUpon>ServerTypings.tt</DependentUpon>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Imports\ServerTypings\MachineCustomization.DisplayObjectColorRow.ts">  <DependentUpon>ServerTypings.tt</DependentUpon></TypeScriptCompile>
+    <TypeScriptCompile Include="Imports\ServerTypings\MachineCustomization.DisplayObjectColorService.ts">  <DependentUpon>ServerTypings.tt</DependentUpon></TypeScriptCompile>
+    <Content Include="Modules\MachineCustomization\DisplayObjectColor\DisplayObjectColorIndex.cshtml" />
+    <TypeScriptCompile Include="Modules\MachineCustomization\DisplayObjectColor\DisplayObjectColorDialog.ts" />
+    <TypeScriptCompile Include="Modules\MachineCustomization\DisplayObjectColor\DisplayObjectColorGrid.ts" />
+    <TypeScriptCompile Include="Imports\ServerTypings\MachineCustomization.DisplayObjectColorForm.ts">  <DependentUpon>ServerTypings.tt</DependentUpon></TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Code\" />

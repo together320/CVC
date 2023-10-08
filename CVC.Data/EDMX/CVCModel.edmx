@@ -476,6 +476,16 @@
           <Property Name="UpdatedDate" Type="datetime" />
           <Property Name="RecordAddedSource" Type="varchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="DisplayObjectColor">
+          <Key>
+            <PropertyRef Name="ColorId" />
+          </Key>
+          <Property Name="ColorId" Type="int" Nullable="false" />
+          <Property Name="RangeFrom" Type="float" />
+          <Property Name="RangeTo" Type="float" />
+          <Property Name="Color" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ViewsId" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="EndOfLine">
           <Key>
             <PropertyRef Name="EndOfLineId" />
@@ -549,6 +559,7 @@
           <Property Name="PreviousPasswordLimit" Type="int" />
           <Property Name="DatabaseLimit" Type="int" />
           <Property Name="LicenseExpiryNotification" Type="int" />
+          <Property Name="ScreenshotCapturePath" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="Exception">
           <Key>
@@ -766,7 +777,6 @@
             <PropertyRef Name="ListDisplayId" />
           </Key>
           <Property Name="ListDisplayId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ListDisplayName" Type="varchar" MaxLength="50" />
           <Property Name="BackgroundColor" Type="varchar" MaxLength="50" />
           <Property Name="BorderStyle" Type="int" />
           <Property Name="Checkbox" Type="bit" />
@@ -783,6 +793,8 @@
           <Property Name="MultiSelect" Type="bit" />
           <Property Name="AutoResize" Type="bit" />
           <Property Name="Collapsible" Type="bit" />
+          <Property Name="ViewId" Type="int" />
+          <Property Name="ListDisplayName" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Machine">
           <Key>
@@ -967,6 +979,8 @@
           <Property Name="RecordAddedSource" Type="varchar" MaxLength="50" />
           <Property Name="ColumnName" Type="varchar" MaxLength="250" />
           <Property Name="PickListId" Type="int" />
+          <Property Name="IsRoundOff" Type="bit" />
+          <Property Name="RoundOffDigits" Type="int" />
         </EntityType>
         <EntityType Name="MachineRecipe">
           <Key>
@@ -1512,6 +1526,8 @@
           <Property Name="Action" Type="varchar" MaxLength="50" />
           <Property Name="ChangedOn" Type="datetime" />
           <Property Name="BatchId" Type="int" />
+          <Property Name="TerminalTypeId" Type="int" />
+          <Property Name="MachineId" Type="int" />
         </EntityType>
         <EntityType Name="UserLogArchive">
           <Key>
@@ -1684,6 +1700,14 @@
           <Property Name="ListDisplayId" Type="int" />
           <Property Name="FormDisplayId" Type="int" />
           <Property Name="ButtonDisplayId" Type="int" />
+          <Property Name="RealtimeParameterDisplayId" Type="int" />
+          <Property Name="LineChartDisplayId" Type="int" />
+          <Property Name="PieChartDisplayId" Type="int" />
+          <Property Name="TreeDisplayId" Type="int" />
+          <Property Name="AttachmentDisplayId" Type="int" />
+          <Property Name="AlarmDisplayId" Type="int" />
+          <Property Name="NotificationDisplayId" Type="int" />
+          <Property Name="ContainerDisplayId" Type="int" />
         </EntityType>
         <EntityType Name="ViewsAccess">
           <Key>
@@ -1701,7 +1725,7 @@
           <Property Name="UpdatedDate" Type="datetime" />
           <Property Name="ModuleId" Type="int" />
         </EntityType>
-        <Association Name="FK__AccessLev__Proto__5669C4BE">
+        <Association Name="FK__AccessLev__Proto__3AD6B8E2">
           <End Role="Protocol" Type="Self.Protocol" Multiplicity="1" />
           <End Role="AccessLevel" Type="Self.AccessLevel" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1713,7 +1737,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__BatchRunD__ViewF__1A1FD08D">
+        <Association Name="FK__BatchRunD__ViewF__6E565CE8">
           <End Role="ViewField" Type="Self.ViewField" Multiplicity="0..1" />
           <End Role="BatchRunData" Type="Self.BatchRunData" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1725,7 +1749,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ImportLog__UserI__62CF9BA3">
+        <Association Name="FK__ImportLog__UserI__21D600EE">
           <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
           <End Role="ImportLog" Type="Self.ImportLog" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1737,7 +1761,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__IPCParame__Attri__261B931E">
+        <Association Name="FK__IPCParame__Attri__22CA2527">
           <End Role="Attribute" Type="Self.Attribute" Multiplicity="0..1" />
           <End Role="IPCParameter" Type="Self.IPCParameter" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1749,7 +1773,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__IPCParame__Attri__50B0EB68">
+        <Association Name="FK__IPCParame__Attri__23BE4960">
           <End Role="Attribute" Type="Self.Attribute" Multiplicity="0..1" />
           <End Role="IPCParameter" Type="Self.IPCParameter" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1761,7 +1785,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__MachineCo__CpuTy__12149A71">
+        <Association Name="FK__MachineCo__CpuTy__4707859D">
           <End Role="PickListValue" Type="Self.PickListValue" Multiplicity="0..1" />
           <End Role="MachineCommunication" Type="Self.MachineCommunication" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1773,7 +1797,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__MachineCo__Secur__51A50FA1">
+        <Association Name="FK__MachineCo__Secur__47FBA9D6">
           <End Role="PickListValue" Type="Self.PickListValue" Multiplicity="0..1" />
           <End Role="MachineCommunication" Type="Self.MachineCommunication" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1785,7 +1809,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__MachineCo__Secur__529933DA">
+        <Association Name="FK__MachineCo__Secur__48EFCE0F">
           <End Role="PickListValue" Type="Self.PickListValue" Multiplicity="0..1" />
           <End Role="MachineCommunication" Type="Self.MachineCommunication" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1797,7 +1821,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__MachineCo__UserI__538D5813">
+        <Association Name="FK__MachineCo__UserI__49E3F248">
           <End Role="PickListValue" Type="Self.PickListValue" Multiplicity="0..1" />
           <End Role="MachineCommunication" Type="Self.MachineCommunication" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1809,7 +1833,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__MasterTer__Termi__222B06A9">
+        <Association Name="FK__MasterTer__Termi__0ABD916C">
           <End Role="TerminalType" Type="Self.TerminalType" Multiplicity="0..1" />
           <End Role="MasterTerminal" Type="Self.MasterTerminal" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1821,7 +1845,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__MessageMa__PickL__168449D3">
+        <Association Name="FK__MessageMa__PickL__0BB1B5A5">
           <End Role="PickListValue" Type="Self.PickListValue" Multiplicity="1" />
           <End Role="MessageMaster" Type="Self.MessageMaster" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1833,7 +1857,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__TerminalM__Machi__7DEDA633">
+        <Association Name="FK__TerminalM__Machi__59E54FE7">
           <End Role="Machine" Type="Self.Machine" Multiplicity="1" />
           <End Role="TerminalMachineMapping" Type="Self.TerminalMachineMapping" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1845,7 +1869,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__TerminalM__Termi__7EE1CA6C">
+        <Association Name="FK__TerminalM__Termi__5AD97420">
           <End Role="MasterTerminal" Type="Self.MasterTerminal" Multiplicity="1" />
           <End Role="TerminalMachineMapping" Type="Self.TerminalMachineMapping" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1857,7 +1881,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__UserLog__BatchId__3AC1AA49">
+        <Association Name="FK__UserLog__BatchId__5CC1BC92">
           <End Role="Batch" Type="Self.Batch" Multiplicity="0..1" />
           <End Role="UserLog" Type="Self.UserLog" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1869,7 +1893,31 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__UserMachi__Creat__11007AA7">
+        <Association Name="FK__UserLog__Machine__5BCD9859">
+          <End Role="Machine" Type="Self.Machine" Multiplicity="0..1" />
+          <End Role="UserLog" Type="Self.UserLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Machine">
+              <PropertyRef Name="MachineId" />
+            </Principal>
+            <Dependent Role="UserLog">
+              <PropertyRef Name="MachineId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserLog__Termina__2AAB3E11">
+          <End Role="TerminalType" Type="Self.TerminalType" Multiplicity="0..1" />
+          <End Role="UserLog" Type="Self.UserLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TerminalType">
+              <PropertyRef Name="TerminalTypeId" />
+            </Principal>
+            <Dependent Role="UserLog">
+              <PropertyRef Name="TerminalTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserMachi__Creat__60924D76">
           <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
           <End Role="UserMachineMapping" Type="Self.UserMachineMapping" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1881,7 +1929,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__UserMachi__UserI__353DDB1D">
+        <Association Name="FK__UserMachi__UserI__618671AF">
           <End Role="Users" Type="Self.Users" Multiplicity="1" />
           <End Role="UserMachineMapping" Type="Self.UserMachineMapping" Multiplicity="*" />
           <ReferentialConstraint>
@@ -3057,6 +3105,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_DisplayObjectColor_Views">
+          <End Role="Views" Type="Self.Views" Multiplicity="1" />
+          <End Role="DisplayObjectColor" Type="Self.DisplayObjectColor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Views">
+              <PropertyRef Name="ViewsId" />
+            </Principal>
+            <Dependent Role="DisplayObjectColor">
+              <PropertyRef Name="ViewsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_EndOfLine_Status">
           <End Role="Status" Type="Self.Status" Multiplicity="0..1" />
           <End Role="EndOfLine" Type="Self.EndOfLine" Multiplicity="*" />
@@ -3486,6 +3546,18 @@
             </Principal>
             <Dependent Role="LineMaintenanceSchedule">
               <PropertyRef Name="UpdatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ListDisplay_ViewId">
+          <End Role="Views" Type="Self.Views" Multiplicity="0..1" />
+          <End Role="ListDisplay" Type="Self.ListDisplay" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Views">
+              <PropertyRef Name="ViewsId" />
+            </Principal>
+            <Dependent Role="ListDisplay">
+              <PropertyRef Name="ViewId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -5553,6 +5625,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Views_Views">
+          <End Role="Views" Type="Self.Views" Multiplicity="1" />
+          <End Role="Views1" Type="Self.Views" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Views">
+              <PropertyRef Name="ViewsId" />
+            </Principal>
+            <Dependent Role="Views1">
+              <PropertyRef Name="ViewsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ViewsAccess_Module">
           <End Role="Module" Type="Self.Module" Multiplicity="0..1" />
           <End Role="ViewsAccess" Type="Self.ViewsAccess" Multiplicity="*" />
@@ -5684,6 +5768,7 @@
           <EntitySet Name="DateFormatType" EntityType="Self.DateFormatType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Desiccant" EntityType="Self.Desiccant" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DisplayObjectColor" EntityType="Self.DisplayObjectColor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EndOfLine" EntityType="Self.EndOfLine" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EnvironmentVariable" EntityType="Self.EnvironmentVariable" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Exception" EntityType="Self.Exception" Schema="dbo" store:Type="Tables" />
@@ -5759,67 +5844,75 @@
           <EntitySet Name="ViewFieldAuthentication" EntityType="Self.ViewFieldAuthentication" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Views" EntityType="Self.Views" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ViewsAccess" EntityType="Self.ViewsAccess" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__AccessLev__Proto__5669C4BE" Association="Self.FK__AccessLev__Proto__5669C4BE">
+          <AssociationSet Name="FK__AccessLev__Proto__3AD6B8E2" Association="Self.FK__AccessLev__Proto__3AD6B8E2">
             <End Role="Protocol" EntitySet="Protocol" />
             <End Role="AccessLevel" EntitySet="AccessLevel" />
           </AssociationSet>
-          <AssociationSet Name="FK__BatchRunD__ViewF__1A1FD08D" Association="Self.FK__BatchRunD__ViewF__1A1FD08D">
+          <AssociationSet Name="FK__BatchRunD__ViewF__6E565CE8" Association="Self.FK__BatchRunD__ViewF__6E565CE8">
             <End Role="ViewField" EntitySet="ViewField" />
             <End Role="BatchRunData" EntitySet="BatchRunData" />
           </AssociationSet>
-          <AssociationSet Name="FK__ImportLog__UserI__62CF9BA3" Association="Self.FK__ImportLog__UserI__62CF9BA3">
+          <AssociationSet Name="FK__ImportLog__UserI__21D600EE" Association="Self.FK__ImportLog__UserI__21D600EE">
             <End Role="Users" EntitySet="Users" />
             <End Role="ImportLog" EntitySet="ImportLog" />
           </AssociationSet>
-          <AssociationSet Name="FK__IPCParame__Attri__261B931E" Association="Self.FK__IPCParame__Attri__261B931E">
+          <AssociationSet Name="FK__IPCParame__Attri__22CA2527" Association="Self.FK__IPCParame__Attri__22CA2527">
             <End Role="Attribute" EntitySet="Attribute" />
             <End Role="IPCParameter" EntitySet="IPCParameter" />
           </AssociationSet>
-          <AssociationSet Name="FK__IPCParame__Attri__50B0EB68" Association="Self.FK__IPCParame__Attri__50B0EB68">
+          <AssociationSet Name="FK__IPCParame__Attri__23BE4960" Association="Self.FK__IPCParame__Attri__23BE4960">
             <End Role="Attribute" EntitySet="Attribute" />
             <End Role="IPCParameter" EntitySet="IPCParameter" />
           </AssociationSet>
-          <AssociationSet Name="FK__MachineCo__CpuTy__12149A71" Association="Self.FK__MachineCo__CpuTy__12149A71">
+          <AssociationSet Name="FK__MachineCo__CpuTy__4707859D" Association="Self.FK__MachineCo__CpuTy__4707859D">
             <End Role="PickListValue" EntitySet="PickListValue" />
             <End Role="MachineCommunication" EntitySet="MachineCommunication" />
           </AssociationSet>
-          <AssociationSet Name="FK__MachineCo__Secur__51A50FA1" Association="Self.FK__MachineCo__Secur__51A50FA1">
+          <AssociationSet Name="FK__MachineCo__Secur__47FBA9D6" Association="Self.FK__MachineCo__Secur__47FBA9D6">
             <End Role="PickListValue" EntitySet="PickListValue" />
             <End Role="MachineCommunication" EntitySet="MachineCommunication" />
           </AssociationSet>
-          <AssociationSet Name="FK__MachineCo__Secur__529933DA" Association="Self.FK__MachineCo__Secur__529933DA">
+          <AssociationSet Name="FK__MachineCo__Secur__48EFCE0F" Association="Self.FK__MachineCo__Secur__48EFCE0F">
             <End Role="PickListValue" EntitySet="PickListValue" />
             <End Role="MachineCommunication" EntitySet="MachineCommunication" />
           </AssociationSet>
-          <AssociationSet Name="FK__MachineCo__UserI__538D5813" Association="Self.FK__MachineCo__UserI__538D5813">
+          <AssociationSet Name="FK__MachineCo__UserI__49E3F248" Association="Self.FK__MachineCo__UserI__49E3F248">
             <End Role="PickListValue" EntitySet="PickListValue" />
             <End Role="MachineCommunication" EntitySet="MachineCommunication" />
           </AssociationSet>
-          <AssociationSet Name="FK__MasterTer__Termi__222B06A9" Association="Self.FK__MasterTer__Termi__222B06A9">
+          <AssociationSet Name="FK__MasterTer__Termi__0ABD916C" Association="Self.FK__MasterTer__Termi__0ABD916C">
             <End Role="TerminalType" EntitySet="TerminalType" />
             <End Role="MasterTerminal" EntitySet="MasterTerminal" />
           </AssociationSet>
-          <AssociationSet Name="FK__MessageMa__PickL__168449D3" Association="Self.FK__MessageMa__PickL__168449D3">
+          <AssociationSet Name="FK__MessageMa__PickL__0BB1B5A5" Association="Self.FK__MessageMa__PickL__0BB1B5A5">
             <End Role="PickListValue" EntitySet="PickListValue" />
             <End Role="MessageMaster" EntitySet="MessageMaster" />
           </AssociationSet>
-          <AssociationSet Name="FK__TerminalM__Machi__7DEDA633" Association="Self.FK__TerminalM__Machi__7DEDA633">
+          <AssociationSet Name="FK__TerminalM__Machi__59E54FE7" Association="Self.FK__TerminalM__Machi__59E54FE7">
             <End Role="Machine" EntitySet="Machine" />
             <End Role="TerminalMachineMapping" EntitySet="TerminalMachineMapping" />
           </AssociationSet>
-          <AssociationSet Name="FK__TerminalM__Termi__7EE1CA6C" Association="Self.FK__TerminalM__Termi__7EE1CA6C">
+          <AssociationSet Name="FK__TerminalM__Termi__5AD97420" Association="Self.FK__TerminalM__Termi__5AD97420">
             <End Role="MasterTerminal" EntitySet="MasterTerminal" />
             <End Role="TerminalMachineMapping" EntitySet="TerminalMachineMapping" />
           </AssociationSet>
-          <AssociationSet Name="FK__UserLog__BatchId__3AC1AA49" Association="Self.FK__UserLog__BatchId__3AC1AA49">
+          <AssociationSet Name="FK__UserLog__BatchId__5CC1BC92" Association="Self.FK__UserLog__BatchId__5CC1BC92">
             <End Role="Batch" EntitySet="Batch" />
             <End Role="UserLog" EntitySet="UserLog" />
           </AssociationSet>
-          <AssociationSet Name="FK__UserMachi__Creat__11007AA7" Association="Self.FK__UserMachi__Creat__11007AA7">
+          <AssociationSet Name="FK__UserLog__Machine__5BCD9859" Association="Self.FK__UserLog__Machine__5BCD9859">
+            <End Role="Machine" EntitySet="Machine" />
+            <End Role="UserLog" EntitySet="UserLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserLog__Termina__2AAB3E11" Association="Self.FK__UserLog__Termina__2AAB3E11">
+            <End Role="TerminalType" EntitySet="TerminalType" />
+            <End Role="UserLog" EntitySet="UserLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserMachi__Creat__60924D76" Association="Self.FK__UserMachi__Creat__60924D76">
             <End Role="Users" EntitySet="Users" />
             <End Role="UserMachineMapping" EntitySet="UserMachineMapping" />
           </AssociationSet>
-          <AssociationSet Name="FK__UserMachi__UserI__353DDB1D" Association="Self.FK__UserMachi__UserI__353DDB1D">
+          <AssociationSet Name="FK__UserMachi__UserI__618671AF" Association="Self.FK__UserMachi__UserI__618671AF">
             <End Role="Users" EntitySet="Users" />
             <End Role="UserMachineMapping" EntitySet="UserMachineMapping" />
           </AssociationSet>
@@ -6211,6 +6304,10 @@
             <End Role="Users" EntitySet="Users" />
             <End Role="Desiccant" EntitySet="Desiccant" />
           </AssociationSet>
+          <AssociationSet Name="FK_DisplayObjectColor_Views" Association="Self.FK_DisplayObjectColor_Views">
+            <End Role="Views" EntitySet="Views" />
+            <End Role="DisplayObjectColor" EntitySet="DisplayObjectColor" />
+          </AssociationSet>
           <AssociationSet Name="FK_EndOfLine_Status" Association="Self.FK_EndOfLine_Status">
             <End Role="Status" EntitySet="Status" />
             <End Role="EndOfLine" EntitySet="EndOfLine" />
@@ -6354,6 +6451,10 @@
           <AssociationSet Name="FK_LineMaintenanceSchedule_Users1" Association="Self.FK_LineMaintenanceSchedule_Users1">
             <End Role="Users" EntitySet="Users" />
             <End Role="LineMaintenanceSchedule" EntitySet="LineMaintenanceSchedule" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ListDisplay_ViewId" Association="Self.FK_ListDisplay_ViewId">
+            <End Role="Views" EntitySet="Views" />
+            <End Role="ListDisplay" EntitySet="ListDisplay" />
           </AssociationSet>
           <AssociationSet Name="FK_Machine_MachineId" Association="Self.FK_Machine_MachineId">
             <End Role="Machine" EntitySet="Machine" />
@@ -7042,6 +7143,10 @@
           <AssociationSet Name="FK_Views_Users1" Association="Self.FK_Views_Users1">
             <End Role="Users" EntitySet="Users" />
             <End Role="Views" EntitySet="Views" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Views_Views" Association="Self.FK_Views_Views">
+            <End Role="Views" EntitySet="Views" />
+            <End Role="Views1" EntitySet="Views" />
           </AssociationSet>
           <AssociationSet Name="FK_ViewsAccess_Module" Association="Self.FK_ViewsAccess_Module">
             <End Role="Module" EntitySet="Module" />
@@ -8560,6 +8665,27 @@
             <End Role="ButtonDisplay" EntitySet="ButtonDisplays" />
             <End Role="View" EntitySet="Views" />
           </AssociationSet>
+          <EntitySet Name="DisplayObjectColors" EntityType="CVCModel.DisplayObjectColor" />
+          <AssociationSet Name="FK_DisplayObjectColor_Views" Association="CVCModel.FK_DisplayObjectColor_Views">
+            <End Role="View" EntitySet="Views" />
+            <End Role="DisplayObjectColor" EntitySet="DisplayObjectColors" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ListDisplay_ViewId" Association="CVCModel.FK_ListDisplay_ViewId">
+            <End Role="View" EntitySet="Views" />
+            <End Role="ListDisplay" EntitySet="ListDisplays" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserLog__Machine__5BCD9859" Association="CVCModel.FK__UserLog__Machine__5BCD9859">
+            <End Role="Machine" EntitySet="Machines" />
+            <End Role="UserLog" EntitySet="UserLogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserLog__Termina__2AAB3E11" Association="CVCModel.FK__UserLog__Termina__2AAB3E11">
+            <End Role="TerminalType" EntitySet="TerminalTypes" />
+            <End Role="UserLog" EntitySet="UserLogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Views_Views" Association="CVCModel.FK_Views_Views">
+            <End Role="View" EntitySet="Views" />
+            <End Role="View1" EntitySet="Views" />
+          </AssociationSet>
           </EntityContainer>
         <ComplexType Name="BackupData_Result">
           <Property Type="Int32" Name="Column1" Nullable="true" />
@@ -9207,6 +9333,7 @@
           <NavigationProperty Name="TimeFormatType" Relationship="CVCModel.FK_TimeFormatType_TimeFormatValue" FromRole="EnvironmentVariable" ToRole="TimeFormatType" />
           <Property Name="DatabaseLimit" Type="Int32" />
           <Property Name="LicenseExpiryNotification" Type="Int32" />
+          <Property Name="ScreenshotCapturePath" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Exception">
           <Key>
@@ -9482,6 +9609,7 @@
           <Property Name="TableId" Type="Int32" />
           <Property Name="TableName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Views" Relationship="CVCModel.FK_Views_MachineId" FromRole="Machine" ToRole="View" />
+          <NavigationProperty Name="UserLogs" Relationship="CVCModel.FK__UserLog__Machine__5BCD9859" FromRole="Machine" ToRole="UserLog" />
         </EntityType>
         <EntityType Name="MachineCommunication">
           <Key>
@@ -9696,6 +9824,8 @@
           <Property Name="ColumnName" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
           <Property Name="PickListId" Type="Int32" />
           <NavigationProperty Name="PickList" Relationship="CVCModel.FK_MachineParameter_PickList" FromRole="MachineParameter" ToRole="PickList" />
+          <Property Name="IsRoundOff" Type="Boolean" />
+          <Property Name="RoundOffDigits" Type="Int32" />
         </EntityType>
         <EntityType Name="MachineRecipe">
           <Key>
@@ -10413,6 +10543,10 @@
           <Property Name="ChangedOn" Type="DateTime" Precision="3" />
           <Property Name="BatchId" Type="Int32" />
           <NavigationProperty Name="Batch" Relationship="CVCModel.FK__UserLog__BatchId__3AC1AA49" FromRole="UserLog" ToRole="Batch" />
+          <Property Name="TerminalTypeId" Type="Int32" />
+          <Property Name="MachineId" Type="Int32" />
+          <NavigationProperty Name="Machine" Relationship="CVCModel.FK__UserLog__Machine__5BCD9859" FromRole="UserLog" ToRole="Machine" />
+          <NavigationProperty Name="TerminalType" Relationship="CVCModel.FK__UserLog__Termina__2AAB3E11" FromRole="UserLog" ToRole="TerminalType" />
         </EntityType>
         <EntityType Name="UserLogArchive">
           <Key>
@@ -10724,6 +10858,18 @@
           <NavigationProperty Name="FormDisplay" Relationship="CVCModel.FK_Views_FormDisplayId" FromRole="View" ToRole="FormDisplay" />
           <Property Name="ButtonDisplayId" Type="Int32" />
           <NavigationProperty Name="ButtonDisplay" Relationship="CVCModel.FK_Views_ButtonDisplayId" FromRole="View" ToRole="ButtonDisplay" />
+          <Property Name="RealtimeParameterDisplayId" Type="Int32" />
+          <Property Name="LineChartDisplayId" Type="Int32" />
+          <Property Name="PieChartDisplayId" Type="Int32" />
+          <Property Name="TreeDisplayId" Type="Int32" />
+          <Property Name="AttachmentDisplayId" Type="Int32" />
+          <Property Name="AlarmDisplayId" Type="Int32" />
+          <Property Name="NotificationDisplayId" Type="Int32" />
+          <Property Name="ContainerDisplayId" Type="Int32" />
+          <NavigationProperty Name="DisplayObjectColors" Relationship="CVCModel.FK_DisplayObjectColor_Views" FromRole="View" ToRole="DisplayObjectColor" />
+          <NavigationProperty Name="ListDisplays" Relationship="CVCModel.FK_ListDisplay_ViewId" FromRole="View" ToRole="ListDisplay" />
+          <NavigationProperty Name="Views1" Relationship="CVCModel.FK_Views_Views" FromRole="View" ToRole="View1" />
+          <NavigationProperty Name="View1" Relationship="CVCModel.FK_Views_Views" FromRole="View1" ToRole="View" />
         </EntityType>
         <EntityType Name="ViewsAccess">
           <Key>
@@ -14527,6 +14673,7 @@
           <Property Name="EditedOn" Type="DateTime" Precision="3" />
           <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="MasterTerminals" Relationship="CVCModel.FK__MasterTer__Termi__222B06A9" FromRole="TerminalType" ToRole="MasterTerminal" />
+          <NavigationProperty Name="UserLogs" Relationship="CVCModel.FK__UserLog__Termina__2AAB3E11" FromRole="TerminalType" ToRole="UserLog" />
         </EntityType>
         <Association Name="FK__MasterTer__Termi__222B06A9">
           <End Type="CVCModel.TerminalType" Role="TerminalType" Multiplicity="0..1" />
@@ -14847,6 +14994,8 @@
           <Property Name="Collapsible" Type="Boolean" />
           <NavigationProperty Name="Views" Relationship="CVCModel.FK_Views_ListDisplayId" FromRole="ListDisplay" ToRole="View" />
           <Property Name="ListDisplayName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ViewId" Type="Int32" />
+          <NavigationProperty Name="View" Relationship="CVCModel.FK_ListDisplay_ViewId" FromRole="ListDisplay" ToRole="View" />
         </EntityType>
         <Association Name="FK_Views_ListDisplayId">
           <End Type="CVCModel.ListDisplay" Role="ListDisplay" Multiplicity="0..1" />
@@ -14920,6 +15069,77 @@
             </Principal>
             <Dependent Role="View">
               <PropertyRef Name="ButtonDisplayId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="DisplayObjectColor">
+          <Key>
+            <PropertyRef Name="ColorId" />
+          </Key>
+          <Property Name="ColorId" Type="Int32" Nullable="false" />
+          <Property Name="RangeFrom" Type="Double" />
+          <Property Name="RangeTo" Type="Double" />
+          <Property Name="Color" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ViewsId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="View" Relationship="CVCModel.FK_DisplayObjectColor_Views" FromRole="DisplayObjectColor" ToRole="View" />
+        </EntityType>
+        <Association Name="FK_DisplayObjectColor_Views">
+          <End Type="CVCModel.View" Role="View" Multiplicity="1" />
+          <End Type="CVCModel.DisplayObjectColor" Role="DisplayObjectColor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="View">
+              <PropertyRef Name="ViewsId" />
+            </Principal>
+            <Dependent Role="DisplayObjectColor">
+              <PropertyRef Name="ViewsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ListDisplay_ViewId">
+          <End Type="CVCModel.View" Role="View" Multiplicity="0..1" />
+          <End Type="CVCModel.ListDisplay" Role="ListDisplay" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="View">
+              <PropertyRef Name="ViewsId" />
+            </Principal>
+            <Dependent Role="ListDisplay">
+              <PropertyRef Name="ViewId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserLog__Machine__5BCD9859">
+          <End Type="CVCModel.Machine" Role="Machine" Multiplicity="0..1" />
+          <End Type="CVCModel.UserLog" Role="UserLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Machine">
+              <PropertyRef Name="MachineId" />
+            </Principal>
+            <Dependent Role="UserLog">
+              <PropertyRef Name="MachineId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserLog__Termina__2AAB3E11">
+          <End Type="CVCModel.TerminalType" Role="TerminalType" Multiplicity="0..1" />
+          <End Type="CVCModel.UserLog" Role="UserLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TerminalType">
+              <PropertyRef Name="TerminalTypeId" />
+            </Principal>
+            <Dependent Role="UserLog">
+              <PropertyRef Name="TerminalTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Views_Views">
+          <End Type="CVCModel.View" Role="View" Multiplicity="1" />
+          <End Type="CVCModel.View" Role="View1" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="View">
+              <PropertyRef Name="ViewsId" />
+            </Principal>
+            <Dependent Role="View1">
+              <PropertyRef Name="ViewsId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -15432,6 +15652,7 @@
           <EntitySetMapping Name="EnvironmentVariables">
             <EntityTypeMapping TypeName="CVCModel.EnvironmentVariable">
               <MappingFragment StoreEntitySet="EnvironmentVariable">
+                <ScalarProperty Name="ScreenshotCapturePath" ColumnName="ScreenshotCapturePath" />
                 <ScalarProperty Name="LicenseExpiryNotification" ColumnName="LicenseExpiryNotification" />
                 <ScalarProperty Name="DatabaseLimit" ColumnName="DatabaseLimit" />
                 <ScalarProperty Name="PreviousPasswordLimit" ColumnName="PreviousPasswordLimit" />
@@ -15804,6 +16025,8 @@
           <EntitySetMapping Name="MachineParameters">
             <EntityTypeMapping TypeName="CVCModel.MachineParameter">
               <MappingFragment StoreEntitySet="MachineParameter">
+                <ScalarProperty Name="RoundOffDigits" ColumnName="RoundOffDigits" />
+                <ScalarProperty Name="IsRoundOff" ColumnName="IsRoundOff" />
                 <ScalarProperty Name="PickListId" ColumnName="PickListId" />
                 <ScalarProperty Name="ColumnName" ColumnName="ColumnName" />
                 <ScalarProperty Name="RecordAddedSource" ColumnName="RecordAddedSource" />
@@ -16365,6 +16588,8 @@
           <EntitySetMapping Name="UserLogs">
             <EntityTypeMapping TypeName="CVCModel.UserLog">
               <MappingFragment StoreEntitySet="UserLog">
+                <ScalarProperty Name="MachineId" ColumnName="MachineId" />
+                <ScalarProperty Name="TerminalTypeId" ColumnName="TerminalTypeId" />
                 <ScalarProperty Name="BatchId" ColumnName="BatchId" />
                 <ScalarProperty Name="ChangedOn" ColumnName="ChangedOn" />
                 <ScalarProperty Name="Action" ColumnName="Action" />
@@ -16524,6 +16749,14 @@
           <EntitySetMapping Name="Views">
             <EntityTypeMapping TypeName="CVCModel.View">
               <MappingFragment StoreEntitySet="Views">
+                <ScalarProperty Name="ContainerDisplayId" ColumnName="ContainerDisplayId" />
+                <ScalarProperty Name="NotificationDisplayId" ColumnName="NotificationDisplayId" />
+                <ScalarProperty Name="AlarmDisplayId" ColumnName="AlarmDisplayId" />
+                <ScalarProperty Name="AttachmentDisplayId" ColumnName="AttachmentDisplayId" />
+                <ScalarProperty Name="TreeDisplayId" ColumnName="TreeDisplayId" />
+                <ScalarProperty Name="PieChartDisplayId" ColumnName="PieChartDisplayId" />
+                <ScalarProperty Name="LineChartDisplayId" ColumnName="LineChartDisplayId" />
+                <ScalarProperty Name="RealtimeParameterDisplayId" ColumnName="RealtimeParameterDisplayId" />
                 <ScalarProperty Name="ButtonDisplayId" ColumnName="ButtonDisplayId" />
                 <ScalarProperty Name="FormDisplayId" ColumnName="FormDisplayId" />
                 <ScalarProperty Name="ListDisplayId" ColumnName="ListDisplayId" />
@@ -16702,6 +16935,7 @@
           <EntitySetMapping Name="ListDisplays">
             <EntityTypeMapping TypeName="CVCModel.ListDisplay">
               <MappingFragment StoreEntitySet="ListDisplay">
+                <ScalarProperty Name="ViewId" ColumnName="ViewId" />
                 <ScalarProperty Name="ListDisplayName" ColumnName="ListDisplayName" />
                 <ScalarProperty Name="Collapsible" ColumnName="Collapsible" />
                 <ScalarProperty Name="AutoResize" ColumnName="AutoResize" />
@@ -16759,6 +16993,17 @@
                 <ScalarProperty Name="BackgroundColor" ColumnName="BackgroundColor" />
                 <ScalarProperty Name="ButtonDisplayName" ColumnName="ButtonDisplayName" />
                 <ScalarProperty Name="ButtonDisplayId" ColumnName="ButtonDisplayId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DisplayObjectColors">
+            <EntityTypeMapping TypeName="CVCModel.DisplayObjectColor">
+              <MappingFragment StoreEntitySet="DisplayObjectColor">
+                <ScalarProperty Name="ViewsId" ColumnName="ViewsId" />
+                <ScalarProperty Name="Color" ColumnName="Color" />
+                <ScalarProperty Name="RangeTo" ColumnName="RangeTo" />
+                <ScalarProperty Name="RangeFrom" ColumnName="RangeFrom" />
+                <ScalarProperty Name="ColorId" ColumnName="ColorId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

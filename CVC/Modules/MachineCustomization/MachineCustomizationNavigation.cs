@@ -27,3 +27,4 @@ using MyPages = CVC.MachineCustomization.Pages;
 [assembly: NavigationLink(int.MaxValue, "Entity Customization/Business Entity Relationship", typeof(MyPages.PrimaryRelationshipController), icon: null)]
 //[assembly: NavigationLink(int.MaxValue, "Entity Customization/Secondary Relationship", typeof(MyPages.SecondaryRelationshipController), icon: null)]
 [assembly: NavigationLink(int.MaxValue, "Entity Customization/Screen Views", typeof(MyPages.ScreenViewsController), icon: null)]
+[assembly: NavigationLink(int.MaxValue, "Entity Customization/Display Object Color", typeof(MyPages.DisplayObjectColorController), icon: null)]

@@ -199,7 +199,7 @@ namespace CVC.MachineCustomization.Entities
             //public Int32Field ViewId;
 
             //public StringField ViewViewName;
-            
+
             public RowFields()
               : base((string)null, "")
             {

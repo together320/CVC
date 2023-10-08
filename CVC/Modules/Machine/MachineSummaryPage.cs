@@ -4,6 +4,7 @@
 // MVID: 250FBC80-8FD8-44B6-9120-1561B0D3D414
 // Assembly location: D:\Anil\CVC\bin\CVC.Web.dll
 
+using Newtonsoft.Json.Linq;
 using AdvancedHMIDrivers;
 using CVC.Data;
 using CVC.Data.EDMX;
@@ -11,6 +12,7 @@ using CVC.MDB;
 using CVC.Modules.Common.CommonServices;
 using CVC.Modules.Common.Dashboard;
 using CVC.ViewModels;
+using Microsoft.Ajax.Utilities;
 using Serenity;
 using System;
 using System.Collections.Generic;
@@ -23,6 +25,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.SessionState;
 using static CVC.BusinessServices.Common.ClsConstants;
+using Newtonsoft.Json;
 
 namespace CVC.Machine.Pages
 {
@@ -215,90 +218,107 @@ namespace CVC.Machine.Pages
 
         }
 
-        public async Task<ActionResult> GetCustomizePreviewDataAsync(int MachineId, int ViewId)
+        [HttpPost]
+        public async Task<ActionResult> GetCustomizePreviewDataAsync(int MachineID, int ViewId)
         {
 
             CommonServices objCommonServices = new CommonServices();
-
-            var ModuleId = new CVCEntities().Modules.FirstOrDefault(a => a.MachineId == MachineId).ModuleId;
+            int ModuleId = 0;
             var Model = new MachineSummaryPageModel() { ViewFieldList = new List<DashBoardField>() };
-            Model.ViewFieldList = new List<DashBoardField>();
-            Model.ViewFieldList = await new DashboardCommon().GetDashBoardFieldAsync(ModuleId, ViewId);
-            // var batchForLabel = new DashboardCommon().GetBatchForLebelRoll();
-
-            var LabelRoll = new LabelRoll();
-
-            if (objCommonServices.CheckIsLabelRoll(ModuleId) == true)
+            using (CVCEntities cvcEntities = new CVCEntities())
             {
-                Model.IsLabelRoll = true;
-                int? machineId = 0;
-                if (Session["ModuleId"] != null)
+
+                int MachineId = MachineID;
+                var module = cvcEntities.Modules.FirstOrDefault(a => a.MachineId == MachineId);
+                ModuleId = module.ModuleId;
+
+                Model.ViewFieldList = await new DashboardCommon().GetDashBoardFieldAsync(ModuleId, ViewId);
+                // var batchForLabel = new DashboardCommon().GetBatchForLebelRoll();
+
+                var LabelRoll = new LabelRoll();
+
+                // if (objCommonServices.CheckIsLabelRoll(ModuleId) == true)
+                // {
+                //     Model.IsLabelRoll = true;
+                //     int? machineId = 0;
+                //     if (Session["ModuleId"] != null)
+                //     {
+                //         string moduleId = Session["ModuleId"].ToString();
+                //         machineId = new DashboardCommon().GetMachineId(moduleId);
+                //         LabelRoll = objCommonServices.GetLabelRollDetails(machineId);
+                //         if (LabelRoll != null)
+                //         {
+                //             Model.ViewFieldList.Add(new DashBoardField() { ParameterName = "Label Roll", Value = LabelRoll.LabelRollNumber.ToString(), IPCAddress = "NA" });
+                //             System.Web.HttpContext.Current.Cache["LabelRollNumber"] = LabelRoll.LabelRollNumber;
+                //             System.Web.HttpContext.Current.Cache["NumberOfLabels"] = LabelRoll.NumberOfLabels;
+                //             System.Web.HttpContext.Current.Cache["LabelRollId"] = LabelRoll.LabelRollId;
+                //             //  Model.ViewFieldList.Add(new DashBoardField() { ParameterName = "Label On Rolls", Value = LabelRoll.NumberOfLabels.ToString(), IPCAddress = "NA" });
+                //         }
+                //     }
+                // }
+                Model.ViewFieldList = Model.ViewFieldList.Where(a => a.IPCAddress != null).ToList();
+
+
+                // Model.ViewFieldList = Model.ViewFieldList.Where(a => a.IPCAddress != null).OrderByDescending(a => a.IsMachineSpeed).ToList();
+                if (Model.ViewFieldList.Count > 0)
                 {
-                    string moduleId = Session["ModuleId"].ToString();
-                    machineId = new DashboardCommon().GetMachineId(moduleId);
-                    LabelRoll = objCommonServices.GetLabelRollDetails(machineId);
-                    if (LabelRoll != null)
+                    Model.MachineParameterId = Model.ViewFieldList?.Where(a => a.MachineParameterId > 0)?.FirstOrDefault()?.MachineParameterId ?? 0;
+                    var machineCommunication = new CVC.BusinessServices.Common.CommonServices().GetMachineCommunicationDetails(Model.MachineParameterId);
+                    if (machineCommunication != null)
                     {
-                        Model.ViewFieldList.Add(new DashBoardField() { ParameterName = "Label Roll", Value = LabelRoll.LabelRollNumber.ToString(), IPCAddress = "NA" });
-                        System.Web.HttpContext.Current.Cache["LabelRollNumber"] = LabelRoll.LabelRollNumber;
-                        System.Web.HttpContext.Current.Cache["NumberOfLabels"] = LabelRoll.NumberOfLabels;
-                        System.Web.HttpContext.Current.Cache["LabelRollId"] = LabelRoll.LabelRollId;
-                        //  Model.ViewFieldList.Add(new DashBoardField() { ParameterName = "Label On Rolls", Value = LabelRoll.NumberOfLabels.ToString(), IPCAddress = "NA" });
+                        Model.ProtocolType = machineCommunication.Protocol.ProtocolName;
+                        Model.IPAddress = machineCommunication.IPAddress;
+                        Model.TcpipPort = ushort.Parse(machineCommunication.TCPIPPort.ToString());
+                        Model.PollRateOverride = machineCommunication?.PollRate ?? 100;
+
+                        if (Model.ProtocolType.ToUpper() == ProtocolType.MDB.ToUpper())
+                        {
+                            Model.MDBPath = machineCommunication.MDBPath;
+                        }
+                        else if (Model.ProtocolType.ToUpper() == ProtocolType.OPCUaClient.ToUpper())
+                        {
+
+                            Model.UserName = machineCommunication.UserName;
+                            Model.Password = machineCommunication.Password;
+                        }
+                        else if (Model.ProtocolType.ToUpper() == ProtocolType.SiemensS7Net.ToUpper())
+                        {
+                            Model.CpuType = machineCommunication?.PickListValue6?.PickList?.PickListName;
+                            Model.Rack = machineCommunication.Rack;
+                            Model.Slot = machineCommunication.Slot;
+                        }
+
+
                     }
+                    Model.MachineId = new DashboardCommon().GetMachineId(Convert.ToString(ModuleId));
+                    System.Web.HttpContext.Current.Cache.Remove("CustomizePreview");
+                    System.Web.HttpContext.Current.Cache["CustomizePreview"] = Model;
+                }
+                else
+                {
+                    System.Web.HttpContext.Current.Cache.Remove("CustomizePreview");
+                }
+
+                if (LabelRoll == null)
+                {
+                    System.Web.HttpContext.Current.Cache.Remove("LabelRollNumber");
+                    System.Web.HttpContext.Current.Cache.Remove("NumberOfLabels");
+                    System.Web.HttpContext.Current.Cache.Remove("LabelRollId");
                 }
             }
-            Model.ViewFieldList = Model.ViewFieldList.Where(a => a.IPCAddress != null).ToList();
 
-
-            // Model.ViewFieldList = Model.ViewFieldList.Where(a => a.IPCAddress != null).OrderByDescending(a => a.IsMachineSpeed).ToList();
-            if (Model.ViewFieldList.Count > 0)
+            JArray jDataArr = new JArray();
+            foreach (var item in Model.ViewFieldList)
             {
-                Model.MachineParameterId = Model.ViewFieldList?.Where(a => a.MachineParameterId > 0)?.FirstOrDefault()?.MachineParameterId ?? 0;
-                var machineCommunication = new CVC.BusinessServices.Common.CommonServices().GetMachineCommunicationDetails(Model.MachineParameterId);
-                if (machineCommunication != null)
-                {
-                    Model.ProtocolType = machineCommunication.Protocol.ProtocolName;
-                    Model.IPAddress = machineCommunication.IPAddress;
-                    Model.TcpipPort = ushort.Parse(machineCommunication.TCPIPPort.ToString());
-                    Model.PollRateOverride = machineCommunication?.PollRate ?? 100;
-
-                    if (Model.ProtocolType.ToUpper() == ProtocolType.MDB.ToUpper())
-                    {
-                        Model.MDBPath = machineCommunication.MDBPath;
-                    }
-                    else if (Model.ProtocolType.ToUpper() == ProtocolType.OPCUaClient.ToUpper())
-                    {
-
-                        Model.UserName = machineCommunication.UserName;
-                        Model.Password = machineCommunication.Password;
-                    }
-                    else if (Model.ProtocolType.ToUpper() == ProtocolType.SiemensS7Net.ToUpper())
-                    {
-                        Model.CpuType = machineCommunication?.PickListValue6?.PickList?.PickListName;
-                        Model.Rack = machineCommunication.Rack;
-                        Model.Slot = machineCommunication.Slot;
-                    }
-
-
-                }
-                Model.MachineId = new DashboardCommon().GetMachineId(Convert.ToString(ModuleId));
-                System.Web.HttpContext.Current.Cache.Remove("CustomizePreview");
-                System.Web.HttpContext.Current.Cache["CustomizePreview"] = Model;
-            }
-            else
-            {
-                System.Web.HttpContext.Current.Cache.Remove("CustomizePreview");
+                JObject jObj = new JObject{
+                    {"ParameterName", item.ParameterName},
+                    {"Value", item.Value}
+                };
+                jDataArr.Add(jObj);
             }
 
-            if (LabelRoll == null)
-            {
-                System.Web.HttpContext.Current.Cache.Remove("LabelRollNumber");
-                System.Web.HttpContext.Current.Cache.Remove("NumberOfLabels");
-                System.Web.HttpContext.Current.Cache.Remove("LabelRollId");
-            }
-
-            return Json(Model.ViewFieldList, JsonRequestBehavior.AllowGet); // part to customize
-
+            return Json(jDataArr.ToString(), JsonRequestBehavior.AllowGet); // part to customize
+            // return "hi, checked";
         }
 
         public ActionResult IndexAjax(int ModuleId)

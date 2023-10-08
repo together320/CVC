@@ -29,24 +29,24 @@ namespace CVC
         public void Send(string name, string message)
         {
 
-             int? moduleId = 0;
-             int? machineParameterId = 0;
-             int? value = 0;
-             int? incrementalNumber = 0;
-             int? endNumber = 0;
+            int? moduleId = 0;
+            int? machineParameterId = 0;
+            int? value = 0;
+            int? incrementalNumber = 0;
+            int? endNumber = 0;
             CommandPanelPageModel model;
             MachineSummaryPageModel msp;
             AlarmSummaryController asc = new AlarmSummaryController();
-            var mspResponse =string.Empty;
+            var mspResponse = string.Empty;
             var cpResponse = string.Empty;
-            var apResponse = string.Empty;;
+            var apResponse = string.Empty; ;
             var apJsonResult = new JsonResult();
             var record = new string[] { };
             var shbresponse = string.Empty;
             // var heartBeatValue = "";
             try
             {
-             
+
 
                 if (name.Contains("alarmmachine") || name.Contains("raisealarm"))
                 {
@@ -189,7 +189,7 @@ namespace CVC
             {
                 name = null;
                 message = null;
-                moduleId = null;        
+                moduleId = null;
                 value = null;
                 incrementalNumber = null;
                 endNumber = null;
@@ -204,11 +204,11 @@ namespace CVC
                 record = null;
                 Clients = null;
                 machineParameterId = null;
-                shbresponse = string.Empty;           
+                shbresponse = string.Empty;
             }
         }
 
-        private  CommandPanelPageModel ReadCommandPanel()
+        private CommandPanelPageModel ReadCommandPanel()
         {
             CommandPanelController cpc = new CommandPanelController();
             var CommandPanel = new CommandPanelPageModel();
@@ -219,7 +219,7 @@ namespace CVC
 
                 CommandPanel = (CommandPanelPageModel)HttpContext.Current.Cache["CommandPanel"];
 
-                if (CommandPanel.ProtocolType.ToUpper() ==ProtocolType.MDB.ToUpper())
+                if (CommandPanel.ProtocolType.ToUpper() == ProtocolType.MDB.ToUpper())
                 {
                     return cpc.CallMDBMachineCommandPanel(CommandPanel);
                 }
@@ -227,9 +227,9 @@ namespace CVC
                 {
                     return cpc.CallPLCMachineCommandPanel(CommandPanel);
                 }
-               else if (CommandPanel.ProtocolType.ToUpper() == ProtocolType.OPCUaClient.ToUpper())
+                else if (CommandPanel.ProtocolType.ToUpper() == ProtocolType.OPCUaClient.ToUpper())
                 {
-                  return clsOpcUaClient.ReadCommandPanel(CommandPanel);
+                    return clsOpcUaClient.ReadCommandPanel(CommandPanel);
                 }
                 else if (CommandPanel.ProtocolType.ToUpper() == ProtocolType.SiemensS7Net.ToUpper())
                 {
@@ -261,16 +261,16 @@ namespace CVC
             try
             {
                 MachineSummaryPanel = (MachineSummaryPageModel)HttpContext.Current.Cache["MachineSummary"];
-                
-                if (MachineSummaryPanel.ProtocolType.ToUpper() ==ProtocolType.MDB.ToUpper())
+
+                if (MachineSummaryPanel.ProtocolType.ToUpper() == ProtocolType.MDB.ToUpper())
                 {
                     return msc.CallMDBMachineSummaryPanel(MachineSummaryPanel);
                 }
-               else if (MachineSummaryPanel.ProtocolType.ToUpper().Contains(ProtocolType.Modbus.ToUpper()))
+                else if (MachineSummaryPanel.ProtocolType.ToUpper().Contains(ProtocolType.Modbus.ToUpper()))
                 {
                     return msc.CallPLCMachineSummaryPanel(MachineSummaryPanel);
                 }
-               else if (MachineSummaryPanel.ProtocolType.ToUpper() == ProtocolType.OPCUaClient.ToUpper())
+                else if (MachineSummaryPanel.ProtocolType.ToUpper() == ProtocolType.OPCUaClient.ToUpper())
                 {
                     return clsOpcUaClient.ReadMachineSummaryPanel(MachineSummaryPanel);
                 }
@@ -304,17 +304,17 @@ namespace CVC
 
             try
             {
-                MachineSummaryPanel = (MachineSummaryPageModel)HttpContext.Current.Cache["customizePreview"];
-                
-                if (MachineSummaryPanel.ProtocolType.ToUpper() ==ProtocolType.MDB.ToUpper())
+                MachineSummaryPanel = (MachineSummaryPageModel)HttpContext.Current.Cache["CustomizePreview"];
+
+                if (MachineSummaryPanel.ProtocolType.ToUpper() == ProtocolType.MDB.ToUpper())
                 {
                     return msc.CallMDBMachineSummaryPanel(MachineSummaryPanel);
                 }
-               else if (MachineSummaryPanel.ProtocolType.ToUpper().Contains(ProtocolType.Modbus.ToUpper()))
+                else if (MachineSummaryPanel.ProtocolType.ToUpper().Contains(ProtocolType.Modbus.ToUpper()))
                 {
                     return msc.CallPLCMachineSummaryPanel(MachineSummaryPanel);
                 }
-               else if (MachineSummaryPanel.ProtocolType.ToUpper() == ProtocolType.OPCUaClient.ToUpper())
+                else if (MachineSummaryPanel.ProtocolType.ToUpper() == ProtocolType.OPCUaClient.ToUpper())
                 {
                     return clsOpcUaClient.ReadMachineSummaryPanel(MachineSummaryPanel);
                 }
@@ -337,7 +337,7 @@ namespace CVC
 
         }
 
-     
+
         //private AlarmPageModel GetAlarm(int moduleId)
         //{
         //    var Model = new AlarmPageModel();

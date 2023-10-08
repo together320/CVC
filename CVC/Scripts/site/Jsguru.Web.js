@@ -2928,6 +2928,110 @@ var CVC;
 (function (CVC) {
     var MachineCustomization;
     (function (MachineCustomization) {
+        var DisplayObjectColorForm = /** @class */ (function (_super) {
+            __extends(DisplayObjectColorForm, _super);
+            function DisplayObjectColorForm() {
+                return _super !== null && _super.apply(this, arguments) || this;
+            }
+            DisplayObjectColorForm.formKey = 'MachineCustomization.DisplayObjectColor';
+            return DisplayObjectColorForm;
+        }(Serenity.PrefixedContext));
+        MachineCustomization.DisplayObjectColorForm = DisplayObjectColorForm;
+        [,
+            ['RangeFrom', function () { return Serenity.DecimalEditor; }],
+            ['RangeTo', function () { return Serenity.DecimalEditor; }],
+            ['Color', function () { return Serenity.StringEditor; }],
+            ['ViewsId', function () { return Serenity.IntegerEditor; }]
+        ].forEach(function (x) { return Object.defineProperty(DisplayObjectColorForm.prototype, x[0], {
+            get: function () {
+                return this.w(x[0], x[1]());
+            },
+            enumerable: true,
+            configurable: true
+        }); });
+    })(MachineCustomization = CVC.MachineCustomization || (CVC.MachineCustomization = {}));
+})(CVC || (CVC = {}));
+var CVC;
+(function (CVC) {
+    var MachineCustomization;
+    (function (MachineCustomization) {
+        var DisplayObjectColorRow;
+        (function (DisplayObjectColorRow) {
+            DisplayObjectColorRow.idProperty = 'ColorId';
+            DisplayObjectColorRow.nameProperty = 'Color';
+            DisplayObjectColorRow.localTextPrefix = 'MachineCustomization.DisplayObjectColor';
+            DisplayObjectColorRow.deletePermission = 'Administration:General';
+            DisplayObjectColorRow.insertPermission = 'Administration:General';
+            DisplayObjectColorRow.readPermission = 'Administration:General';
+            DisplayObjectColorRow.updatePermission = 'Administration:General';
+            var Fields;
+            (function (Fields) {
+            })(Fields = DisplayObjectColorRow.Fields || (DisplayObjectColorRow.Fields = {}));
+            [
+                'ColorId',
+                'RangeFrom',
+                'RangeTo',
+                'Color',
+                'ViewsId',
+                'ViewsModuleId',
+                'ViewsViewName',
+                'ViewsIsAccessFieldWise',
+                'ViewsStatusId',
+                'ViewsCreatedBy',
+                'ViewsCreatedDate',
+                'ViewsUpdatedBy',
+                'ViewsUpdatedDate',
+                'ViewsIsMachineSettings',
+                'ViewsIsMachineSummary',
+                'ViewsIslabelRoll',
+                'ViewsIsCommandPanel',
+                'ViewsIsFactorySetting',
+                'ViewsDisplayObjectTypeId',
+                'ViewsMachineId',
+                'ViewsListDisplayId',
+                'ViewsFormDisplayId',
+                'ViewsButtonDisplayId',
+                'ViewsRealtimeParameterDisplayId',
+                'ViewsLineChartDisplayId',
+                'ViewsPieChartDisplayId',
+                'ViewsTreeDisplayId',
+                'ViewsAttachmentDisplayId',
+                'ViewsAlarmDisplayId',
+                'ViewsNotificationDisplayId',
+                'ViewsContainerDisplayId'
+            ].forEach(function (x) { return Fields[x] = x; });
+        })(DisplayObjectColorRow = MachineCustomization.DisplayObjectColorRow || (MachineCustomization.DisplayObjectColorRow = {}));
+    })(MachineCustomization = CVC.MachineCustomization || (CVC.MachineCustomization = {}));
+})(CVC || (CVC = {}));
+var CVC;
+(function (CVC) {
+    var MachineCustomization;
+    (function (MachineCustomization) {
+        var DisplayObjectColorService;
+        (function (DisplayObjectColorService) {
+            DisplayObjectColorService.baseUrl = 'MachineCustomization/DisplayObjectColor';
+            var Methods;
+            (function (Methods) {
+            })(Methods = DisplayObjectColorService.Methods || (DisplayObjectColorService.Methods = {}));
+            [
+                'Create',
+                'Update',
+                'Delete',
+                'Retrieve',
+                'List'
+            ].forEach(function (x) {
+                DisplayObjectColorService[x] = function (r, s, o) {
+                    return Q.serviceRequest(DisplayObjectColorService.baseUrl + '/' + x, r, s, o);
+                };
+                Methods[x] = DisplayObjectColorService.baseUrl + '/' + x;
+            });
+        })(DisplayObjectColorService = MachineCustomization.DisplayObjectColorService || (MachineCustomization.DisplayObjectColorService = {}));
+    })(MachineCustomization = CVC.MachineCustomization || (CVC.MachineCustomization = {}));
+})(CVC || (CVC = {}));
+var CVC;
+(function (CVC) {
+    var MachineCustomization;
+    (function (MachineCustomization) {
         var DisplayObjectFieldForm = /** @class */ (function (_super) {
             __extends(DisplayObjectFieldForm, _super);
             function DisplayObjectFieldForm(prefix) {
@@ -7661,17 +7765,17 @@ var CVC;
             opt.title = Q.text('Site.BasicProgressDialog.PleaseWait');
             opt.width = 600;
             opt.buttons = [{
-                text: Q.text('Dialogs.CancelButton'),
-                click: function () {
-                    _this.cancelled = true;
-                    _this.element.closest('.ui-dialog')
-                        .find('.ui-dialog-buttonpane .ui-button')
-                        .attr('disabled', 'disabled')
-                        .css('opacity', '0.5');
-                    _this.element.dialog('option', 'title', Q.trimToNull(_this.cancelTitle) ||
-                        Q.text('Site.BasicProgressDialog.CancelTitle'));
-                }
-            }];
+                    text: Q.text('Dialogs.CancelButton'),
+                    click: function () {
+                        _this.cancelled = true;
+                        _this.element.closest('.ui-dialog')
+                            .find('.ui-dialog-buttonpane .ui-button')
+                            .attr('disabled', 'disabled')
+                            .css('opacity', '0.5');
+                        _this.element.dialog('option', 'title', Q.trimToNull(_this.cancelTitle) ||
+                            Q.text('Site.BasicProgressDialog.CancelTitle'));
+                    }
+                }];
             return opt;
         };
         BasicProgressDialog.prototype.initDialog = function () {
@@ -8012,16 +8116,16 @@ var CVC;
             GridEditorBase.prototype.getButtons = function () {
                 var _this = this;
                 return [{
-                    title: this.getAddButtonCaption(),
-                    cssClass: 'add-button',
-                    onClick: function () {
-                        _this.createEntityDialog(_this.getItemType(), function (dlg) {
-                            var dialog = dlg;
-                            dialog.onSave = function (opt, callback) { return _this.save(opt, callback); };
-                            dialog.loadEntityAndOpenDialog(_this.getNewEntity());
-                        });
-                    }
-                }];
+                        title: this.getAddButtonCaption(),
+                        cssClass: 'add-button',
+                        onClick: function () {
+                            _this.createEntityDialog(_this.getItemType(), function (dlg) {
+                                var dialog = dlg;
+                                dialog.onSave = function (opt, callback) { return _this.save(opt, callback); };
+                                dialog.loadEntityAndOpenDialog(_this.getNewEntity());
+                            });
+                        }
+                    }];
             };
             GridEditorBase.prototype.editItem = function (entityOrId) {
                 var _this = this;
@@ -8090,10 +8194,8 @@ var CVC;
                     columns.unshift({
                         field: 'Delete Row',
                         name: '',
-                        format: function (ctx) {
-                            return '<a class="inline-action delete-row" title="delete">' +
-                                '<i class="fa fa-trash-o text-red"></i></a>';
-                        },
+                        format: function (ctx) { return '<a class="inline-action delete-row" title="delete">' +
+                            '<i class="fa fa-trash-o text-red"></i></a>'; },
                         width: 24,
                         minWidth: 24,
                         maxWidth: 24
@@ -8683,6 +8785,56 @@ var CVC;
             return DisplayObjectLookupEditor;
         }(Serenity.LookupEditorBase));
         MachineCustomization.DisplayObjectLookupEditor = DisplayObjectLookupEditor;
+    })(MachineCustomization = CVC.MachineCustomization || (CVC.MachineCustomization = {}));
+})(CVC || (CVC = {}));
+var CVC;
+(function (CVC) {
+    var MachineCustomization;
+    (function (MachineCustomization) {
+        var DisplayObjectColorDialog = /** @class */ (function (_super) {
+            __extends(DisplayObjectColorDialog, _super);
+            function DisplayObjectColorDialog() {
+                var _this = _super !== null && _super.apply(this, arguments) || this;
+                _this.form = new MachineCustomization.DisplayObjectColorForm(_this.idPrefix);
+                return _this;
+            }
+            DisplayObjectColorDialog.prototype.getFormKey = function () { return MachineCustomization.DisplayObjectColorForm.formKey; };
+            DisplayObjectColorDialog.prototype.getIdProperty = function () { return MachineCustomization.DisplayObjectColorRow.idProperty; };
+            DisplayObjectColorDialog.prototype.getLocalTextPrefix = function () { return MachineCustomization.DisplayObjectColorRow.localTextPrefix; };
+            DisplayObjectColorDialog.prototype.getNameProperty = function () { return MachineCustomization.DisplayObjectColorRow.nameProperty; };
+            DisplayObjectColorDialog.prototype.getService = function () { return MachineCustomization.DisplayObjectColorService.baseUrl; };
+            DisplayObjectColorDialog.prototype.getDeletePermission = function () { return MachineCustomization.DisplayObjectColorRow.deletePermission; };
+            DisplayObjectColorDialog.prototype.getInsertPermission = function () { return MachineCustomization.DisplayObjectColorRow.insertPermission; };
+            DisplayObjectColorDialog.prototype.getUpdatePermission = function () { return MachineCustomization.DisplayObjectColorRow.updatePermission; };
+            DisplayObjectColorDialog = __decorate([
+                Serenity.Decorators.registerClass()
+            ], DisplayObjectColorDialog);
+            return DisplayObjectColorDialog;
+        }(Serenity.EntityDialog));
+        MachineCustomization.DisplayObjectColorDialog = DisplayObjectColorDialog;
+    })(MachineCustomization = CVC.MachineCustomization || (CVC.MachineCustomization = {}));
+})(CVC || (CVC = {}));
+var CVC;
+(function (CVC) {
+    var MachineCustomization;
+    (function (MachineCustomization) {
+        var DisplayObjectColorGrid = /** @class */ (function (_super) {
+            __extends(DisplayObjectColorGrid, _super);
+            function DisplayObjectColorGrid(container) {
+                return _super.call(this, container) || this;
+            }
+            DisplayObjectColorGrid.prototype.getColumnsKey = function () { return 'MachineCustomization.DisplayObjectColor'; };
+            DisplayObjectColorGrid.prototype.getDialogType = function () { return MachineCustomization.DisplayObjectColorDialog; };
+            DisplayObjectColorGrid.prototype.getIdProperty = function () { return MachineCustomization.DisplayObjectColorRow.idProperty; };
+            DisplayObjectColorGrid.prototype.getInsertPermission = function () { return MachineCustomization.DisplayObjectColorRow.insertPermission; };
+            DisplayObjectColorGrid.prototype.getLocalTextPrefix = function () { return MachineCustomization.DisplayObjectColorRow.localTextPrefix; };
+            DisplayObjectColorGrid.prototype.getService = function () { return MachineCustomization.DisplayObjectColorService.baseUrl; };
+            DisplayObjectColorGrid = __decorate([
+                Serenity.Decorators.registerClass()
+            ], DisplayObjectColorGrid);
+            return DisplayObjectColorGrid;
+        }(Serenity.EntityGrid));
+        MachineCustomization.DisplayObjectColorGrid = DisplayObjectColorGrid;
     })(MachineCustomization = CVC.MachineCustomization || (CVC.MachineCustomization = {}));
 })(CVC || (CVC = {}));
 var CVC;

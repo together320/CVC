@@ -53,6 +53,7 @@ namespace CVC.Data.EDMX
         public Nullable<int> PreviousPasswordLimit { get; set; }
         public Nullable<int> DatabaseLimit { get; set; }
         public Nullable<int> LicenseExpiryNotification { get; set; }
+        public string ScreenshotCapturePath { get; set; }
     
         public virtual DateFormatType DateFormatType { get; set; }
         public virtual User User { get; set; }

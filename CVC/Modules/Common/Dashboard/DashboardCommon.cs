@@ -2424,6 +2424,30 @@ namespace CVC.Modules.Common.Dashboard
             return machineId;
         }
 
+        public bool? GetMachineRealTimeFromMachineId(int machineId)
+        {
+            bool? isRealTime;
+            using (CVCEntities cvcEntities = new CVCEntities())
+            {
+                isRealTime = cvcEntities?.Machines?.FirstOrDefault(a => a.MachineId == machineId)?.IsRealTime;
+            }
+
+            return isRealTime;
+        }
+
+        public int? GetModuleIdFromMachineId(int machineId)
+        {
+            int? moduleId = null;
+            using (CVCEntities cvcEntities = new CVCEntities())
+            {
+                var module = cvcEntities.Modules.FirstOrDefault(a => a.MachineId == machineId);
+                if (module != null)
+                    moduleId = module.ModuleId;
+            }
+            return moduleId;
+        }
+
+
         public int? GetMachineId(int? ModuleId)
         {
             using (CVCEntities cvcEntities = new CVCEntities())

@@ -113,6 +113,12 @@
 .s-MachineCustomization-ScreenViewsDialog .caption {
   width: 150px;
 }
+.s-MachineCustomization-DisplayObjectColorDialog > .size {
+  width: 650px;
+}
+.s-MachineCustomization-DisplayObjectColorDialog .caption {
+  width: 150px;
+}
 div[class*="DisplayDialog"] {
   width: 850px !important;
 }

@@ -130,6 +130,7 @@ namespace CVC.Data.EDMX
         public virtual DbSet<ListDisplay> ListDisplays { get; set; }
         public virtual DbSet<FormDisplay> FormDisplays { get; set; }
         public virtual DbSet<ButtonDisplay> ButtonDisplays { get; set; }
+        public virtual DbSet<DisplayObjectColor> DisplayObjectColors { get; set; }
     
         public virtual int Common_AuditLog(Nullable<int> p_UserId, string p_UserName, string p_Action, string p_TableName, Nullable<int> p_RowId, string p_Module, string p_Page, string p_FieldName, string p_OldValue, string p_NewValue, string p_Comments, string p_PCIPAddress, Nullable<int> p_BatchId, string p_BatchName, Nullable<int> p_MachineId, string p_MachineName, string p_Changes)
         {

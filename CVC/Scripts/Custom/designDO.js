@@ -5,16 +5,20 @@ var do_editor;
 var newChart;
 var chart_labels = [];
 
-$(document).ready(function () {
-    console.log("asdfasdfasdfasdf");
-    GetCustomizeRealdata(5, 22)
-        .then(data => {
-            console.log("data");
-            setTimeout(() => {
-                connectToSocket();
-            }, 3000);
-        });
-});
+var isRTMachine = false;
+var machineId = -1;
+var moduleId = -1; // -1: undefined, >0 : defined
+var timmer;
+var colorList = [];
+var doTypeId = -1; // DisplayObjectTypeId  if >0, there is dotype, if <0, not.
+var colorRowHtml = `<div id="color-row" class="col-md-12" style="display:flex;align-items:center;gap:10px;">
+                        <p style="margin:0px;">From : </p><input id="color-from" type="number" class="col-md-2" required />
+                        <p style="margin:0px;">To : </p><input id="color-to" type="number" class="col-md-2" required />
+                        <p style="margin:0px;">Color : </p><input type="color" id="color-pick" class="form-control col-md-1"  data-prefered-format = "hex" required />
+                        <a class="pull-right btn btn-primary save-color"><i class="fas fa-database" style="pointer-events:none"></i></a>
+                        <a class="pull-right btn btn-danger delete-color"><i class="fas fa-eraser" style="pointer-events:none"></i></a>
+                    </div>`;
+var isNewColorRow = false;
 
 function connectToSocket() {
     var socket = $.connection.socketHub;
@@ -22,25 +26,15 @@ function connectToSocket() {
         var result = JSON.parse(data);
         switch (result.type) {
             case 'customizePreview':
-                setTimeout(() => {
+                timmer = setTimeout(() => {
                     socket.server.send('customizePreview', '');
                 }, 300);
-                processMachineSummary(result.data);
+                processCustomizePreview(result.data);
                 break;
             default:
         }
-
         result = null;
-
     };
-
-    //bind CustomizePreview Data
-    function processCustomizePreview(data) {
-        console.log("updating machine summary");
-        console.log(data);
-        alert("hurray");
-        data = null;
-    }
 
     $.connection.hub.start().done(function () {
         socket.server.send('customizePreview', '');
@@ -51,6 +45,43 @@ function connectToSocket() {
             $.connection.hub.start();
         }, 3000); // Restart connection after 3 seconds.
     });
+}
+
+function processCustomizePreview(dataList) { // datalist is just ViewFieldList
+    if (dataList == null) {
+        clearTimeout(timmer);
+        return; g
+    } else {
+        var labels = [], datum = [], colors = [];
+        dataList.forEach(element => {
+            labels.push(element.ParameterName);
+            if (element.Value == null)
+                datum.push(0);
+            else
+                datum.push(element.value);
+            // colors.push(element.)
+        });
+        updateChartByParameters(labels, datum);
+    }
+}
+
+function getChartColorArray(valueArr) {
+    if (colorList == null || colorList.lenth == 0) return;
+    var colors = [];
+    valueArr.forEach(element => {
+        colors.push(calculateBackgroundColor(element));
+    })
+    return colors;
+}
+
+function calculateBackgroundColor(value) {
+    for (var i = 0; i < colorList.length; i++) {
+        if (value >= colorList[i].RangeFrom && value <= colorList[i].RangeTo) {
+            return colorList[i].color;
+        }
+    }
+    // Default color if no range matches
+    return 'gray';
 }
 
 var formCount = 0; var initFormCount = 0;
@@ -96,7 +127,7 @@ function saveDO() {
         }
     }
 
-    AddUpdateDOF(parameterList);
+    AddUpdateDOF(parameterList); // is not yet full-defined
 }
 
 function dragDO(event) {                   //when dragging main display object
@@ -178,7 +209,7 @@ function dragComponent(event, type) {            //when dragging sample componen
         res = "<input type='button' value='Sample button' style='color:black'/>";
 
     var nodeCopy = $(res).attr('id', newId).addClass('clones').addClass('component');
-    //alert($(nodeCopy).prop('outerHTML'));
+    //Q.notifyInfo($(nodeCopy).prop('outerHTML'));
     nodeCopy.addClass('my-dragging-class');  // Apply the CSS class with reduced opacity
     //$(nodeCopy).draggable({
     //    handle: ".dragButton"
@@ -244,12 +275,37 @@ function toggleHeader(index) {
     }
 }
 
-function updateChart() {
+function updateChart() { //
     var newData = [];
     newChart.data.labels = chart_labels;
     for (var i = 0; i < chart_labels.length; i++)
         newData.push(Math.random() * 100);
     newChart.data.datasets[0].data = newData;
+    newChart.data.datasets[0].backgroundColor = getChartColorArray(newData);
+
+    console.log("chart" + newChart);
+    newChart.update();
+}
+
+function updateChartByParameters(labels, dataList) {//function updateChart(labels, dataList, colors) { 
+    var dataTable = $('#do_element_table_' + $("#DisplayObjectId").val()).DataTable();
+    var columnNames = [];
+    dataTable.columns().header().each(function (header, index) {
+        columnNames.push($(header).text());
+    });
+
+    for (var i = 0; i < columnNames.length; i++) { // under the prepise that elements of columNames and labels are the same in content but the deference in sequence
+        values.push(0);
+        for (var j = 0; j < labels.length - 1; j++) {
+            if (labels[j] == null) continue;
+            if (columnNames[i] == labels[j]) {
+                values[i] = dataList[j];
+                break;
+            }
+        }
+    }
+    newChart.data.datasets[0].data = values;
+    newChart.data.datasets[0].backgroundColor = getChartColorArray(values);
     newChart.update();
 }
 
@@ -281,16 +337,51 @@ $(function () {
         }
         event.preventDefault();
     });
+
     $(document).on("drop", ".rowContainerElement", function (event) {
         var isClone = event.originalEvent.dataTransfer.getData('dragging');
         var droppedId = event.originalEvent.dataTransfer.getData('dropped-id');
-        if (droppedId.includes('ef')) {
-            var columnName = event.originalEvent.dataTransfer.getData('columnName');
+        if (droppedId.includes('ef')) {     //if EF is dropped to the grid
+            var columnName = event.originalEvent.dataTransfer.getData('columnName');    //get the column name
             var dataTable = $('#do_element_table_' + $("#DisplayObjectId").val()).DataTable();
-            let columnIndex = dataTable.columns().header().map(c => $(c).text()).indexOf(columnName);
+            let columnIndex = dataTable.columns().header().map(c => $(c).text()).indexOf(columnName);   //get column index from the table
 
             console.log('columnName :', columnName, 'columnIndex :', columnIndex);
-            toggleHeader(columnIndex);
+            toggleHeader(columnIndex);  //toggle column, if visible then hidden, if hidden then visible
+            if (isRTMachine == true) {
+                var isShow = false; // when there is at least one ef shown, isshow is true
+                $.each(dataTable.columns().header(), function (index, column) {
+                    if (dataTable.column(index).visible()) {
+                        isShow = true;
+                        return false;  // This will break out of the $.each loop
+                    }
+                });
+                if (isShow) {
+                    if (machineId == -1) {
+                        Q.notifyWarning("Machine is undifined.");
+                        return;
+                    } else if (moduleId == -1) {
+                        Q.notifyWarning("Module is undifined.");
+                        return;
+                    }
+                    var viewsId = $("#DisplayObjectId").val();
+                    showLoader();
+                    GetCustomizeRealData(machineId, viewsId)     // save the Http Cache
+                        .then(data => { // machineData
+                            console.log('GetCustomizeRealData is called data = ' + data); // data is the array as [{ParameterName, Value},{}...]
+                            processCustomizePreview(data);
+                            hideLoader();
+                            // setTimeout(() => {
+                            connectToSocket();   // read periodically the data based on cache
+                            // }, 3000);
+                        }).catch(error => {
+                            Q.notifyError("DataBase Connection Faild.");
+                            hideLoader();
+                        });
+                } else {
+                    // clearTimeout(timmer);
+                }
+            }
             return;
         }
         var nodeCopy = $("#" + droppedId);
@@ -305,10 +396,10 @@ $(function () {
 
             $(this).append(nodeCopy);
             if ($("#DisplayObjectType").val() == 1) { //in case of table
-                getTableDataFromDisplayObject($("#DisplayObjectId").val()).then(function (data) {
-                    $("#do_element_table_" + $("#DisplayObjectId").val()).empty();
+                getTableDataFromDisplayObject($("#DisplayObjectId").val()).then(function (data) {   //fetches all fields form the database
+                    $("#do_element_table_" + $("#DisplayObjectId").val()).empty();  //format table
                     var tableHeaders;
-                    Object.keys(data[0]).map(function (columnName) {
+                    Object.keys(data[0]).map(function (columnName) {        //prepare table headers
                         tableHeaders += "<th>" + columnName + "</th>";
                     })
                     $("#do_element_table_" + $("#DisplayObjectId").val()).append('<thead><tr>' + tableHeaders + '</tr></thead>');
@@ -320,7 +411,7 @@ $(function () {
                         }
                         return row;
                     });
-                    $("#do_element_table_" + $("#DisplayObjectId").val()).DataTable({
+                    $("#do_element_table_" + $("#DisplayObjectId").val()).DataTable({   //make table
                         data: dataTableData, // Replace yourDataArray with the fetched data from the server
                         columns: Object.keys(data[0]).map(function (columnName) {
                             return { title: columnName, visible: false };
@@ -331,21 +422,21 @@ $(function () {
                             text: 'Add',
                             name: 'add',
                             action: function (e, dt, node, config) {
-                                alert('New button clicked');
+                                Q.notifyInfo('New button clicked');
                             }
                         },
                         {
                             text: 'Edit',
                             name: 'edit',
                             action: function (e, dt, node, config) {
-                                alert('Edit button clicked');
+                                Q.notifyInfo('Edit button clicked');
                             }
                         },
                         {
                             text: 'Delete',
                             name: 'delete',
                             action: function (e, dt, node, config) {
-                                alert('Delete button clicked');
+                                Q.notifyInfo('Delete button clicked');
                             }
                         }],
                     });
@@ -381,25 +472,25 @@ $(function () {
                             text: 'Add',
                             name: 'add',
                             action: function (e, dt, node, config) {
-                                alert('New button clicked');
+                                Q.notifyInfo('New button clicked');
                             }
                         },
                         {
                             text: 'Edit',
                             name: 'edit',
                             action: function (e, dt, node, config) {
-                                alert('Edit button clicked');
+                                Q.notifyInfo('Edit button clicked');
                             }
                         },
                         {
                             text: 'Delete',
                             name: 'delete',
                             action: function (e, dt, node, config) {
-                                alert('Delete button clicked');
+                                Q.notifyInfo('Delete button clicked');
                             }
                         }],
                         pageLength: 1,
-                        rowCallback: function (row, data, index) {
+                        rowCallback: function (row, data, index) {      //this happens when we change current row, so here we have to change form display
                             let mainDoElement = $("#do_element_" + $("#DisplayObjectId").val());
                             mainDoElement.empty();
 
@@ -459,8 +550,9 @@ $(function () {
                                     }
                                 }
                             });
+                            updateChart();
 
-                            setInterval(updateChart, 1000);
+                            // setInterval(updateChart, 1000);
                         }
 
                     }
@@ -482,6 +574,28 @@ $(function () {
         rowCount = 0;
     });
 
+    $("#idEditColor").on("click", function (event) {  // run the modal for editing color range
+        showLoader(); // run the cvc-loading
+        getDisplayObjectColorsByViewsId($("#DisplayObjectId").val())
+            .then(function (data) {
+                var jData = JSON.parse(data);
+                doTypeId = jData.DisplayObjectTypeId;
+                if (doTypeId == -1 || doTypeId == null) { //this displayobjecttype is undifined
+                    Q.notifyWarning("DisplayObject's Type is undefined.");
+                } else {
+                    $("#modal-color").modal();
+                    colorList = jData.DisplayObjectColors;
+                    $('.color-list').empty();
+                    refreshColorRows(colorList);
+                }
+                hideLoader();
+            }).catch(error => {
+                Q.notifyError("DataBase Connection Error.");
+                console.log(error);
+                hideLoader();
+            });
+    });
+
     $(".workSpace").on("dragover", function (event) {
         event.preventDefault();
     });
@@ -499,4 +613,113 @@ $(function () {
         } else {
         }
     });
+
+    $("#add-color-row").on("click", event => {
+        if (isNewColorRow)
+            Q.notifyWarning('First, save your new color.');
+        else {
+            isNewColorRow = true;
+            var newRow = colorRowHtml.replace("color-row", "color-row-new").replace("color-from", 'color-from-new').replace("color-to", "color-to-new").replace("color-pick", "color-pick-new");
+            $(".color-list").append(newRow);
+        }
+    });
+
+    $(document).on("click", ".delete-color", event => {
+        var colorId = $(event.target).parent().attr('id');
+        colorId = colorId.split('-')[2];
+        if (colorId == "new") {
+            $('#color-row-new').html('');
+            isNewColorRow = false;
+        } else {
+            showLoader();
+            deleteColorRow(colorId)
+                .then(data => {
+                    for (var i = 0; i < colorList.length; i++) {
+                        if (colorList[i].ColorId == data.EntityId) {
+                            colorList.splice(i, 1);
+                            break;
+                        }
+                    }
+                    $('#color-row-' + colorId).html('');
+                    hideLoader();
+                    Q.notifySuccess("Color deletion was successful.");
+                }).catch(error => {
+                    Q.notifyError("DataBase Connection Error.");
+                    console.log(error);
+                    hideLoader();
+                });
+        }
+    });
+
+    $(document).on("focus", ".form-control", function () {
+        var preferredFormat = $(this).data("preferred-format") || "hex";
+
+        $(this).spectrum({
+            showInput: true,
+            preferredFormat: "hex"
+        });
+    });
+
+    $(document).on("click", ".save-color", event => { // this 
+        var viewsId = $("#DisplayObjectId").val();
+        var colorId = $(event.target).parent().attr('id');
+        colorId = colorId.split('-')[2];
+        var from = $('#color-from-' + colorId).val();
+        var to = $('#color-to-' + colorId).val();
+        var pick = $('#color-pick-' + colorId).val();
+        if (from == "" || to == "" || pick == "") {
+            Q.notifyWarning("There is Empty Field. Pleasse Insert Value.");
+            return;
+        } else if (from > to) {
+            Q.notifyWarning("The Maximum Value of Setting Range is smaller than the Minimum. Please try again.");
+            return;
+        }
+        var rowData = {
+            ColorId: colorId,
+            RangeFrom: from,
+            RangeTo: to,
+            Color: pick,
+            ViewsId: viewsId
+        };
+        showLoader();
+        saveColorRowByViewsId(viewsId, rowData)
+            .then(data => {
+                if (colorId == "new") {
+                    isNewColorRow = false;
+                    rowData.ColorId = data.EntityId;
+                    $("#color-row-new").attr('id', 'color-row-' + data.EntityId);
+                    $("#color-from-new").attr('id', 'color-from-' + data.EntityId);
+                    $("#color-to-new").attr('id', 'color-to-' + data.EntityId);
+                    $("#color-pick-new").attr('id', 'color-pick-' + data.EntityId);
+                    colorList.push(rowData);
+                    Q.notifySuccess('Color Addition was Successful.');
+                } else {
+                    for (var i = 0; i < colorList.length; i++) {
+                        if (colorList[i].ColorId == data.EntityId) {
+                            colorList[i].RangeFrom = from;
+                            colorList[i].RangeTo = to;
+                            colorList[i].Color = pick;
+                        }
+                    }
+                    Q.notifySuccess('Color Update was Successful.');
+                }
+                hideLoader();
+            }).catch(error => {
+                Q.notifyError('Color Update Faild.');
+                console.log(error);
+                hideLoader();
+            });
+    });
+
 });
+
+function refreshColorRows(jArr) { // jArr = displayObjectColor's JsonArray
+    jArr.forEach(element => {
+        var newRow = colorRowHtml.replace("color-row", "color-row-" + element.ColorId).replace("color-from", 'color-from-' + element.ColorId).replace("color-to", "color-to-" + element.ColorId).replace("color-pick", "color-pick-" + element.ColorId);
+        $(".color-list").append(newRow);
+        $('#color-from-' + element.ColorId).val(element.RangeFrom);
+        $('#color-to-' + element.ColorId).val(element.RangeTo);
+        $('#color-pick-' + element.ColorId).val(element.Color);
+    });
+    isNewColorRow = false;
+}

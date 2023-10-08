@@ -66,6 +66,23 @@ function getMachineParametersFromDisplayObject(displayObjectId) {
     });
 }
 
+function getMachineRealTimeDataFromViewsId(viewsId) {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: Q.resolveUrl('~/Request/GetMachineRealTimeDataFromViewsId'),
+            type: 'POST',
+            dataType: 'json',
+            data: { viewsId: viewsId },
+            success: function (data) {
+                resolve(data);
+            },
+            error: function (error) {
+                reject(error);
+            }
+        });
+    });
+}
+
 function getTableDataFromDisplayObject(displayObjectId) {
     return new Promise(function (resolve, reject) {
         $.ajax({
@@ -85,16 +102,16 @@ function getTableDataFromDisplayObject(displayObjectId) {
 
 
 // demand a hand for delete
-function GetCustomizeRealdata(machineId, viewId) {
+function GetCustomizeRealData(machineId, viewId) {
     console.log("GetCustomizeRealdata called");
     return new Promise(function (resolve, reject) {
         $.ajax({
             url: Q.resolveUrl('/MachineSummaryMachine/GetCustomizePreviewDataAsync'),
-            type: 'GET',
+            type: 'POST',
             async: true,
             dataType: 'json',
             data: {
-                MachineId: machineId,
+                MachineID: machineId,
                 ViewId: viewId
             },
             success: function (data) {
@@ -102,6 +119,61 @@ function GetCustomizeRealdata(machineId, viewId) {
             },
             error: function (err) {
                 reject(err)
+            }
+        });
+    });
+}
+
+function getDisplayObjectColorsByViewsId(viewsId) {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: Q.resolveUrl('~/Request/GetDisplayObjectColors'),
+            type: 'POST',
+            dataType: 'json',
+            data: { ViewsId: viewsId },
+            success: function (data) {
+                resolve(data);
+            },
+            error: function (error) {
+                reject(error);
+            }
+        });
+    });
+}
+
+function saveColorRowByViewsId(viewsId, rowData) {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: Q.resolveUrl('~/Request/SaveDisplayObjectColor'),
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                ViewsId: viewsId,
+                RowData: JSON.stringify(rowData)
+            },
+            success: function (data) {
+                resolve(data);
+            },
+            error: function (error) {
+                reject(error);
+            }
+        });
+    });
+}
+function deleteColorRow(colorId) {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: Q.resolveUrl('~/Request/DeleteDisplayObjectColor'),
+            type: 'POST',
+            dataType: 'json',
+            data: { ColorId: colorId },
+            success: function (data) {
+                console.log("deleting DOcolor is succeed!!!");
+                console.log(data);
+                resolve(data);
+            },
+            error: function (error) {
+                reject(error);
             }
         });
     });
