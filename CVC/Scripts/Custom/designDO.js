@@ -281,8 +281,6 @@ function updateChart() { //
     for (var i = 0; i < chart_labels.length; i++)
         newData.push(Math.random() * 100);
     newChart.data.datasets[0].data = newData;
-    newChart.data.datasets[0].backgroundColor = getChartColorArray(newData);
-
     if (colorList != null || colorList.length > 0) {
         newChart.data.datasets[0].backgroundColor = getChartColorArray(newData);
     }
@@ -308,6 +306,9 @@ function updateChartByParameters(labels, dataList) {//function updateChart(label
         }
     }
     newChart.data.datasets[0].data = values;
+    if (colorList != null || colorList.length > 0) {
+        newChart.data.datasets[0].backgroundColor = getChartColorArray(newData);
+    }
     newChart.update();
 }
 
