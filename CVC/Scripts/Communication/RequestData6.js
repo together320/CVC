@@ -174,3 +174,39 @@ function deleteColorRow(colorId) {
         });
     });
 }
+
+function deleteRowFromDatatable(url, rowId) {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: Q.resolveUrl(url),
+            type: 'POST',
+            dataType: 'json',
+            data: JSON.stringify({ EntityId: rowId }),
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                resolve(data);
+            },
+            error: function (error) {
+                reject(error);
+            }
+        });
+    });
+}
+
+function addRowToDataTable(url, rowData) {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: Q.resolveUrl(url),
+            type: 'POST',
+            dataType: 'json',
+            data: JSON.stringify({ Entity: rowData }),
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                resolve(data);
+            },
+            error: function (error) {
+                reject(error);
+            }
+        });
+    });
+}

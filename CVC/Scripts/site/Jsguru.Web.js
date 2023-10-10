@@ -3010,20 +3010,17 @@ var CVC;
         var DisplayObjectColorService;
         (function (DisplayObjectColorService) {
             DisplayObjectColorService.baseUrl = 'MachineCustomization/DisplayObjectColor';
-            var Methods;
-            (function (Methods) {
-            })(Methods = DisplayObjectColorService.Methods || (DisplayObjectColorService.Methods = {}));
             [
                 'Create',
                 'Update',
                 'Delete',
                 'Retrieve',
-                'List'
+                'List',
+                'FetchAllColumns'
             ].forEach(function (x) {
                 DisplayObjectColorService[x] = function (r, s, o) {
                     return Q.serviceRequest(DisplayObjectColorService.baseUrl + '/' + x, r, s, o);
                 };
-                Methods[x] = DisplayObjectColorService.baseUrl + '/' + x;
             });
         })(DisplayObjectColorService = MachineCustomization.DisplayObjectColorService || (MachineCustomization.DisplayObjectColorService = {}));
     })(MachineCustomization = CVC.MachineCustomization || (CVC.MachineCustomization = {}));

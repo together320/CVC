@@ -20,7 +20,12 @@
 @* <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> *@
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.js"></script>
-// spectrum end
+
+//for utilities
+<script src="~/Scripts/Custom/utilities.js"></script>
+
+//datatable
+@* <link rel="stylesheet" type="text/css" href="~/Scripts/Custom/1.css"> *@
 
 <!--Reference the SignalR library. -->
 <script src="~/Scripts/jquery.signalR-2.4.1.min.js"></script>
@@ -165,7 +170,7 @@
                             Basic Elements
                         </div>
                         <!-- Nav Item - Pages Collapse Menu -->
-                        <li class="nav-item" style="padding: 10px 0px 10px 20px;">
+                        <!--<li class="nav-item" style="padding: 10px 0px 10px 20px;">
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#separator12"
                                 aria-expanded="true" aria-controls="separator12">
                                 <i class="fas fa-fw fa-gavel"></i>
@@ -175,16 +180,16 @@
                                 data-parent="#accordionSidebar"
                                 style="padding:0.5rem; margin:1rem 1rem 1rem 0; background-color: white; border-radius : 10px; border : 1px solid gray;">
                                 <div class="bg-white py-2 collapse-inner rounded">
-                                    @Html.Raw(DragContainer.GetRowStrs("12"))
-                                    @Html.Raw(DragContainer.GetRowStrs("6 6"))
-                                    @Html.Raw(DragContainer.GetRowStrs("4 4 4"))
-                                    @Html.Raw(DragContainer.GetRowStrs("3 3 3 3"))
-                                    @Html.Raw(DragContainer.GetRowStrs(""))
+                        @Html.Raw(DragContainer.GetRowStrs("12"))
+                        @Html.Raw(DragContainer.GetRowStrs("6 6"))
+                        @Html.Raw(DragContainer.GetRowStrs("4 4 4"))
+                        @Html.Raw(DragContainer.GetRowStrs("3 3 3 3"))
+                        @Html.Raw(DragContainer.GetRowStrs(""))
                                 </div>
                             </div>
-                        </li>
+                        </li> -->
                         <!-- Nav Item - Pages Collapse Menu -->
-                        <li class="nav-item" style="padding: 10px 0px 10px 20px;">
+                        <!--<li class="nav-item" style="padding: 10px 0px 10px 20px;">
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#displayForms"
                                 aria-expanded="true" aria-controls="displayForms">
                                 <i class="fas fa-fw fa-magic"></i>
@@ -204,7 +209,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </li>
+                        </li> -->
 
                         <li class="nav-item" style="padding: 10px 0px 10px 20px;">
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseModal"
@@ -291,7 +296,8 @@
                             <!-- End of Topbar -->
                             <!-- Begin Page Content -->
                             <div class="container-fluid">
-                                <main class="workSpace" id="idWorkSpace" style="min-height:1000px;overflow:auto;">
+                                <main class="workSpace" id="idWorkSpace"
+                                    style="min-height:1000px;overflow:auto;position:relative;">
                                 </main>
                             </div>
                             <!-- /.container-fluid -->
@@ -338,6 +344,27 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
                 <a id="add-color-row" class="btn btn-default pull-left">Add</a>
+                @*<button type="button" class="btn btn-primary">Save changes</button>*@
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+
+<div class="modal fade" id="modal-add-EF">
+    <div class="modal-dialog" style="margin-top : 300px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Add Entity Field</h4>
+            </div>
+            <div class="modal-body" id="EF-row-Content" style="display:grid; grid-template-columns: min-content, auto;">
+
+            </div>
+            <div class="modal-footer" style="">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                <a id="add-EF-row" class="btn btn-default pull-left">Add</a>
                 @*<button type="button" class="btn btn-primary">Save changes</button>*@
             </div>
         </div><!-- /.modal-content -->

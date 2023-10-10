@@ -6360,12 +6360,14 @@ declare namespace CVC.MachineCustomization {
         function Delete(request: Serenity.DeleteRequest, onSuccess?: (response: Serenity.DeleteResponse) => void, opt?: Q.ServiceOptions<any>): JQueryXHR;
         function Retrieve(request: Serenity.RetrieveRequest, onSuccess?: (response: Serenity.RetrieveResponse<DisplayObjectColorRow>) => void, opt?: Q.ServiceOptions<any>): JQueryXHR;
         function List(request: Serenity.ListRequest, onSuccess?: (response: Serenity.ListResponse<DisplayObjectColorRow>) => void, opt?: Q.ServiceOptions<any>): JQueryXHR;
-        namespace Methods {
-            const Create: string;
-            const Update: string;
-            const Delete: string;
-            const Retrieve: string;
-            const List: string;
+        function FetchAllColumns(request: ColumnIdsRequest, onSuccess?: (response: Serenity.ListResponse<ColumnIDRow>) => void, opt?: Q.ServiceOptions<any>): JQueryXHR;
+        const enum Methods {
+            Create = "MachineCustomization/DisplayObjectColor/Create",
+            Update = "MachineCustomization/DisplayObjectColor/Update",
+            Delete = "MachineCustomization/DisplayObjectColor/Delete",
+            Retrieve = "MachineCustomization/DisplayObjectColor/Retrieve",
+            List = "MachineCustomization/DisplayObjectColor/List",
+            FetchAllColumns = "MachineCustomization/DisplayObjectColor/FetchAllColumns"
         }
     }
 }

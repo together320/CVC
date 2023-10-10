@@ -446,5 +446,37 @@ namespace CVC.Modules.NModuleManagement
             return dotype;
         }
 
+        public DeleteResponse DeleteRowFromTable(string tableName, int entityId)
+        {
+            DeleteResponse data = new DeleteResponse();
+            var repo = new DisplayObjectColorRepository();
+            IDbConnection connection = SqlConnections.NewFor<DisplayObjectColorRow>();
+            using (var uow = new UnitOfWork(connection))
+            {
+                var deleteRequest = new DeleteRequest();
+                deleteRequest.EntityId = entityId;
+                data = repo.Delete(uow, deleteRequest);
+                uow.Commit();
+            }
+            return data;
+        }
+
+        private IDbConnection getIDbConnectionByTableName(string tableName)
+        {
+            IDbConnection connection = null;
+            switch (tableName)
+            {
+                case "Roles":
+                    connection = SqlConnections.NewFor<DisplayObjectColorRow>();
+                    break;
+                case "Views":
+                    break;
+                case "Machine":
+                    break;
+                case "Module":
+                    break;
+            }
+            return connection;
+        }
     }
 }

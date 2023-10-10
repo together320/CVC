@@ -20,6 +20,7 @@ using CVC.Modules.MachineCustomization.Message;
 using CVC.Modules.MachineCustomization.TerminalType;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Web.UI.WebControls;
 // using CVC.ViewModels;
 // using Serenity.Web;
 
@@ -106,7 +107,10 @@ namespace CVC.Controllers
             var machineId = (int)dashboardCommon.GetMachineIdFromViewId(viewsId);
             var isRealTime = dashboardCommon.GetMachineRealTimeFromMachineId(machineId);
             var moduleId = dashboardCommon.GetModuleIdFromMachineId(machineId);
-            var jRealTimeData = new { machineId = machineId, isRealTime = isRealTime, moduleId = moduleId };
+            string tableName = null;
+            if (machineId != null)
+                tableName = _repo.getTableNamefromMachine(machineId);
+            var jRealTimeData = new { machineId = machineId, isRealTime = isRealTime, moduleId = moduleId, tableName = tableName };
             return Json(jRealTimeData, JsonRequestBehavior.AllowGet);
         }
 
@@ -174,6 +178,13 @@ namespace CVC.Controllers
         public JsonResult DeleteDisplayObjectColor(int ColorId)
         {
             var deleteResult = _repo.DeleteDOColor(ColorId);
+            return Json(deleteResult, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult DeleteRowFromTable(string TableName, int EntityId)
+        {
+            var deleteResult = _repo.DeleteRowFromTable(TableName, EntityId);
             return Json(deleteResult, JsonRequestBehavior.AllowGet);
         }
     }
