@@ -10,7 +10,10 @@ var isRTMachine = false;
 var tableName = null;
 var machineId = -1;
 var moduleId = -1; // -1: undefined, >0 : defined
+
+// DataTable
 var columnList = [];
+var selectedEntityId = -1;
 
 // TimeCounter
 var timmer;
@@ -26,7 +29,7 @@ var colorRowHtml = `<div id="color-row" class="col-md-12" style="display:flex;al
                         <a class="pull-right btn btn-danger delete-color"><i class="fas fa-eraser" style="pointer-events:none"></i></a>
                     </div>`;
 
-var efRowHtml = `<p style="margin:0px;">EFnameToChange  </p><input id="value-ef" type="text" required />`;
+var efRowHtml = `<p style="margin:0px;">EFnameToChange  </p><input id="value-ef" type="text" required value=''/>`;
 
 var isNewColorRow = false;
 //
@@ -142,6 +145,7 @@ function saveDO() {
 }
 
 function addDo() {
+    columnList = [];
     console.log("add do function is called");
     var newId = `parent_do_element_${$("#DisplayObjectId").val()}`;
 
@@ -189,7 +193,6 @@ function addDo() {
                 return row;
             });
             $("#do_element_table_" + $("#DisplayObjectId").val()).DataTable({   //make table
-                dom: 'Bfrtip',
                 select: true,
                 data: dataTableData, // Replace yourDataArray with the fetched data from the server
                 columns: Object.keys(data[0]).map(function (columnName) {
@@ -206,20 +209,32 @@ function addDo() {
                         var k = 0;
                         $('#EF-row-Content').empty();
                         for (var colname of columnList) {
-                            if (k !== 0) {
+                            if (k > 0) {
                                 var efRealRowHtml = efRowHtml.replace("EFnameToChange", colname);
                                 $('#EF-row-Content').append(efRealRowHtml);
                             }
                             k++;
                         }
-                        Q.notifyInfo('New button clicked');
+                        $('#modal-add-EF #add-EF-row').html('Add');
                     }
                 },
                 {
                     text: 'Edit',
                     name: 'edit',
                     action: function (e, dt, node, config) {
-                        Q.notifyInfo('Edit button clicked');
+                        $('#modal-add-EF').modal();
+                        var row = dt.row('.selected').data();
+                        $('#EF-row-Content').empty();
+                        var k = 0;
+                        selectedEntityId = row[0];
+                        for (var colname of columnList) {
+                            if (k > 0) {
+                                var efRealRowHtml = efRowHtml.replace("EFnameToChange", colname).replace(`value=''`, 'value=' + row[k]);
+                                $('#EF-row-Content').append(efRealRowHtml);
+                            }
+                            k++;
+                        }
+                        $('#modal-add-EF #add-EF-row').html('Save');
                     }
                 },
                 {
@@ -227,10 +242,9 @@ function addDo() {
                     name: 'delete',
                     action: function (e, dt, node, config) {
                         if (tableName == null || tableName == "") {
-                            Q.notifyWarning("Entity Field Value Table is undifined.");
+                            Q.notifyWarning("Entity Value Table is undifined.");
                             return;
-                        } else if (tableName == "Roles")
-                            tableName = "Role";
+                        }
                         var row = dt.row('.selected').data();
                         var serviceUrl = getCVCServiceUrl(tableName) + '/Delete';
                         deleteRowFromDatatable(serviceUrl, row[0])
@@ -266,8 +280,10 @@ function addDo() {
                 return row;
             });
             $("#do_element_table_" + $("#DisplayObjectId").val()).DataTable({
+                select: true,
                 data: dataTableData, // Replace yourDataArray with the fetched data from the server
                 columns: Object.keys(data[0]).map(function (columnName) {
+                    columnList.push(columnName);
                     return { title: columnName, visible: false };
                 }),
                 dom: 'Bfrtip',
@@ -286,14 +302,26 @@ function addDo() {
                             }
                             k++;
                         }
-                        Q.notifyInfo('New button clicked');
+                        $('#modal-add-EF #add-EF-row').html('Save');
                     }
                 },
                 {
                     text: 'Edit',
                     name: 'edit',
                     action: function (e, dt, node, config) {
-                        Q.notifyInfo('Edit button clicked');
+                        $('#modal-add-EF').modal();
+                        var row = dt.row({ search: 'applied' }).data();
+                        $('#EF-row-Content').empty();
+                        var k = 0;
+                        selectedEntityId = row[0];
+                        for (var colname of columnList) {
+                            if (k > 0) {
+                                var efRealRowHtml = efRowHtml.replace("EFnameToChange", colname).replace(`value=''`, 'value=' + row[k]);
+                                $('#EF-row-Content').append(efRealRowHtml);
+                            }
+                            k++;
+                        }
+                        $('#modal-add-EF #add-EF-row').html('Save');
                     }
                 },
                 {
@@ -636,195 +664,195 @@ $(function () {
             undoStack.push($('.workSpace').html());
 
             $(this).append(nodeCopy);
-            if ($("#DisplayObjectType").val() == 1) { //in case of table
-                getTableDataFromDisplayObject($("#DisplayObjectId").val()).then(function (data) {   //fetches all fields form the database
-                    $("#do_element_table_" + $("#DisplayObjectId").val()).empty();  //format table
-                    var tableHeaders;
-                    Object.keys(data[0]).map(function (columnName) {        //prepare table headers
-                        tableHeaders += "<th>" + columnName + "</th>";
-                    })
-                    $("#do_element_table_" + $("#DisplayObjectId").val()).append('<thead><tr>' + tableHeaders + '</tr></thead>');
-                    // $('#do_element').dataTable(json);
-                    var dataTableData = data.map(function (item) {
-                        var row = [];
-                        for (var key in item) {
-                            row.push(item[key]);
-                        }
-                        return row;
-                    });
-                    $("#do_element_table_" + $("#DisplayObjectId").val()).DataTable({   //make table
-                        dom: 'Bfrtip',
-                        select: true,
-                        data: dataTableData, // Replace yourDataArray with the fetched data from the server
-                        columns: Object.keys(data[0]).map(function (columnName) {
-                            columnList.push(columnName);
-                            return { title: columnName, visible: false };
-                        }),
-                        dom: 'Bfrtip',
-                        altEditor: true,     // Enable altEditor
-                        buttons: [{
-                            text: 'Add',
-                            name: 'add',
-                            action: function (e, dt, node, config) {
-                                $('#modal-add-EF').modal();
-                                var k = 0;
-                                for (var colname of columnList) {
-                                    if (k !== 0) {
-                                        var efRealRowHtml = efRowHtml.replace("EFnameToChange", colname);
-                                        $('#EF-row-Content').append(efRealRowHtml);
-                                    }
-                                    k++;
-                                }
-                                Q.notifyInfo('New button clicked');
-                            }
-                        },
-                        {
-                            text: 'Edit',
-                            name: 'edit',
-                            action: function (e, dt, node, config) {
-                                Q.notifyInfo('Edit button clicked');
-                            }
-                        },
-                        {
-                            text: 'Delete',
-                            name: 'delete',
-                            action: function (e, dt, node, config) {
-                                if (tableName == null || tableName == "") {
-                                    Q.notifyWarning("Entity Field Value Table is undifined.");
-                                    return;
-                                } else if (tableName == "Roles")
-                                    tableName = "Role";
-                                var row = dt.row('.selected').data();
-                                var serviceUrl = getCVCServiceUrl(tableName) + '/Delete';
-                                deleteRowFromDatatable(serviceUrl, row[0])
-                                    .then(deleteResult => {
-                                        console.log('ef row delete result = ' + deleteResult);
-                                        Q.notifyInfo("Row Deletion is Successful.");
-                                        dt.rows('.selected').remove().draw();
-                                    }).catch(error => {
-                                        Q.notifyError(tableName + ' table connection is faild.' + error);
-                                    });// row is array, index = 0: identity
-                            }
-                        }],
-                    });
-                });
-            }
-            if ($("#DisplayObjectType").val() == 2) { //in case of form
-                getTableDataFromDisplayObject($("#DisplayObjectId").val()).then(function (data) {
-                    $("#do_element_" + $("#DisplayObjectId").val()).empty();
-                    $("#do_element_table_" + $("#DisplayObjectId").val()).empty();
-                    $("#do_element_table_" + $("#DisplayObjectId").val()).css('display', 'none');
+            // if ($("#DisplayObjectType").val() == 1) { //in case of table
+            //     getTableDataFromDisplayObject($("#DisplayObjectId").val()).then(function (data) {   //fetches all fields form the database
+            //         $("#do_element_table_" + $("#DisplayObjectId").val()).empty();  //format table
+            //         var tableHeaders;
+            //         Object.keys(data[0]).map(function (columnName) {        //prepare table headers
+            //             tableHeaders += "<th>" + columnName + "</th>";
+            //         })
+            //         $("#do_element_table_" + $("#DisplayObjectId").val()).append('<thead><tr>' + tableHeaders + '</tr></thead>');
+            //         // $('#do_element').dataTable(json);
+            //         var dataTableData = data.map(function (item) {
+            //             var row = [];
+            //             for (var key in item) {
+            //                 row.push(item[key]);
+            //             }
+            //             return row;
+            //         });
+            //         $("#do_element_table_" + $("#DisplayObjectId").val()).DataTable({   //make table
+            //             dom: 'Bfrtip',
+            //             select: true,
+            //             data: dataTableData, // Replace yourDataArray with the fetched data from the server
+            //             columns: Object.keys(data[0]).map(function (columnName) {
+            //                 columnList.push(columnName);
+            //                 return { title: columnName, visible: false };
+            //             }),
+            //             dom: 'Bfrtip',
+            //             altEditor: true,     // Enable altEditor
+            //             buttons: [{
+            //                 text: 'Add',
+            //                 name: 'add',
+            //                 action: function (e, dt, node, config) {
+            //                     $('#modal-add-EF').modal();
+            //                     var k = 0;
+            //                     for (var colname of columnList) {
+            //                         if (k !== 0) {
+            //                             var efRealRowHtml = efRowHtml.replace("EFnameToChange", colname);
+            //                             $('#EF-row-Content').append(efRealRowHtml);
+            //                         }
+            //                         k++;
+            //                     }
+            //                     Q.notifyInfo('New button clicked');
+            //                 }
+            //             },
+            //             {
+            //                 text: 'Edit',
+            //                 name: 'edit',
+            //                 action: function (e, dt, node, config) {
+            //                     Q.notifyInfo('Edit button clicked');
+            //                 }
+            //             },
+            //             {
+            //                 text: 'Delete',
+            //                 name: 'delete',
+            //                 action: function (e, dt, node, config) {
+            //                     if (tableName == null || tableName == "") {
+            //                         Q.notifyWarning("Entity Field Value Table is undifined.");
+            //                         return;
+            //                     } else if (tableName == "Roles")
+            //                         tableName = "Role";
+            //                     var row = dt.row('.selected').data();
+            //                     var serviceUrl = getCVCServiceUrl(tableName) + '/Delete';
+            //                     deleteRowFromDatatable(serviceUrl, row[0])
+            //                         .then(deleteResult => {
+            //                             console.log('ef row delete result = ' + deleteResult);
+            //                             Q.notifyInfo("Row Deletion is Successful.");
+            //                             dt.rows('.selected').remove().draw();
+            //                         }).catch(error => {
+            //                             Q.notifyError(tableName + ' table connection is faild.' + error);
+            //                         });// row is array, index = 0: identity
+            //                 }
+            //             }],
+            //         });
+            //     });
+            // }
+            // if ($("#DisplayObjectType").val() == 2) { //in case of form
+            //     getTableDataFromDisplayObject($("#DisplayObjectId").val()).then(function (data) {
+            //         $("#do_element_" + $("#DisplayObjectId").val()).empty();
+            //         $("#do_element_table_" + $("#DisplayObjectId").val()).empty();
+            //         $("#do_element_table_" + $("#DisplayObjectId").val()).css('display', 'none');
 
-                    var tableHeaders;
-                    Object.keys(data[0]).map(function (columnName) {
-                        tableHeaders += "<th>" + columnName + "</th>";
-                    })
-                    $("#do_element_table_" + $("#DisplayObjectId").val()).append('<thead><tr>' + tableHeaders + '</tr></thead>');
-                    // $('#do_element').dataTable(json);
-                    var dataTableData = data.map(function (item) {
-                        var row = [];
-                        for (var key in item) {
-                            row.push(item[key]);
-                        }
-                        return row;
-                    });
-                    $("#do_element_table_" + $("#DisplayObjectId").val()).DataTable({
-                        data: dataTableData, // Replace yourDataArray with the fetched data from the server
-                        columns: Object.keys(data[0]).map(function (columnName) {
-                            return { title: columnName, visible: false };
-                        }),
-                        dom: 'Bfrtip',
-                        altEditor: true,     // Enable altEditor
-                        buttons: [{
-                            text: 'Add',
-                            name: 'add',
-                            action: function (e, dt, node, config) {
-                                Q.notifyInfo('New button clicked');
-                            }
-                        },
-                        {
-                            text: 'Edit',
-                            name: 'edit',
-                            action: function (e, dt, node, config) {
-                                Q.notifyInfo('Edit button clicked');
-                            }
-                        },
-                        {
-                            text: 'Delete',
-                            name: 'delete',
-                            action: function (e, dt, node, config) {
-                                Q.notifyInfo('Delete button clicked');
-                            }
-                        }],
-                        pageLength: 1,
-                        rowCallback: function (row, data, index) {      //this happens when we change current row, so here we have to change form display
-                            let mainDoElement = $("#do_element_" + $("#DisplayObjectId").val());
-                            mainDoElement.empty();
+            //         var tableHeaders;
+            //         Object.keys(data[0]).map(function (columnName) {
+            //             tableHeaders += "<th>" + columnName + "</th>";
+            //         })
+            //         $("#do_element_table_" + $("#DisplayObjectId").val()).append('<thead><tr>' + tableHeaders + '</tr></thead>');
+            //         // $('#do_element').dataTable(json);
+            //         var dataTableData = data.map(function (item) {
+            //             var row = [];
+            //             for (var key in item) {
+            //                 row.push(item[key]);
+            //             }
+            //             return row;
+            //         });
+            //         $("#do_element_table_" + $("#DisplayObjectId").val()).DataTable({
+            //             data: dataTableData, // Replace yourDataArray with the fetched data from the server
+            //             columns: Object.keys(data[0]).map(function (columnName) {
+            //                 return { title: columnName, visible: false };
+            //             }),
+            //             dom: 'Bfrtip',
+            //             altEditor: true,     // Enable altEditor
+            //             buttons: [{
+            //                 text: 'Add',
+            //                 name: 'add',
+            //                 action: function (e, dt, node, config) {
+            //                     Q.notifyInfo('New button clicked');
+            //                 }
+            //             },
+            //             {
+            //                 text: 'Edit',
+            //                 name: 'edit',
+            //                 action: function (e, dt, node, config) {
+            //                     Q.notifyInfo('Edit button clicked');
+            //                 }
+            //             },
+            //             {
+            //                 text: 'Delete',
+            //                 name: 'delete',
+            //                 action: function (e, dt, node, config) {
+            //                     Q.notifyInfo('Delete button clicked');
+            //                 }
+            //             }],
+            //             pageLength: 1,
+            //             rowCallback: function (row, data, index) {      //this happens when we change current row, so here we have to change form display
+            //                 let mainDoElement = $("#do_element_" + $("#DisplayObjectId").val());
+            //                 mainDoElement.empty();
 
-                            let dataTable = $("#do_element_table_" + $("#DisplayObjectId").val()).DataTable();
-                            let numCols = dataTable.columns().nodes().length;
-                            for (var i = 0; i < numCols; i++) {
-                                let column = dataTable.column(i);
-                                if (column.visible()) {
-                                    mainDoElement.append(`<div class='row' style='justify-content : center;'><div class='col-3'>${$(column.header()).text()} :</div><div class='col-3'>${data[i]}</div></div>`);
-                                }
-                            }
+            //                 let dataTable = $("#do_element_table_" + $("#DisplayObjectId").val()).DataTable();
+            //                 let numCols = dataTable.columns().nodes().length;
+            //                 for (var i = 0; i < numCols; i++) {
+            //                     let column = dataTable.column(i);
+            //                     if (column.visible()) {
+            //                         mainDoElement.append(`<div class='row' style='justify-content : center;'><div class='col-3'>${$(column.header()).text()} :</div><div class='col-3'>${data[i]}</div></div>`);
+            //                     }
+            //                 }
 
-                            mainDoElement.insertBefore($("#do_element_table_" + $("#DisplayObjectId").val()));
-                        }
-                    });
-                });
-            }
-            if ($("#DisplayObjectType").val() == 3 || $("#DisplayObjectType").val() == 4 || $("#DisplayObjectType").val() == 5
-                || $("#DisplayObjectType").val() == 6 || $("#DisplayObjectType").val() == 7 || $("#DisplayObjectType").val() == 9
-                || $("#DisplayObjectType").val() == 10) { //in case of button format
-                $("#do_element_" + $("#DisplayObjectId").val()).empty();
-                $("#do_element_table_" + $("#DisplayObjectId").val()).empty();
+            //                 mainDoElement.insertBefore($("#do_element_table_" + $("#DisplayObjectId").val()));
+            //             }
+            //         });
+            //     });
+            // }
+            //     if ($("#DisplayObjectType").val() == 3 || $("#DisplayObjectType").val() == 4 || $("#DisplayObjectType").val() == 5
+            //         || $("#DisplayObjectType").val() == 6 || $("#DisplayObjectType").val() == 7 || $("#DisplayObjectType").val() == 9
+            //         || $("#DisplayObjectType").val() == 10) { //in case of button format
+            //         //     $("#do_element_" + $("#DisplayObjectId").val()).empty();
+            //         //     $("#do_element_table_" + $("#DisplayObjectId").val()).empty();
 
-                var tableHeaders;
-                for (var i = 0; i < efDataList.length; i++) {
-                    tableHeaders += "<th>" + efDataList[i].ParameterName + "</th>";
-                }
-                $("#do_element_table_" + $("#DisplayObjectId").val()).append('<thead><tr>' + tableHeaders + '</tr></thead>');
-                // $('#do_element').dataTable(json);
-                var dataTableData = [];
-                $("#do_element_table_" + $("#DisplayObjectId").val()).DataTable({
-                    data: dataTableData, // Replace yourDataArray with the fetched data from the server
-                    columns: efDataList.map(function (efData) {
-                        return { title: efData.ParameterName, visible: false };
-                    }),
-                    "initComplete": function (settings, json) {
-                        $("#do_element_table_" + $("#DisplayObjectId").val() + "_wrapper").css('display', 'none');
-                        if ($("#DisplayObjectType").val() == 5 || $("#DisplayObjectType").val() == 6) { //chart view
-                            var xValues = [];
-                            var yValues = [];
-                            var barColors = ["red", "green", "blue", "orange", "brown"];
+            //         //     var tableHeaders;
+            //         //     for (var i = 0; i < efDataList.length; i++) {
+            //         //         tableHeaders += "<th>" + efDataList[i].ParameterName + "</th>";
+            //         //     }
+            //         //     $("#do_element_table_" + $("#DisplayObjectId").val()).append('<thead><tr>' + tableHeaders + '</tr></thead>');
+            //         //     // $('#do_element').dataTable(json);
+            //         //     var dataTableData = [];
+            //         //     $("#do_element_table_" + $("#DisplayObjectId").val()).DataTable({
+            //         //         data: dataTableData, // Replace yourDataArray with the fetched data from the server
+            //         //         columns: efDataList.map(function (efData) {
+            //         //             return { title: efData.ParameterName, visible: false };
+            //         //         }),
+            //         //         "initComplete": function (settings, json) {
+            //         //             $("#do_element_table_" + $("#DisplayObjectId").val() + "_wrapper").css('display', 'none');
+            //         //             if ($("#DisplayObjectType").val() == 5 || $("#DisplayObjectType").val() == 6) { //chart view
+            //         //                 var xValues = [];
+            //         //                 var yValues = [];
+            //         //                 var barColors = ["red", "green", "blue", "orange", "brown"];
 
-                            newChart = new Chart($("#do_element_" + $("#DisplayObjectId").val()), {
-                                type: $("#DisplayObjectType").val() == 5 ? "bar" : "pie",
-                                data: {
-                                    labels: xValues,
-                                    datasets: [{
-                                        backgroundColor: barColors,
-                                        data: yValues
-                                    }]
-                                },
-                                options: {
-                                    legend: { display: false },
-                                    title: {
-                                        display: true,
-                                        text: "Chart"
-                                    }
-                                }
-                            });
-                            updateChart();
+            //         //                 newChart = new Chart($("#do_element_" + $("#DisplayObjectId").val()), {
+            //         //                     type: $("#DisplayObjectType").val() == 5 ? "bar" : "pie",
+            //         //                     data: {
+            //         //                         labels: xValues,
+            //         //                         datasets: [{
+            //         //                             backgroundColor: barColors,
+            //         //                             data: yValues
+            //         //                         }]
+            //         //                     },
+            //         //                     options: {
+            //         //                         legend: { display: false },
+            //         //                         title: {
+            //         //                             display: true,
+            //         //                             text: "Chart"
+            //         //                         }
+            //         //                     }
+            //         //                 });
+            //         //                 updateChart();
 
-                            // setInterval(updateChart, 1000);
-                        }
+            //         //                 // setInterval(updateChart, 1000);
+            //         //             }
 
-                    }
-                });
-            }
+            //         //         }
+            //         //     });
+            //     }
         }
     });
 
@@ -1003,16 +1031,34 @@ $(function () {
             addArr.push(val);
             k++;
         });
-        var serviceUrl = getCVCServiceUrl(tableName) + '/Create';
-        addRowToDataTable(serviceUrl, dataobj)
-            .then(data => {
-                var addRow = [];
-                addRow.push(data.EntityId);
-                addArr.map(item => addRow.push(item));
-                addNewRow(addRow);
-            }).catch(error => {
-                Q.notifyError("DataBase Connection is Faild");
-            });
+        var serviceUrl = getCVCServiceUrl(tableName);
+        if ($(this).text() == "Add") {
+            serviceUrl += '/Create';
+            addRowToDataTable(serviceUrl, dataobj)
+                .then(data => {
+                    var addRow = [];
+                    addRow.push(data.EntityId);
+                    addArr.map(item => addRow.push(item));
+                    addNewRow(addRow);
+                    Q.notifySuccess("Entity Value Addition is Successful.");
+                }).catch(error => {
+                    Q.notifyError("DataBase Connection is Faild");
+                });
+        } else if ($(this).text() == "Save") {
+            serviceUrl += '/Update';
+            saveRowToDataTable(serviceUrl, dataobj, selectedEntityId)
+                .then(data => {
+                    var addRow = [];
+                    addRow.push(data.EntityId);
+                    addArr.map(item => addRow.push(item));
+                    addNewRow(addRow);
+                    Q.notifySuccess("Entity Value Addition is Successful.");
+                }).catch(error => {
+                    Q.notifyError("DataBase Connection is Faild");
+                });
+        }
+
+
     });
 });
 
@@ -1032,4 +1078,14 @@ function addNewRow(addData) {
     dataTable.row
         .add(addData)
         .draw(false);
+}
+
+function saveEditRow(editData) {
+    let dataTable = $("#do_element_table_" + $("#DisplayObjectId").val()).DataTable();
+    if ($("#DisplayObjectType").val() == 1) {
+        dataTable.rows({ search: 'applied' }).remove().draw();
+    } else if ($("#DisplayObjectType").val() == 2) {
+        dataTable.rows('.selected').remove().draw();
+    }
+    dataTable.row(0).data(editData).draw();
 }

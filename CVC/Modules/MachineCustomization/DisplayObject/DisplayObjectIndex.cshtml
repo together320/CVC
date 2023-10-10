@@ -45,6 +45,7 @@
             tableName = data.tableName;
             isRTMachine = data.isRealTime != null ? true : false;
             isRTMachine = data.isRealTime;
+    @* columnList = []; *@
         });
         getMachineParametersFromDisplayObject($("#DisplayObjectId").val()).then(function (data) {
             efDataList = data;
