@@ -14,4 +14,36 @@
 
         Q.initFullHeightGridPage($('#GridDiv'));
     });
+<<<<<<< Updated upstream
+=======
+
+    $(document).on('click', '.design-mode', function () {
+        $("#modal-design").css({
+            "padding-top": '30px',
+            "display": 'flex',
+            "justify-content": 'center'
+        });
+        $("#modal-design").modal();
+        $(`.workSpace`).empty();
+        $("#idWorkSpace").attr('id', `WorkSpace_${$("#DisplayObjectId").val()
+            }`);
+        var viewsId = $("#DisplayObjectId").val();
+        getMachineRealTimeDataFromViewsId(viewsId).then(function (data) {
+            machineId = data.machineId == null ? -1 : parseInt(data.machineId);
+            moduleId = data.moduleId == null ? -1 : parseInt(data.moduleId);
+            isRTMachine = false;
+            if (data.isRealTime != null)
+                isRTMachine = data.isRealTime;
+        });
+        getMachineParametersFromDisplayObject($("#DisplayObjectId").val()).then(function (data) {
+            efDataList = data;
+            console.log(efDataList);
+            $("#efList").empty();
+            for (var i = 0; i < efDataList.length; i++) {
+                $("#efList").append(efStr.replace('xxId', efDataList[i].MachineParameterId).replace('xxName', efDataList[i].ParameterName).replace('xxColumn', efDataList[i].ColumnName).replace('xxPickList', efDataList[i].PickListId));
+            }
+            addDo();
+        });
+    });
+>>>>>>> Stashed changes
 </script>
