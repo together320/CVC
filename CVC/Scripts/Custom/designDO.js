@@ -179,62 +179,67 @@ function addDo() {
 
     if ($("#DisplayObjectType").val() == 1) { //in case of table
         getTableDataFromDisplayObject($("#DisplayObjectId").val()).then(function (data) {   //fetches all fields form the database
-            $("#do_element_table_" + $("#DisplayObjectId").val()).empty();  //format table
-            var tableHeaders;
-            Object.keys(data[0]).map(function (columnName) {        //prepare table headers
-                tableHeaders += "<th>" + columnName + "</th>";
-            })
-            $("#do_element_table_" + $("#DisplayObjectId").val()).append('<thead><tr>' + tableHeaders + '</tr></thead>');
-            $("#do_element_table_" + $("#DisplayObjectId").val()).append('<tfoot><tr>' + tableHeaders + '</tr></tfoot>');
-            // $('#do_element').dataTable(json);
-            var dataTableData = data.map(function (item) {
-                var row = [];
-                for (var key in item) {
-                    row.push(item[key]);
-                }
-                return row;
-            });
-
-            console.log(dataTableData);
-            $("#do_element_table_" + $("#DisplayObjectId").val()).DataTable({   //make table
-                select: true,
-                data: dataTableData, // Replace yourDataArray with the fetched data from the server
-                columns: Object.keys(data[0]).map(function (columnName) {
-                    columnList.push(columnName);
-                    return { title: columnName, visible: false };
-                }),
-                responsive: {
-                    details: {
-                        type: 'column'
+            getAllDataTypesFromDisplayObject($("#DisplayObjectId").val()).then(function (typeData) {
+                $("#do_element_table_" + $("#DisplayObjectId").val()).empty();  //format table
+                var tableHeaders;
+                Object.keys(data[0]).map(function (columnName) {        //prepare table headers
+                    tableHeaders += "<th>" + columnName + "</th>";
+                })
+                $("#do_element_table_" + $("#DisplayObjectId").val()).append('<thead><tr>' + tableHeaders + '</tr></thead>');
+                $("#do_element_table_" + $("#DisplayObjectId").val()).append('<tfoot><tr>' + tableHeaders + '</tr></tfoot>');
+                // $('#do_element').dataTable(json);
+                var dataTableData = data.map(function (item) {
+                    var row = [];
+                    for (var key in item) {
+                        row.push(item[key]);
                     }
-                },
-                columnDefs: [{
-                    className: 'control',
-                    orderable: false,
-                }],
-                dom: 'Bfrtip',
-                altEditor: true,     // Enable altEditor
-                buttons: [],
-                initComplete: function () {
-                    this.api()
-                        .columns()
-                        .every(function () {
-                            let column = this;
-                            let title = column.footer().textContent;
+                    return row;
+                });
 
-                            // Create input element
-                            let input = document.createElement('input');
-                            input.placeholder = title;
-                            column.footer().replaceChildren(input);
+                console.log(dataTableData);
+                $("#do_element_table_" + $("#DisplayObjectId").val()).DataTable({   //make table
+                    select: true,
+                    data: dataTableData, // Replace yourDataArray with the fetched data from the server
+                    columns: Object.keys(data[0]).map(function (columnName) {
+                        columnList.push(columnName);
+                        return { title: columnName, visible: false };
+                    }),
+                    responsive: {
+                        details: {
+                            type: 'column'
+                        }
+                    },
+                    columnDefs: [{
+                        className: 'control',
+                        orderable: false,
+                    }],
+                    dom: 'Bfrtip',
+                    altEditor: true,     // Enable altEditor
+                    buttons: [],
+                    initComplete: function () {
+                        this.api()
+                            .columns()
+                            .every(function () {
+                                let column = this;
+                                let title = column.footer().textContent;
 
-                            // Event listener for user input
-                            input.addEventListener('keyup', () => {
-                                if (column.search() !== this.value) {
-                                    column.search(input.value).draw();
-                                }
+                                // Create input element
+                                let input = document.createElement('input');
+                                input.placeholder = title;
+                                column.footer().replaceChildren(input);
+
+                                // Event listener for user input
+                                input.addEventListener('keyup', () => {
+                                    if (column.search() !== this.value) {
+                                        column.search(input.value).draw();
+                                    }
+                                });
                             });
-                        });
-                }
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                    Q.notifyError("Data Base Connection is Error.");
+                });
             });
 
         });
@@ -583,13 +588,14 @@ $(function () {
                         setEditRowModal(columnList, 'Save', row);
                     });
                 } else if ($("#DisplayObjectType").val() == 2) {
-                    nodeCopy.click(function (e) {
-                        $('#modal-add-EF').modal();
-                        var row = dataTable.row({ search: 'applied' }).data();
-                        $('#EF-row-Content').empty();
-                        selectedEntityId = row[0];
-                        setEditRowModal(columnList, 'Save', row);
-                    });
+                    Q.notifyInfo("Edit directly.");
+                    // nodeCopy.click(function (e) {
+                    //     $('#modal-add-EF').modal();
+                    //     var row = dataTable.row({ search: 'applied' }).data();
+                    //     $('#EF-row-Content').empty();
+                    //     selectedEntityId = row[0];
+                    //     setEditRowModal(columnList, 'Save', row);
+                    // });
                 }
             } else if (commontype == '6') { // Delete
                 if ($("#DisplayObjectType").val() == 1) {
