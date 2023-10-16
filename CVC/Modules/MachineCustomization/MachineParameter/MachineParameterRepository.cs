@@ -10,6 +10,7 @@ using Serenity.Data;
 using Serenity.Services;
 using System.Data;
 using System.Linq;
+using System.Data.Entity.Infrastructure;
 
 namespace CVC.MachineCustomization.Repositories
 {
@@ -24,22 +25,29 @@ namespace CVC.MachineCustomization.Repositories
     }
 
     public SaveResponse Create(IUnitOfWork uow, SaveRequest<MachineParameterRow> request)
-        {
-            CheckMachineParameterNameExist(request.Entity.ParameterName, request.Entity.MachineId, request.Entity.MachineParameterId, "Create");
+    {
+      CheckMachineParameterNameExist(request.Entity.ParameterName, request.Entity.MachineId, request.Entity.MachineParameterId, "Create");
 
-            return new MachineParameterRepository.MySaveHandler().Process(uow, request, SaveRequestType.Create);
-       }
+      return new MachineParameterRepository.MySaveHandler().Process(uow, request, SaveRequestType.Create);
+    }
 
     public SaveResponse Update(IUnitOfWork uow, SaveRequest<MachineParameterRow> request)
-        {
-            CheckMachineParameterNameExist(request.Entity.ParameterName, request.Entity.MachineId, request.Entity.MachineParameterId, "Update");
+    {
+      CheckMachineParameterNameExist(request.Entity.ParameterName, request.Entity.MachineId, request.Entity.MachineParameterId, "Update");
 
-            return new MachineParameterRepository.MySaveHandler().Process(uow, request, SaveRequestType.Update);
-        }
+      return new MachineParameterRepository.MySaveHandler().Process(uow, request, SaveRequestType.Update);
+    }
 
     public DeleteResponse Delete(IUnitOfWork uow, DeleteRequest request)
     {
-      return new MachineParameterRepository.MyDeleteHandler().Process(uow, request);
+      try
+      {
+        return new MachineParameterRepository.MyDeleteHandler().Process(uow, request);
+      }
+      catch (DbUpdateException ex) // Foreign key violation
+      {
+        throw new ValidationError("Cannot delete the record as it's being referenced in another table.");
+      }
     }
 
     public RetrieveResponse<MachineParameterRow> Retrieve(IDbConnection connection, RetrieveRequest request)
@@ -68,28 +76,28 @@ namespace CVC.MachineCustomization.Repositories
     {
     }
 
-        private void CheckMachineParameterNameExist(string machineParameterName, int? machineId, int? machineParameterId, string requestType)
+    private void CheckMachineParameterNameExist(string machineParameterName, int? machineId, int? machineParameterId, string requestType)
+    {
+      using (CVCEntities cvcEntities = new CVCEntities())
+      {
+        #region Check Machine Parameter Name exist
+        var machineParameter = new MachineParameter();
+        if (requestType == "Create")
         {
-            using (CVCEntities cvcEntities = new CVCEntities())
-            {
-                #region Check Machine Parameter Name exist
-                var machineParameter = new MachineParameter();
-                if (requestType == "Create")
-                {
-                    machineParameter = cvcEntities?.MachineParameters?.FirstOrDefault(a => a.ParameterName.ToLower() == machineParameterName.ToLower() && a.MachineId == machineId);
-                }
-                else
-                {
-                    machineParameter = cvcEntities?.MachineParameters?.FirstOrDefault(a => a.ParameterName.ToLower() == machineParameterName.ToLower() && a.MachineId == machineId && a.MachineParameterId != machineParameterId);
-                }
-                if (machineParameter != null)
-                {
-                    throw new Serenity.Services.ValidationError("Alert", "Another record with the same 'Parameter Name' value(s) exists!");
-                }
-
-                #endregion
-            }
+          machineParameter = cvcEntities?.MachineParameters?.FirstOrDefault(a => a.ParameterName.ToLower() == machineParameterName.ToLower() && a.MachineId == machineId);
+        }
+        else
+        {
+          machineParameter = cvcEntities?.MachineParameters?.FirstOrDefault(a => a.ParameterName.ToLower() == machineParameterName.ToLower() && a.MachineId == machineId && a.MachineParameterId != machineParameterId);
+        }
+        if (machineParameter != null)
+        {
+          throw new Serenity.Services.ValidationError("Alert", "Another record with the same 'Parameter Name' value(s) exists!");
         }
 
+        #endregion
+      }
     }
+
+  }
 }

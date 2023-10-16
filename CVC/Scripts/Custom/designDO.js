@@ -226,6 +226,7 @@ function addDo() {
                                 // Create input element
                                 let input = document.createElement('input');
                                 input.placeholder = title;
+                                input.style.color = "black";
                                 column.footer().replaceChildren(input);
 
                                 // Event listener for user input
@@ -451,7 +452,7 @@ function toggleHeader(index) {
         let column = dataTable.column(i);
         // console.log($(column.header()).text());
         if (column.visible()) {
-            if ($("#DisplayObjectType").val() == 2) {
+            if ($("#DisplayObjectType").val() == 2) { // make the input forms  from datatable
                 var htmlstr = "<div class='row' style='justify-content : center;'><div class='col-3'>" + $(column.header()).text() + " :</div><div class='col-3'><input type='' form-do-input='" + i + "' value='" + data[i] + "' /></div></div>";
                 htmlstr = htmlstr.replace("type=''", "type='" + getHtmlTypeByDBType(columnTypes[i].DataType) + "'");
                 mainDoElement.append(htmlstr);
@@ -612,6 +613,7 @@ $(function () {
                                 console.log('ef row delete result = ' + deleteResult);
                                 dataTable.rows('.selected').remove().draw();
                                 Q.notifyInfo("Row Deletion is Successful.");
+                                refreshDataTableAfterDeletion();
                                 hideLoader();
                             }).catch(error => {
                                 Q.notifyError(tableName + ' table connection is faild.' + error);
@@ -1068,7 +1070,12 @@ $(function () {
             var val = $(this).val();
             if (val == "null")
                 val = null;
-            dataobj[columnList[k]] = val;
+            if (columnList[k].toLowerCase() == "createat" || columnList[k].toLowerCase() == "updateat")
+                dataobj[columnList[k]] = '';
+            else if (columnList[k].toLowerCase() == "createby" || columnList[k].toLowerCase() == "updateby")
+                dataobj[columnList[k]] = '';
+            else
+                dataobj[columnList[k]] = val;
             addArr.push(val);
             k++;
         });
@@ -1196,4 +1203,31 @@ function setEditRowModal(columnList, buttonName, row = []) {
         k++;
     }
     $('#modal-add-EF #add-EF-row').html(buttonName);
+}
+
+function refreshDataTableAfterDeletion() {
+    let dataTable = $("#do_element_table_" + $("#DisplayObjectId").val()).DataTable();
+    var data = dataTable.row(dataTable.page.info().page).data();
+    let numCols = dataTable.columns().nodes().length;
+
+    console.log(numCols);
+    for (var i = 0; i < numCols; i++) {
+        let column = dataTable.column(i);
+        if (column.visible()) {
+            var htmlstr = "<div class='row' style='justify-content : center;'><div class='col-3'>" + $(column.header()).text() + " :</div><div class='col-3'><input type='' form-do-input='" + i + "' value='" + data[i] + "' /></div></div>";
+            htmlstr = htmlstr.replace("type=''", "type='" + getHtmlTypeByDBType(columnTypes[i].DataType) + "'");
+            mainDoElement.append(htmlstr);
+            var input = "[form-do-input=" + i + "]";
+            $(input).keydown(function (event) {
+                if (event.keyCode == 13) {
+                    var rowData = dataTable.row({ search: 'applied' }).data();
+                    var colindex = $(this).attr("form-do-input");
+                    rowData[parseInt(colindex)] = this.value;
+                    event.preventDefault();
+                    saveFormRow(rowData);
+                }
+            });
+        }
+    }
+    return true;
 }

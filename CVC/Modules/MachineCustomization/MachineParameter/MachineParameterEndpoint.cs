@@ -16,29 +16,37 @@ namespace CVC.MachineCustomization.Endpoints
 {
   [RoutePrefix("Services/MachineCustomization/MachineParameter")]
   [Route("{action}")]
-  [ConnectionKey(typeof (MachineParameterRow))]
-  [ServiceAuthorize(typeof (MachineParameterRow))]
+  [ConnectionKey(typeof(MachineParameterRow))]
+  [ServiceAuthorize(typeof(MachineParameterRow))]
   public class MachineParameterController : ServiceEndpoint
   {
     [HttpPost]
-    [AuthorizeCreate(typeof (MachineParameterRow))]
+    [AuthorizeCreate(typeof(MachineParameterRow))]
     public SaveResponse Create(IUnitOfWork uow, SaveRequest<MachineParameterRow> request)
     {
       return new MachineParameterRepository().Create(uow, request);
     }
 
     [HttpPost]
-    [AuthorizeUpdate(typeof (MachineParameterRow))]
+    [AuthorizeUpdate(typeof(MachineParameterRow))]
     public SaveResponse Update(IUnitOfWork uow, SaveRequest<MachineParameterRow> request)
     {
       return new MachineParameterRepository().Update(uow, request);
     }
 
     [HttpPost]
-    [AuthorizeDelete(typeof (MachineParameterRow))]
+    [AuthorizeDelete(typeof(MachineParameterRow))]
     public DeleteResponse Delete(IUnitOfWork uow, DeleteRequest request)
     {
-      return new MachineParameterRepository().Delete(uow, request);
+      try
+      {
+        return new MachineParameterRepository().Delete(uow, request);
+      }
+      catch (ValidationError ex)
+      {
+        // Handle the error, e.g., log it, show a message to the user, etc.
+        return new DeleteResponse { Error = new ServiceError { Message = ex.Message } };
+      }
     }
 
     [HttpPost]
@@ -57,19 +65,19 @@ namespace CVC.MachineCustomization.Endpoints
     // Fetch names and ids of all columns in a table
     public ListResponse<ColumnIDRow> FetchAllColumns(IDbConnection connection, ColumnIdsRequest request)
     {
-        var data = connection.Query<ColumnIDRow>(@"SELECT 
+      var data = connection.Query<ColumnIDRow>(@"SELECT 
                                                     COL.name ColumnName,
                                                     COL.column_id ColumnId
                                             From sys.columns COL
                                             WHERE COL.object_id = @tableId;",
-                                                param: new
-                                                {
-                                                    tableId = request.TableId
-                                                },
-                                                commandType: System.Data.CommandType.Text);
-        var response = new ListResponse<ColumnIDRow>();
-        response.Entities = (List<ColumnIDRow>)data;
-        return response;
+                                              param: new
+                                              {
+                                                tableId = request.TableId
+                                              },
+                                              commandType: System.Data.CommandType.Text);
+      var response = new ListResponse<ColumnIDRow>();
+      response.Entities = (List<ColumnIDRow>)data;
+      return response;
     }
-    }
+  }
 }
