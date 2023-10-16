@@ -100,6 +100,24 @@ function getTableDataFromDisplayObject(displayObjectId) {
     });
 }
 
+function getAllDataTypesFromDisplayObject(displayObjectId) {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: Q.resolveUrl('~/Request/getAllDataTypesFromDisplayObject'),
+            async: true,
+            type: 'POST',
+            dataType: 'json',
+            data: { displayObjectId: displayObjectId },
+            success: function (data) {
+                resolve(data);
+            },
+            error: function (error) {
+                reject(error);
+            }
+        });
+    });
+}
+
 
 // demand a hand for delete
 function GetCustomizeRealData(viewId) {

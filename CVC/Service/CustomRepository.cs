@@ -41,7 +41,7 @@ namespace CVC.Service
     public async Task<ResponseModel<string>> GetAllData(string tblName)
     {
       ResponseModel<string> response = new ResponseModel<string>();
-      
+
       try
       {
         using (SqlConnection conn = new SqlConnection(connectionstring))
@@ -56,7 +56,7 @@ namespace CVC.Service
           await Task.Run(() => da.Fill(dt));
 
           response.Data = JsonConvert.SerializeObject(dt);
-          response.resultCode = dt.Rows.Count > 0 ? 200 : 200; // 204 for No Content
+          response.resultCode = dt.Rows.Count > 0 ? 200 : 204; // 204 for No Content
         }
       }
       catch (SqlException ex) // SQL Server returned an error
@@ -72,7 +72,46 @@ namespace CVC.Service
       return response;
     }
     /// </getAllData>
-    
+
+    public async Task<ResponseModel<string>> GetAllDataTypes(string tblName)
+    {
+      ResponseModel<string> response = new ResponseModel<string>();
+      try
+      {
+        using (SqlConnection conn = new SqlConnection(connectionstring))
+        {
+          SqlCommand cmd = new SqlCommand();
+          string query = "USE CVCUXDEV;" +
+                       "SELECT t.name AS DataType " +
+                       "FROM sys.columns c " +
+                       "JOIN sys.types t ON c.user_type_id = t.user_type_id " +
+                       "WHERE c.object_id = OBJECT_ID('{0}');";
+          string str = string.Format(query, tblName);
+          cmd.CommandText = str;
+          cmd.Connection = conn;
+
+          SqlDataAdapter da = new SqlDataAdapter(cmd);
+          DataTable dt = new DataTable();
+          await Task.Run(() => da.Fill(dt));
+
+          response.Data = JsonConvert.SerializeObject(dt);
+          response.resultCode = dt.Rows.Count > 0 ? 200 : 204; // 204 for No Content
+        }
+      }
+      catch (SqlException ex) // SQL Server returned an error
+      {
+        response.message = "Error accessing the database: " + ex.Message;
+        response.resultCode = 500;
+      }
+      catch (Exception ex) // Other general error
+      {
+        response.message = "Unexpected error: " + ex.Message;
+        response.resultCode = 500;
+      }
+      return response;
+    }
+
+
 
     /////////////////Manage FieldFilter Database//////////////////////
 

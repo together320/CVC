@@ -12,12 +12,13 @@ namespace CVC.Data.EDMX
     using System;
     using System.Collections.Generic;
     
-    public partial class DisplayObjectColor
+    public partial class DisplayObjectTypeColor
     {
-        public int ColorId { get; set; }
-        public Nullable<double> RangeFrom { get; set; }
-        public Nullable<double> RangeTo { get; set; }
-        public string Color { get; set; }
-        public int DOTypeId { get; set; }
+        public int DOTColorId { get; set; }
+        public string DOTColor { get; set; }
+        public double Min { get; set; }
+        public double Max { get; set; }
+        public int DisplayObjectTypeId { get; set; }
+        public int SubTypeId { get; set; }
     }
 }

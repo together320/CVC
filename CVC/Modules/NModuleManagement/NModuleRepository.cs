@@ -366,7 +366,7 @@ namespace CVC.Modules.NModuleManagement
 
             using (CVCEntities cVCEntities = new CVCEntities())
             {
-                colors = cVCEntities.DisplayObjectColors.Where(a => a.ViewsId == viewsId).ToList();
+               // colors = cVCEntities.DisplayObjectColors.Where(a => a.ViewsId == viewsId).ToList();
             }
             return colors;
         }

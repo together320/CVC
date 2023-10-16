@@ -1,16 +1,22 @@
 ﻿<!DOCTYPE html>
 @{
-var rtl = System.Globalization.CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft;
+    var rtl = System.Globalization.CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft;
 }
 <html lang="@UICulture">
+
 <head>
-    @{Html.RenderPartial(MVC.Views.Shared._LayoutHead);}
+    @{
+        Html.RenderPartial(MVC.Views.Shared._LayoutHead);
+    }
     @RenderSection("Head", false)
     <title>@ViewData["Title"]</title>
     <link href="~/Content/site/keyboard.css" rel="stylesheet" />
+    <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
 </head>
+
 <body id="s-@(ViewData["PageId"])Page" class="@(ViewData["BodyClass"]) no-navigation@(rtl ? " rtl" : "")">
     @RenderBody()
 </body>
+
 </html>
 <script src="~/Scripts/jquery.keyboard.js"></script>

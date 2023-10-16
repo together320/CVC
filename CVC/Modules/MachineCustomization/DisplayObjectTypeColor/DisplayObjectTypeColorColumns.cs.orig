@@ -1,0 +1,24 @@
+﻿
+namespace CVC.MachineCustomization.Columns
+{
+    using Serenity;
+    using Serenity.ComponentModel;
+    using Serenity.Data;
+    using System;
+    using System.ComponentModel;
+    using System.Collections.Generic;
+    using System.IO;
+
+    [ColumnsScript("MachineCustomization.DisplayObjectTypeColor")]
+    [BasedOnRow(typeof(Entities.DisplayObjectTypeColorRow), CheckNames = true)]
+    public class DisplayObjectTypeColorColumns
+    {
+        [EditLink, DisplayName("Db.Shared.RecordId"), AlignRight]
+        public Int32 DotColorId { get; set; }
+        [EditLink]
+        public String DotColor { get; set; }
+        public Double Min { get; set; }
+        public Double Max { get; set; }
+        public Int32 DisplayObjectTypeId { get; set; }
+    }
+}

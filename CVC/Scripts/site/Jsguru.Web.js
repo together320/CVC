@@ -3191,6 +3191,86 @@ var CVC;
 (function (CVC) {
     var MachineCustomization;
     (function (MachineCustomization) {
+        var DisplayObjectTypeColorForm = /** @class */ (function (_super) {
+            __extends(DisplayObjectTypeColorForm, _super);
+            function DisplayObjectTypeColorForm() {
+                return _super !== null && _super.apply(this, arguments) || this;
+            }
+            DisplayObjectTypeColorForm.formKey = 'MachineCustomization.DisplayObjectTypeColor';
+            return DisplayObjectTypeColorForm;
+        }(Serenity.PrefixedContext));
+        MachineCustomization.DisplayObjectTypeColorForm = DisplayObjectTypeColorForm;
+        [,
+            ['DotColor', function () { return CVC.Common.CustomEditors.ColorPickerEditor; }],
+            ['Min', function () { return Serenity.DecimalEditor; }],
+            ['Max', function () { return Serenity.DecimalEditor; }],
+            ['DisplayObjectTypeId', function () { return Serenity.IntegerEditor; }],
+            ['SubTypeId', function () { return Serenity.IntegerEditor; }]
+        ].forEach(function (x) { return Object.defineProperty(DisplayObjectTypeColorForm.prototype, x[0], {
+            get: function () {
+                return this.w(x[0], x[1]());
+            },
+            enumerable: true,
+            configurable: true
+        }); });
+    })(MachineCustomization = CVC.MachineCustomization || (CVC.MachineCustomization = {}));
+})(CVC || (CVC = {}));
+var CVC;
+(function (CVC) {
+    var MachineCustomization;
+    (function (MachineCustomization) {
+        var DisplayObjectTypeColorRow;
+        (function (DisplayObjectTypeColorRow) {
+            DisplayObjectTypeColorRow.idProperty = 'DotColorId';
+            DisplayObjectTypeColorRow.nameProperty = 'DotColor';
+            DisplayObjectTypeColorRow.localTextPrefix = 'MachineCustomization.DisplayObjectTypeColor';
+            DisplayObjectTypeColorRow.deletePermission = 'Administration:General';
+            DisplayObjectTypeColorRow.insertPermission = 'Administration:General';
+            DisplayObjectTypeColorRow.readPermission = 'Administration:General';
+            DisplayObjectTypeColorRow.updatePermission = 'Administration:General';
+            var Fields;
+            (function (Fields) {
+            })(Fields = DisplayObjectTypeColorRow.Fields || (DisplayObjectTypeColorRow.Fields = {}));
+            [
+                'DotColorId',
+                'DotColor',
+                'Min',
+                'Max',
+                'DisplayObjectTypeId',
+                'SubTypeId'
+            ].forEach(function (x) { return Fields[x] = x; });
+        })(DisplayObjectTypeColorRow = MachineCustomization.DisplayObjectTypeColorRow || (MachineCustomization.DisplayObjectTypeColorRow = {}));
+    })(MachineCustomization = CVC.MachineCustomization || (CVC.MachineCustomization = {}));
+})(CVC || (CVC = {}));
+var CVC;
+(function (CVC) {
+    var MachineCustomization;
+    (function (MachineCustomization) {
+        var DisplayObjectTypeColorService;
+        (function (DisplayObjectTypeColorService) {
+            DisplayObjectTypeColorService.baseUrl = 'MachineCustomization/DisplayObjectTypeColor';
+            var Methods;
+            (function (Methods) {
+            })(Methods = DisplayObjectTypeColorService.Methods || (DisplayObjectTypeColorService.Methods = {}));
+            [
+                'Create',
+                'Update',
+                'Delete',
+                'Retrieve',
+                'List'
+            ].forEach(function (x) {
+                DisplayObjectTypeColorService[x] = function (r, s, o) {
+                    return Q.serviceRequest(DisplayObjectTypeColorService.baseUrl + '/' + x, r, s, o);
+                };
+                Methods[x] = DisplayObjectTypeColorService.baseUrl + '/' + x;
+            });
+        })(DisplayObjectTypeColorService = MachineCustomization.DisplayObjectTypeColorService || (MachineCustomization.DisplayObjectTypeColorService = {}));
+    })(MachineCustomization = CVC.MachineCustomization || (CVC.MachineCustomization = {}));
+})(CVC || (CVC = {}));
+var CVC;
+(function (CVC) {
+    var MachineCustomization;
+    (function (MachineCustomization) {
         var FormDisplayForm = /** @class */ (function (_super) {
             __extends(FormDisplayForm, _super);
             function FormDisplayForm(prefix) {
@@ -8362,7 +8442,28 @@ var CVC;
         var AlarmDisplayGrid = /** @class */ (function (_super) {
             __extends(AlarmDisplayGrid, _super);
             function AlarmDisplayGrid(container) {
-                return _super.call(this, container) || this;
+                var _this = _super.call(this, container) || this;
+                var grid = _this.slickGrid;
+                // var view = this.view;
+                //setTimeout(() => this.slickGrid.setSelectedRows([0]), 1000);
+                grid.onSelectedRowsChanged.subscribe(function () {
+                    var _a;
+                    var selectedRow = grid.getSelectedRows()[0];
+                    var record = grid.getDataItem(selectedRow);
+                    var doTypeLookup = CVC.Common.CustomEditors.DOTypeLookup;
+                    var dot = Q.tryFirst(doTypeLookup, function (x) { return x.text === "Alarm Display"; });
+                    $('#DisplayObjectTypeId').val(dot.id);
+                    $('#SubTypeId').val(record.AlarmDisplayId);
+                    console.log("AlarmDisplayId = ", record.AlarmDisplayId);
+                    // added by Denis for RS 8.3 dated 9/8/2021
+                    // Get SecondaryRelationshipGrid widget and destroy it if it exists.
+                    var widget = $('#DisplayObjectType_Color').tryGetWidget(MachineCustomization.DisplayObjectTypeColorGrid);
+                    (_a = widget) === null || _a === void 0 ? void 0 : _a.destroy();
+                    // Init SecondaryRelationshipGrid widget in the element with id 'Secondary_GridDiv'
+                    new CVC.MachineCustomization.DisplayObjectTypeColorGrid($('#DisplayObjectType_Color')).init();
+                    // $(".quick-filters-bar").hide();
+                });
+                return _this;
             }
             AlarmDisplayGrid.prototype.getColumnsKey = function () { return 'MachineCustomization.AlarmDisplay'; };
             AlarmDisplayGrid.prototype.getDialogType = function () { return MachineCustomization.AlarmDisplayDialog; };
@@ -8370,6 +8471,18 @@ var CVC;
             AlarmDisplayGrid.prototype.getInsertPermission = function () { return MachineCustomization.AlarmDisplayRow.insertPermission; };
             AlarmDisplayGrid.prototype.getLocalTextPrefix = function () { return MachineCustomization.AlarmDisplayRow.localTextPrefix; };
             AlarmDisplayGrid.prototype.getService = function () { return MachineCustomization.AlarmDisplayService.baseUrl; };
+            AlarmDisplayGrid.prototype.getSlickOptions = function () {
+                var opt = _super.prototype.getSlickOptions.call(this);
+                opt.enableTextSelectionOnCells = true;
+                opt.selectedCellCssClass = "slick-row-selected";
+                opt.enableCellNavigation = true;
+                return opt;
+            };
+            AlarmDisplayGrid.prototype.createSlickGrid = function () {
+                var grid = _super.prototype.createSlickGrid.call(this);
+                grid.setSelectionModel(new Slick.RowSelectionModel());
+                return grid;
+            };
             AlarmDisplayGrid = __decorate([
                 Serenity.Decorators.registerClass()
             ], AlarmDisplayGrid);
@@ -8997,6 +9110,87 @@ var CVC;
 (function (CVC) {
     var MachineCustomization;
     (function (MachineCustomization) {
+        var DisplayObjectTypeColorDialog = /** @class */ (function (_super) {
+            __extends(DisplayObjectTypeColorDialog, _super);
+            function DisplayObjectTypeColorDialog() {
+                var _this = _super !== null && _super.apply(this, arguments) || this;
+                _this.form = new MachineCustomization.DisplayObjectTypeColorForm(_this.idPrefix);
+                return _this;
+            }
+            DisplayObjectTypeColorDialog.prototype.getFormKey = function () { return MachineCustomization.DisplayObjectTypeColorForm.formKey; };
+            DisplayObjectTypeColorDialog.prototype.getIdProperty = function () { return MachineCustomization.DisplayObjectTypeColorRow.idProperty; };
+            DisplayObjectTypeColorDialog.prototype.getLocalTextPrefix = function () { return MachineCustomization.DisplayObjectTypeColorRow.localTextPrefix; };
+            DisplayObjectTypeColorDialog.prototype.getNameProperty = function () { return MachineCustomization.DisplayObjectTypeColorRow.nameProperty; };
+            DisplayObjectTypeColorDialog.prototype.getService = function () { return MachineCustomization.DisplayObjectTypeColorService.baseUrl; };
+            DisplayObjectTypeColorDialog.prototype.getDeletePermission = function () { return MachineCustomization.DisplayObjectTypeColorRow.deletePermission; };
+            DisplayObjectTypeColorDialog.prototype.getInsertPermission = function () { return MachineCustomization.DisplayObjectTypeColorRow.insertPermission; };
+            DisplayObjectTypeColorDialog.prototype.getUpdatePermission = function () { return MachineCustomization.DisplayObjectTypeColorRow.updatePermission; };
+            DisplayObjectTypeColorDialog.prototype.afterLoadEntity = function () {
+                _super.prototype.afterLoadEntity.call(this);
+                // Your custom initialization logic here
+                // Example: Set a default value for a field if it's empty
+                var subid = $("#SubTypeId").val();
+                var dotid = $("#DisplayObjectTypeId").val();
+                console.log("subid ", subid, "dotid ", dotid);
+                this.form.SubTypeId.value = parseInt(subid);
+                // this.form.SubTypeId.value = 123;
+                this.form.DisplayObjectTypeId.value = parseInt(dotid);
+                // // this.form.DisplayObjectTypeId.read
+                Serenity.EditorUtils.setReadOnly(this.form.DisplayObjectTypeId, true);
+                Serenity.EditorUtils.setReadOnly(this.form.SubTypeId, true);
+            };
+            DisplayObjectTypeColorDialog = __decorate([
+                Serenity.Decorators.registerClass()
+            ], DisplayObjectTypeColorDialog);
+            return DisplayObjectTypeColorDialog;
+        }(Serenity.EntityDialog));
+        MachineCustomization.DisplayObjectTypeColorDialog = DisplayObjectTypeColorDialog;
+    })(MachineCustomization = CVC.MachineCustomization || (CVC.MachineCustomization = {}));
+})(CVC || (CVC = {}));
+var CVC;
+(function (CVC) {
+    var MachineCustomization;
+    (function (MachineCustomization) {
+        var DisplayObjectTypeColorGrid = /** @class */ (function (_super) {
+            __extends(DisplayObjectTypeColorGrid, _super);
+            function DisplayObjectTypeColorGrid(container) {
+                return _super.call(this, container) || this;
+            }
+            DisplayObjectTypeColorGrid.prototype.getColumnsKey = function () { return 'MachineCustomization.DisplayObjectTypeColor'; };
+            DisplayObjectTypeColorGrid.prototype.getDialogType = function () { return MachineCustomization.DisplayObjectTypeColorDialog; };
+            DisplayObjectTypeColorGrid.prototype.getIdProperty = function () { return MachineCustomization.DisplayObjectTypeColorRow.idProperty; };
+            DisplayObjectTypeColorGrid.prototype.getInsertPermission = function () { return MachineCustomization.DisplayObjectTypeColorRow.insertPermission; };
+            DisplayObjectTypeColorGrid.prototype.getLocalTextPrefix = function () { return MachineCustomization.DisplayObjectTypeColorRow.localTextPrefix; };
+            DisplayObjectTypeColorGrid.prototype.getService = function () { return MachineCustomization.DisplayObjectTypeColorService.baseUrl; };
+            DisplayObjectTypeColorGrid.prototype.onViewSubmit = function () {
+                if (!_super.prototype.onViewSubmit.call(this)) {
+                    return false;
+                }
+                var request = this.view.params;
+                var dotId = parseInt($("#DisplayObjectTypeId").val());
+                var subId = parseInt($("#SubTypeId").val());
+                //$("#PrimaryRelationshipId").val("");
+                if (!request.EqualityFilter)
+                    request.EqualityFilter = {};
+                if (dotId) {
+                    console.log("DisplayObjectTypeColorGrid!!! dotid =", dotId, "subid = ", subId);
+                    request.EqualityFilter["DisplayObjectTypeId"] = dotId;
+                    request.EqualityFilter["SubTypeId"] = subId;
+                }
+                return true;
+            };
+            DisplayObjectTypeColorGrid = __decorate([
+                Serenity.Decorators.registerClass()
+            ], DisplayObjectTypeColorGrid);
+            return DisplayObjectTypeColorGrid;
+        }(Serenity.EntityGrid));
+        MachineCustomization.DisplayObjectTypeColorGrid = DisplayObjectTypeColorGrid;
+    })(MachineCustomization = CVC.MachineCustomization || (CVC.MachineCustomization = {}));
+})(CVC || (CVC = {}));
+var CVC;
+(function (CVC) {
+    var MachineCustomization;
+    (function (MachineCustomization) {
         var FormDisplayDialog = /** @class */ (function (_super) {
             __extends(FormDisplayDialog, _super);
             function FormDisplayDialog() {
@@ -9109,7 +9303,28 @@ var CVC;
         var LineChartDisplayGrid = /** @class */ (function (_super) {
             __extends(LineChartDisplayGrid, _super);
             function LineChartDisplayGrid(container) {
-                return _super.call(this, container) || this;
+                var _this = _super.call(this, container) || this;
+                var grid = _this.slickGrid;
+                // var view = this.view;
+                //setTimeout(() => this.slickGrid.setSelectedRows([0]), 1000);
+                grid.onSelectedRowsChanged.subscribe(function () {
+                    var _a;
+                    var selectedRow = grid.getSelectedRows()[0];
+                    var record = grid.getDataItem(selectedRow);
+                    var doTypeLookup = CVC.Common.CustomEditors.DOTypeLookup;
+                    var dot = Q.tryFirst(doTypeLookup, function (x) { return x.text === "Line Chart Display"; });
+                    $('#DisplayObjectTypeId').val(dot.id);
+                    $('#SubTypeId').val(record.LineChartDisplayId);
+                    console.log("LineChartDisplayId = ", record.LineChartDisplayId);
+                    // added by Denis for RS 8.3 dated 9/8/2021
+                    // Get SecondaryRelationshipGrid widget and destroy it if it exists.
+                    var widget = $('#DisplayObjectType_Color').tryGetWidget(MachineCustomization.DisplayObjectTypeColorGrid);
+                    (_a = widget) === null || _a === void 0 ? void 0 : _a.destroy();
+                    // Init SecondaryRelationshipGrid widget in the element with id 'Secondary_GridDiv'
+                    new CVC.MachineCustomization.DisplayObjectTypeColorGrid($('#DisplayObjectType_Color')).init();
+                    // $(".quick-filters-bar").hide();
+                });
+                return _this;
             }
             LineChartDisplayGrid.prototype.getColumnsKey = function () { return 'MachineCustomization.LineChartDisplay'; };
             LineChartDisplayGrid.prototype.getDialogType = function () { return MachineCustomization.LineChartDisplayDialog; };
@@ -9117,6 +9332,18 @@ var CVC;
             LineChartDisplayGrid.prototype.getInsertPermission = function () { return MachineCustomization.LineChartDisplayRow.insertPermission; };
             LineChartDisplayGrid.prototype.getLocalTextPrefix = function () { return MachineCustomization.LineChartDisplayRow.localTextPrefix; };
             LineChartDisplayGrid.prototype.getService = function () { return MachineCustomization.LineChartDisplayService.baseUrl; };
+            LineChartDisplayGrid.prototype.getSlickOptions = function () {
+                var opt = _super.prototype.getSlickOptions.call(this);
+                opt.enableTextSelectionOnCells = true;
+                opt.selectedCellCssClass = "slick-row-selected";
+                opt.enableCellNavigation = true;
+                return opt;
+            };
+            LineChartDisplayGrid.prototype.createSlickGrid = function () {
+                var grid = _super.prototype.createSlickGrid.call(this);
+                grid.setSelectionModel(new Slick.RowSelectionModel());
+                return grid;
+            };
             LineChartDisplayGrid = __decorate([
                 Serenity.Decorators.registerClass()
             ], LineChartDisplayGrid);
@@ -9320,7 +9547,28 @@ var CVC;
         var NotificationDisplayGrid = /** @class */ (function (_super) {
             __extends(NotificationDisplayGrid, _super);
             function NotificationDisplayGrid(container) {
-                return _super.call(this, container) || this;
+                var _this = _super.call(this, container) || this;
+                var grid = _this.slickGrid;
+                // var view = this.view;
+                //setTimeout(() => this.slickGrid.setSelectedRows([0]), 1000);
+                grid.onSelectedRowsChanged.subscribe(function () {
+                    var _a;
+                    var selectedRow = grid.getSelectedRows()[0];
+                    var record = grid.getDataItem(selectedRow);
+                    var doTypeLookup = CVC.Common.CustomEditors.DOTypeLookup;
+                    var dot = Q.tryFirst(doTypeLookup, function (x) { return x.text === "Notification Display"; });
+                    $('#DisplayObjectTypeId').val(dot.id);
+                    $('#SubTypeId').val(record.NotificationDisplayId);
+                    console.log("piechartdisplayid = ", record.NotificationDisplayId);
+                    // added by Denis for RS 8.3 dated 9/8/2021
+                    // Get SecondaryRelationshipGrid widget and destroy it if it exists.
+                    var widget = $('#DisplayObjectType_Color').tryGetWidget(MachineCustomization.DisplayObjectTypeColorGrid);
+                    (_a = widget) === null || _a === void 0 ? void 0 : _a.destroy();
+                    // Init SecondaryRelationshipGrid widget in the element with id 'Secondary_GridDiv'
+                    new CVC.MachineCustomization.DisplayObjectTypeColorGrid($('#DisplayObjectType_Color')).init();
+                    // $(".quick-filters-bar").hide();
+                });
+                return _this;
             }
             NotificationDisplayGrid.prototype.getColumnsKey = function () { return 'MachineCustomization.NotificationDisplay'; };
             NotificationDisplayGrid.prototype.getDialogType = function () { return MachineCustomization.NotificationDisplayDialog; };
@@ -9328,6 +9576,18 @@ var CVC;
             NotificationDisplayGrid.prototype.getInsertPermission = function () { return MachineCustomization.NotificationDisplayRow.insertPermission; };
             NotificationDisplayGrid.prototype.getLocalTextPrefix = function () { return MachineCustomization.NotificationDisplayRow.localTextPrefix; };
             NotificationDisplayGrid.prototype.getService = function () { return MachineCustomization.NotificationDisplayService.baseUrl; };
+            NotificationDisplayGrid.prototype.getSlickOptions = function () {
+                var opt = _super.prototype.getSlickOptions.call(this);
+                opt.enableTextSelectionOnCells = true;
+                opt.selectedCellCssClass = "slick-row-selected";
+                opt.enableCellNavigation = true;
+                return opt;
+            };
+            NotificationDisplayGrid.prototype.createSlickGrid = function () {
+                var grid = _super.prototype.createSlickGrid.call(this);
+                grid.setSelectionModel(new Slick.RowSelectionModel());
+                return grid;
+            };
             NotificationDisplayGrid = __decorate([
                 Serenity.Decorators.registerClass()
             ], NotificationDisplayGrid);
@@ -9386,7 +9646,28 @@ var CVC;
         var PieChartDisplayGrid = /** @class */ (function (_super) {
             __extends(PieChartDisplayGrid, _super);
             function PieChartDisplayGrid(container) {
-                return _super.call(this, container) || this;
+                var _this = _super.call(this, container) || this;
+                var grid = _this.slickGrid;
+                // var view = this.view;
+                //setTimeout(() => this.slickGrid.setSelectedRows([0]), 1000);
+                grid.onSelectedRowsChanged.subscribe(function () {
+                    var _a;
+                    var selectedRow = grid.getSelectedRows()[0];
+                    var record = grid.getDataItem(selectedRow);
+                    var doTypeLookup = CVC.Common.CustomEditors.DOTypeLookup;
+                    var dot = Q.tryFirst(doTypeLookup, function (x) { return x.text === "Pie Chart Display"; });
+                    $('#DisplayObjectTypeId').val(dot.id);
+                    $('#SubTypeId').val(record.PieChartDisplayId);
+                    console.log("piechartdisplayid = ", record.PieChartDisplayId);
+                    // added by Denis for RS 8.3 dated 9/8/2021
+                    // Get SecondaryRelationshipGrid widget and destroy it if it exists.
+                    var widget = $('#DisplayObjectType_Color').tryGetWidget(MachineCustomization.DisplayObjectTypeColorGrid);
+                    (_a = widget) === null || _a === void 0 ? void 0 : _a.destroy();
+                    // Init SecondaryRelationshipGrid widget in the element with id 'Secondary_GridDiv'
+                    new CVC.MachineCustomization.DisplayObjectTypeColorGrid($('#DisplayObjectType_Color')).init();
+                    // $(".quick-filters-bar").hide();
+                });
+                return _this;
             }
             PieChartDisplayGrid.prototype.getColumnsKey = function () { return 'MachineCustomization.PieChartDisplay'; };
             PieChartDisplayGrid.prototype.getDialogType = function () { return MachineCustomization.PieChartDisplayDialog; };
@@ -9394,6 +9675,18 @@ var CVC;
             PieChartDisplayGrid.prototype.getInsertPermission = function () { return MachineCustomization.PieChartDisplayRow.insertPermission; };
             PieChartDisplayGrid.prototype.getLocalTextPrefix = function () { return MachineCustomization.PieChartDisplayRow.localTextPrefix; };
             PieChartDisplayGrid.prototype.getService = function () { return MachineCustomization.PieChartDisplayService.baseUrl; };
+            PieChartDisplayGrid.prototype.getSlickOptions = function () {
+                var opt = _super.prototype.getSlickOptions.call(this);
+                opt.enableTextSelectionOnCells = true;
+                opt.selectedCellCssClass = "slick-row-selected";
+                opt.enableCellNavigation = true;
+                return opt;
+            };
+            PieChartDisplayGrid.prototype.createSlickGrid = function () {
+                var grid = _super.prototype.createSlickGrid.call(this);
+                grid.setSelectionModel(new Slick.RowSelectionModel());
+                return grid;
+            };
             PieChartDisplayGrid = __decorate([
                 Serenity.Decorators.registerClass()
             ], PieChartDisplayGrid);
@@ -9642,7 +9935,28 @@ var CVC;
         var RealtimeParameterDisplayGrid = /** @class */ (function (_super) {
             __extends(RealtimeParameterDisplayGrid, _super);
             function RealtimeParameterDisplayGrid(container) {
-                return _super.call(this, container) || this;
+                var _this = _super.call(this, container) || this;
+                var grid = _this.slickGrid;
+                // var view = this.view;
+                //setTimeout(() => this.slickGrid.setSelectedRows([0]), 1000);
+                grid.onSelectedRowsChanged.subscribe(function () {
+                    var _a;
+                    var selectedRow = grid.getSelectedRows()[0];
+                    var record = grid.getDataItem(selectedRow);
+                    var doTypeLookup = CVC.Common.CustomEditors.DOTypeLookup;
+                    var dot = Q.tryFirst(doTypeLookup, function (x) { return x.text === "Realtime Parameter Display"; });
+                    $('#DisplayObjectTypeId').val(dot.id);
+                    $('#SubTypeId').val(record.RealtimeParameterDisplayId);
+                    console.log("RealtimeParameterDisplayId = ", record.RealtimeParameterDisplayId);
+                    // added by Denis for RS 8.3 dated 9/8/2021
+                    // Get SecondaryRelationshipGrid widget and destroy it if it exists.
+                    var widget = $('#DisplayObjectType_Color').tryGetWidget(MachineCustomization.DisplayObjectTypeColorGrid);
+                    (_a = widget) === null || _a === void 0 ? void 0 : _a.destroy();
+                    // Init SecondaryRelationshipGrid widget in the element with id 'Secondary_GridDiv'
+                    new CVC.MachineCustomization.DisplayObjectTypeColorGrid($('#DisplayObjectType_Color')).init();
+                    // $(".quick-filters-bar").hide();
+                });
+                return _this;
             }
             RealtimeParameterDisplayGrid.prototype.getColumnsKey = function () { return 'MachineCustomization.RealtimeParameterDisplay'; };
             RealtimeParameterDisplayGrid.prototype.getDialogType = function () { return MachineCustomization.RealtimeParameterDisplayDialog; };
@@ -9650,6 +9964,18 @@ var CVC;
             RealtimeParameterDisplayGrid.prototype.getInsertPermission = function () { return MachineCustomization.RealtimeParameterDisplayRow.insertPermission; };
             RealtimeParameterDisplayGrid.prototype.getLocalTextPrefix = function () { return MachineCustomization.RealtimeParameterDisplayRow.localTextPrefix; };
             RealtimeParameterDisplayGrid.prototype.getService = function () { return MachineCustomization.RealtimeParameterDisplayService.baseUrl; };
+            RealtimeParameterDisplayGrid.prototype.getSlickOptions = function () {
+                var opt = _super.prototype.getSlickOptions.call(this);
+                opt.enableTextSelectionOnCells = true;
+                opt.selectedCellCssClass = "slick-row-selected";
+                opt.enableCellNavigation = true;
+                return opt;
+            };
+            RealtimeParameterDisplayGrid.prototype.createSlickGrid = function () {
+                var grid = _super.prototype.createSlickGrid.call(this);
+                grid.setSelectionModel(new Slick.RowSelectionModel());
+                return grid;
+            };
             RealtimeParameterDisplayGrid = __decorate([
                 Serenity.Decorators.registerClass()
             ], RealtimeParameterDisplayGrid);

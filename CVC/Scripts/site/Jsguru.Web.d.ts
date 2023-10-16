@@ -6899,6 +6899,62 @@ declare namespace CVC.MachineCustomization {
     }
 }
 declare namespace CVC.MachineCustomization {
+    class DisplayObjectTypeColorForm extends Serenity.PrefixedContext {
+        static formKey: string;
+    }
+    interface DisplayObjectTypeColorForm {
+        DotColor: Common.CustomEditors.ColorPickerEditor;
+        Min: Serenity.DecimalEditor;
+        Max: Serenity.DecimalEditor;
+        DisplayObjectTypeId: Serenity.IntegerEditor;
+        SubTypeId: Serenity.IntegerEditor;
+    }
+}
+declare namespace CVC.MachineCustomization {
+    interface DisplayObjectTypeColorRow {
+        DotColorId?: number;
+        DotColor?: string;
+        Min?: number;
+        Max?: number;
+        DisplayObjectTypeId?: number;
+        SubTypeId?: number;
+    }
+    namespace DisplayObjectTypeColorRow {
+        const idProperty = "DotColorId";
+        const nameProperty = "DotColor";
+        const localTextPrefix = "MachineCustomization.DisplayObjectTypeColor";
+        const deletePermission = "Administration:General";
+        const insertPermission = "Administration:General";
+        const readPermission = "Administration:General";
+        const updatePermission = "Administration:General";
+        namespace Fields {
+            const DotColorId: any;
+            const DotColor: any;
+            const Min: any;
+            const Max: any;
+            const DisplayObjectTypeId: any;
+            const SubTypeId: any;
+        }
+    }
+}
+declare namespace CVC.MachineCustomization {
+    namespace DisplayObjectTypeColorService {
+        const baseUrl = "MachineCustomization/DisplayObjectTypeColor";
+        function Create(request: Serenity.SaveRequest<DisplayObjectTypeColorRow>, onSuccess?: (response: Serenity.SaveResponse) => void, opt?: Q.ServiceOptions<any>): JQueryXHR;
+        function Update(request: Serenity.SaveRequest<DisplayObjectTypeColorRow>, onSuccess?: (response: Serenity.SaveResponse) => void, opt?: Q.ServiceOptions<any>): JQueryXHR;
+        function Delete(request: Serenity.DeleteRequest, onSuccess?: (response: Serenity.DeleteResponse) => void, opt?: Q.ServiceOptions<any>): JQueryXHR;
+        function Retrieve(request: Serenity.RetrieveRequest, onSuccess?: (response: Serenity.RetrieveResponse<DisplayObjectTypeColorRow>) => void, opt?: Q.ServiceOptions<any>): JQueryXHR;
+        function List(request: Serenity.ListRequest, onSuccess?: (response: Serenity.ListResponse<DisplayObjectTypeColorRow>) => void, opt?: Q.ServiceOptions<any>): JQueryXHR;
+        namespace Methods {
+            const Create: string;
+            const Update: string;
+            const Delete: string;
+            const Retrieve: string;
+            const List: string;
+        }
+    }
+}
+declare namespace CVC.MachineCustomization {
 }
 declare namespace CVC.MachineCustomization {
     interface FormDisplayForm {
@@ -15413,6 +15469,8 @@ declare namespace CVC.MachineCustomization {
         protected getLocalTextPrefix(): string;
         protected getService(): string;
         constructor(container: JQuery);
+        protected getSlickOptions(): Slick.GridOptions;
+        protected createSlickGrid(): Slick.Grid;
     }
 }
 declare namespace CVC.MachineCustomization {
@@ -15586,6 +15644,32 @@ declare namespace CVC.MachineCustomization {
     }
 }
 declare namespace CVC.MachineCustomization {
+    class DisplayObjectTypeColorDialog extends Serenity.EntityDialog<DisplayObjectTypeColorRow, any> {
+        protected getFormKey(): string;
+        protected getIdProperty(): string;
+        protected getLocalTextPrefix(): string;
+        protected getNameProperty(): string;
+        protected getService(): string;
+        protected getDeletePermission(): string;
+        protected getInsertPermission(): string;
+        protected getUpdatePermission(): string;
+        protected form: DisplayObjectTypeColorForm;
+        protected afterLoadEntity(): void;
+    }
+}
+declare namespace CVC.MachineCustomization {
+    class DisplayObjectTypeColorGrid extends Serenity.EntityGrid<DisplayObjectTypeColorRow, any> {
+        protected getColumnsKey(): string;
+        protected getDialogType(): typeof DisplayObjectTypeColorDialog;
+        protected getIdProperty(): string;
+        protected getInsertPermission(): string;
+        protected getLocalTextPrefix(): string;
+        protected getService(): string;
+        constructor(container: JQuery);
+        protected onViewSubmit(): boolean;
+    }
+}
+declare namespace CVC.MachineCustomization {
     class FormDisplayDialog extends Serenity.EntityDialog<FormDisplayRow, any> {
         protected getFormKey(): string;
         protected getIdProperty(): string;
@@ -15633,6 +15717,8 @@ declare namespace CVC.MachineCustomization {
         protected getLocalTextPrefix(): string;
         protected getService(): string;
         constructor(container: JQuery);
+        protected getSlickOptions(): Slick.GridOptions;
+        protected createSlickGrid(): Slick.Grid;
     }
 }
 declare namespace CVC.MachineCustomization {
@@ -15701,6 +15787,8 @@ declare namespace CVC.MachineCustomization {
         protected getLocalTextPrefix(): string;
         protected getService(): string;
         constructor(container: JQuery);
+        protected getSlickOptions(): Slick.GridOptions;
+        protected createSlickGrid(): Slick.Grid;
     }
 }
 declare namespace CVC.MachineCustomization {
@@ -15726,6 +15814,8 @@ declare namespace CVC.MachineCustomization {
         protected getLocalTextPrefix(): string;
         protected getService(): string;
         constructor(container: JQuery);
+        protected getSlickOptions(): Slick.GridOptions;
+        protected createSlickGrid(): Slick.Grid;
     }
 }
 declare namespace CVC.MachineCustomization {
@@ -15785,6 +15875,8 @@ declare namespace CVC.MachineCustomization {
         protected getLocalTextPrefix(): string;
         protected getService(): string;
         constructor(container: JQuery);
+        protected getSlickOptions(): Slick.GridOptions;
+        protected createSlickGrid(): Slick.Grid;
     }
 }
 declare namespace CVC.MachineCustomization {

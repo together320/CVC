@@ -217,6 +217,9 @@
     <Compile Include="EDMX\DisplayObjectColor.cs">
       <DependentUpon>CVCModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="EDMX\DisplayObjectTypeColor.cs">
+      <DependentUpon>CVCModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="EDMX\EndOfLine.cs">
       <DependentUpon>CVCModel.tt</DependentUpon>
     </Compile>

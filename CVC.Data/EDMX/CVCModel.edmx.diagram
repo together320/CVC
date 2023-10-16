@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="f873180c4ab3494cb0efce85edc8eefe" Name="Diagram1" ZoomLevel="67">
+      <Diagram DiagramId="f873180c4ab3494cb0efce85edc8eefe" Name="Diagram1" ZoomLevel="97">
         <EntityTypeShape EntityType="CVCModel.Alarm" Width="1.5" PointX="3" PointY="133.75" />
         <EntityTypeShape EntityType="CVCModel.AlarmLog" Width="1.5" PointX="11.25" PointY="132.875" />
         <EntityTypeShape EntityType="CVCModel.AlarmLogArchive" Width="1.5" PointX="14.25" PointY="137.875" />
@@ -439,12 +439,12 @@
         <AssociationConnector Association="CVCModel.FK_Views_FormDisplayId" />
         <EntityTypeShape EntityType="CVCModel.ButtonDisplay" Width="1.5" PointX="13.375" PointY="1" />
         <AssociationConnector Association="CVCModel.FK_Views_ButtonDisplayId" />
-        <EntityTypeShape EntityType="CVCModel.DisplayObjectColor" Width="1.5" PointX="38.25" PointY="151.625" />
-        <AssociationConnector Association="CVCModel.FK_DisplayObjectColor_Views" />
         <AssociationConnector Association="CVCModel.FK_ListDisplay_ViewId" />
         <AssociationConnector Association="CVCModel.FK__UserLog__Machine__5BCD9859" />
         <AssociationConnector Association="CVCModel.FK__UserLog__Termina__2AAB3E11" />
         <AssociationConnector Association="CVCModel.FK_Views_Views" />
+        <EntityTypeShape EntityType="CVCModel.DisplayObjectTypeColor" Width="1.5" PointX="13.375" PointY="8.75" />
+        <EntityTypeShape EntityType="CVCModel.DisplayObjectColor" Width="1.5" PointX="13.375" PointY="5.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

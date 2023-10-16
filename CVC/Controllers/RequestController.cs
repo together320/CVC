@@ -72,6 +72,30 @@ namespace CVC.Controllers
         }
 
         [HttpPost]
+        public async Task<ActionResult> getAllDataTypesFromDisplayObject(int displayObjectId) //getAllData
+        {
+            var machineId = 0;
+            if (displayObjectId > 0)
+            {
+                DashboardCommon dashboardCommon = new DashboardCommon();
+                machineId = (int)dashboardCommon.GetMachineIdFromViewId(displayObjectId);
+            }
+
+            var TableName = _repo.getTableNamefromMachine(machineId);
+            var result = await repository.GetAllDataTypes(TableName);
+            if (result.resultCode == 200)
+            {
+                return Content(result.Data, "application/json");
+            }
+            else
+            {
+                ModelState.AddModelError("", result.message);
+            }
+
+            return Content(result.message, "application/json");
+        }
+
+        [HttpPost]
         public JsonResult GetDropdownListfromPickListId(int pickListId) //getAllData
         {
             CVC.Data.EDMX.PickList pickList = new Data.EDMX.PickList();
@@ -155,7 +179,7 @@ namespace CVC.Controllers
                     {"Color", color.Color},
                     {"RangeFrom", color.RangeFrom},
                     {"RangeTo", color.RangeTo},
-                    {"ViewsId", color.ViewsId}
+                    {"DOTypeId", color.DOTypeId}
                 };
                 jArr.Add(jObj);
             }

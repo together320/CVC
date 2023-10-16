@@ -19,7 +19,6 @@ namespace CVC.Data.EDMX
         {
             this.ViewFields = new HashSet<ViewField>();
             this.ViewsAccesses = new HashSet<ViewsAccess>();
-            this.DisplayObjectColors = new HashSet<DisplayObjectColor>();
             this.ListDisplays = new HashSet<ListDisplay>();
         }
     
@@ -63,8 +62,6 @@ namespace CVC.Data.EDMX
         public virtual ListDisplay ListDisplay { get; set; }
         public virtual FormDisplay FormDisplay { get; set; }
         public virtual ButtonDisplay ButtonDisplay { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DisplayObjectColor> DisplayObjectColors { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ListDisplay> ListDisplays { get; set; }
         public virtual View Views1 { get; set; }
