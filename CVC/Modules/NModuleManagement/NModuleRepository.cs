@@ -366,7 +366,7 @@ namespace CVC.Modules.NModuleManagement
 
             using (CVCEntities cVCEntities = new CVCEntities())
             {
-               // colors = cVCEntities.DisplayObjectColors.Where(a => a.ViewsId == viewsId).ToList();
+                // colors = cVCEntities.DisplayObjectColors.Where(a => a.ViewsId == viewsId).ToList();
             }
             return colors;
         }
@@ -461,22 +461,11 @@ namespace CVC.Modules.NModuleManagement
             return data;
         }
 
-        private IDbConnection getIDbConnectionByTableName(string tableName)
+        public View GetDisplayObjectData(int viewsId)
         {
-            IDbConnection connection = null;
-            switch (tableName)
-            {
-                case "Roles":
-                    connection = SqlConnections.NewFor<DisplayObjectColorRow>();
-                    break;
-                case "Views":
-                    break;
-                case "Machine":
-                    break;
-                case "Module":
-                    break;
-            }
-            return connection;
+            var viewData = cvcEntities.Views.FirstOrDefault(v => v.ViewsId == viewsId);
+           // var data = JObject.Parse(viewData.ToString());
+            return viewData;
         }
     }
 }

@@ -1,0 +1,1023 @@
+﻿@using CVC.Components
+@using Newtonsoft.Json.Linq;
+@model CVC.Models.DisplayObjectEditModel
+
+@{
+    var doId = ViewBag.doId = Model.SelectedDisplayObject.ViewsId;
+    var doTypeId = ViewBag.doTypeId = Model.SelectedDisplayObject.DisplayObjectTypeId;
+    var doName = Model.SelectedDisplayObject.ViewName;
+    Layout = null;
+    JArray subtypedata = JArray.Parse(Model.SubDO.SubTypeData);
+}
+
+<!-- Page Wrapper -->
+<div id="main-content" style="display:flex">
+
+    <!-- Sidebar -->
+    <ul style="border-right:double; width : 25rem!important; padding-inline-start:0px; margin-bottom:0px; list-style:none;"
+        id="accordionSidebar">
+        <!-- Sidebar - Brand -->
+        <!--<a class="sidebar-brand d-flex align-items-center justify-content-center"
+                   href='@Url.Action("Index", "Home", new { area = "" })'
+                   style="border:0px;margin:0px;padding:0px;">
+                    <img draggable="true"
+                         style="filter: brightness(80%); border: 0px; margin: 0px; padding: 0px; overflow: auto; width : 100%;"
+                         src="~/Content/images/cvc-pharma.bmp" alt="Image description" />
+                </a>-->
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0">
+        <!-- Heading -->
+        <div class="sidebar-heading" style="color: rgba(255,255,255,.4);padding-left: 10px;">
+            Basic Elements
+        </div>
+        <li class="nav-item" style="padding: 10px 0px 10px 20px;">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseModal"
+               aria-expanded="true" aria-controls="collapseModal">
+                <i class="fas fa-fw fa-filter"></i>
+                <span>Component Lists</span>
+            </a>
+            <div id="collapseModal" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar"
+                 style="padding:0.5rem; margin:1rem 1rem 1rem 0;">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <div class="row" style='padding:1px 10px 10px 15px;display:flex;'>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+                             style="border-bottom:thick;display: flex;/* justify-content: center; */"
+                             ondragstart='dragComponent(event, 0);' draggable='true'>
+                            <i class="fa fa-pencil-square-o"></i>&nbsp;&nbsp;TextBox
+                        </div>
+                    </div>
+                    <div class="row" style='padding:1px 10px 10px 15px;display:flex;'>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+                             style="border-bottom:thick;display: flex;/* justify-content: center; */"
+                             ondragstart='dragComponent(event, 1);' draggable='true'>
+                            <i class="fa fa-pencil-square"></i>&nbsp;&nbsp;Label
+                        </div>
+                    </div>
+                    <div class="row" style='padding:1px 10px 10px 15px;display:flex;'>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+                             style="border-bottom:thick;display: flex;/* justify-content: center; */"
+                             ondragstart='dragComponent(event, 2);' draggable='true'>
+                            <i class="fa fa-toggle-down"></i>&nbsp;&nbsp;Dropdown
+                        </div>
+                    </div>
+                    <div class="row" style='padding:1px 10px 10px 15px;display:flex;'>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+                             style="border-bottom:thick;display: flex;/* justify-content: center; */"
+                             ondragstart='dragComponent(event, 3);' draggable='true'>
+                            <i class="fa fa-circle"></i>&nbsp;&nbsp;Button
+                        </div>
+                    </div>
+                    <div class="row" style='padding:1px 10px 10px 15px;display:flex;'>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+                             style="border-bottom:thick;display: flex;/* justify-content: center; */"
+                             ondragstart='dragComponent(event, 4);' draggable='true'>
+                            <i class="fa fa-plus-circle"></i>&nbsp;&nbsp;Add Button
+                        </div>
+                    </div>
+                    <div class="row" style='padding:1px 10px 10px 15px;display:flex;'>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+                             style="border-bottom:thick;display: flex;/* justify-content: center; */"
+                             ondragstart='dragComponent(event, 5);' draggable='true'>
+                            <i class="fa fa-circle-o-notch"></i>&nbsp;&nbsp;Edit Button
+                        </div>
+                    </div>
+                    <div class="row" style='padding:1px 10px 10px 15px;display:flex;'>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+                             style="border-bottom:thick;display: flex;/* justify-content: center; */"
+                             ondragstart='dragComponent(event, 6);' draggable='true'>
+                            <i class="fa fa-minus-circle"></i>&nbsp;&nbsp;Delete Button
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item" style="padding: 10px 0px 10px 20px;">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseComponent"
+               aria-expanded="true" aria-controls="collapseComponent">
+                <i class="fas fa-fw fa-cog"></i>
+                <span>Entity Field Lists</span>
+            </a>
+            <div id="collapseComponent" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar"
+                 style="padding:0.5rem; margin:1rem 0rem 1rem 0;">
+                <div class="bg-white py-2 collapse-inner rounded" id="efList"
+                     style="overflow-y:auto;overflow-x:hidden;max-height:800px;">
+                    @foreach (var item in Model.SubDO.SelectedEFs)
+                    {
+                        <div class='row' style='padding:1px 10px 10px 15px;display:flex;'>
+                            <div ondragstart='dragEF(event);' draggable='true' class='col-xs-12 col-sm-12 col-md-12 col-lg-12'
+                                 style='border-bottom:thick;display: flex;' machineId='@item.MachineParameterId'
+                                 columnName='@item.ColumnName' pickListId='@item.PickListId'>
+                                <i class="fa fa-cube"></i>&nbsp;&nbsp;@if (item.ColumnName == null)
+                                {
+                                    @item.ParameterName;
+                                }
+                                else
+                                {
+                                    @item.ColumnName;
+                                }
+                            </div>
+                        </div>
+                    }
+                    <!--addDo()-->
+                </div>
+            </div>
+        </li>
+    </ul>
+    <!-- End of Sidebar -->
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" style="width : 100%; padding-top : 30px;">
+        <!-- Main Content -->
+        <div id="content">
+            <div style="display:flex;justify-content:end;margin-right:20px;gap:10px;">
+                @* <button type="button" id="idEditColor" class="btn btn-danger">
+                    Edit Color
+                    </button> *@
+                <button type="button" id="idDeleteMain" class="btn btn-danger">
+                    Clear
+                </button>
+                <button type="button" class="btn btn-primary" onclick="saveDO();">
+                    Save
+                </button>
+                <!-- <button type="button" class="btn btn-success">
+                            Preview
+                        </button> -->
+                <button type="button" class="btn btn-warning" onclick="undoDoEdit();">
+                    Undo
+                </button>
+            </div>
+            <!-- End of Topbar -->
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <main class="workSpace" id="WorkSpace_@Model.SelectedDisplayObject.ViewsId"
+                      style="min-height:1000px;overflow:auto;position:relative;display:flex;justify-content:center;">
+                    @Html.Partial("~/Views/DisplayObjectEdit/ListDisplay_PartialView.cshtml", Model.SubDO);
+                    @*@Html.Action("ListDisplay_PartialView", "DisplayObjectEdit");*@
+                </main>
+
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+        <!-- End of Footer -->
+    </div>
+    <!-- End of Content Wrapper -->
+</div>
+
+
+<script type="text/javascript">
+            // chart display
+    var newChart;
+    var chart_labels = [];
+
+    // TimeCounter
+    var timmer;
+
+    // ColorRange
+    var colorList = [];
+
+    // drag component count
+    var componentCount = 0;
+
+    // init page
+    $(function () {
+        $(document).ready(function () {
+            $.ajax({
+            url: Q.resolveUrl('./DisplayObjectEdit/GetRealtimeParametersAsync'),
+            async: true,
+            type: 'POST',
+            dataType: 'json',
+            data: { MachineId: @Model.SelectedMachine.MachineId.Value, ViewsId:@doId },
+            success: function (data) {
+                console.log(data);
+                GetScreenLockTimeOut();
+                CheckHeartBeatSend();
+                setTimeout(() => {
+                    connectToSocket();
+                }, 3000);
+            },
+            error: function (error) {
+                reject(error);
+            }
+        });
+
+        });
+        console.log("editDO modal");
+        $(document).on("drop", ".component", function (event) {
+            event.stopImmediatePropagation();
+            var isClone = event.originalEvent.dataTransfer.getData('dragging');
+            var droppedId = event.originalEvent.dataTransfer.getData('dropped-id');
+            if (droppedId.includes('ef')) {
+                var pickListId = event.originalEvent.dataTransfer.getData('pickListId');
+                var columnName = event.originalEvent.dataTransfer.getData('columnName').trimStart().trimEnd();
+                /*console.log('drop component!! pickId: ', pickListId, 'columnName: ', columnName);*/
+                if (pickListId == "-1" || pickListId == 'undefined') {
+                    /*console.log("picklist id is -1, so setting value");*/
+                    $(event.target).text(columnName);
+                    $(event.target).val(columnName);
+                }
+                else {
+                    GetDropdownListfromPickListId(pickListId).then(function (data) {
+                        $(event.target).empty();
+                        data.forEach(function (item) {
+                            var newOption = $('<option>', {
+                                value: item,
+                                text: item
+                            });
+                            $(event.target).append(newOption);
+                        });
+                    });
+                }
+            }
+            event.preventDefault();
+        });
+
+        $(document).on("drop", ".workSpace", function (event) {
+            var droppedId = event.originalEvent.dataTransfer.getData('dropped-id');
+            var nodeCopy = $("#" + droppedId);
+            if (droppedId.includes('componentId') == 1) {
+                undoStack.push($('.workSpace').html());
+                $(this).append(nodeCopy);
+                var commontype = $("#" + droppedId).attr('commonbutton');
+                nodeCopy.css({
+                    "position": "absolute",
+                    "left": event.clientX - $(".workSpace").offset().left,
+                    "top": event.clientY - $(".workSpace").offset().top
+                });
+                let dataTable = $('#do_element_table_@doId').DataTable();
+                if (commontype == '4') { //Add
+                    nodeCopy.click(function (e) {
+                        $('#modal-add-EF').modal();
+                        $('#EF-row-Content').empty();
+                        setEditRowModal(columnList, 'Add');
+                    });
+                } else if (commontype == '5') { //Edit
+                    if (@doTypeId == 1) {
+                        nodeCopy.click(function (e) {
+                            $('#modal-add-EF').modal();
+                            var row = dataTable.row('.selected').data();
+                            $('#EF-row-Content').empty();
+                            selectedEntityId = row[0];
+                            setEditRowModal(columnList, 'Save', row);
+                        });
+                    } else if (@doTypeId == 2) {
+                        Q.notifyInfo("Edit on InputField.");
+                        // nodeCopy.click(function (e) {
+                        //     $('#modal-add-EF').modal();
+                        //     var row = dataTable.row({ search: 'applied' }).data();
+                        //     $('#EF-row-Content').empty();
+                        //     selectedEntityId = row[0];
+                        //     setEditRowModal(columnList, 'Save', row);
+                        // });
+                    }
+                } else if (commontype == '6') { // Delete
+                    if (@doTypeId == 1) {
+                        nodeCopy.click(function (e) {
+                            if (tableName == null || tableName == "") {
+                                Q.notifyWarning("Entity Value Table is undifined.");
+                                return;
+                            }
+                            var row = dataTable.row('.selected').data();
+                            if (row == null || row == 'undefined' || row.length == 0) {
+                                Q.notifyWarning("No Row is Selected.");
+                                return;
+                            }
+                            let serviceUrl = getCVCServiceUrl(tableName) + '/Delete';
+                            showLoader();
+                            deleteRowFromDatatable(serviceUrl, row[0])
+                                .then(deleteResult => {
+                                    console.log('ef row delete result = ' + deleteResult);
+                                    dataTable.rows('.selected').remove().draw();
+                                    Q.notifyInfo("Row Deletion is Successful.");
+                                    refreshDataTableAfterDeletion();
+                                    hideLoader();
+                                }).catch(error => {
+                                    Q.notifyError(tableName + ' table connection is faild.');
+                                    hideLoader();
+                                });// row is array, index = 0: identity
+                        });
+                    } else if (@doTypeId == 2) {
+                        nodeCopy.click(function (e) {
+                            if (tableName == null || tableName == "") {
+                                Q.notifyWarning("Entity Field Value Table is undifined.");
+                                return;
+                            }
+                            let row = dataTable.row({ search: 'applied' }).data();
+                            if (row == null || row == 'undefined' || row.length == 0) {
+                                Q.notifyWarning("No Row is Selected.");
+                                return;
+                            }
+                            let serviceUrl = getCVCServiceUrl(tableName) + '/Delete';
+                            showLoader();
+                            deleteRowFromDatatable(serviceUrl, row[0])
+                                .then(deleteResult => {
+                                    console.log('ef row delete result = ' + deleteResult);
+                                    Q.notifyInfo("Row Deletion is Successful.");
+                                    dataTable.rows('applied').remove().draw();
+                                    hideLoader();
+                                }).catch(error => {
+                                    Q.notifyError(tableName + ' table connection is faild.' + error);
+                                    hideLoader();
+                                });// row is array, index = 0: identity
+                        });
+                    }
+                }
+            }
+        });
+
+        $(document).on("drop", ".mainDO", function (event) {
+            console.log("dropped onto the parent do element");
+            var isClone = event.originalEvent.dataTransfer.getData('dragging');
+            var droppedId = event.originalEvent.dataTransfer.getData('dropped-id');
+            if (droppedId.includes('ef')) {     //if EF is dropped to the grid
+                var columnName = event.originalEvent.dataTransfer.getData('columnName').trimStart().trimEnd();    //get the column name
+                console.log('columnName', columnName);
+                var dataTable = $('#do_element_table_@doId').DataTable();
+                let columnIndex = 0;//dataTable.columns().header().map(c => $(c).innerText).indexOf(columnName);   //get column index from the table
+                // Assuming you have a DataTable called "myDataTable"
+                var columnNames = dataTable.columns().header().toArray();
+                for (columnIndex = 0; columnIndex < columnNames.length; columnIndex++) {
+                    if (columnName == columnNames[columnIndex].innerText)
+                        break;
+                }
+                // Printing the column names
+                toggleHeader(columnIndex);  //toggle column, if visible then hidden, if hidden then visible
+                var isRealTime = @Model.SelectedMachine.IsRealTime.ToString().ToLower();
+                if (isRealTime == 'true') {
+                    var isShow = false; // when there is at least one ef shown, isshow is true
+                    $.each(dataTable.columns().header(), function (index, column) {
+                        if (dataTable.column(index).visible()) {
+                            isShow = true;
+                            return false;  // This will break out of the $.each loop
+                        }
+                    });
+                    if (isShow) {
+                        var machineId = @Model.SelectedMachine.MachineId.ToString();
+                        var viewsId = parseInt(@doId.ToString());
+                        //showLoader();
+                       /* GetCustomizeRealData(viewsId)     // save the Http Cache
+                            .then(data => { // machineData
+                                processCustomizePreview(data);
+                                hideLoader();
+                                // setTimeout(() => {
+                                connectToSocket();   // read periodically the data based on cache
+                                // }, 3000);
+                            }).catch(error => {
+                                Q.notifyError("DataBase Connection Faild.");
+                                hideLoader();
+                            });*/
+                    } else {
+                        // clearTimeout(timmer);
+                    }
+                }
+                return;
+            }
+            var nodeCopy = $("#" + droppedId);
+            var nodeValue = nodeCopy.is('input, select, textarea') ? nodeCopy.val() : nodeCopy.text();
+            if (droppedId.includes('componentId') == 1) {
+                undoStack.push($('.workSpace').html());
+
+                $(this).append(nodeCopy);
+            }
+
+            if (droppedId.includes('do_element') == 1) {
+                undoStack.push($('.workSpace').html());
+
+                $(this).append(nodeCopy);
+            }
+        });
+
+        $(document).on("click", ".removeButton", function () {      //when click xremove button
+            undoStack.push($('.workSpace').html());
+
+            $(this).parent().parent().remove();
+        });
+        ///Clear all
+        $("#idDeleteMain").on("click", function (event) {       //delete all button
+            undoStack.push($('.workSpace').html());
+
+            $("main").empty();
+            rowCount = 0;
+        });
+
+        $(".workSpace").on("dragover", function (event) {
+            event.preventDefault();
+        });
+
+        $('.workSpace').on("drop", function (event) {
+            var isClone = event.originalEvent.dataTransfer.getData('dragging');
+            var droppedId = event.originalEvent.dataTransfer.getData('dropped-id');
+            if (droppedId != "" && droppedId.includes("formId") == 0) {
+                var nodeCopy = $("#" + droppedId);
+                var nodeValue = nodeCopy.is('input, select, textarea') ? nodeCopy.val() : nodeCopy.text();
+
+                undoStack.push($('.workSpace').html());
+
+                $(this).append(nodeCopy);
+            } else {
+            }
+        });
+
+        $(document).on('click', '#do_element_table_@doId' + ', tbody tr', function (e) {
+            let classList = e.currentTarget.classList;
+            var table = $("#do_element_table_@doId").DataTable();
+            if (classList.contains('selected')) {
+                classList.remove('selected');
+            }
+            else {
+                table.rows('.selected').nodes().each((row) => row.classList.remove('selected'));
+                classList.add('selected');
+            }
+        });
+
+        $(document).on('click', '#modal-add-EF #add-EF-row', function () {
+            var dataobj = {};
+            var addArr = [];
+            var k = 1;
+            if ($(this).text() == "Save")
+                dataobj[columnList[0]] = selectedEntityId;
+            $('#EF-row-Content').find('input').each(function () {
+                var val = $(this).val();
+                if (val == "null")
+                    val = null;
+                if (columnList[k].toLowerCase() == "createat" || columnList[k].toLowerCase() == "updateat" ||
+                    columnList[k].toLowerCase() == "createby" || columnList[k].toLowerCase() == "updateby" ||
+                    columnList[k].toLowerCase() == "createddate" || columnList[k].toLowerCase() == "updateddate")
+                    dataobj[columnList[k]] = '';
+                else
+                    dataobj[columnList[k]] = val;
+                addArr.push(val);
+                k++;
+            });
+            let serviceUrl = getCVCServiceUrl(tableName);
+            showLoader();
+            if ($(this).text() == "Add") {
+                serviceUrl += '/Create';
+                addRowToDataTable(serviceUrl, dataobj)
+                    .then(data => {
+                        var addRow = [];
+                        addRow.push(data.EntityId);
+                        addArr.map(item => addRow.push(item));
+                        addNewRow(addRow);
+                        Q.notifySuccess("Entity Value Addition is Successful.");
+                        hideLoader();
+                    }).catch(error => {
+                        Q.notifyError("DataBase Connection is Faild");
+                        hideLoader();
+                    });
+            } else if ($(this).text() == "Save") {
+                serviceUrl += '/Update';
+                saveRowToDataTable(serviceUrl, dataobj, selectedEntityId)
+                    .then(data => {
+                        var addRow = [];
+                        addArr.map(item => addRow.push(item));
+                        saveEditRow(addRow);
+                        Q.notifySuccess("Entity Value Addition is Successful.");
+                        hideLoader();
+                    }).catch(error => {
+                        Q.notifyError("DataBase Connection is Faild");
+                        hideLoader();
+                    });
+            }
+        });
+    });
+    // end init page
+
+    function connectToSocket() {
+        console.log('connectToSocket');
+        var socket = $.connection.socketHub;
+        socket.client.addNewMessageToPage = function (data, message) {
+
+            var result = JSON.parse(data);
+            console.log(data);
+            switch (result.type) {
+                case 'displaypreview':
+                    setTimeout(() => {
+                        socket.server.send('displaypreview', '');
+                    }, 300);
+                    console.log(data);
+                    updateChart(result.data);
+                    //console.log("realtimedata:", result.data);
+                    break;
+                default:
+                    break;
+            }
+
+            result = null;
+        };
+
+        $.connection.hub.start().done(function () {
+            socket.server.send('displaypreview', '');
+        });
+
+        $.connection.hub.disconnected(function () {
+            setTimeout(function () {
+                $.connection.hub.start();
+            }, 3000); // Restart connection after 3 seconds.
+        });
+    }
+
+    function CheckHeartBeatSend() {
+        var machineId = @Model.SelectedMachine.MachineId.Value;
+        $.ajax({
+            url: Q.resolveUrl('~/Common/CheckHeartBeatSendByMachineId'),
+            type: 'GET',
+            data: { "MachineId": machineId},
+            async: true,
+            success: function (response) {
+
+                if (response.IsHeartBeatSend == true) {
+                    /*IsHeartBeatSend = true;
+                    IPCAddress_IsHeartBeatSend = response.IPCAddress;
+                    MachineParameterId_IsHeartBeatSend = response.MachineParameterId;
+                    IncrementalNumber_HeartBeatSend = response.IncrementalNumber;
+                    HearBeatSend_Value = response.StartNumber;
+                    StartNumber_HeartBeatSend = response.StartNumber;
+                    EndNumber_HeartBeatSend = response.EndNumber;*/
+                }
+
+            },
+            error: function (x, y, z) {
+
+            }
+        });
+
+    }
+
+    function processDisplayPreview(data) { // repair
+        $(data).each(function (i, item) {
+            if (item.Value != "True" && item.Value != "False") {
+                if (item.IsMissingLabelCounter == true) {
+
+                    var oldValue = $("#limsnglabel-" + item.MachineParameterId).attr("oldvalue");
+                    if (oldValue == item.Value) {
+                        //  $("#limsnglabel-" + item.MachineParameterId).attr("style", "display:none");
+                        // console.log(new Date());
+                    }
+                    else {
+                        if (initialMissingLabelValue != 0) {
+                            AlarmCounter(item);
+                            AddToAuditLog();
+                            AddToAlarmLog(item.AlarmId);
+                        }
+                    }
+                    $("#limsnglabel-" + item.MachineParameterId).attr("oldvalue", item.Value);
+
+                    // item.OldValue = item.Value;
+                    initialMissingLabelValue = 1;
+                }
+
+
+                $("#h2-" + item.ViewFieldId).text(item.Value);
+                $("#lbl-" + item.ViewFieldId).text(item.Value);
+                $("#div-" + item.ViewFieldId).removeClass("bg-green bg-red bg-yellow bg-blue").addClass("bg-" + item.BackgroundColor);
+            }
+        });
+        data = null;
+    }
+
+    // start drag
+    function dragEF(event) {                   //when dragging main display object
+        console.log('dragEF start');
+        event.dataTransfer.setData('dragging', 'no-clone');
+        event.dataTransfer.setData('dropped-id', 'ef');
+        event.dataTransfer.setData('columnName', $(event.target).attr('columnname'));
+        event.dataTransfer.setData('pickListId', $(event.target).attr('pickListId'));
+        //if button, realtime format, then the columnName does not exist, so parameterName will use
+        if (@doTypeId == 3 || @doTypeId == 4 || @doTypeId == 5 || @doTypeId || @doTypeId == 7 || @doTypeId == 9 || @doTypeId == 10)
+            event.dataTransfer.setData('columnName', $(event.target).text());
+    }
+
+    function dragGrid(event) {                   //when dragging grid system
+        if ($("main").html().trim() === "") {
+            rowCount = 0;
+        }
+        var value = $(event.target).prev().children(':first').val().trimEnd();
+        if (value != "") {
+            var newId = 'gridId' + ++rowCount + '_@doId';
+            var res = row_GetRowCloneStrs(value, newId, value);
+            var nodeCopy = $(res).attr('id', newId).addClass('clones');
+            nodeCopy.addClass('my-dragging-class');  // Apply the CSS class with reduced opacity
+            $('body').append(nodeCopy);
+            event.dataTransfer.setData('dragging', 'no-clone');
+            event.dataTransfer.setData('dropped-id', newId);
+            event.dataTransfer.setDragImage(nodeCopy[0], 0, 0);
+        }
+    }
+
+    function dragComponent(event, type) {      //when dragging sample components
+        if ($("main").html().trim() === "") {
+            rowCount = 0;
+        }
+        var res = "";
+        var newId = 'componentId' + ++componentCount + '_@doId';
+        if (type == 0) //textbox
+            res = "<textarea style='color:black'>Sample textbox</textarea>";
+        else if (type == 1) //label
+            res = "<p style='color:black'>Sample label</p>";
+        else if (type == 2)
+            res = "<select style='color:black'></select>";
+        else if (type == 3)
+            res = "<input type='button' value='Sample button' style='color:black'/>";
+        else if (type == 4)
+            res = "<input type='button' value='Add' style='color:black' commonButton='4'/>";
+        else if (type == 5)
+            res = "<input type='button' value='Edit' style='color:black' commonButton='5'/>";
+        else if (type == 6)
+            res = "<input type='button' value='Delete' style='color:black' commonButton='6'/>";
+
+        var nodeCopy = $(res).attr('id', newId).addClass('clones').addClass('component');
+        //Q.notifyInfo($(nodeCopy).prop('outerHTML'));
+        nodeCopy.addClass('my-dragging-class');  // Apply the CSS class with reduced opacity
+
+        $('body').append(nodeCopy);
+        event.dataTransfer.setData('dragging', 'no-clone');
+        event.dataTransfer.setData('dropped-id', newId);
+        event.dataTransfer.setDragImage(nodeCopy[0], 0, 0);
+    }
+    // end start drag
+
+    // general button functionality ===> undo, clear, save
+    function undoDoEdit() {
+        if (undoStack.length > 1) {
+            undoStack.pop(); // Remove the latest state from the stack
+            $('.workSpace').html(undoStack[undoStack.length - 1]);
+        }
+    }
+
+    function saveDO() {
+        let dataTable = $("#do_element_table_@doId").DataTable();
+        var data = dataTable.row(dataTable.page.info().page).data();
+        let numCols = dataTable.columns().nodes().length;
+
+        let parameterList = [];
+
+        for (var i = 0; i < numCols; i++) {
+            let column = dataTable.column(i);
+            if (column.visible()) {
+                let parameter = {};
+                let columnText = $(column.header()).text();
+
+                for (var j = 0; j < efDataList.length; j++) {
+                    if (efDataList[j].ColumnName == columnText || efDataList[j].ParameterName == columnText) {
+                        parameter["ViewsId"] = @doId;
+                        parameter["ViewFieldName"] = efDataList[j].ParameterName;
+                        parameter["MachineParameterId"] = efDataList[j].MachineParameterId;
+                        parameter["StatusId"] = 1;
+                        parameterList.push(parameter);
+                        break;
+                    }
+                }
+            }
+        }
+
+        AddUpdateDOF(parameterList); // is not yet full-defined
+    }
+    // end common button
+
+    // toggleHeader
+    function toggleHeader(index) {
+        console.log('toggleheader is called', index);
+        let dataTable = $("#do_element_table_@doId").DataTable();
+        let column = dataTable.column(index);
+        column.visible(!column.visible());
+
+        @*if (@doTypeId == 1)
+            return;*@
+
+        undoStack.push($('.workSpace').html());
+
+        let mainDoElement = $("#do_element_@doId");
+        mainDoElement.empty();
+
+        var data = dataTable.row(dataTable.page.info().page).data();
+        let numCols = dataTable.columns().nodes().length;
+        chart_labels = [];
+
+        console.log(numCols);
+        for (var i = 0; i < numCols; i++) {
+            let column = dataTable.column(i);
+            if (column.visible()) {
+                if (@doTypeId == 2) { // make the input forms  from datatable
+                    /*console.log('toggleheader log! this type is form display');*/
+                    let htmlstr = "<div class='row' style='justify-content:center;'><div class='col-3' style='color:black;'>" + $(column.header()).text() + " :</div><div class='col-3'><input style='color:black;' type='' form-do-input='" + i + "' value='" + data[i] + "' /></div></div>";
+                    let columnTypes = @Html.Raw(Model.SubDO.SubDOTypeColumns);
+                    htmlstr = htmlstr.replace("type=''", "type='" + getHtmlTypeByDBType(columnTypes[i].DataType) + "'");
+                    mainDoElement.append(htmlstr);
+                    let input = "[form-do-input=" + i + "]";
+                    mainDoElement.insertBefore($("#do_element_table_1068"));
+                    $(input).keydown(function (event) {
+                        if (event.keyCode == 13) {
+                            let rowData = dataTable.row({ search: 'applied' }).data();
+                            let colindex = $(this).attr("form-do-input");
+                            rowData[parseInt(colindex)] = this.value;
+                            event.preventDefault();
+                            saveFormRow(rowData);
+                        }
+                    });
+
+                }
+                if (@doTypeId == 3) // button display
+                    mainDoElement.append(`<button type="button" class="btn btn-app btn-light"><i class="fa fa-play" style="display:block"></i><span style="display:block">${$(column.header()).text().substring(0, 5) + "..."}</span></button>`);
+                if (@doTypeId == 4) {// realtimeparameters
+                    mainDoElement.append(`<div class="card-box widget-flat text-white bg-blue" style="background-color:aqua;height:inherit; text-align:center;"><i class="fi-tag"></i><h3>333</h3><span>${$(column.header()).text()}</span></div>`);
+                    mainDoElement.addClass('do_element_grid');
+                }
+                if (@doTypeId == 9) { // alarm display
+                    mainDoElement.append(`<li style="padding: 5px 10px;"><div style="color:#f1556c; background-color:#fef0f2; border:#f9b3bd 1px solid; padding:10px; border-radius:4px; font-weight:normal;font-size:16px;">${$(column.header()).text()}</div></li>`);
+                    mainDoElement.addClass('do_element_grid');
+                }
+                if (@doTypeId == 10) // notification display
+                    mainDoElement.append(`<li style="padding: 5px 10px;"><div class="notification" style="color:#169F85; background-color:#b1f3e5; border:#75c7b6 1px solid; padding:10px; border-radius:4px; font-weight:normal;font-size:16px;">${$(column.header()).text()}</div></li>`);
+                chart_labels.push($(column.header()).text());
+            }
+        }
+
+        if (@doTypeId == 7) { //tree view
+            console.log('chart_labels', chart_labels);
+            tree_nodes = [];
+            for (var i = 0; i < chart_labels.length; i++) {
+                tree_nodes.push({ text: chart_labels[i] });
+            }
+            console.log(tree_nodes);
+            $("#do_element_@doId").treeview({ data: [{ text: '@doName', nodes: tree_nodes }], collapsed: true,
+  "expanded": true,});
+            $("#do_element_@doId").css('color', 'black');
+
+        }
+        addSearchInputInFooter();
+    }
+            //end toggle header
+
+            // set search footer of table for List Display
+    function addSearchInputInFooter() {
+        let tableElement = $("#do_element_table_@doId");
+        let dataTable = $("#do_element_table_@doId").DataTable();
+        if (tableElement.children('tfoot').length)
+            return;
+        var tfoot = $('<tfoot></tfoot>');
+        var footer = $('<tr></tr>');
+        tfoot.append(footer);
+        tableElement.append(tfoot);
+
+        dataTable.api().columns().every(function () {
+            var column = this;
+            if (column.visible()) {
+                var input = $("<input type='text' style='width:100%;color:black;'>");
+                input.keyup(function () {
+                    if (column.search() !== this.value) {
+                        column.search(this.value).draw();
+                    }
+                });
+                var th = $('<th></th>');
+                th.append(input);
+                $(footer).append(th);
+            }
+        });
+    }
+</script>
+@if (doTypeId == 1)
+{
+    <style>
+        table {
+            border: 5px @(subtypedata[0]["BorderStyle"].ToString() == "1" ? "solid" : "double") gray !important ;
+            font-family : @subtypedata[0]["Font"]!important;
+            font-size : @subtypedata[0]["FontSize"]!important;
+            color : @subtypedata[0]["FontColor"]!important;
+        }
+        tr {
+            background-color: @subtypedata[0]["BackgroundColor"];
+            color : @subtypedata[0]["FontColor"]!important;
+        }
+        td {
+            color : @subtypedata[0]["FontColor"]!important;
+        }
+    </style>
+}
+
+@if (doTypeId == 2)
+{
+    <style>
+         .dataTables_wrapper {
+            border: 5px @(subtypedata[0]["BorderStyle"].ToString() == "1" ? "solid" : "double") gray !important ;
+            background-color: @subtypedata[0]["BackgroundColor"] !important;
+         }
+
+         .dataTables_wrapper *
+         {
+            color : @subtypedata[0]["FontColorUnselected"]!important;
+            font-family : @subtypedata[0]["Font"]!important;
+            font-size : @subtypedata[0]["FontSize"]!important;
+         }
+         .dataTables_wrapper input{
+             color : @subtypedata[0]["FontColorUnselected"]!important;
+         }
+         .dataTables_wrapper input:focus{
+             color : @subtypedata[0]["FontColorSelected"]!important;
+         }
+    </style>
+}
+
+@if (doTypeId == 3)
+{
+    <style>
+         .btn-app.btn-light {
+            border: 5px @(subtypedata[0]["BorderStyle"].ToString() == "1" ? "solid" : "double") gray !important ;
+            background-color: @subtypedata[0]["BackgroundColor"] !important;
+            font-family : @subtypedata[0]["Font"]!important;
+            text-align: @(subtypedata[0]["Alignment"].ToString() == "1" ? "left" : (subtypedata[0]["Alignment"].ToString() == "3" ? "right" : "center"));
+         }
+    </style>
+}
+
+@if (doTypeId == 4)
+{
+    <style>
+         .card-box {
+            border: 5px @(subtypedata[0]["BorderStyle"].ToString() == "1" ? "solid" : "double") gray !important ;
+            background-color: @subtypedata[0]["BackgroundColor"] !important;
+            font-family : @subtypedata[0]["Font"]!important;
+            text-align: @(subtypedata[0]["Alignment"].ToString() == "1" ? "left" : (subtypedata[0]["Alignment"].ToString() == "3" ? "right" : "center"));
+         }
+    </style>
+}
+
+@if (doTypeId == 5)
+{
+    <style>
+         .card-box {
+            border: 5px @(subtypedata[0]["BorderStyle"].ToString() == "1" ? "solid" : "double") gray !important ;
+            background-color: @subtypedata[0]["BackgroundColor"] !important;
+         }
+    </style>
+}
+
+@if (doTypeId == 10)
+{
+    <style>
+         .notification {
+            border: 5px @(subtypedata[0]["BorderStyle"].ToString() == "1" ? "solid" : "double") gray !important ;
+            background-color: @subtypedata[0]["BackgroundColor"] !important;
+            font-family : @subtypedata[0]["Font"]!important;
+            text-align: @(subtypedata[0]["Alignment"].ToString() == "1" ? "left" : (subtypedata[0]["Alignment"].ToString() == "3" ? "right" : "center"));
+            color:@subtypedata[0]["FontColor"]!important;
+         }
+    </style>
+}
+
+<style>
+    .do_element_grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        height: 100px;
+        grid-gap: 20px;
+    }
+
+    #modal-design {
+        display: flex;
+        justify-content: center;
+        margin-top: 100px;
+    }
+
+    .my-dragging-class {
+        opacity: 1;
+        /* 50% opacity */
+    }
+
+    .rowcontainer {
+        border: 1px solid green;
+    }
+
+    .rowContainerElement {
+        min-height: 150px;
+        border: 1px solid black;
+    }
+
+    .circleNumber {
+        width: 50px;
+        /*height: 50px;*/
+        border-radius: 50%;
+        background: linear-gradient(#a55, #f00);
+        color: #fff;
+        text-align: center;
+        line-height: 25px;
+        font-size: 20px;
+    }
+
+        .circleNumber:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 20px 30px rgba(0, 0, 0, 0.2);
+        }
+
+    .dragButton {
+        display: inline-block;
+        font-size: 15px;
+        cursor: pointer;
+        text-align: center;
+        text-decoration: none;
+        outline: none;
+        color: #fff;
+        background-color: #4CAF50;
+        border: none;
+        border-radius: 7px;
+        box-shadow: 0 9px #999;
+        text-align: center;
+        margin-right: 8px;
+    }
+
+        .dragButton:hover {
+            background-color: #3e8e41
+        }
+
+        .dragButton:active {
+            background-color: #3e8e41;
+            box-shadow: 0 5px #666;
+            transform: translateY(4px);
+        }
+
+    .removeButton {
+        display: inline-block;
+        font-size: 15px;
+        cursor: pointer;
+        text-align: center;
+        text-decoration: none;
+        outline: none;
+        color: #fff;
+        background-color: #9f0e0e;
+        border: none;
+        border-radius: 7px;
+        box-shadow: 0 9px #999;
+        text-align: center;
+    }
+
+        .removeButton:hover {
+            background-color: #7e0e01
+        }
+
+        .removeButton:active {
+            background-color: #601010;
+            box-shadow: 0 5px #666;
+            transform: translateY(4px);
+        }
+
+
+    .forFix tr:nth-child(4n+1) {
+        background-color: #f2f2f2;
+    }
+
+    .forFix tr:nth-child(4n+2) {
+        background-color: #dddddd;
+    }
+
+    .forFix tr:nth-child(4n+3) {
+        background-color: #bbbbbb;
+    }
+
+    .forFix tr:nth-child(4n) {
+        background-color: #999999;
+    }
+
+    .color-yellow {
+        background-color: #f6c23e;
+    }
+
+    #draggable {
+        width: 150px;
+        height: 150px;
+        background: #ccc;
+    }
+
+    tbody {
+        color: black;
+    }
+
+    div.dataTables_scrollBody {
+        overflow-x: auto;
+        overflow-y: scroll;
+    }
+
+    div.dataTables_wrapper {
+        overflow: auto;
+    }
+
+    .backlink {
+        float: right;
+        margin-right: 20px;
+        text-decoration: underline;
+        font-size: 14px;
+    }
+
+    #collapseComponent .row,
+    #collapseModal .row {
+        color: slategrey;
+    }
+
+        #collapseComponent .row:hover,
+        #collapseModal .row:hover {
+            color: lightsteelblue;
+        }
+
+        #collapseComponent .row:active,
+        #collapseModal .row:active {
+            color: black
+        }
+</style>

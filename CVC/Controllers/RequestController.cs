@@ -4,6 +4,7 @@ using CVC.Modules.Common.Dashboard;
 using CVC.Modules.NModuleManagement;
 using CVC.Service;
 using CVC.ViewModels;
+using CVC.Models;
 
 using Serenity.Web;
 using System;
@@ -56,9 +57,12 @@ namespace CVC.Controllers
                 DashboardCommon dashboardCommon = new DashboardCommon();
                 machineId = (int)dashboardCommon.GetMachineIdFromViewId(displayObjectId);
             }
-
+            ResponseModel<string> result = null;
             var TableName = _repo.getTableNamefromMachine(machineId);
-            var result = await repository.GetAllData(TableName);
+            if (TableName == null || TableName == "")
+                return Content("No Table is mapped to this Machine.", "application/json");
+            else
+                result = await repository.GetAllData(TableName);
             if (result.resultCode == 200)
             {
                 return Content(result.Data, "application/json");
@@ -81,8 +85,12 @@ namespace CVC.Controllers
                 machineId = (int)dashboardCommon.GetMachineIdFromViewId(displayObjectId);
             }
 
+            ResponseModel<string> result;
             var TableName = _repo.getTableNamefromMachine(machineId);
-            var result = await repository.GetAllDataTypes(TableName);
+            if (TableName == null || TableName == "")
+                return Content("No Table is mapped to this Machine.", "application/json");
+            else
+                result = await repository.GetAllDataTypes(TableName);
             if (result.resultCode == 200)
             {
                 return Content(result.Data, "application/json");
@@ -211,5 +219,99 @@ namespace CVC.Controllers
             var deleteResult = _repo.DeleteRowFromTable(TableName, EntityId);
             return Json(deleteResult, JsonRequestBehavior.AllowGet);
         }
+
+        // basic properties of displayobject e.g. LineChartDisplay's row
+        [HttpPost]
+        public JsonResult GetSubTypeTableAndPrimarykey(int ViewsId)
+        {
+            var viewData = _repo.GetDisplayObjectData(ViewsId);
+
+            if (viewData == null || viewData.DisplayObjectTypeId == null || viewData.DisplayObjectTypeId == 0)
+            {
+                return Json(new { message = "DisplayObjectType is undefined." }, JsonRequestBehavior.AllowGet);
+            }
+            var subTable = getSubTypeTablePrimarayKeyName(viewData.DisplayObjectTypeId);
+            int? primarykey = null;
+            switch (subTable)
+            {
+              case "ListDisplay":
+                primarykey = viewData.ListDisplayId;
+                break;
+              case "FormDisplay":
+                primarykey = viewData.FormDisplayId;
+                break;
+              case "ButtonDisplay":
+                primarykey = viewData.ButtonDisplayId;
+                break;
+              case "RealtimeParameterDisplay":
+                primarykey = viewData.RealtimeParameterDisplayId;
+                break;
+              case "LineChartDisplay":
+                primarykey = viewData.LineChartDisplayId;
+                break;
+              case "PieChartDisplay":
+                primarykey = viewData.PieChartDisplayId;
+                break;
+              case "TreeDisplay":
+                primarykey = viewData.TreeDisplayId;
+                break;
+              case "AttachmentDisplay":
+                primarykey = viewData.AttachmentDisplayId;
+                break;
+              case "AlarmDisplay":
+                primarykey = viewData.AlarmDisplayId;
+                break;
+              case "NotificationDisplay":
+                primarykey = viewData.NotificationDisplayId;
+                break;
+            }
+            return Json(new { tableName = subTable, primaryKey = primarykey }, JsonRequestBehavior.AllowGet);
+        }
+
+        private string getSubTypeTablePrimarayKeyName(int? dotype)
+        {
+            string tableName = "";
+            switch (dotype)
+            {
+                case 1:
+                    tableName = "ListDisplay";
+                    break;
+                case 2:
+                    tableName = "FormDisplay";
+                    break;
+                case 3:
+                    tableName = "ButtonDisplay";
+                    break;
+                case 4:
+                    tableName = "RealtimeParameterDisplay";
+                    break;
+                case 5:
+                    tableName = "LineChartDisplay";
+                    break;
+                case 6:
+                    tableName = "PieChartDisplay";
+                    break;
+                case 7:
+                    tableName = "TreeDisplay";
+                    break;
+                case 8:
+                    tableName = "AttachmentDisplay";
+                    break;
+                case 9:
+                    tableName = "AlarmDisplay";
+                    break;
+                case 10:
+                    tableName = "NotificationDisplay";
+                    break;
+                case 11:
+                    // connection = SqlConnections.NewFor<DisplayObjectColorRow>();
+                    break;
+                default:
+                  break;
+
+            }
+            return tableName;
+        }
+
     }
 }

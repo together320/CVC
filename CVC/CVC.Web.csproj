@@ -379,6 +379,7 @@
     <Compile Include="Components\DragContainer.cs" />
     <Compile Include="Controllers\ArchivalRestoreController.cs" />
     <Compile Include="Controllers\CommonController.cs" />
+    <Compile Include="Controllers\DisplayObjectEditController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImportFileController.cs" />
     <Compile Include="Controllers\LicenseController.cs" />
@@ -480,6 +481,7 @@
     </Compile>
     <Compile Include="Migrations\MigrationUtils.cs" />
     <Compile Include="Models\ADUser.cs" />
+    <Compile Include="Models\DisplayObjectEditModel.cs" />
     <Compile Include="Models\LDAP.cs" />
     <Compile Include="Models\Response.cs" />
     <Compile Include="Models\TerminalMappingModel.cs" />
@@ -10445,6 +10447,8 @@
     <Content Include="Views\LicenseCustomer\Index.cshtml" />
     <Content Include="Views\LicenseList\Index.cshtml" />
     <Content Include="tsconfig.json" />
+    <Content Include="Views\DisplayObjectEdit\DisplayObjectEdit.cshtml" />
+    <Content Include="Views\DisplayObjectEdit\ListDisplay_PartialView.cshtml" />
     <TypeScriptCompile Include="Imports\ServerTypings\Administration.AdminFormColumns.ts">
       <DependentUpon>ServerTypings.tt</DependentUpon>
     </TypeScriptCompile>
@@ -11730,31 +11734,55 @@
     <TypeScriptCompile Include="Imports\ServerTypings\MachineCustomization.ScreenViewsForm.ts">
       <DependentUpon>ServerTypings.tt</DependentUpon>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Imports\ServerTypings\MachineCustomization.DisplayObjectColorRow.ts">  <DependentUpon>ServerTypings.tt</DependentUpon></TypeScriptCompile>
-    <TypeScriptCompile Include="Imports\ServerTypings\MachineCustomization.DisplayObjectColorService.ts">  <DependentUpon>ServerTypings.tt</DependentUpon></TypeScriptCompile>
+    <TypeScriptCompile Include="Imports\ServerTypings\MachineCustomization.DisplayObjectColorRow.ts">
+      <DependentUpon>ServerTypings.tt</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Imports\ServerTypings\MachineCustomization.DisplayObjectColorService.ts">
+      <DependentUpon>ServerTypings.tt</DependentUpon>
+    </TypeScriptCompile>
     <Content Include="Modules\MachineCustomization\DisplayObjectColor\DisplayObjectColorIndex.cshtml" />
     <TypeScriptCompile Include="Modules\MachineCustomization\DisplayObjectColor\DisplayObjectColorDialog.ts" />
     <TypeScriptCompile Include="Modules\MachineCustomization\DisplayObjectColor\DisplayObjectColorGrid.ts" />
-    <TypeScriptCompile Include="Imports\ServerTypings\MachineCustomization.DisplayObjectColorForm.ts">  <DependentUpon>ServerTypings.tt</DependentUpon></TypeScriptCompile>
-    <TypeScriptCompile Include="Imports\ServerTypings\Default.ViewsRow.ts">  <DependentUpon>ServerTypings.tt</DependentUpon></TypeScriptCompile>
-    <TypeScriptCompile Include="Imports\ServerTypings\Default.ViewsService.ts">  <DependentUpon>ServerTypings.tt</DependentUpon></TypeScriptCompile>
+    <TypeScriptCompile Include="Imports\ServerTypings\MachineCustomization.DisplayObjectColorForm.ts">
+      <DependentUpon>ServerTypings.tt</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Imports\ServerTypings\Default.ViewsRow.ts">
+      <DependentUpon>ServerTypings.tt</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Imports\ServerTypings\Default.ViewsService.ts">
+      <DependentUpon>ServerTypings.tt</DependentUpon>
+    </TypeScriptCompile>
     <Content Include="Modules\Default\Views\ViewsIndex.cshtml" />
     <TypeScriptCompile Include="Modules\Default\Views\ViewsDialog.ts" />
     <TypeScriptCompile Include="Modules\Default\Views\ViewsGrid.ts" />
-    <TypeScriptCompile Include="Imports\ServerTypings\Default.ViewsForm.ts">  <DependentUpon>ServerTypings.tt</DependentUpon></TypeScriptCompile>
+    <TypeScriptCompile Include="Imports\ServerTypings\Default.ViewsForm.ts">
+      <DependentUpon>ServerTypings.tt</DependentUpon>
+    </TypeScriptCompile>
     <Content Include="Content\site\site.default.less" />
-    <TypeScriptCompile Include="Imports\ServerTypings\MachineCustomization.ViewsRow.ts">  <DependentUpon>ServerTypings.tt</DependentUpon></TypeScriptCompile>
-    <TypeScriptCompile Include="Imports\ServerTypings\MachineCustomization.ViewsService.ts">  <DependentUpon>ServerTypings.tt</DependentUpon></TypeScriptCompile>
+    <TypeScriptCompile Include="Imports\ServerTypings\MachineCustomization.ViewsRow.ts">
+      <DependentUpon>ServerTypings.tt</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Imports\ServerTypings\MachineCustomization.ViewsService.ts">
+      <DependentUpon>ServerTypings.tt</DependentUpon>
+    </TypeScriptCompile>
     <Content Include="Modules\MachineCustomization\Views\ViewsIndex.cshtml" />
     <TypeScriptCompile Include="Modules\MachineCustomization\Views\ViewsDialog.ts" />
     <TypeScriptCompile Include="Modules\MachineCustomization\Views\ViewsGrid.ts" />
-    <TypeScriptCompile Include="Imports\ServerTypings\MachineCustomization.ViewsForm.ts">  <DependentUpon>ServerTypings.tt</DependentUpon></TypeScriptCompile>
-    <TypeScriptCompile Include="Imports\ServerTypings\MachineCustomization.DisplayObjectTypeColorRow.ts">  <DependentUpon>ServerTypings.tt</DependentUpon></TypeScriptCompile>
-    <TypeScriptCompile Include="Imports\ServerTypings\MachineCustomization.DisplayObjectTypeColorService.ts">  <DependentUpon>ServerTypings.tt</DependentUpon></TypeScriptCompile>
+    <TypeScriptCompile Include="Imports\ServerTypings\MachineCustomization.ViewsForm.ts">
+      <DependentUpon>ServerTypings.tt</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Imports\ServerTypings\MachineCustomization.DisplayObjectTypeColorRow.ts">
+      <DependentUpon>ServerTypings.tt</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Imports\ServerTypings\MachineCustomization.DisplayObjectTypeColorService.ts">
+      <DependentUpon>ServerTypings.tt</DependentUpon>
+    </TypeScriptCompile>
     <Content Include="Modules\MachineCustomization\DisplayObjectTypeColor\DisplayObjectTypeColorIndex.cshtml" />
     <TypeScriptCompile Include="Modules\MachineCustomization\DisplayObjectTypeColor\DisplayObjectTypeColorDialog.ts" />
     <TypeScriptCompile Include="Modules\MachineCustomization\DisplayObjectTypeColor\DisplayObjectTypeColorGrid.ts" />
-    <TypeScriptCompile Include="Imports\ServerTypings\MachineCustomization.DisplayObjectTypeColorForm.ts">  <DependentUpon>ServerTypings.tt</DependentUpon></TypeScriptCompile>
+    <TypeScriptCompile Include="Imports\ServerTypings\MachineCustomization.DisplayObjectTypeColorForm.ts">
+      <DependentUpon>ServerTypings.tt</DependentUpon>
+    </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Code\" />
@@ -11818,7 +11846,7 @@
     <TypeScriptCompile Include="Scripts\typings\serenity\Serenity.CoreLib.d.ts" />
     <TypeScriptCompile Include="Scripts\serenity\Serenity.CoreLib.d.ts" />
   </ItemGroup>
-   <PropertyGroup>
+  <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>

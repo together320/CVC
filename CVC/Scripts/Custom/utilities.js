@@ -1,7 +1,7 @@
 var moduleNames = {
     "Administration": ["Roles", "UserManagement", "ModuleAccess", "Language", "Users"],
     "MachineCustomization": ["PackageLine", "Machine", "MachineParameter", "Alarm", "Module", "DisplayObject", "TerminalType", "MasterTerminal", "MessageMaster", "ListDisplay", "FormDisplay", "ButtonDisplay", "RealTimeParameterDisplay", "LineChartDisplay", "PieChartDisplay", "TreeDisplay", "AttachmentDisplay", "AlarmDisplay", "NotificationDisplay", "ContainerDisplay", "PrimaryRelationship", "SecondaryRelationship", "ScreenViews", "DisplayObjectColor", "MachineRecipe"],
-    "PackSettings": ["Bottle", "Pack", "Cotton", "Desiccant", "Cap"],
+    "PackSettings": ["Bottle", "Pack", "Cotton", "Desiccant", "Cap", "EndOfLine"],
     "Configuration": ["Company", "Department"],
     "ExternalApplicationInterface": [],
     "Report": [],

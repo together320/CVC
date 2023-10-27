@@ -155,6 +155,10 @@ function getDisplayObjectColorsByViewsId(viewsId) {
     });
 }
 
+function getDisplayObjectByViewsId(viewsId) { // viewsId == displayobjectId
+
+}
+
 function saveColorRowByViewsId(viewsId, rowData) {
     return new Promise(function (resolve, reject) {
         $.ajax({
@@ -182,8 +186,6 @@ function deleteColorRow(colorId) {
             dataType: 'json',
             data: { ColorId: colorId },
             success: function (data) {
-                console.log("deleting DOcolor is succeed!!!");
-                console.log(data);
                 resolve(data);
             },
             error: function (error) {
@@ -235,6 +237,41 @@ function saveRowToDataTable(url, rowData, entityId) {
             type: 'POST',
             dataType: 'json',
             data: JSON.stringify({ EntityId: entityId, Entity: rowData }),
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                resolve(data);
+            },
+            error: function (error) {
+                reject(error);
+            }
+        });
+    });
+}
+
+function GetSubTypeTableAndPrimarykey(viewsId) {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: Q.resolveUrl('~/Request/GetSubTypeTableAndPrimarykey'),
+            type: 'POST',
+            dataType: 'json',
+            data: { ViewsId: viewsId },
+            success: function (data) {
+                resolve(data);
+            },
+            error: function (error) {
+                reject(error);
+            }
+        });
+    });
+}
+
+function GetSubTypeDataBySubEntityId(url, entityId) {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: Q.resolveUrl(url),
+            type: 'POST',
+            dataType: 'json',
+            data: JSON.stringify({ EntityId: entityId }),
             contentType: "application/json; charset=utf-8",
             success: function (data) {
                 resolve(data);

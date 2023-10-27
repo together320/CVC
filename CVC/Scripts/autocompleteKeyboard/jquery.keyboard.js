@@ -1,4 +1,4 @@
-﻿/*! jQuery UI Virtual Keyboard v1.30.1 *//*
+/*! jQuery UI Virtual Keyboard v1.30.4 *//*
 Author: Jeremy Satterfield
 Maintained: Rob Garrison (Mottie on github)
 Licensed under the MIT License
@@ -42,7 +42,7 @@ http://www.opensource.org/licenses/mit-license.php
 	var $keyboard = $.keyboard = function (el, options) {
 	var o, base = this;
 
-	base.version = '1.30.1';
+	base.version = '1.30.4';
 
 	// Access to jQuery and DOM versions of element
 	base.$el = $(el);
@@ -623,98 +623,38 @@ http://www.opensource.org/licenses/mit-license.php
 		return base;
 	};
 
-	//base.makePreview = function () {
-	//	if (o.usePreview) {
-	//		var indx, attrs, attr, removedAttr,
-	//			kbcss = $keyboard.css;
-	//		base.$preview = base.$el.clone(false)
-	//			.data('keyboard', base)
-	//			.removeClass(kbcss.placeholder + ' ' + kbcss.input)
-	//			.addClass(kbcss.preview + ' ' + o.css.input)
-	//			.attr('tabindex', '-1')
-	//			.show(); // for hidden inputs
-	//		base.preview = base.$preview[0];
-          
-	//		// remove extraneous attributes.
-	//		removedAttr = /^(data-|id|aria-haspopup)/i;
-	//		attrs = base.$preview.get(0).attributes;
-	//		for (indx = attrs.length - 1; indx >= 0; indx--) {
-	//			attr = attrs[indx] && attrs[indx].name;
-	//			if (removedAttr.test(attr)) {
-	//				// remove data-attributes - see #351
-	//				base.preview.removeAttribute(attr);
-	//			}
-	//		}
-	//		// build preview container and append preview display
-	//		$('<div />')
-	//			.addClass(kbcss.wrapper)
-	//			.append(base.$preview)
-	//			.prependTo(base.$keyboard);
-	//	} else {
-	//		base.$preview = base.$el;
-	//		base.preview = base.el;
-	//	}
-	//};
-        base.makePreview = function () {
-            if (o.usePreview) {
-                var indx, attrs, attr, removedAttr,
-                    kbcss = $keyboard.css;
-                if (base.el.type === 'search') {
-                    base.$preview = base.$el.clone(false)
-                        .data('keyboard', base)
-                        // .removeClass(kbcss.placeholder)
-                        // .addClass(kbcss.preview)
-                        .attr('tabindex', '-1')
-                        .show(); // for hidden inputs
-                }
-                else {
-                    base.$preview = base.$el.clone(false)
-                        .data('keyboard', base)
-                        .removeClass(kbcss.placeholder + ' ' + kbcss.input)
-                        .addClass(kbcss.preview + ' ' + o.css.input)
-                        .attr('tabindex', '-1')
-                        .show(); // for hidden inputs
-                }
+	base.makePreview = function () {
+		if (o.usePreview) {
+			var indx, attrs, attr, removedAttr,
+				kbcss = $keyboard.css;
+			base.$preview = base.$el.clone(false)
+				.data('keyboard', base)
+				.removeClass(kbcss.placeholder + ' ' + kbcss.input)
+				.addClass(kbcss.preview + ' ' + o.css.input)
+				.attr('tabindex', '-1')
+				.show(); // for hidden inputs
+			base.preview = base.$preview[0];
 
-                base.preview = base.$preview[0];
-
-                base.label = 'Min:' + base.el.min + ' Max:' + base.el.max;
-
-                // Switch the number input field to text so the caret positioning will work again
-                if (base.preview.type === 'number' || base.preview.type === 'search') {
-                    base.preview.type = 'text';
-                }
-
-                // remove extraneous attributes.
-                removedAttr = /^(data-|id|aria-haspopup)/i;
-                attrs = base.$preview.get(0).attributes;
-                for (indx = attrs.length - 1; indx >= 0; indx--) {
-                    attr = attrs[indx] && attrs[indx].name;
-                    if (removedAttr.test(attr)) {
-                        // remove data-attributes - see #351
-                        base.preview.removeAttribute(attr);
-                    }
-                }
-                // build preview container and append preview display
-                if (base.el.type === 'search') {        ///this type only used in RenderViewField for Min/Max only
-                    $('<div />')
-                        .addClass(kbcss.wrapper)
-                        .append(base.$preview)
-                        .append(base.label)
-                        .prependTo(base.$keyboard);
-                }
-                else {
-                    $('<div />')
-                        .addClass(kbcss.wrapper)
-                        .append(base.$preview)
-                        .prependTo(base.$keyboard);
-                }
-
-            } else {
-                base.$preview = base.$el;
-                base.preview = base.el;
-            }
-        };
+			// remove extraneous attributes.
+			removedAttr = /^(data-|id|aria-haspopup)/i;
+			attrs = base.$preview.get(0).attributes;
+			for (indx = attrs.length - 1; indx >= 0; indx--) {
+				attr = attrs[indx] && attrs[indx].name;
+				if (removedAttr.test(attr)) {
+					// remove data-attributes - see #351
+					base.preview.removeAttribute(attr);
+				}
+			}
+			// build preview container and append preview display
+			$('<div />')
+				.addClass(kbcss.wrapper)
+				.append(base.$preview)
+				.prependTo(base.$keyboard);
+		} else {
+			base.$preview = base.$el;
+			base.preview = base.el;
+		}
+	};
 
 	// Added in v1.26.8 to allow chaining of the caret function, e.g.
 	// keyboard.reveal().caret(4,5).insertText('test').caret('end');
@@ -2747,7 +2687,8 @@ http://www.opensource.org/licenses/mit-license.php
 			base.showSet();
 		},
 		sign: function (base) {
-			if (/^[+-]?\d*\.?\d*$/.test(base.getValue())) {
+			var signRegex = base.decimal ? /^[+-]?\d*\.?\d*$/ : /^[+-]?\d*,?\d*$/;
+			if (signRegex.test(base.getValue())) {
 				var caret,
 					p = $keyboard.caret(base.$preview),
 					val = base.getValue(),
@@ -3227,6 +3168,7 @@ http://www.opensource.org/licenses/mit-license.php
 
 	$keyboard.checkCaretSupport = function () {
 		if (typeof $keyboard.checkCaret !== 'boolean') {
+			var elWithFocus = document.activeElement;
 			// Check if caret position is saved when input is hidden or loses focus
 			// (*cough* all versions of IE and I think Opera has/had an issue as well
 			var $temp = $('<div style="height:0px;width:0px;overflow:hidden;position:fixed;top:0;left:-100px;">' +
@@ -3235,6 +3177,9 @@ http://www.opensource.org/licenses/mit-license.php
 			// Also save caret position of the input if it is locked
 			$keyboard.checkCaret = $keyboard.caret($temp.find('input').hide().show()).start !== 3;
 			$temp.remove();
+			if (elWithFocus && elWithFocus.focus) {
+				elWithFocus.focus();
+			}
 		}
 		return $keyboard.checkCaret;
 	};

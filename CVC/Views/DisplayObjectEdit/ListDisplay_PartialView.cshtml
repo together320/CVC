@@ -1,0 +1,210 @@
+﻿@using Newtonsoft.Json.Linq;
+@using Newtonsoft.Json;
+@model CVC.Models.SubDisplayObject
+
+@{
+    var doId = ViewBag.doId;
+    var doTypeId = ViewBag.doTypeId;
+    JArray columns = new JArray();
+    JArray columDatum = new JArray();
+    JArray typeData = JArray.Parse(Model.SubTypeData);
+    if (Model.SubDOTypeColumns != "" && Model.SubDOTypeData != null)
+    {
+        columns = JArray.Parse(Model.SubDOTypeColumns);
+        columDatum = JArray.Parse(Model.SubDOTypeData);
+    }
+}
+
+@if (doTypeId == 5 || doTypeId == 6)
+{
+    <canvas id='do_element_@doId' style='display:block;width:100%;max-width:600px;' width='400' height='400'></canvas>
+}
+else
+{
+    <div id="do_element_@doId"></div>
+}
+<div style='width:90%; margin:0 auto; position:absolute; min-height:90%;' class="mainDO" id='parent_do_element_@doId'>
+    <table id='do_element_table_@doId' class='displays table-striped table-bordered dt-responsive nowrap' width='100' cellspacing='0'>
+        @if (@Model.SelectedEFs.Count > 0)
+        {
+            <thead>
+                <tr style="">
+                    @if (doTypeId == 1 || doTypeId == 2)
+                    {
+                        foreach (JObject item in columns)
+                        {
+                            <td style="color: black">@item["ColumnName"]</td>
+                        }
+                    }
+                    else
+                    {
+                        foreach (var item in Model.SelectedEFs)
+                        {
+                            if (item.ColumnName == null)
+                            {
+                                <td>@item.ParameterName</td>
+                            }
+                            else
+                            {
+                                <td>@item.ColumnName</td>
+                            }
+                        }
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @if (doTypeId == 1 || doTypeId == 2)
+                {
+                    foreach (JObject obj in columDatum)
+                    {
+                        <tr>
+                            @foreach (var property in obj)
+                            {
+                                <td>@property.Value</td>
+                            }
+                        </tr>
+                    }
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    @if (doTypeId == 1 || doTypeId == 2)
+                    {
+                        foreach (JObject item in columns)
+                        {
+                            <td>@item["ColumnName"]</td>
+                        }
+                    }
+                </tr>
+            </tfoot>
+        }
+    </table>
+</div>
+
+<script type="text/javascript">
+    var newChart;
+    var chart_labels = [];
+
+    $(document).ready(function () {
+        console.log('this is initfunction');
+        if (@Model.SelectedEFs.Count == 0) {
+            Q.notifyWarning("There is no Entity Field.");
+            return;
+        }
+        if (@doTypeId != 1) {
+            $('#do_element_table_@doId').css('display', 'none');
+            @*$("#do_element_table_" + @doId.ToString() + "_length").css('display', 'none');*@
+        }
+
+        $(do_element_table_@doId).DataTable({
+            /*responsive: {
+                details: {
+                    type: 'column'
+                }
+            },*/
+            "columnDefs": [
+                {"targets": "_all", "visible": false, "orderable": false },
+            ],
+            pageLength: @doTypeId== 2 ? 1 : 10,
+            lengthChange: @doTypeId== 1 ? true : false,
+            buttons: [],
+            initComplete: function () {
+                if (@doTypeId == 1) {
+                    this.api()
+                        .columns()
+                        .every(function () {
+                            let column = this;
+                            let title = column.footer().textContent;
+
+                            // Create input element
+                            let input = document.createElement('input');
+                            input.placeholder = title;
+                            input.style.color = "black";
+                            column.footer().replaceChildren(input);
+
+                            // Event listener for user input
+                            input.addEventListener('keyup', () => {
+                                if (column.search() !== this.value) {
+                                    column.search(input.value).draw();
+                                }
+                            });
+                        });
+                } else {
+                    if (@doTypeId != 2) {
+                        $("#do_element_table_@doId" + "_wrapper").css('display', 'none');
+                        if (@doTypeId == 5 || @doTypeId == 6) { //chart view
+                            var xValues = [];
+                            var yValues = [];
+                            var barColors = ["red", "green", "blue", "orange", "brown"];
+
+                            Chart.defaults.color = '#ff0000';
+                            newChart = new Chart($("#do_element_@doId"), {
+                                type: @doTypeId == 5 ? "bar" : "pie",
+                                data: {
+                                    labels: xValues,
+                                    datasets: [{
+                                        backgroundColor: barColors,
+                                        data: yValues
+                                    }]
+                                },
+                                options: {
+                                    legend: { display: false },
+                                    title: {    
+                                        display: true,
+                                        text: "Chart"
+                                    }
+                                }
+                            });
+                            updateChart();
+
+                            setInterval(updateChart, 1000);
+                        }
+                    }
+                }
+
+            },
+            rowCallback: function (row, data, index) {      //this happens when we change current row, so here we have to change form display
+                if (@doTypeId == 2) {
+                    let mainDoElement = $("#do_element_@doId");
+                    mainDoElement.empty();
+
+                    let dataTable = $("#do_element_table_@doId").DataTable();
+                    let numCols = dataTable.columns().nodes().length;
+                    var columnDatum = @Html.Raw(JsonConvert.SerializeObject(columns)); // columdaum is column name, column type
+                    for (var i = 0; i < numCols; i++) {
+                        var inputType = getHtmlTypeByDBType(columnDatum[i].DataType);
+                        let column = dataTable.column(i);
+                        if (column.visible()) {
+                            console.log('this column is visible');
+                            mainDoElement.append("<div class='row' style='justify-content : center;'><div class='col-3' style='color:black;'>" + $(column.header()).text() + " :</div><div class='col-3'><input style='color:black;' value='" + data[i] + "' type='" + inputType + "' form-do-input='" + i + "'/></div></div>");
+                            var input = "[form-do-input=" + i + "]";
+                            $(input).keydown(function (event) {
+                                if (event.keyCode == 13) {
+                                    var rowData = dataTable.row({ search: 'applied' }).data();
+                                    var colindex = $(this).attr("form-do-input");
+                                    rowData[parseInt(colindex)] = this.value;
+                                    event.preventDefault();
+                                    saveFormRow(rowData);
+                                }
+                            });
+                        }
+                    }
+                    mainDoElement.insertBefore($("#do_element_table_@doId"));
+                }
+            }
+        });
+    });
+
+    function updateChart(data) { //
+        var newData = [];
+        newChart.data.labels = chart_labels;
+        for (var i = 0; i < chart_labels.length; i++) {
+            const desiredValue = data.find(item => item.MachineParameterName === chart_labels[i])?.Value || null;
+            newData[i] = desiredValue;
+        }
+        newChart.data.datasets[0].data = newData;
+
+        console.log("chart" + newChart);
+        newChart.update();
+    }
+</script>
