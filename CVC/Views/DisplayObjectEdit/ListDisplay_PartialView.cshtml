@@ -196,14 +196,29 @@ else
     });
 
     function updateChart(data) { //
+        if (isConnected) {
+            var newData = [];
+            newChart.data.labels = chart_labels;
+            for (var i = 0; i < chart_labels.length; i++) {
+                const desiredValue = data.find(item => item.MachineParameterName === chart_labels[i])?.Value || null;
+                newData[i] = desiredValue;
+            }
+            newChart.data.datasets[0].data = newData;
+
+            console.log("chart" + newChart);
+            newChart.update();
+        }
+        else
+            updateRandomChart();
+    }
+
+    function updateRandomChart() {
         var newData = [];
         newChart.data.labels = chart_labels;
-        for (var i = 0; i < chart_labels.length; i++) {
-            const desiredValue = data.find(item => item.MachineParameterName === chart_labels[i])?.Value || null;
-            newData[i] = desiredValue;
-        }
+        for (var i = 0; i < chart_labels.length; i++)
+            newData.push(Math.random() * 100);
         newChart.data.datasets[0].data = newData;
-
+        
         console.log("chart" + newChart);
         newChart.update();
     }

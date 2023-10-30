@@ -75,21 +75,14 @@ namespace CVC.Controllers
         }
         foreach (var sp in sortParameters)
         {
-          foreach(var vf in sortViewFields)
+          SelectedEntityFieldForDO ef = new SelectedEntityFieldForDO
           {
-            if(vf.MachineParameterId == sp.MachineParameterId)
-            {
-              SelectedEntityFieldForDO ef = new SelectedEntityFieldForDO
-              {
-                MachineParameterId = sp.MachineParameterId,
-                ParameterName = sp.ParameterName,
-                ColumnName = sp.ColumnName,
-                PickListId = sp.PickListId
-              };
-              displayObjectEditModel.SubDO.SelectedEFs.Add(ef);
-            }
-
-          }
+            MachineParameterId = sp.MachineParameterId,
+            ParameterName = sp.ParameterName,
+            ColumnName = sp.ColumnName,
+            PickListId = sp.PickListId
+          };
+          displayObjectEditModel.SubDO.SelectedEFs.Add(ef);
         }
       }
 
