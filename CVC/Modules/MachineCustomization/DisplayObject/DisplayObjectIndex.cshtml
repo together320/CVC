@@ -11,8 +11,35 @@
 <div class="modal fade" id="modal-design">
     <div class="modal-dialog modal-fullscreen">
         <div class="modal-content bg-primary">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Add(Edit) Entity Field</h4>
+            </div>
             <div class="modal-body" style="padding : 0px!important;">
                 <!-- Editing DisplayObject Modal -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-add-EF">
+    <div class="modal-dialog" style="margin-top : 300px;">
+        <div class="modal-content bg-primary">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Add(Edit) Entity Field</h4>
+            </div>
+            <div class="modal-body" id="EF-row-Content" style="display: grid; grid-template-columns: min-content auto; grid-column-gap: 20px; grid-row-gap: 20px;">
+                <!--  EF Row Input List  -->
+            </div>
+            <div class="modal-footer" style="">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                <a id="add-EF-row" class="btn btn-default pull-left">Add</a>
+                @*<button type="button" class="btn btn-primary">Save changes</button>*@
             </div>
         </div>
     </div>
@@ -25,9 +52,8 @@
 
 <link href="~/Content/css/icons.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-<link
-    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-    rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+      rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.css">
 
 <script src="~/Scripts/jquery.signalR-2.4.1.min.js"></script>
@@ -70,6 +96,7 @@
             },
             dataType: 'html',
             success: function (resultHtml) {
+                $('#modal-design .modal-body').off();
                 $('#modal-design .modal-body').html(resultHtml);
                 //$('#modal-design .modal-body').html("");
                 $('#modal-design').modal();

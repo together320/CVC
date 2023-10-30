@@ -92,6 +92,7 @@ function calculateBackgroundColor(value) { // value is float
 $("#draggable").draggable();
 
 function undoDoEdit() {
+    Q.notifyWarning("Currently under Development.");
     if (undoStack.length > 1) {
         undoStack.pop(); // Remove the latest state from the stack
         $('.workSpace').html(undoStack[undoStack.length - 1]);

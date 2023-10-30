@@ -8857,9 +8857,9 @@ var CVC;
                 _super.prototype.onClick.call(this, e, row, cell);
                 if (e.isDefaultPrevented())
                     return;
-                if ($(e.target).hasClass("design-mode")) {
+                /*if ($(e.target).hasClass("design-mode")) {
                     Q.notifyInfo("Design Mode selected");
-                }
+                }*/
             };
             DisplayObjectGrid = __decorate([
                 Serenity.Decorators.registerClass()

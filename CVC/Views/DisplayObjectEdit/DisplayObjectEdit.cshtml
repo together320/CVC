@@ -178,31 +178,106 @@
     // drag component count
     var componentCount = 0;
 
+    /*var columnList = [];*/
+    var columnTypes = [];
+
+    var timers = [];
+
+    var tableName = '';
     // init page
     $(function () {
         $(document).ready(function () {
-            $.ajax({
-            url: Q.resolveUrl('./DisplayObjectEdit/GetRealtimeParametersAsync'),
-            async: true,
-            type: 'POST',
-            dataType: 'json',
-            data: { MachineId: @Model.SelectedMachine.MachineId.Value, ViewsId:@doId },
-            success: function (data) {
-                console.log(data);
-                GetScreenLockTimeOut();
-                CheckHeartBeatSend();
-                setTimeout(() => {
-                    connectToSocket();
-                }, 3000);
-            },
-            error: function (error) {
-                reject(error);
+            // variable initialization
+            let jsonstr = '@Html.Raw(Model.SubDO.SubDOTypeColumns)';
+            columnTypes = JSON.parse(jsonstr);
+            tableName = '@Model.SelectedMachine.TableName';
+
+            // modal event initialization
+            initModal();
+
+            let isRealtime = @Model.SelectedMachine.IsRealTime.ToString().ToLower();
+            if (isRealtime == "true" && @doTypeId == 4 ||@doTypeId == 5 ||@doTypeId == 6 ||@doTypeId == 9 ||@doTypeId == 10) {
+                console.log('ensure the realtilemachine');
+                $.ajax({
+                    url: Q.resolveUrl('./DisplayObjectEdit/GetRealtimeParametersAsync'),
+                    async: true,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { MachineId: @Model.SelectedMachine.MachineId, ViewsId:@doId },
+                    success: function (data) {
+                        if (data.data == null) {
+                            Q.notifyWarning("No real-time device connection.");
+                            $('#modal-design').modal('hide');
+                            return;
+                        }
+                        GetScreenLockTimeOut();
+                        CheckHeartBeatSend();
+                        timers.push(setTimeout(() => {
+                            connectToSocket();
+                        }, 3000));
+                    },
+                    error: function (error) {
+                        reject(error);
+                    }
+                });
+            }
+            $('#modal-design').on('hidden.bs.modal', function() {
+                // Stop time counters and any other scripts when modal is closed
+                if (timers != null && timers.length > 0) {
+                    timers.forEach(element => clearTimeout(element));
+                }
+            });
+        });
+        
+
+        $(document).on("click", ".removeButton", function () {      //when click xremove button
+            undoStack.push($('.workSpace').html());
+
+            $(this).parent().parent().remove();
+        });
+        ///Clear all
+        $("#idDeleteMain").on("click", function (event) {       //delete all button
+            undoStack.push($('.workSpace').html());
+
+            $("main").empty();
+            rowCount = 0;
+        });
+
+        $(".workSpace").on("dragover", function (event) {
+            event.preventDefault();
+        });
+
+        $('.workSpace').on("drop", function (event) {
+            var isClone = event.originalEvent.dataTransfer.getData('dragging');
+            var droppedId = event.originalEvent.dataTransfer.getData('dropped-id');
+            if (droppedId != "" && droppedId.includes("formId") == 0) {
+                var nodeCopy = $("#" + droppedId);
+                var nodeValue = nodeCopy.is('input, select, textarea') ? nodeCopy.val() : nodeCopy.text();
+
+                undoStack.push($('.workSpace').html());
+
+                $(this).append(nodeCopy);
+            } else {
             }
         });
 
+        $(document).on('click', '#do_element_table_@doId' + ', tbody tr', function (e) {
+            let classList = e.currentTarget.classList;
+            var table = $("#do_element_table_@doId").DataTable();
+            if (classList.contains('selected')) {
+                classList.remove('selected');
+            }
+            else {
+                table.rows('.selected').nodes().each((row) => row.classList.remove('selected'));
+                classList.add('selected');
+            }
         });
-        console.log("editDO modal");
-        $(document).on("drop", ".component", function (event) {
+
+        
+    });
+    // end init page
+    function initModal() {
+        $(".component").on("drop", function (event) {
             event.stopImmediatePropagation();
             var isClone = event.originalEvent.dataTransfer.getData('dragging');
             var droppedId = event.originalEvent.dataTransfer.getData('dropped-id');
@@ -231,7 +306,7 @@
             event.preventDefault();
         });
 
-        $(document).on("drop", ".workSpace", function (event) {
+        $(".workSpace").on("drop", function (event) {
             var droppedId = event.originalEvent.dataTransfer.getData('dropped-id');
             var nodeCopy = $("#" + droppedId);
             if (droppedId.includes('componentId') == 1) {
@@ -248,7 +323,7 @@
                     nodeCopy.click(function (e) {
                         $('#modal-add-EF').modal();
                         $('#EF-row-Content').empty();
-                        setEditRowModal(columnList, 'Add');
+                        setEditRowModal('Add');
                     });
                 } else if (commontype == '5') { //Edit
                     if (@doTypeId == 1) {
@@ -257,17 +332,10 @@
                             var row = dataTable.row('.selected').data();
                             $('#EF-row-Content').empty();
                             selectedEntityId = row[0];
-                            setEditRowModal(columnList, 'Save', row);
+                            setEditRowModal('Save', row);
                         });
                     } else if (@doTypeId == 2) {
                         Q.notifyInfo("Edit on InputField.");
-                        // nodeCopy.click(function (e) {
-                        //     $('#modal-add-EF').modal();
-                        //     var row = dataTable.row({ search: 'applied' }).data();
-                        //     $('#EF-row-Content').empty();
-                        //     selectedEntityId = row[0];
-                        //     setEditRowModal(columnList, 'Save', row);
-                        // });
                     }
                 } else if (commontype == '6') { // Delete
                     if (@doTypeId == 1) {
@@ -324,7 +392,7 @@
             }
         });
 
-        $(document).on("drop", ".mainDO", function (event) {
+        $(".mainDO").on("drop", function (event) {
             console.log("dropped onto the parent do element");
             var isClone = event.originalEvent.dataTransfer.getData('dragging');
             var droppedId = event.originalEvent.dataTransfer.getData('dropped-id');
@@ -386,65 +454,22 @@
             }
         });
 
-        $(document).on("click", ".removeButton", function () {      //when click xremove button
-            undoStack.push($('.workSpace').html());
-
-            $(this).parent().parent().remove();
-        });
-        ///Clear all
-        $("#idDeleteMain").on("click", function (event) {       //delete all button
-            undoStack.push($('.workSpace').html());
-
-            $("main").empty();
-            rowCount = 0;
-        });
-
-        $(".workSpace").on("dragover", function (event) {
-            event.preventDefault();
-        });
-
-        $('.workSpace').on("drop", function (event) {
-            var isClone = event.originalEvent.dataTransfer.getData('dragging');
-            var droppedId = event.originalEvent.dataTransfer.getData('dropped-id');
-            if (droppedId != "" && droppedId.includes("formId") == 0) {
-                var nodeCopy = $("#" + droppedId);
-                var nodeValue = nodeCopy.is('input, select, textarea') ? nodeCopy.val() : nodeCopy.text();
-
-                undoStack.push($('.workSpace').html());
-
-                $(this).append(nodeCopy);
-            } else {
-            }
-        });
-
-        $(document).on('click', '#do_element_table_@doId' + ', tbody tr', function (e) {
-            let classList = e.currentTarget.classList;
-            var table = $("#do_element_table_@doId").DataTable();
-            if (classList.contains('selected')) {
-                classList.remove('selected');
-            }
-            else {
-                table.rows('.selected').nodes().each((row) => row.classList.remove('selected'));
-                classList.add('selected');
-            }
-        });
-
-        $(document).on('click', '#modal-add-EF #add-EF-row', function () {
+        $('#modal-add-EF #add-EF-row').on('click', function () {
             var dataobj = {};
             var addArr = [];
             var k = 1;
             if ($(this).text() == "Save")
-                dataobj[columnList[0]] = selectedEntityId;
+                dataobj[columnTypes[0].ColumnName] = selectedEntityId;
             $('#EF-row-Content').find('input').each(function () {
                 var val = $(this).val();
                 if (val == "null")
                     val = null;
-                if (columnList[k].toLowerCase() == "createat" || columnList[k].toLowerCase() == "updateat" ||
-                    columnList[k].toLowerCase() == "createby" || columnList[k].toLowerCase() == "updateby" ||
-                    columnList[k].toLowerCase() == "createddate" || columnList[k].toLowerCase() == "updateddate")
-                    dataobj[columnList[k]] = '';
+                if (columnTypes[k].ColumnName.toLowerCase() == "createat" || columnTypes[k].ColumnName.toLowerCase() == "updateat" ||
+                    columnTypes[k].ColumnName.toLowerCase() == "createby" || columnTypes[k].ColumnName.toLowerCase() == "updateby" ||
+                    columnTypes[k].ColumnName.toLowerCase() == "createddate" || columnTypes[k].ColumnName.toLowerCase() == "updateddate")
+                    dataobj[columnTypes[k].ColumnName.toLowerCase()] = '';
                 else
-                    dataobj[columnList[k]] = val;
+                    dataobj[columnTypes[k].ColumnName.toLowerCase()] = val;
                 addArr.push(val);
                 k++;
             });
@@ -479,9 +504,9 @@
                     });
             }
         });
-    });
-    // end init page
+    }
 
+    /*get the realtime data from machine with signalr*/
     function connectToSocket() {
         console.log('connectToSocket');
         var socket = $.connection.socketHub;
@@ -491,9 +516,9 @@
             console.log(data);
             switch (result.type) {
                 case 'displaypreview':
-                    setTimeout(() => {
+                    timers.push(setTimeout(() => {
                         socket.server.send('displaypreview', '');
-                    }, 300);
+                    }, 300));
                     console.log(data);
                     updateChart(result.data);
                     //console.log("realtimedata:", result.data);
@@ -510,9 +535,9 @@
         });
 
         $.connection.hub.disconnected(function () {
-            setTimeout(function () {
+            timers.push(setTimeout(function () {
                 $.connection.hub.start();
-            }, 3000); // Restart connection after 3 seconds.
+            }, 3000)); // Restart connection after 3 seconds.
         });
     }
 
@@ -641,6 +666,8 @@
         if (undoStack.length > 1) {
             undoStack.pop(); // Remove the latest state from the stack
             $('.workSpace').html(undoStack[undoStack.length - 1]);
+            // connect event
+            initModal();
         }
     }
 
@@ -774,7 +801,42 @@
             }
         });
     }
+
+    var efRowHtml = "<p style='margin:0px; color:black; display:block; '>EFnameToChange  </p> <input id='value-ef' type='text' required value='' style='color:black; display:block; '/>";
+
+    function setEditRowModal(buttonName, row = []) {
+        console.log('columnTypes', columnTypes);
+        var k = 0;
+        var efRealRowHtml = '';
+        for (var column of columnTypes) {
+            let colname = column.ColumnName;
+            let coltype = column.DataType;
+            if (k > 0) {
+                let lowercase = colname.toLowerCase();
+                efRealRowHtml = efRowHtml;
+                if (lowercase.includes('createat') || lowercase.includes('updateat') ||
+                    lowercase.includes('createby') || lowercase.includes('updateby') ||
+                    lowercase.includes('createddate') || lowercase.includes('updateddate') ||
+                    lowercase.includes('createdby') || lowercase.includes('updatedby')) {
+                    console.log('lowercase', lowercase);
+                    efRealRowHtml = efRealRowHtml.replace(/display:block;/g, "display:none;");
+                }
+                var inputType = getHtmlTypeByDBType(coltype);
+                if (buttonName == "Add")
+                    efRealRowHtml = efRealRowHtml.replace("EFnameToChange", colname).replace("type='text'", "type='" + inputType + "'");
+                else if ((buttonName == "Save"))
+                    efRealRowHtml = efRealRowHtml.replace("EFnameToChange", colname).replace("value=''", "value='" + row[k] + "'").replace("type='text'", "type='" + inputType + "'");
+                $('#EF-row-Content').append(efRealRowHtml);
+            }
+            k++;
+        }
+        $('#modal-add-EF #add-EF-row').html(buttonName);
+    }
 </script>
+
+
+
+
 @if (doTypeId == 1)
 {
     <style>

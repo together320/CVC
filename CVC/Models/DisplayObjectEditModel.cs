@@ -58,7 +58,7 @@ namespace CVC.Models
   public class SubDisplayObject
   {
     public string SubDOTypeData { get; set; } // all rows of subdisplayobjecttype of Table of DB
-    public string SubDOTypeColumns { get; set; } // all colmn names of subdisplayobjecttype Table of DB
+    public string SubDOTypeColumns { get; set; } // ef parameter table's ColumnNames and DataTypes
     public string SubTypeData { get; set; } // real subtype of displayobject is gotten by subdotype table, which is gotten by viewTable's displayobjecttypeId
     public List<SelectedEntityFieldForDO> SelectedEFs { get; set; }
     public List<SelectedViewField> SelectedVFs { get; set; }
