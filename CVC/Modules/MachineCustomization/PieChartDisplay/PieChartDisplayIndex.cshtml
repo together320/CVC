@@ -2,7 +2,7 @@
     ViewData["Title"] = Serenity.LocalText.Get("Db.MachineCustomization.PieChartDisplay.EntityPlural");
 }
 
-<div id="GridDiv"></div>
+<div id="PieChart_GridDiv"></div>
 <div id="DisplayObjectType_Color"></div>
 
 @Html.Hidden("DisplayObjectTypeId", "", new { @id = "DisplayObjectTypeId" })
@@ -10,7 +10,7 @@
 
 <script type="text/javascript">
     jQuery(function () {
-        new CVC.MachineCustomization.PieChartDisplayGrid($('#GridDiv'), {}).init();
+        new CVC.MachineCustomization.PieChartDisplayGrid($('#PieChart_GridDiv'), {}).init();
 
         Q.initFullHeightGridPage($('#GridDiv'));
     });

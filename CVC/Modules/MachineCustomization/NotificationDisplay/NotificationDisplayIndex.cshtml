@@ -2,7 +2,7 @@
     ViewData["Title"] = Serenity.LocalText.Get("Db.MachineCustomization.NotificationDisplay.EntityPlural");
 }
 
-<div id="GridDiv"></div>
+<div id="Notification_GridDiv"></div>
 <div id="DisplayObjectType_Color"></div>
 
 @Html.Hidden("DisplayObjectTypeId", "", new { @id = "DisplayObjectTypeId" })
@@ -10,7 +10,7 @@
 
 <script type="text/javascript">
     jQuery(function () {
-        new CVC.MachineCustomization.NotificationDisplayGrid($('#GridDiv'), {}).init();
+        new CVC.MachineCustomization.NotificationDisplayGrid($('#Notification_GridDiv'), {}).init();
 
         Q.initFullHeightGridPage($('#GridDiv'));
     });

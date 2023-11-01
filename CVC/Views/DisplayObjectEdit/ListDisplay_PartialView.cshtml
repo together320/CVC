@@ -86,7 +86,11 @@ else
     var chart_labels = [];
 
     $(document).ready(function () {
-        console.log('this is initfunction');
+        let vfList = @Html.Raw(Json.Encode(Model.SelectedVFs)); // ViewFieldList --> MachineParameterId, ViewFieldName, MachineParameterName, ColumName, ViewField, StatusId
+        let efDataList = @Html.Raw(Json.Encode(Model.SelectedEFs)); // machineParameterList --> MachineParameterId, ParameterName, ColumnName, PickListId
+        var dotype = @doTypeId;
+        console.log('vfList: ', vfList);
+
         if (@Model.SelectedEFs.Count == 0) {
             Q.notifyWarning("There is no Entity Field.");
             return;
@@ -97,13 +101,13 @@ else
         }
 
         $(do_element_table_@doId).DataTable({
-            /*responsive: {
+            responsive: {
                 details: {
                     type: 'column'
                 }
-            },*/
+            },
             "columnDefs": [
-                {"targets": "_all", "visible": false, "orderable": false },
+                { "targets": "_all", "visible": false, "orderable": false },
             ],
             pageLength: @doTypeId== 2 ? 1 : 10,
             lengthChange: @doTypeId== 1 ? true : false,
@@ -115,7 +119,14 @@ else
                         .every(function () {
                             let column = this;
                             let title = column.footer().textContent;
-
+                            let text = $(column.header()).text();
+                            for (var vf of vfList) {
+                                if (vf.ColumnName == text || vf.MachineParameterName == text) {
+                                    column.visible(true);
+                                    console.log(vf.ColumnName, text);
+                                    break;
+                                }
+                            }
                             // Create input element
                             let input = document.createElement('input');
                             input.placeholder = title;
@@ -130,6 +141,19 @@ else
                             });
                         });
                 } else {
+                    /*this.api()
+                        .columns()
+                        .every(function () {
+                            let column = this;
+                            let text = $(column.header()).text();
+                            for (var vf of vfList) {
+                                if (vf.ColumnName == text || vf.MachineParameterName == text) {
+                                    column.visible(true);
+                                    console.log(vf.ColumnName, text);
+                                    break;
+                                }
+                            }
+                        });*/
                     if (@doTypeId != 2) {
                         $("#do_element_table_@doId" + "_wrapper").css('display', 'none');
                         if (@doTypeId == 5 || @doTypeId == 6) { //chart view
@@ -149,15 +173,19 @@ else
                                 },
                                 options: {
                                     legend: { display: false },
-                                    title: {    
+                                    title: {
                                         display: true,
                                         text: "Chart"
-                                    }
+                                    },
+                                    tooltips: {
+                                        mode : 'label',
+                                        enabled : true
+                                    },
                                 }
                             });
                             updateChart();
 
-                            setInterval(updateChart, 1000);
+                            intervalTimmer.push(setInterval(updateChart, 1000));
                         }
                     }
                 }
@@ -196,20 +224,19 @@ else
     });
 
     function updateChart(data) { //
-        if (isConnected) {
-            var newData = [];
-            newChart.data.labels = chart_labels;
-            for (var i = 0; i < chart_labels.length; i++) {
-                const desiredValue = data.find(item => item.MachineParameterName === chart_labels[i])?.Value || null;
-                newData[i] = desiredValue;
-            }
-            newChart.data.datasets[0].data = newData;
-
-            console.log("chart" + newChart);
-            newChart.update();
+        console.log("chartdata:", data);
+        if (data == null || typeof data == 'undefined')
+            return;
+        var newData = [];
+        newChart.data.labels = chart_labels;
+        for (var i = 0; i < chart_labels.length; i++) {
+        /*console.log(data[0].MachineParameterName, typeof chart_labels);*/
+            console.log()
+            const desiredValue = Array.isArray(data) ? data.find(item => item.MachineParameterName === chart_labels[i])?.Value || null : null;
+            newData[i] = desiredValue;
         }
-        else
-            updateRandomChart();
+        newChart.data.datasets[0].data = newData;
+        newChart.update();
     }
 
     function updateRandomChart() {
@@ -218,8 +245,6 @@ else
         for (var i = 0; i < chart_labels.length; i++)
             newData.push(Math.random() * 100);
         newChart.data.datasets[0].data = newData;
-        
-        console.log("chart" + newChart);
         newChart.update();
     }
 </script>

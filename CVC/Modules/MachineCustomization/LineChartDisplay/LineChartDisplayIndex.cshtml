@@ -2,7 +2,7 @@
     ViewData["Title"] = Serenity.LocalText.Get("Db.MachineCustomization.LineChartDisplay.EntityPlural");
 }
 
-<div id="GridDiv"></div>
+<div id="LineChart_GridDiv" style="max-height:600px"></div>
 <div id="DisplayObjectType_Color"></div>
 
 @Html.Hidden("DisplayObjectTypeId", "", new { @id = "DisplayObjectTypeId" })
@@ -10,7 +10,7 @@
 
 <script type="text/javascript">
     jQuery(function () {
-        new CVC.MachineCustomization.LineChartDisplayGrid($('#GridDiv'), {}).init();
+        new CVC.MachineCustomization.LineChartDisplayGrid($('#LineChart_GridDiv'), {}).init();
 
         Q.initFullHeightGridPage($('#GridDiv'));
     });

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using CVC.Data.EDMX;
 
 namespace CVC.Models
 {
@@ -34,6 +35,8 @@ namespace CVC.Models
     public int ViewField { get; set; }
     public string ViewFieldName { get; set; }
     public int? StatusId { get; set; }
+    public string MachineParameterName { get; set; }
+    public string ColumnName { get; set; }
   }
 
   public class SelectedDisplayObjectData
@@ -59,6 +62,7 @@ namespace CVC.Models
   {
     public string SubDOTypeData { get; set; } // all rows of subdisplayobjecttype of Table of DB
     public string SubDOTypeColumns { get; set; } // ef parameter table's ColumnNames and DataTypes
+    public List<DisplayObjectTypeColor> SubTypeColors { get; set; } // this defines the color range for displayobject paramters
     public string SubTypeData { get; set; } // real subtype of displayobject is gotten by subdotype table, which is gotten by viewTable's displayobjecttypeId
     public List<SelectedEntityFieldForDO> SelectedEFs { get; set; }
     public List<SelectedViewField> SelectedVFs { get; set; }

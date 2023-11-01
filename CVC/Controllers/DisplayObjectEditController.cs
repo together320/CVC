@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using CVC.Models;
 using CVC.Modules.Common.CommonServices;
 using CVC.Modules.Common.Dashboard;
+using CVC.Modules.NModuleManagement;
 using static CVC.BusinessServices.Common.ClsConstants;
 
 namespace CVC.Controllers
@@ -27,77 +28,87 @@ namespace CVC.Controllers
     public async Task<ActionResult> DisplayObjectEdit(int ViewsId)
     {
       DisplayObjectEditModel displayObjectEditModel = new DisplayObjectEditModel();
-      using (CVCEntities cvcEntities = new CVCEntities())
+      displayObjectEditModel.SubDO = new SubDisplayObject();
+      displayObjectEditModel.SubDO.SelectedEFs = new List<SelectedEntityFieldForDO>();
+      displayObjectEditModel.SubDO.SelectedVFs = new List<SelectedViewField>();
+      CVCEntities cvcEntities = new CVCEntities();
+      var displayObject = cvcEntities.Views.FirstOrDefault(v => v.ViewsId == ViewsId);
+      var machine = cvcEntities.Machines.FirstOrDefault(m => m.MachineId == displayObject.MachineId);
+      var machineParameters = cvcEntities.MachineParameters.Where(mf => mf.MachineId == displayObject.MachineId).ToList();
+      var viewFields = cvcEntities.ViewFields.Where(vf => vf.ViewsId == ViewsId).ToList();
+      displayObjectEditModel.SelectedDisplayObject = new SelectedDisplayObjectData
       {
-        var displayObject = cvcEntities.Views.FirstOrDefault(v => v.ViewsId == ViewsId);
-        var machine = cvcEntities.Machines.FirstOrDefault(m => m.MachineId == displayObject.MachineId);
-        var machineParameters = cvcEntities.MachineParameters.Where(mf => mf.MachineId == displayObject.MachineId).ToList();
-        var viewFields = cvcEntities.ViewFields.Where(vf => vf.ViewsId == ViewsId).ToList();
-        displayObjectEditModel.SelectedDisplayObject = new SelectedDisplayObjectData
+        ViewsId = ViewsId,
+        ViewName = displayObject.ViewName,
+        StatusId = displayObject.StatusId,
+        DisplayObjectTypeId = displayObject.DisplayObjectTypeId,
+        ListDisplayId = displayObject.ListDisplayId,
+        FormDisplayId = displayObject.FormDisplayId,
+        ButtonDisplayId = displayObject.ButtonDisplayId,
+        RealtimeParameterDisplayId = displayObject.RealtimeParameterDisplayId,
+        LineChartDisplayId = displayObject.LineChartDisplayId,
+        PieDisplayId = displayObject.PieChartDisplayId,
+        TreeDisplayId = displayObject.TreeDisplayId,
+        AttachmentDisplayId = displayObject.AttachmentDisplayId,
+        AlarmDisplayId = displayObject.AlarmDisplayId,
+        NotificationDisplayId = displayObject.NotificationDisplayId,
+        ContainerDisplayId = displayObject.ContainerDisplayId,
+      };
+      displayObjectEditModel.SelectedMachine = new SelectedMachieDataForEditDO
+      {
+        MachineId = machine.MachineId,
+        IsRealTime = machine.IsRealTime,
+        TableName = machine.TableName
+      };
+
+      var sortParameters = machineParameters.OrderBy(p => p.ParameterName).ToList();
+      var sortViewFields = viewFields.OrderBy(v => v.ViewFieldName).ToList();
+      foreach (var item in sortViewFields)
+      {
+        SelectedViewField vf = new SelectedViewField()
         {
-          ViewsId = ViewsId,
-          ViewName = displayObject.ViewName,
-          StatusId = displayObject.StatusId,
-          DisplayObjectTypeId = displayObject.DisplayObjectTypeId,
-          ListDisplayId = displayObject.ListDisplayId,
-          FormDisplayId = displayObject.FormDisplayId,
-          ButtonDisplayId = displayObject.ButtonDisplayId,
-          RealtimeParameterDisplayId = displayObject.RealtimeParameterDisplayId,
-          LineChartDisplayId = displayObject.LineChartDisplayId,
-          PieDisplayId = displayObject.PieChartDisplayId,
-          TreeDisplayId = displayObject.TreeDisplayId,
-          AttachmentDisplayId = displayObject.AttachmentDisplayId,
-          AlarmDisplayId = displayObject.AlarmDisplayId,
-          NotificationDisplayId = displayObject.NotificationDisplayId,
-          ContainerDisplayId = displayObject.ContainerDisplayId,
+          MachineParameterId = item.MachineParameterId,
+          ViewField = item.ViewField1,
+          ViewFieldName = item.ViewFieldName,
+          StatusId = item.StatusId,
+          MachineParameterName = item.MachineParameter.ParameterName,
+          ColumnName = item.MachineParameter.ColumnName
         };
-        displayObjectEditModel.SelectedMachine = new SelectedMachieDataForEditDO
-        {
-          MachineId = machine.MachineId,
-          IsRealTime = machine.IsRealTime,
-          TableName = machine.TableName
-        };
-        displayObjectEditModel.SubDO = new SubDisplayObject();
-        displayObjectEditModel.SubDO.SelectedEFs = new List<SelectedEntityFieldForDO>();
-        displayObjectEditModel.SubDO.SelectedVFs = new List<SelectedViewField>();
-        var sortParameters = machineParameters.OrderBy(p => p.ParameterName).ToList();
-        var sortViewFields = viewFields.OrderBy(v => v.ViewFieldName).ToList();
-        foreach (var item in sortViewFields)
-        {
-          SelectedViewField vf = new SelectedViewField()
-          {
-            MachineParameterId = item.MachineParameterId,
-            ViewField = item.ViewField1,
-            ViewFieldName = item.ViewFieldName,
-            StatusId = item.StatusId
-          };
-          displayObjectEditModel.SubDO.SelectedVFs.Add(vf);
-        }
-        foreach (var sp in sortParameters)
-        {
-          SelectedEntityFieldForDO ef = new SelectedEntityFieldForDO
-          {
-            MachineParameterId = sp.MachineParameterId,
-            ParameterName = sp.ParameterName,
-            ColumnName = sp.ColumnName,
-            PickListId = sp.PickListId
-          };
-          displayObjectEditModel.SubDO.SelectedEFs.Add(ef);
-        }
+        displayObjectEditModel.SubDO.SelectedVFs.Add(vf);
       }
+      foreach (var sp in sortParameters)
+      {
+        SelectedEntityFieldForDO ef = new SelectedEntityFieldForDO
+        {
+          MachineParameterId = sp.MachineParameterId,
+          ParameterName = sp.ParameterName,
+          ColumnName = sp.ColumnName,
+          PickListId = sp.PickListId
+        };
+        displayObjectEditModel.SubDO.SelectedEFs.Add(ef);
+      }
+
+      
 
       // get the data List of the EF parameterTable by machine's TableName    **** name mark is wrong
       CustomRepository _repo = new CustomRepository();
-      var subTypeData = await _repo.GetAllData(displayObjectEditModel.SelectedMachine.TableName);
-      var subColumnData = await _repo.GetAllDataTypes(displayObjectEditModel.SelectedMachine.TableName);
+      if (displayObjectEditModel.SelectedMachine.TableName != null && displayObjectEditModel.SelectedMachine.TableName != "")
+      {
+        var subTypeData = await _repo.GetAllData(displayObjectEditModel.SelectedMachine.TableName);
+        var subColumnData = await _repo.GetAllDataTypes(displayObjectEditModel.SelectedMachine.TableName);
+        if (subTypeData.resultCode != 200)
+          ModelState.AddModelError("", subTypeData.message);
+        else if (subColumnData.resultCode != 200)
+          ModelState.AddModelError("", subColumnData.message);
 
-      if (subTypeData.resultCode != 200)
-        ModelState.AddModelError("", subTypeData.message);
-      else if (subColumnData.resultCode != 200)
-        ModelState.AddModelError("", subColumnData.message);
-
-      displayObjectEditModel.SubDO.SubDOTypeData = subTypeData.Data; // ef parameter table's all data
-      displayObjectEditModel.SubDO.SubDOTypeColumns = subColumnData.Data; // ef parameter table's ColumnName and DataType
+        displayObjectEditModel.SubDO.SubDOTypeData = subTypeData.Data; // ef parameter table's all data
+        displayObjectEditModel.SubDO.SubDOTypeColumns = subColumnData.Data; // ef parameter table's ColumnName and DataType
+      }
+      else
+      {
+        displayObjectEditModel.SubDO.SubDOTypeData = "[]";
+        displayObjectEditModel.SubDO.SubDOTypeColumns = "[]";
+      }
 
       // get the dataList from the sub type table by subtypeid
       SubTypeRowData realSubTypeTable = getTableNameByDisplayObjectType(displayObjectEditModel.SelectedDisplayObject);
@@ -106,7 +117,7 @@ namespace CVC.Controllers
         ModelState.AddModelError("", realsubtypedata.message);
 
       displayObjectEditModel.SubDO.SubTypeData = realsubtypedata.Data; // real dataList for subtype of displayobject
-
+      displayObjectEditModel.SubDO.SubTypeColors = cvcEntities.DisplayObjectTypeColors.Where(a => a.DisplayObjectTypeId == displayObjectEditModel.SelectedDisplayObject.DisplayObjectTypeId && a.SubTypeId == realSubTypeTable.id.Value).ToList();
       return View(displayObjectEditModel);
     }
 
@@ -218,6 +229,25 @@ namespace CVC.Controllers
         System.Web.HttpContext.Current.Cache.Remove("DisplayPreview");
       }
       return Json(Model, JsonRequestBehavior.AllowGet);
+    }
+
+    [HttpPost]
+    public void AddUpdateDOF(List<NViewFieldForm> parameterList)
+    {
+      NModuleRepository _repo = new NModuleRepository();
+      foreach (var parameter in parameterList)
+      {
+        try
+        {
+          if (_repo.AddUpdateViewField(parameter))
+          {
+          }
+        }
+        catch (System.Exception ex)
+        {
+          throw ex;
+        }
+      }
     }
   }
 }

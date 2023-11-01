@@ -1,4 +1,5 @@
 ﻿@using CVC.Components
+@using CVC.Data.EDMX;
 @using Newtonsoft.Json.Linq;
 @model CVC.Models.DisplayObjectEditModel
 
@@ -169,6 +170,7 @@
 
     // TimeCounter
     var timmer;
+    var intervalTimmer = [];
 
     // ColorRange
     var colorList = [];
@@ -180,10 +182,9 @@
     var columnTypes = [];
 
     var timers = [];
-
     var tableName = '';
-
     var isConnected = false;
+    var colorRanges = [];
     // init page
     $(function () {
         $(document).ready(function () {
@@ -191,6 +192,8 @@
             let jsonstr = '@Html.Raw(Model.SubDO.SubDOTypeColumns)';
             columnTypes = JSON.parse(jsonstr);
             tableName = '@Model.SelectedMachine.TableName';
+            undoStack = [];
+            colorRanges = @Html.Raw(Json.Encode(Model.SubDO.SubTypeColors));
 
             // modal event initialization
             initModal();
@@ -205,12 +208,12 @@
                     dataType: 'json',
                     data: { MachineId: @Model.SelectedMachine.MachineId, ViewsId:@doId },
                     success: function (data) {
-                        if (data.data == null) {
-                            Q.notifyWarning("No real-time device connection.");
-                            /*$('#modal-design').modal('hide');*/
-                            isConnected = false;
+                        /*if (data.data == null) {
+                            Q.notifyWarning("No incoming realtime parameter.");
+                            *//*$('#modal-design').modal('hide');*//*
+                            isConnected = false;    
                             return;
-                        }
+                        }*/
                         isConnected = true;
                         GetScreenLockTimeOut();
                         CheckHeartBeatSend();
@@ -219,7 +222,8 @@
                         }, 3000));
                     },
                     error: function (error) {
-                        reject(error);
+                        Q.notifyWarning("No incoming realtime parameter.");
+                        console.log(error);
                     }
                 });
             }
@@ -227,6 +231,9 @@
                 // Stop time counters and any other scripts when modal is closed
                 if (timers != null && timers.length > 0) {
                     timers.forEach(element => clearTimeout(element));
+                }
+                if (intervalTimmer.length > 0) {
+                    intervalTimmer.forEach(element => clearInterval(element));
                 }
             });
         });
@@ -420,24 +427,6 @@
                             return false;  // This will break out of the $.each loop
                         }
                     });
-                    if (isShow) {
-                        var machineId = @Model.SelectedMachine.MachineId.ToString();
-                        var viewsId = parseInt(@doId.ToString());
-                        //showLoader();
-                       /* GetCustomizeRealData(viewsId)     // save the Http Cache
-                            .then(data => { // machineData
-                                processCustomizePreview(data);
-                                hideLoader();
-                                // setTimeout(() => {
-                                connectToSocket();   // read periodically the data based on cache
-                                // }, 3000);
-                            }).catch(error => {
-                                Q.notifyError("DataBase Connection Faild.");
-                                hideLoader();
-                            });*/
-                    } else {
-                        // clearTimeout(timmer);
-                    }
                 }
                 return;
             }
@@ -515,13 +504,13 @@
         socket.client.addNewMessageToPage = function (data, message) {
 
             var result = JSON.parse(data);
-            console.log(data);
+            /*console.log(data);*/
             switch (result.type) {
                 case 'displaypreview':
                     timers.push(setTimeout(() => {
                         socket.server.send('displaypreview', '');
                     }, 300));
-                    console.log(data);
+                    /*console.log(data);*/
                     updateChart(result.data);
                     //console.log("realtimedata:", result.data);
                     break;
@@ -677,17 +666,19 @@
         let dataTable = $("#do_element_table_@doId").DataTable();
         var data = dataTable.row(dataTable.page.info().page).data();
         let numCols = dataTable.columns().nodes().length;
-
+        var efDataList = @Html.Raw(Json.Encode(Model.SubDO.SelectedEFs));
+        console.log('efdatalist:', efDataList);
         let parameterList = [];
 
         for (var i = 0; i < numCols; i++) {
             let column = dataTable.column(i);
             if (column.visible()) {
                 let parameter = {};
-                let columnText = $(column.header()).text();
-
+                let columnText = $(column.header()).text().trimStart().trimEnd();
+                console.log('columnText:', columnText);
                 for (var j = 0; j < efDataList.length; j++) {
                     if (efDataList[j].ColumnName == columnText || efDataList[j].ParameterName == columnText) {
+                        console.log('equal param:', efDataList[j]);
                         parameter["ViewsId"] = @doId;
                         parameter["ViewFieldName"] = efDataList[j].ParameterName;
                         parameter["MachineParameterId"] = efDataList[j].MachineParameterId;
@@ -699,7 +690,19 @@
             }
         }
 
-        AddUpdateDOF(parameterList); // is not yet full-defined
+        console.log('parameterlist:', parameterList);
+        $.ajax({
+            url: Q.resolveUrl('./DisplayObjectEdit/AddUpdateDOF'),
+            type: 'POST',
+            dataType: 'json',
+            data: { parameterList: parameterList },
+            success: function (data) {
+                console.log('save do result: ', data);
+            },
+            error: function (error) {
+                console.log('save do error: ', error);
+            }
+        });
     }
     // end common button
 
@@ -768,8 +771,7 @@
                 tree_nodes.push({ text: chart_labels[i] });
             }
             console.log(tree_nodes);
-            $("#do_element_@doId").treeview({ data: [{ text: '@doName', nodes: tree_nodes }], collapsed: true,
-  "expanded": true,});
+            $("#do_element_@doId").treeview({ data: [{ text: '@doName', nodes: tree_nodes }], collapsed: true, "expanded": true,});
             $("#do_element_@doId").css('color', 'black');
 
         }
