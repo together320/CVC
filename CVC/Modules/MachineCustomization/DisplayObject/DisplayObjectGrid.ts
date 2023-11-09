@@ -107,9 +107,9 @@
 
             if (e.isDefaultPrevented())
                 return;
-            /*if ($(e.target).hasClass("design-mode")) {
+            if ($(e.target).hasClass("design-mode")) {
                 Q.notifyInfo("Design Mode selected");
-            }*/
+            }
         }
         /*******************************************************************************/
     }

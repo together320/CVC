@@ -14,9 +14,13 @@
 
     <script src="~/Scripts/jquery.keyboard.js"></script>
     <script src="~/Scripts/autocompleteKeyboard/jquery.keyboard.extension-all.js"></script>
-    <link href="~/Content/site/keyboard.css" rel="stylesheet" />
+    <link href="~/Scripts/autocompleteKeyboard/keyboard.css" type="text/css" rel="stylesheet">
     <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
     <style type="text/css">
+        div.ui-keyboard {
+            font-size: 2.8rem;
+        }
+
         body {
             font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
             font-size: 13px;
@@ -138,7 +142,7 @@
             z-index: 9999;
             overflow: hidden;
             /* height: 100%;
-                                                                width: 100%; */
+                                                                                width: 100%; */
         }
 
         .loadingmainwrap {
@@ -636,7 +640,7 @@
                     $(function() {
                         $('#Username').val(@Html.Raw(Serenity.JSON.Stringify(ViewData["Activated"])));
                     $('#Password').focus();
-                                                        });
+                                                                        });
         </text>
     }
     });

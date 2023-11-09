@@ -17,23 +17,25 @@
 
 @if (doTypeId == 5 || doTypeId == 6)
 {
-    <canvas id='do_element_@doId' style='display:block;width:100%;max-width:600px;' width='400' height='400'></canvas>
+        <canvas id='do_element_@doId' style='display:block; width:100%; max-width:600px;' width='400' height='400'></canvas>
 }
 else
 {
-    <div id="do_element_@doId"></div>
+        <div id="do_element_@doId" style="padding-top:50px; height:inherit">
+        </div>
 }
-<div style='width:90%; margin:0 auto; position:absolute; min-height:90%;' class="mainDO" id='parent_do_element_@doId'>
-    <table id='do_element_table_@doId' class='displays table-striped table-bordered dt-responsive nowrap' width='100' cellspacing='0'>
+<div style='' class="mainDO" id='parent_do_element_@doId'>
+    <table id='do_element_table_@doId' class='displays table-striped table-bordered dt-responsive nowrap' width='100'
+        cellspacing='0'>
         @if (@Model.SelectedEFs.Count > 0)
         {
-            <thead>
-                <tr style="">
+                <thead>
+                    <tr style="">
                     @if (doTypeId == 1 || doTypeId == 2)
                     {
                         foreach (JObject item in columns)
                         {
-                            <td style="color: black">@item["ColumnName"]</td>
+                                        <td style="color: black">@item["ColumnName"]</td>
                         }
                     }
                     else
@@ -42,41 +44,41 @@ else
                         {
                             if (item.ColumnName == null)
                             {
-                                <td>@item.ParameterName</td>
+                                                <td>@item.ParameterName</td>
                             }
                             else
                             {
-                                <td>@item.ColumnName</td>
+                                                <td>@item.ColumnName</td>
                             }
                         }
                     }
-                </tr>
-            </thead>
-            <tbody>
+                    </tr>
+                </thead>
+                <tbody>
                 @if (doTypeId == 1 || doTypeId == 2)
                 {
                     foreach (JObject obj in columDatum)
                     {
-                        <tr>
+                                    <tr>
                             @foreach (var property in obj)
                             {
-                                <td>@property.Value</td>
+                                                <td>@property.Value</td>
                             }
-                        </tr>
+                                    </tr>
                     }
                 }
-            </tbody>
-            <tfoot>
-                <tr>
+                </tbody>
+                <tfoot>
+                    <tr>
                     @if (doTypeId == 1 || doTypeId == 2)
                     {
                         foreach (JObject item in columns)
                         {
-                            <td>@item["ColumnName"]</td>
+                                        <td>@item["ColumnName"]</td>
                         }
                     }
-                </tr>
-            </tfoot>
+                    </tr>
+                </tfoot>
         }
     </table>
 </div>
@@ -84,10 +86,9 @@ else
 <script type="text/javascript">
     var newChart;
     var chart_labels = [];
-
     $(document).ready(function () {
         let vfList = @Html.Raw(Json.Encode(Model.SelectedVFs)); // ViewFieldList --> MachineParameterId, ViewFieldName, MachineParameterName, ColumName, ViewField, StatusId
-        let efDataList = @Html.Raw(Json.Encode(Model.SelectedEFs)); // machineParameterList --> MachineParameterId, ParameterName, ColumnName, PickListId
+        efDataList = @Html.Raw(Json.Encode(Model.SelectedEFs)); // machineParameterList --> MachineParameterId, ParameterName, ColumnName, PickListId
         var dotype = @doTypeId;
         console.log('vfList: ', vfList);
 
@@ -97,10 +98,10 @@ else
         }
         if (@doTypeId != 1) {
             $('#do_element_table_@doId').css('display', 'none');
-            @*$("#do_element_table_" + @doId.ToString() + "_length").css('display', 'none');*@
+    @*$("#do_element_table_" + @doId.ToString() + "_length").css('display', 'none');*@
         }
 
-        $(do_element_table_@doId).DataTable({
+        dataTable = $(do_element_table_@doId).DataTable({
             responsive: {
                 details: {
                     type: 'column'
@@ -178,11 +179,12 @@ else
                                         text: "Chart"
                                     },
                                     tooltips: {
-                                        mode : 'label',
-                                        enabled : true
-                                    },
+                                        mode: 'label',
+                                        enabled: true
+                                    }
                                 }
                             });
+                            $('.mainDO').append($('#do_element_@doId'));
                             updateChart();
 
                             intervalTimmer.push(setInterval(updateChart, 1000));
@@ -204,7 +206,7 @@ else
                         let column = dataTable.column(i);
                         if (column.visible()) {
                             console.log('this column is visible');
-                            mainDoElement.append("<div class='row' style='justify-content : center;'><div class='col-3' style='color:black;'>" + $(column.header()).text() + " :</div><div class='col-3'><input style='color:black;' value='" + data[i] + "' type='" + inputType + "' form-do-input='" + i + "'/></div></div>");
+                            mainDoElement.append("<div class='row flex-item-form' style='justify-content : center;'><div class='col-md-4' style='color:black;'>" + $(column.header()).text() + ":&nbsp</div><div class='col-md-8'><input style='color:black;' value='" + data[i] + "' type='" + inputType + "' form-do-input='" + i + "'/></div></div>");
                             var input = "[form-do-input=" + i + "]";
                             $(input).keydown(function (event) {
                                 if (event.keyCode == 13) {
@@ -230,7 +232,7 @@ else
         var newData = [];
         newChart.data.labels = chart_labels;
         for (var i = 0; i < chart_labels.length; i++) {
-        /*console.log(data[0].MachineParameterName, typeof chart_labels);*/
+            /*console.log(data[0].MachineParameterName, typeof chart_labels);*/
             console.log()
             const desiredValue = Array.isArray(data) ? data.find(item => item.MachineParameterName === chart_labels[i])?.Value || null : null;
             newData[i] = desiredValue;
