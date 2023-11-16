@@ -249,5 +249,14 @@ namespace CVC.Controllers
         }
       }
     }
+
+    [HttpGet]
+    public async Task<JsonResult> GetTableData(string tableName)
+    {
+      CustomRepository _repo = new CustomRepository();
+      var subTypeData = await _repo.GetAllData(tableName);
+
+      return Json(subTypeData, JsonRequestBehavior.AllowGet);
+    }
   }
 }

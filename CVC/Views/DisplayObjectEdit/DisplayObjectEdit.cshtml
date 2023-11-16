@@ -6,6 +6,7 @@
 @{
     var doId = ViewBag.doId = Model.SelectedDisplayObject.ViewsId;
     var doTypeId = ViewBag.doTypeId = Model.SelectedDisplayObject.DisplayObjectTypeId;
+    ViewBag.doTitle = Model.SelectedDisplayObject.ViewName;
     var doName = Model.SelectedDisplayObject.ViewName;
     Layout = null;
     JArray subtypedata = JArray.Parse(Model.SubDO.SubTypeData);
@@ -18,16 +19,6 @@
 
     <ul style="border-right:double; width : 25rem!important; margin-bottom:0px; list-style:none; background-color:#0cb2bb; padding-inline-start: 0px;"
         id="accordionSidebar">
-        <!-- Sidebar - Brand -->
-        <!--<a class="sidebar-brand d-flex align-items-center justify-content-center"
-                   href='@Url.Action("Index", "Home", new { area = "" })'
-                   style="border:0px;margin:0px;padding:0px;">
-                    <img draggable="true"
-                         style="filter: brightness(80%); border: 0px; margin: 0px; padding: 0px; overflow: auto; width : 100%;"
-                         src="~/Content/images/cvc-pharma.bmp" alt="Image description" />
-                </a>-->
-        <!-- Divider -->
-        <!-- Heading -->
         <li class="nav-item" style="padding: 50px 0px 10px 20px;">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseModal"
                 style="color:white;" aria-expanded="true" aria-controls="collapseModal">
@@ -37,8 +28,7 @@
             <div id="collapseModal" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar"
                 style="padding:0.5rem; margin:1rem 1rem 1rem 0;">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <div class="row" style='        padding: 1px 10px 10px 15px;
-        display: flex;'>
+                    <div class="row" style='padding: 1px 10px 10px 15px; display: flex;'>
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
                             style="border-bottom: thick; display: flex; /* justify-content: center; */"
                             ondragstart='dragComponent(event, 0);' draggable='true'>
@@ -66,27 +56,23 @@
                             <i class="fa fa-circle"></i>&nbsp;&nbsp;Button
                         </div>
                     </div>
-                    <div class="row" style='padding:1px 10px 10px 15px;display:flex;'>
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
-                            style="border-bottom:thick;display: flex;/* justify-content: center; */"
-                            ondragstart='dragComponent(event, 4);' draggable='true'>
-                            <i class="fa fa-plus-circle"></i>&nbsp;&nbsp;Add Button
+                    @if (doTypeId < 3)
+                    {
+                        <div class="row" style='padding:1px 10px 10px 15px;display:flex;'>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+                                style="border-bottom:thick;display: flex;/* justify-content: center; */"
+                                ondragstart='dragComponent(event, 4);' draggable='true'>
+                                <i class="fa fa-plus-circle"></i>&nbsp;&nbsp;Add Button
+                            </div>
                         </div>
-                    </div>
-                    <div class="row" style='padding:1px 10px 10px 15px;display:flex;'>
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
-                            style="border-bottom:thick;display: flex;/* justify-content: center; */"
-                            ondragstart='dragComponent(event, 5);' draggable='true'>
-                            <i class="fa fa-circle-o-notch"></i>&nbsp;&nbsp;Edit Button
+                        <div class="row" style='padding:1px 10px 10px 15px;display:flex;'>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+                                style="border-bottom:thick;display: flex;/* justify-content: center; */"
+                                ondragstart='dragComponent(event, 5);' draggable='true'>
+                                <i class="fa fa-circle-o-notch"></i>&nbsp;&nbsp;Edit Button
+                            </div>
                         </div>
-                    </div>
-                    <div class="row" style='padding:1px 10px 10px 15px;display:flex;'>
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
-                            style="border-bottom:thick;display: flex;/* justify-content: center; */"
-                            ondragstart='dragComponent(event, 6);' draggable='true'>
-                            <i class="fa fa-minus-circle"></i>&nbsp;&nbsp;Delete Button
-                        </div>
-                    </div>
+                    }
                 </div>
             </div>
         </li>
@@ -138,7 +124,7 @@
                 <button type="button" id="idDeleteMain" class="btn btn-danger">
                     Clear
                 </button>
-                <button type="button" class="btn btn-primary" onclick="saveDO();">
+                <button type="button" class="btn btn-primary" onclick="saveConfirm();">
                     Save
                 </button>
                 <!-- <button type="button" class="btn btn-success">
@@ -150,13 +136,18 @@
             </div>
             <!-- End of Topbar -->
             <!-- Begin Page Content -->
+            <div class='' style="text-align:center">
+                <h2 style="color:black; padding-bottom:10px;">@ViewBag.doTitle</h2>
+            </div>
             <div class="container-fluid">
-                <main class="workSpace" id="WorkSpace_@Model.SelectedDisplayObject.ViewsId"
+                <main class="workSpace" id="WorkSpace_@doId"
                     style="min-height:1000px;overflow:auto;position:relative;display:flex;justify-content:center;">
-                    @Html.Partial("~/Views/DisplayObjectEdit/ListDisplay_PartialView.cshtml", Model.SubDO);
+                    @Html.Partial("~/Views/DisplayObjectEdit/ListDisplay_PartialView.cshtml", Model.SubDO)
                     @*@Html.Action("ListDisplay_PartialView", "DisplayObjectEdit");*@
                 </main>
-
+                <div id="tempGrid" class="hidden">
+                    <div class="grid-container"> </div>
+                </div>
             </div>
             <!-- /.container-fluid -->
         </div>
@@ -191,13 +182,26 @@
 
     var dataTable = null;
 
+    // edit modal enviroment
+    var grid = null; // Serenity EntityGrid to add and edit
+    var isClickedDeleteButton = false;
+    var currentRowIdx = -1; // the index of the row applied to form
+
     // init page
     $(function () {
         $(document).ready(function () {
             // variable initialization
+            tableName = '@Model.SelectedMachine.TableName';
+
+            if (@doTypeId == 1 || @doTypeId == 2) {
+                if (tableName == null || tableName == 'undefined' || tableName == '') {
+                    Q.notifyWarning('This entity has not parameter table.');
+                    $('#modal-design').modal('hide');
+                }
+            }
+
             let jsonstr = '@Html.Raw(Model.SubDO.SubDOTypeColumns)';
             columnTypes = JSON.parse(jsonstr);
-            tableName = '@Model.SelectedMachine.TableName';
             undoStack = [];
             colorRanges = @Html.Raw(Json.Encode(Model.SubDO.SubTypeColors));
 
@@ -215,12 +219,6 @@
                     dataType: 'json',
                     data: { MachineId: @Model.SelectedMachine.MachineId, ViewsId: @doId },
                     success: function (data) {
-                        /*if (data.data == null) {
-                            Q.notifyWarning("No incoming realtime parameter.");
-                            *//*$('#modal-design').modal('hide');*//*
-                isConnected = false;    
-                return;
-            }*/
                         isConnected = true;
                         GetScreenLockTimeOut();
                         CheckHeartBeatSend();
@@ -242,9 +240,10 @@
                 if (intervalTimmer.length > 0) {
                     intervalTimmer.forEach(element => clearInterval(element));
                 }
+                isDesign = false;
             });
-        });
 
+        });
 
         $(document).on("click", ".removeButton", function () {      //when click xremove button
             undoStack.push($('.workSpace').html());
@@ -271,17 +270,6 @@
 
                 $(this).append(nodeCopy);
             } else {
-            }
-        });
-
-        $(document).on('click', '#do_element_table_@doId' + ', tbody tr', function (e) {
-            let classList = e.currentTarget.classList;
-            if (classList.contains('selected')) {
-                classList.remove('selected');
-            }
-            else {
-                dataTable.rows('.selected').nodes().each((row) => row.classList.remove('selected'));
-                classList.add('selected');
             }
         });
 
@@ -314,7 +302,27 @@
             event.preventDefault();
         });
 
+        $(document).on("click", ".tool-button.save-and-close-button", function () {
+            if (!isDesign) return;
+            showLoader();
+            updateDatatable();
+        });
+        $(document).on("click", ".tool-button.delete-button", function () {
+            if (!isDesign) return;
+            isClickedDeleteButton = true;
+            //console.log('isClickedDeleteButton:', isClickedDeleteButton);
+        });
 
+        $(document).on("click", ".s-ConfirmDialog button", function () {
+            if (!isDesign || !isClickedDeleteButton) return;
+            let buttonstr = $(this).text();
+            if (buttonstr == 'Yes') {
+                //console.log('delete-yes button clicked');
+                showLoader();
+                updateDatatable();
+            }
+            isClickedDeleteButton = false;
+        });
     });
     // end init page
     function initModal() {
@@ -332,71 +340,54 @@
                 });
                 if (commontype == '4') { //Add
                     nodeCopy.click(function (e) {
-                        $('#modal-add-EF').modal();
-                        $('#EF-row-Content').empty();
-                        setEditRowModal('Add');
+                        if (grid == null)
+                            grid = getEntityGrid(tableName);
+                        if (grid != null) {
+                            if (typeof grid == 'string')
+                                Q.notifyWarning(grid);
+                            else {
+                                grid.addButtonClick();
+                            }
+                        }
                     });
                 } else if (commontype == '5') { //Edit
                     if (@doTypeId == 1) {
                         nodeCopy.click(function (e) {
-                            $('#modal-add-EF').modal();
-                            var row = dataTable.row('.selected').data();
-                            $('#EF-row-Content').empty();
-                            selectedEntityId = row[0];
-                            setEditRowModal('Save', row);
-                        });
-                    } else if (@doTypeId == 2) {
-                        Q.notifyInfo("Edit on InputField.");
-                    }
-                } else if (commontype == '6') { // Delete
-                    if (@doTypeId == 1) {
-                        nodeCopy.click(function (e) {
-                            if (tableName == null || tableName == "") {
-                                Q.notifyWarning("Entity Value Table is undifined.");
+                            let row = dataTable.row('.selected').data();
+                            if (typeof row == "undefined") {
+                                Q.notifyWarning("Please choose a row.");
                                 return;
                             }
-                            var row = dataTable.row('.selected').data();
-                            if (row == null || row == 'undefined' || row.length == 0) {
-                                Q.notifyWarning("No Row is Selected.");
-                                return;
+                            if (grid == null)
+                                grid = getEntityGrid(tableName);
+                            if (grid != null) {
+                                if (typeof grid == 'string')
+                                    Q.notifyWarning(grid);
+                                else {
+                                    grid.editItem(row[0]);
+                                }
                             }
-                            let serviceUrl = getCVCServiceUrl(tableName) + '/Delete';
-                            showLoader();
-                            deleteRowFromDatatable(serviceUrl, row[0])
-                                .then(deleteResult => {
-                                    console.log('ef row delete result = ' + deleteResult);
-                                    dataTable.rows('.selected').remove().draw();
-                                    Q.notifyInfo("Row Deletion is Successful.");
-                                    refreshDataTableAfterDeletion();
-                                    hideLoader();
-                                }).catch(error => {
-                                    Q.notifyError(tableName + ' table connection is faild.');
-                                    hideLoader();
-                                });// row is array, index = 0: identity
                         });
                     } else if (@doTypeId == 2) {
                         nodeCopy.click(function (e) {
-                            if (tableName == null || tableName == "") {
-                                Q.notifyWarning("Entity Field Value Table is undifined.");
+                            var pageInfo = dataTable.page.info();
+                            var currentRowIdx = pageInfo.page;
+                            //console.log('pagenumber:', currentPageNumber);
+                            var row = dataTable.row(currentRowIdx).data();
+                            //console.log('row data:', row);
+                            if (typeof row == "undefined") {
+                                Q.notifyWarning("Please choose a row.");
                                 return;
                             }
-                            let row = dataTable.row({ search: 'applied' }).data();
-                            if (row == null || row == 'undefined' || row.length == 0) {
-                                Q.notifyWarning("No Row is Selected.");
-                                return;
+                            if (grid == null)
+                                grid = getEntityGrid(tableName);
+                            if (grid != null) {
+                                if (typeof grid == 'string')
+                                    Q.notifyWarning(grid);
+                                else {
+                                    grid.editItem(row[0]);
+                                }
                             }
-                            let serviceUrl = getCVCServiceUrl(tableName) + '/Delete';
-                            showLoader();
-                            deleteRowFromDatatable(serviceUrl, row[0])
-                                .then(deleteResult => {
-                                    console.log('ef row delete result = ' + deleteResult);
-                                    Q.notifyInfo("Row Deletion is Successful.");
-                                    dataTable.rows('applied').remove().draw();
-                                    hideLoader();
-                                }).catch(error => {
-                                    Q.notifyError(tableName + ' table connection is faild.' + error);
-                                    hideLoader();
-                                });// row is array, index = 0: identity
                         });
                     }
                 }
@@ -407,6 +398,8 @@
             console.log("dropped onto the parent do element");
             var isClone = event.originalEvent.dataTransfer.getData('dragging');
             var droppedId = event.originalEvent.dataTransfer.getData('dropped-id');
+            if (droppedId == null || droppedId == "")
+                return;
             if (droppedId.includes('ef')) {     //if EF is dropped to the grid
                 var columnName = event.originalEvent.dataTransfer.getData('columnName').trimStart().trimEnd();    //get the column name
                 console.log('columnName', columnName);
@@ -440,57 +433,6 @@
                 $(this).append(nodeCopy);
             }
         });
-
-        $('#modal-add-EF #add-EF-row').on('click', function () {
-            var dataobj = {};
-            var addArr = [];
-            var k = 1;
-            if ($(this).text() == "Save")
-                dataobj[columnTypes[0].ColumnName] = selectedEntityId;
-            $('#EF-row-Content').find('input').each(function () {
-                var val = $(this).val();
-                if (val == "null")
-                    val = null;
-                if (columnTypes[k].ColumnName.toLowerCase() == "createat" || columnTypes[k].ColumnName.toLowerCase() == "updateat" ||
-                    columnTypes[k].ColumnName.toLowerCase() == "createby" || columnTypes[k].ColumnName.toLowerCase() == "updateby" ||
-                    columnTypes[k].ColumnName.toLowerCase() == "createddate" || columnTypes[k].ColumnName.toLowerCase() == "updateddate")
-                    dataobj[columnTypes[k].ColumnName.toLowerCase()] = '';
-                else
-                    dataobj[columnTypes[k].ColumnName.toLowerCase()] = val;
-                addArr.push(val);
-                k++;
-            });
-            let serviceUrl = getCVCServiceUrl(tableName);
-            showLoader();
-            if ($(this).text() == "Add") {
-                serviceUrl += '/Create';
-                addRowToDataTable(serviceUrl, dataobj)
-                    .then(data => {
-                        var addRow = [];
-                        addRow.push(data.EntityId);
-                        addArr.map(item => addRow.push(item));
-                        addNewRow(addRow);
-                        Q.notifySuccess("Entity Value Addition is Successful.");
-                        hideLoader();
-                    }).catch(error => {
-                        Q.notifyError("DataBase Connection is Faild");
-                        hideLoader();
-                    });
-            } else if ($(this).text() == "Save") {
-                serviceUrl += '/Update';
-                saveRowToDataTable(serviceUrl, dataobj, selectedEntityId)
-                    .then(data => {
-                        var addRow = [];
-                        addArr.map(item => addRow.push(item));
-                        saveEditRow(addRow);
-                        Q.notifySuccess("Entity Value Addition is Successful.");
-                        hideLoader();
-                    }).catch(error => {
-                        Q.notifyError("DataBase Connection is Faild");
-                        hideLoader();
-                    });
-            }
-        });
     }
 
     /*get the realtime data from machine with signalr*/
@@ -505,13 +447,12 @@
                 case 'displaypreview':
                     timers.push(setTimeout(() => {
                         socket.server.send('displaypreview', '');
-                    }, 300));
+                    }, 1000));
                     /*console.log(data);*/
                     if (@doTypeId == 5 || @doTypeId == 6)
                         updateChart(result.data);
                     else if (@doTypeId == 4) {
                         updateRealtimeButtons(result.data);
-                        console.log('this type is realtimebuttons');
                     }
                     //console.log("realtimedata:", result.data);
                     break;
@@ -561,16 +502,16 @@
     }
 
     function updateRealtimeButtons(data) { // repair
-        console.log('update realtimebuttons'); 
-        $(data).each(function (i, item) {
-           /* if (item.Value != "True" && item.Value != "False") {
-                if (item.IsMissingLabelCounter == true) {*/
-                    var element = $('.mainDO').querySelector([parameterId = item.MachineParameterId]);
-                    element.text() = item.Value;
-                /*}
-            }*/
+        /*console.log('update realtimebuttons:', data);*/
+        let parent = $('#do_element_@doId');
+        parent.children().each(function () {
+            let h3element = $(this).find('h3');
+            let param = $(this).attr('parameterId');
+            const desiredValue = Array.isArray(data) ? data.find(item => item.MachineParameterId == param)?.Value || '-' : '-';
+            /*console.log(param);*/
+            // Set the text content of the h3 element
+            h3element.text(desiredValue);
         });
-        data = null;
     }
 
     // start drag
@@ -632,8 +573,6 @@
             res = "<input type='button' value='Add' style='color:black' commonButton='4'/>";
         else if (type == 5)
             res = "<input type='button' value='Edit' style='color:black' commonButton='5'/>";
-        else if (type == 6)
-            res = "<input type='button' value='Delete' style='color:black' commonButton='6'/>";
 
         var nodeCopy = $(res).attr('id', newId).addClass('clones').addClass('component');
         //Q.notifyInfo($(nodeCopy).prop('outerHTML'));
@@ -654,6 +593,10 @@
             // connect event
             initModal();
         }
+    }
+
+    function saveConfirm() {
+        Q.confirm("Would you save this display object?", () => saveDO());
     }
 
     function saveDO() {
@@ -681,7 +624,11 @@
                 }
             }
         }
-
+        if (parameterList.length == 0) {
+            Q.notifyWarning("Nothing is saved.");
+            $('#modal-design').modal('hide');
+            return;
+        }
         console.log('parameterlist:', parameterList);
         $.ajax({
             url: Q.resolveUrl('./DisplayObjectEdit/AddUpdateDOF'),
@@ -690,9 +637,11 @@
             data: { parameterList: parameterList },
             success: function (data) {
                 console.log('save do result: ', data);
+                $('#modal-design').modal('hide');
             },
             error: function (error) {
                 console.log('save do error: ', error);
+                $('#modal-design').modal('hide');
             }
         });
     }
@@ -727,7 +676,7 @@
                     let input = "[form-do-input=" + i + "]";
                     mainDoElement.insertBefore($("#do_element_table_@doId"));
                     mainDoElement.addClass('flex-grid-form');
-                    $(input).keydown(function (event) {
+                    /*$(input).keydown(function (event) {
                         if (event.keyCode == 13) {
                             let rowData = dataTable.row({ search: 'applied' }).data();
                             let colindex = $(this).attr("form-do-input");
@@ -735,12 +684,13 @@
                             event.preventDefault();
                             saveFormRow(rowData);
                         }
-                    });
+                    });*/
 
-                } else if (@doTypeId == 3) // button display
-                    mainDoElement.append(`<button type="button" class="btn btn-app btn-light"><i class="fa fa-play" style="display:block"></i><span style="display:block">${$(column.header()).text()}</span></button>`);
-                else if (@doTypeId == 4) {// realtimeparameters
-                    mainDoElement.append(`<div class="flex-item-realtime card-box widget-flat text-white bg-blue" style="padding-bottome:10px; background-color:aqua; text-align:center;"><i class="fi-tag"></i><h3 parameterId='` + efDataList[i].MachineParameterId + `'>333</h3><span>${$(column.header()).text()}</span></div>`);
+                } else if (@doTypeId == 3) {// button display
+                    mainDoElement.append(`<button type="button" class="btn btn-app btn-light"><i class="fa fa-play" style="display:block; padding:5px;"></i><span style="display:block; text-wrap:balance;">${$(column.header()).text()}</span></button>`);
+                    $('.mainDO').append(mainDoElement);
+                } else if (@doTypeId == 4) {// realtimeparameters
+                    mainDoElement.append(`<div parameterId='` + efDataList[i].MachineParameterId + `' class="flex-item-realtime card-box widget-flat text-white bg-blue" style="padding-bottome:10px; background-color:aqua; text-align:center;"><i class="fi-tag"></i><h3>-</h3><span>${$(column.header()).text()}</span></div>`);
                     $('.mainDO').append(mainDoElement);
                     mainDoElement.addClass('flex-grid-form');
                 } else if (@doTypeId == 5 || @doTypeId == 6) {
@@ -797,33 +747,66 @@
 
     var efRowHtml = "<p style='margin:0px; color:black; display:block; '>EFnameToChange  </p> <input id='value-ef' type='text' required value='' style='color:black; display:block; '/>";
 
-    function setEditRowModal(buttonName, row = []) {
-        console.log('columnTypes', columnTypes);
-        var k = 0;
-        var efRealRowHtml = '';
-        for (var column of columnTypes) {
-            let colname = column.ColumnName;
-            let coltype = column.DataType;
-            if (k > 0) {
-                let lowercase = colname.toLowerCase();
-                efRealRowHtml = efRowHtml;
-                if (lowercase.includes('createat') || lowercase.includes('updateat') ||
-                    lowercase.includes('createby') || lowercase.includes('updateby') ||
-                    lowercase.includes('createddate') || lowercase.includes('updateddate') ||
-                    lowercase.includes('createdby') || lowercase.includes('updatedby')) {
-                    console.log('lowercase', lowercase);
-                    efRealRowHtml = efRealRowHtml.replace(/display:block;/g, "display:none;");
-                }
-                var inputType = getHtmlTypeByDBType(coltype);
-                if (buttonName == "Add")
-                    efRealRowHtml = efRealRowHtml.replace("EFnameToChange", colname).replace("type='text'", "type='" + inputType + "'");
-                else if ((buttonName == "Save"))
-                    efRealRowHtml = efRealRowHtml.replace("EFnameToChange", colname).replace("value=''", "value='" + row[k] + "'").replace("type='text'", "type='" + inputType + "'");
-                $('#EF-row-Content').append(efRealRowHtml);
+    // delay function
+    function delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    // Use the async/await syntax to introduce a 2-second delay
+    async function updateDatatable() {
+        await delay(2000);
+        $.ajax({
+            url: Q.resolveUrl('./DisplayObjectEdit/GetTableData'),
+            type: 'GET',
+            data: { tableName: tableName },
+            dataType: 'json',
+            success: function (data) {
+                //console.log('all data:', data.Data);
+                data = JSON.parse(data.Data);
+                var rowData = data.map(function (item) {
+                    var row = [];
+                    for (var key in item) {
+                        row.push(item[key]);
+                    }
+                    return row;
+                });
+                dataTable.clear();
+                dataTable.rows.add(rowData);
+                dataTable.draw();
+                focusPage();
+                hideLoader();
+            },
+            error: function (error) {
+                Q.notifyError("Datatable connection error.");
+                hideLoader();
             }
-            k++;
+        });
+    }
+
+    function focusPage() { // in case form and table
+        if (@doTypeId == 2) {
+            let mainDoElement = $("#do_element_@doId");
+            mainDoElement.empty();
+            var data = dataTable.row(dataTable.page.info().page).data();
+            let numCols = dataTable.columns().nodes().length;
+            chart_labels = [];
+
+            console.log(numCols);
+            for (var i = 0; i < numCols; i++) {
+                let column = dataTable.column(i);
+                if (column.visible()) {
+                    // make the input forms  from datatable
+                    /*console.log('toggleheader log! this type is form display');*/
+                    let htmlstr = "<div class='row flex-item-form' style='justify-content:center;'><div class='col-md-4' style='color:black;'>" + $(column.header()).text() + ":&nbsp</div><div class='col-md-8'><input style='color:black;' type='' form-do-input='" + i + "' value='" + data[i] + "' /></div></div>";
+                    let columnTypes = @Html.Raw(Model.SubDO.SubDOTypeColumns);
+                    htmlstr = htmlstr.replace("type=''", "type='" + getHtmlTypeByDBType(columnTypes[i].DataType) + "'");
+                    mainDoElement.append(htmlstr);
+                    let input = "[form-do-input=" + i + "]";
+                    mainDoElement.insertBefore($("#do_element_table_@doId"));
+                    mainDoElement.addClass('flex-grid-form');
+                }
+            }
         }
-        $('#modal-add-EF #add-EF-row').html(buttonName);
     }
 </script>
 
@@ -834,7 +817,7 @@
 {
     <style>
         table {
-            border: 5px @(subtypedata[0]["BorderStyle"].ToString() == "1" ? "solid" : "double") gray !important;
+            border: 1px @(subtypedata[0]["BorderStyle"].ToString() == "1" ? "solid" : "double") gray !important;
             font-family: @subtypedata[0]["Font"] !important;
             font-size: @subtypedata[0]["FontSize"] !important;
             color: @subtypedata[0]["FontColor"] !important;
@@ -855,7 +838,7 @@
 {
     <style>
         .dataTables_wrapper {
-            border: 5px @(subtypedata[0]["BorderStyle"].ToString() == "1" ? "solid" : "double") gray !important;
+            border: 1px @(subtypedata[0]["BorderStyle"].ToString() == "1" ? "solid" : "double") gray !important;
             background-color: @subtypedata[0]["BackgroundColor"] !important;
         }
 
@@ -879,10 +862,14 @@
 {
     <style>
         .btn-app.btn-light {
-            border: 5px @(subtypedata[0]["BorderStyle"].ToString() == "1" ? "solid" : "double") gray !important;
+            border: 1px @(subtypedata[0]["BorderStyle"].ToString() == "1" ? "solid" : "double") gray !important;
             background-color: @subtypedata[0]["BackgroundColor"] !important;
             font-family: @subtypedata[0]["Font"] !important;
             text-align: @(subtypedata[0]["Alignment"].ToString() == "1" ? "left" : (subtypedata[0]["Alignment"].ToString() == "3" ? "right" : "center"));
+            width: inherit;
+            max-width: 180px;
+            /* height: inherit; */
+            min-height: 100px;
         }
     </style>
 }
@@ -891,7 +878,7 @@
 {
     <style>
         .card-box {
-            border: 5px @(subtypedata[0]["BorderStyle"].ToString() == "1" ? "solid" : "double") gray !important;
+            border: 1px @(subtypedata[0]["BorderStyle"].ToString() == "1" ? "solid" : "double") gray !important;
             background-color: @subtypedata[0]["BackgroundColor"] !important;
             font-family: @subtypedata[0]["Font"] !important;
             text-align: @(subtypedata[0]["Alignment"].ToString() == "1" ? "left" : (subtypedata[0]["Alignment"].ToString() == "3" ? "right" : "center"));
@@ -903,7 +890,8 @@
 {
     <style>
         #do_element_@doId {
-            border: 5px @(subtypedata[0]["BorderStyle"].ToString() == "1" ? "solid" : "double") gray !important;
+            border: 1px @(subtypedata[0]["BorderStyle"].ToString() == "1" ? "solid" : "double") gray !important;
+            padding: 40px;
         }
     </style>
 }
@@ -912,7 +900,7 @@
 {
     <style>
         .notification {
-            border: 5px @(subtypedata[0]["BorderStyle"].ToString() == "1" ? "solid" : "double") gray !important;
+            border: 1px @(subtypedata[0]["BorderStyle"].ToString() == "1" ? "solid" : "double") gray !important;
             background-color: @subtypedata[0]["BackgroundColor"] !important;
             font-family: @subtypedata[0]["Font"] !important;
             text-align: @(subtypedata[0]["Alignment"].ToString() == "1" ? "left" : (subtypedata[0]["Alignment"].ToString() == "3" ? "right" : "center"));
@@ -922,6 +910,10 @@
 }
 
 <style>
+    .ui-dialog.s-Dialog {
+        z-index: 1052 !important;
+    }
+
     .flex-grid-alarm {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -933,7 +925,7 @@
         display: flex;
         flex-wrap: wrap;
         width: 100%;
-        grid-column-gap: 30px;
+        grid-column-gap: 7px;
     }
 
     .flex-item-form {
@@ -953,11 +945,15 @@
     }
 
     .s-MessageDialog .message {
-        color: red;
+        color: rgb(0, 0, 0);
     }
 
     .s-MessageDialog.s-ConfirmDialog {
-        z-index: 1050 !important;
+        z-index: 1054 !important;
+    }
+
+    .s-MessageDialog.s-AlertDialog {
+        z-index: 1054 !important;
     }
 
     #modal-design {
@@ -1114,8 +1110,8 @@
         margin: 0 auto;
         position: absolute;
         min-height: 50%;
-        border: grey dashed;
-        padding: 30px;
+        border: grey dashed 1px;
+        padding: 50px 30px;
 
     }
 

@@ -39,10 +39,10 @@
     <link href="~/Content/site/site.css" rel="stylesheet" type="text/css" />
 
     // using keyboard plugin
-    <link href="~/Scripts/autocompleteKeyboard/keyboard.css" type="text/css" rel="stylesheet">
+    <script src="~/Scripts/jquery.keyboard.js"></script>
+    <link href="~/Content/site/keyboard.css" type="text/css" rel="stylesheet">
     <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
     <script src="~/Scripts/autocompleteKeyboard/jquery.keyboard.extension-all.js"></script>
-    <script src="~/Scripts/autocompleteKeyboard/jquery.keyboard.js"></script>
     <script src="~/Scripts/autocompleteKeyboard/jquery.keyboard.extension-altkeyspopup.js"></script>
     <script src="~/Scripts/autocompleteKeyboard/jquery.keyboard.extension-autocomplete.js"></script>
     <script src="~/Scripts/autocompleteKeyboard/jquery.keyboard.extension-caret.js"></script>
@@ -64,7 +64,7 @@
         <script type="text/javascript">
             $(function () {
             @RenderSection("PageInitScript", false)
-                                                                });
+                                                                                                        });
         </script>
         <div id="page-outer-nonav">
             <div id="page-container" class="page-container-common">
@@ -933,6 +933,6 @@
 
 <style>
     div.ui-keyboard {
-        font-size: 2.8rem;
+        font-size: 2rem;
     }
 </style>

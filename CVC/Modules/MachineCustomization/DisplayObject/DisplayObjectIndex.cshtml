@@ -24,28 +24,6 @@
     </div>
 </div>
 
-<div class="modal fade" id="modal-add-EF">
-    <div class="modal-dialog" style="margin-top : 300px;">
-        <div class="modal-content bg-primary">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title">Add(Edit) Entity Field</h4>
-            </div>
-            <div class="modal-body" id="EF-row-Content"
-                style="display: grid; grid-template-columns: min-content auto; grid-column-gap: 20px; grid-row-gap: 20px;">
-                <!--  EF Row Input List  -->
-            </div>
-            <div class="modal-footer" style="">
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                <a id="add-EF-row" class="btn btn-default pull-left">Add</a>
-                @*<button type="button" class="btn btn-primary">Save changes</button>*@
-            </div>
-        </div>
-    </div>
-</div>
-
 @Html.Hidden("DisplayObjectId", "", new { @id = "DisplayObjectId" })
 @Html.Hidden("DisplayObjectType", "", new { @id = "DisplayObjectType" })
 @Html.Hidden("DisplayObjectName", "", new { @id = "DisplayObjectName" })
@@ -53,11 +31,17 @@
 
 <link href="~/Content/css/icons.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-<link
-    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-    rel="stylesheet">
+<link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.css">
+// datatable
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.jqueryui.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.jqueryui.min.css">
+<script src="https://cdn.datatables.net/select/1.7.0/js/dataTables.select.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/select/1.7.0/css/select.dataTables.min.css">
 
+// signalr
 <script src="~/Scripts/jquery.signalR-2.4.1.min.js"></script>
 <script src="~/signalr/hubs"></script>
 <script src="~/Scripts/Components/formComponent20.js"></script>
@@ -81,7 +65,7 @@
 <script type="text/javascript">
     var efDataList = [];
     var undoStack = [];
-
+    var isDesign = false;
     var efStr = "<div class='row' style='padding:1px;display:flex;padding-left:30px;padding-right:30px;'>" +
         "<div ondragstart='dragEF(event);' draggable='true' class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='background-color: #50c72d; border-radius: 8px;display: flex;' machineId='xxId' columnName='xxColumn' pickListId='xxPickList'>" +
         "xxName" +
@@ -92,8 +76,9 @@
         Q.initFullHeightGridPage($('#GridDiv'));
     });
 
-    $('.loader').removeClass('hidden');
+
     $(document).on('click', '.design-mode', function () {
+        showLoader();
         $.ajax({
             url: './DisplayObjectEdit/DisplayObjectEdit',
             type: 'GET',
@@ -107,11 +92,12 @@
                 $('#modal-design .modal-body').html(resultHtml);
                 //$('#modal-design .modal-body').html("");
                 $('#modal-design').modal();
-                $('.loader').addClass('hidden');
+                isDesign = true;
+                hideLoader();
             },
             error: function (xhr, status, error) {
                 console.error("Error fetching data:", error);
-                $('.loader').addClass('hidden');
+                hideLoader();
             }
         });
     });

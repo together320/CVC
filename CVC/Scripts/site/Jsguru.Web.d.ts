@@ -15160,6 +15160,21 @@ declare namespace CVC {
 }
 declare namespace CVC.Texts {
 }
+declare namespace CVC.Administration {
+    class UserDialog extends Serenity.EntityDialog<UserRow, any> {
+        protected getFormKey(): string;
+        protected getIdProperty(): string;
+        protected getLocalTextPrefix(): string;
+        protected getNameProperty(): string;
+        protected getService(): string;
+        protected getDeletePermission(): string;
+        protected getInsertPermission(): string;
+        protected getUpdatePermission(): string;
+        protected form: UserForm;
+        constructor();
+        protected afterLoadEntity(): void;
+    }
+}
 declare namespace CVC.Common.Bases {
     class GridBase<TItem, TOptions> extends Serenity.EntityGrid<TItem, TOptions> {
         constructor(container: JQuery, options?: TOptions);
@@ -15444,6 +15459,21 @@ declare namespace CVC {
         isHtml: boolean;
         isLocalText: boolean;
         hideLabel: boolean;
+    }
+}
+declare namespace CVC.MachineCustomization {
+    class AlarmDialog extends Serenity.EntityDialog<AlarmRow, any> {
+        protected getFormKey(): string;
+        protected getIdProperty(): string;
+        protected getLocalTextPrefix(): string;
+        protected getNameProperty(): string;
+        protected getService(): string;
+        protected getDeletePermission(): string;
+        protected getInsertPermission(): string;
+        protected getUpdatePermission(): string;
+        protected form: AlarmForm;
+        constructor();
+        protected afterLoadEntity(): void;
     }
 }
 declare namespace CVC.MachineCustomization {
@@ -15765,6 +15795,21 @@ declare namespace CVC.MachineCustomization {
     }
 }
 declare namespace CVC.MachineCustomization {
+    class MachineDialog extends Serenity.EntityDialog<MachineRow, any> {
+        protected getFormKey(): string;
+        protected getIdProperty(): string;
+        protected getLocalTextPrefix(): string;
+        protected getNameProperty(): string;
+        protected getService(): string;
+        protected getDeletePermission(): string;
+        protected getInsertPermission(): string;
+        protected getUpdatePermission(): string;
+        protected form: MachineForm;
+        constructor();
+        protected afterLoadEntity(): void;
+    }
+}
+declare namespace CVC.MachineCustomization {
     class NotificationDisplayDialog extends Serenity.EntityDialog<NotificationDisplayRow, any> {
         protected getFormKey(): string;
         protected getIdProperty(): string;
@@ -15975,5 +16020,95 @@ declare namespace CVC.MachineCustomization {
         protected getLocalTextPrefix(): string;
         protected getService(): string;
         constructor(container: JQuery);
+    }
+}
+declare namespace CVC.PackSettings {
+    class BottleDialog extends Serenity.EntityDialog<BottleRow, any> {
+        protected getFormKey(): string;
+        protected getIdProperty(): string;
+        protected getLocalTextPrefix(): string;
+        protected getNameProperty(): string;
+        protected getService(): string;
+        protected getDeletePermission(): string;
+        protected getInsertPermission(): string;
+        protected getUpdatePermission(): string;
+        protected form: BottleForm;
+        constructor();
+        protected afterLoadEntity(): void;
+    }
+}
+declare namespace CVC.PackSettings {
+    class CapDialog extends Serenity.EntityDialog<CapRow, any> {
+        protected getFormKey(): string;
+        protected getIdProperty(): string;
+        protected getLocalTextPrefix(): string;
+        protected getNameProperty(): string;
+        protected getService(): string;
+        protected getDeletePermission(): string;
+        protected getInsertPermission(): string;
+        protected getUpdatePermission(): string;
+        protected form: CapForm;
+        constructor();
+        protected afterLoadEntity(): void;
+    }
+}
+declare namespace CVC.PackSettings {
+    class CottonDialog extends Serenity.EntityDialog<CottonRow, any> {
+        protected getFormKey(): string;
+        protected getIdProperty(): string;
+        protected getLocalTextPrefix(): string;
+        protected getNameProperty(): string;
+        protected getService(): string;
+        protected getDeletePermission(): string;
+        protected getInsertPermission(): string;
+        protected getUpdatePermission(): string;
+        protected form: CottonForm;
+        constructor();
+        protected afterLoadEntity(): void;
+    }
+}
+declare namespace CVC.PackSettings {
+    class DesiccantDialog extends Serenity.EntityDialog<DesiccantRow, any> {
+        protected getFormKey(): string;
+        protected getIdProperty(): string;
+        protected getLocalTextPrefix(): string;
+        protected getNameProperty(): string;
+        protected getService(): string;
+        protected getDeletePermission(): string;
+        protected getInsertPermission(): string;
+        protected getUpdatePermission(): string;
+        protected form: DesiccantForm;
+        constructor();
+        protected afterLoadEntity(): void;
+    }
+}
+declare namespace CVC.PackSettings {
+    class EndOfLineDialog extends Serenity.EntityDialog<EndOfLineRow, any> {
+        protected getFormKey(): string;
+        protected getIdProperty(): string;
+        protected getLocalTextPrefix(): string;
+        protected getNameProperty(): string;
+        protected getService(): string;
+        protected getDeletePermission(): string;
+        protected getInsertPermission(): string;
+        protected getUpdatePermission(): string;
+        protected form: EndOfLineForm;
+        constructor();
+        protected afterLoadEntity(): void;
+    }
+}
+declare namespace CVC.PackSettings {
+    class PackDialog extends Serenity.EntityDialog<PackRow, any> {
+        protected getFormKey(): string;
+        protected getIdProperty(): string;
+        protected getLocalTextPrefix(): string;
+        protected getNameProperty(): string;
+        protected getService(): string;
+        protected getDeletePermission(): string;
+        protected getInsertPermission(): string;
+        protected getUpdatePermission(): string;
+        protected form: PackForm;
+        constructor();
+        protected afterLoadEntity(): void;
     }
 }

@@ -12,13 +12,13 @@
     <script type="text/javascript">@Html.Raw(Html.GetLocalTextContent("Login"))</script>
     @Html.Stylesheet("~/Scripts/vegas/vegas.css")
 
-    <script src="~/Scripts/jquery.keyboard.js"></script>
     <script src="~/Scripts/autocompleteKeyboard/jquery.keyboard.extension-all.js"></script>
-    <link href="~/Scripts/autocompleteKeyboard/keyboard.css" type="text/css" rel="stylesheet">
+    <script src="~/Scripts/jquery.keyboard.js"></script>
+    <link href="~/Content/site/keyboard.css" type="text/css" rel="stylesheet">
     <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
     <style type="text/css">
         div.ui-keyboard {
-            font-size: 2.8rem;
+            font-size: 2rem;
         }
 
         body {
@@ -142,7 +142,7 @@
             z-index: 9999;
             overflow: hidden;
             /* height: 100%;
-                                                                                width: 100%; */
+                                                                                                        width: 100%; */
         }
 
         .loadingmainwrap {
@@ -640,7 +640,7 @@
                     $(function() {
                         $('#Username').val(@Html.Raw(Serenity.JSON.Stringify(ViewData["Activated"])));
                     $('#Password').focus();
-                                                                        });
+                                                                                                });
         </text>
     }
     });

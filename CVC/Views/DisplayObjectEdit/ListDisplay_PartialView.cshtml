@@ -5,6 +5,7 @@
 @{
     var doId = ViewBag.doId;
     var doTypeId = ViewBag.doTypeId;
+    var doTitle = ViewBag.doTitle;
     JArray columns = new JArray();
     JArray columDatum = new JArray();
     JArray typeData = JArray.Parse(Model.SubTypeData);
@@ -17,25 +18,25 @@
 
 @if (doTypeId == 5 || doTypeId == 6)
 {
-        <canvas id='do_element_@doId' style='display:block; width:100%; max-width:600px;' width='400' height='400'></canvas>
+    <canvas id='do_element_@doId' style='display:block; width:100%; max-width:600px;' width='400' height='400'></canvas>
 }
 else
 {
-        <div id="do_element_@doId" style="padding-top:50px; height:inherit">
-        </div>
+    <div id="do_element_@doId" style="padding-top:50px; height:inherit">
+    </div>
 }
 <div style='' class="mainDO" id='parent_do_element_@doId'>
     <table id='do_element_table_@doId' class='displays table-striped table-bordered dt-responsive nowrap' width='100'
         cellspacing='0'>
         @if (@Model.SelectedEFs.Count > 0)
         {
-                <thead>
-                    <tr style="">
+            <thead>
+                <tr style="">
                     @if (doTypeId == 1 || doTypeId == 2)
                     {
                         foreach (JObject item in columns)
                         {
-                                        <td style="color: black">@item["ColumnName"]</td>
+                            <td style="color: black">@item["ColumnName"]</td>
                         }
                     }
                     else
@@ -44,41 +45,41 @@ else
                         {
                             if (item.ColumnName == null)
                             {
-                                                <td>@item.ParameterName</td>
+                                <td>@item.ParameterName</td>
                             }
                             else
                             {
-                                                <td>@item.ColumnName</td>
+                                <td>@item.ColumnName</td>
                             }
                         }
                     }
-                    </tr>
-                </thead>
-                <tbody>
+                </tr>
+            </thead>
+            <tbody>
                 @if (doTypeId == 1 || doTypeId == 2)
                 {
                     foreach (JObject obj in columDatum)
                     {
-                                    <tr>
+                        <tr>
                             @foreach (var property in obj)
                             {
-                                                <td>@property.Value</td>
+                                <td>@property.Value</td>
                             }
-                                    </tr>
+                        </tr>
                     }
                 }
-                </tbody>
-                <tfoot>
-                    <tr>
+            </tbody>
+            <tfoot>
+                <tr>
                     @if (doTypeId == 1 || doTypeId == 2)
                     {
                         foreach (JObject item in columns)
                         {
-                                        <td>@item["ColumnName"]</td>
+                            <td>@item["ColumnName"]</td>
                         }
                     }
-                    </tr>
-                </tfoot>
+                </tr>
+            </tfoot>
         }
     </table>
 </div>
@@ -102,17 +103,14 @@ else
         }
 
         dataTable = $(do_element_table_@doId).DataTable({
-            responsive: {
-                details: {
-                    type: 'column'
-                }
-            },
             "columnDefs": [
-                { "targets": "_all", "visible": false, "orderable": false },
+                { "targets": "_all", "visible": false, 'searchable': true },
             ],
+            paging: true,
             pageLength: @doTypeId== 2 ? 1 : 10,
             lengthChange: @doTypeId== 1 ? true : false,
             buttons: [],
+            select: 'single',
             initComplete: function () {
                 if (@doTypeId == 1) {
                     this.api()
@@ -174,15 +172,12 @@ else
                                 },
                                 options: {
                                     legend: { display: false },
-                                    title: {
-                                        display: true,
-                                        text: "Chart"
-                                    },
                                     tooltips: {
                                         mode: 'label',
                                         enabled: true
                                     }
                                 }
+
                             });
                             $('.mainDO').append($('#do_element_@doId'));
                             updateChart();
@@ -223,17 +218,17 @@ else
                 }
             }
         });
+
     });
 
     function updateChart(data) { //
-        console.log("chartdata:", data);
+        /*console.log("chartdata:", data);*/
         if (data == null || typeof data == 'undefined')
             return;
         var newData = [];
         newChart.data.labels = chart_labels;
         for (var i = 0; i < chart_labels.length; i++) {
             /*console.log(data[0].MachineParameterName, typeof chart_labels);*/
-            console.log()
             const desiredValue = Array.isArray(data) ? data.find(item => item.MachineParameterName === chart_labels[i])?.Value || null : null;
             newData[i] = desiredValue;
         }
