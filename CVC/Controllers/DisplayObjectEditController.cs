@@ -88,7 +88,7 @@ namespace CVC.Controllers
         displayObjectEditModel.SubDO.SelectedEFs.Add(ef);
       }
 
-      
+
 
       // get the data List of the EF parameterTable by machine's TableName    **** name mark is wrong
       CustomRepository _repo = new CustomRepository();
@@ -239,8 +239,13 @@ namespace CVC.Controllers
       {
         try
         {
-          if (_repo.AddUpdateViewField(parameter))
+          if (parameter.StatusId == 1)
           {
+            if (_repo.AddUpdateViewField(parameter)) { }
+          }
+          else
+          {
+            if (_repo.deleteViewField(parameter.ViewField)) { }
           }
         }
         catch (System.Exception ex)

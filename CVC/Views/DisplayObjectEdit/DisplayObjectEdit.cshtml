@@ -158,6 +158,8 @@
 
 
 <script type="text/javascript">
+    var vfList = [];
+
     // chart display
     var newChart;
     var chart_labels = [];
@@ -187,10 +189,14 @@
     var isClickedDeleteButton = false;
     var currentRowIdx = -1; // the index of the row applied to form
 
+    var stop_buttonDOs = [];
+
     // init page
     $(function () {
         $(document).ready(function () {
+            undoStack = [];
             // variable initialization
+            undoStack.push('');
             tableName = '@Model.SelectedMachine.TableName';
 
             if (@doTypeId == 1 || @doTypeId == 2) {
@@ -202,9 +208,8 @@
 
             let jsonstr = '@Html.Raw(Model.SubDO.SubDOTypeColumns)';
             columnTypes = JSON.parse(jsonstr);
-            undoStack = [];
-            colorRanges = @Html.Raw(Json.Encode(Model.SubDO.SubTypeColors));
 
+            colorRanges = @Html.Raw(Json.Encode(Model.SubDO.SubTypeColors));
             // modal event initialization
             initModal();
 
@@ -245,11 +250,11 @@
 
         });
 
-        $(document).on("click", ".removeButton", function () {      //when click xremove button
+        /* $(document).on("click", ".removeButton", function () {      //when click xremove button
             undoStack.push($('.workSpace').html());
 
             $(this).parent().parent().remove();
-        });
+        }); */
         ///Clear all
         $("#idDeleteMain").on("click", function (event) {  //once click clear button, ...
             Q.confirm("Do you delete all EntityField from Display Object?", () => HideAllColumns());
@@ -259,19 +264,18 @@
             event.preventDefault();
         });
 
-        $('.workSpace').on("drop", function (event) {
+        /*$('.workSpace').on("drop", function (event) {
             var isClone = event.originalEvent.dataTransfer.getData('dragging');
             var droppedId = event.originalEvent.dataTransfer.getData('dropped-id');
             if (droppedId != "" && droppedId.includes("formId") == 0) {
                 var nodeCopy = $("#" + droppedId);
                 var nodeValue = nodeCopy.is('input, select, textarea') ? nodeCopy.val() : nodeCopy.text();
-
-                undoStack.push($('.workSpace').html());
-
-                $(this).append(nodeCopy);
+                undoStack.push($('#component_content').html());
+                console.log("undostack count is", undoStack.length);
+                $(#component_content).append(nodeCopy);
             } else {
             }
-        });
+        });*/
 
         $(document).on("drop", ".component", function (event) {
             event.stopImmediatePropagation();
@@ -326,20 +330,23 @@
     });
     // end init page
     function initModal() {
+
         $(".workSpace").on("drop", function (event) {
             var droppedId = event.originalEvent.dataTransfer.getData('dropped-id');
             var nodeCopy = $("#" + droppedId);
             if (droppedId.includes('componentId') == 1) {
-                undoStack.push($('.workSpace').html());
-                $(this).append(nodeCopy);
+                $("#component_content").append(nodeCopy);
+                console.log("initial workspace undostack count is", undoStack.length);
                 var commontype = $("#" + droppedId).attr('commonbutton');
                 nodeCopy.css({
                     "position": "absolute",
                     "left": event.clientX - $(".workSpace").offset().left,
                     "top": event.clientY - $(".workSpace").offset().top
                 });
+                undoStack.push($('#component_content').html());
                 if (commontype == '4') { //Add
                     nodeCopy.click(function (e) {
+                        console.log('table addbutton click');
                         if (grid == null)
                             grid = getEntityGrid(tableName);
                         if (grid != null) {
@@ -351,6 +358,7 @@
                         }
                     });
                 } else if (commontype == '5') { //Edit
+                    console.log('table edit button clicked');
                     if (@doTypeId == 1) {
                         nodeCopy.click(function (e) {
                             let row = dataTable.row('.selected').data();
@@ -421,15 +429,8 @@
             }
             var nodeCopy = $("#" + droppedId);
             var nodeValue = nodeCopy.is('input, select, textarea') ? nodeCopy.val() : nodeCopy.text();
-            if (droppedId.includes('componentId') == 1) {
-                undoStack.push($('.workSpace').html());
-
-                $(this).append(nodeCopy);
-            }
-
             if (droppedId.includes('do_element') == 1) {
-                undoStack.push($('.workSpace').html());
-
+                //undoStack.push($('.workSpace').html());
                 $(this).append(nodeCopy);
             }
         });
@@ -587,12 +588,18 @@
 
     // general button functionality ===> undo, clear, save
     function undoDoEdit() {
-        if (undoStack.length > 1) {
-            undoStack.pop(); // Remove the latest state from the stack
-            $('.workSpace').html(undoStack[undoStack.length - 1]);
-            // connect event
-            initModal();
-        }
+        Q.confirm("Would you like to revert to the previous component operation?", () => {
+            if (undoStack.length > 1) {
+                undoStack.pop();
+                let idx = undoStack.length - 1;
+                console.log('undo idx is', idx);
+                if (idx == 0) {
+                    $('#component_content').html('');
+                } else {
+                    $('#component_content').html(undoStack[idx]);
+                }
+            }
+        });
     }
 
     function saveConfirm() {
@@ -604,7 +611,7 @@
         let numCols = dataTable.columns().nodes().length;
         console.log('efdatalist:', efDataList);
         let parameterList = [];
-
+        let vfListTemp = vfList;
         for (var i = 0; i < numCols; i++) {
             let column = dataTable.column(i);
             if (column.visible()) {
@@ -613,15 +620,32 @@
                 console.log('columnText:', columnText);
                 for (var j = 0; j < efDataList.length; j++) {
                     if (efDataList[j].ColumnName == columnText || efDataList[j].ParameterName == columnText) {
+                        let vf_idx = vfListTemp.findIndex(vf => vf.MachineParameterId == efDataList[j].MachineParameterId);
+                        if (vf_idx < 0)
+                            parameter["StatusId"] = 1; // parameter to add
+                        else {
+                            vfListTemp.splice(vf_idx, 1);
+                            continue;
+                        }
                         console.log('equal param:', efDataList[j]);
                         parameter["ViewsId"] = @doId;
                         parameter["ViewFieldName"] = efDataList[j].ParameterName;
                         parameter["MachineParameterId"] = efDataList[j].MachineParameterId;
-                        parameter["StatusId"] = 1;
                         parameterList.push(parameter);
                         break;
                     }
                 }
+            }
+        }
+        if (vfListTemp != null || vfListTemp.length > 0) { // insert list to delete // hint !!! ==== statusId=0 is to delete, else is to add
+            for (let vf of vfListTemp) {
+                let parameter = {};
+                parameter["ViewsId"] = @doId;
+                parameter["ViewFieldName"] = vf.ViewFieldName;
+                parameter["ViewField"] = vf.ViewField;
+                parameter["MachineParameterId"] = vf.MachineParameterId;
+                parameter["StatusId"] = 0;
+                parameterList.push(parameter);
             }
         }
         if (parameterList.length == 0) {
@@ -654,9 +678,9 @@
     @*if (@doTypeId == 1)
             return;*@
 
-            undoStack.push($('.workSpace').html());
+            //undoStack.push($('.workSpace').html());
 
-        let mainDoElement = $("#do_element_@doId");
+            let mainDoElement = $("#do_element_@doId");
         mainDoElement.empty();
 
         var data = dataTable.row(dataTable.page.info().page).data();
@@ -687,7 +711,11 @@
                     });*/
 
                 } else if (@doTypeId == 3) {// button display
-                    mainDoElement.append(`<button type="button" class="btn btn-app btn-light"><i class="fa fa-play" style="display:block; padding:5px;"></i><span style="display:block; text-wrap:balance;">${$(column.header()).text()}</span></button>`);
+                    let stopIdx = stop_buttonDOs.indexOf(i.toString());
+                    let playStr = "fa-play";
+                    if (stopIdx >= 0)
+                        playStr = "fa-stop";
+                    mainDoElement.append(`<button type="button" class="btn btn-app btn-light buttonDO" onclick="clickButtonDO(event);" columnIdx="` + i + `"><i class="fa ` + playStr + `" style="display:block; padding:5px; pointer-events:none"></i><span style="display:block; text-wrap:balance; pointer-events:none;">${$(column.header()).text()}</span></button>`);
                     $('.mainDO').append(mainDoElement);
                 } else if (@doTypeId == 4) {// realtimeparameters
                     mainDoElement.append(`<div parameterId='` + efDataList[i].MachineParameterId + `' class="flex-item-realtime card-box widget-flat text-white bg-blue" style="padding-bottome:10px; background-color:aqua; text-align:center;"><i class="fi-tag"></i><h3>-</h3><span>${$(column.header()).text()}</span></div>`);
@@ -808,10 +836,26 @@
             }
         }
     }
+
+    function clickButtonDO(event) {
+        console.log('clickButtonDO');
+        let columnIdx = $(event.target).attr("columnIdx");
+        let icon = $(event.target).find('.fa-play');
+        let stopIdx = stop_buttonDOs.indexOf(columnIdx.toString());
+        if (icon.length > 0) {
+            icon.removeClass('fa-play');
+            icon.addClass('fa-stop');
+            if (stopIdx < 0)
+                stop_buttonDOs.push(columnIdx);
+        } else {
+            icon = $(event.target).find('.fa-stop');
+            icon.removeClass('fa-stop');
+            icon.addClass('fa-play');
+            if (stopIdx >= 0)
+                stop_buttonDOs.splice(stopIdx, 1);
+        }
+    }
 </script>
-
-
-
 
 @if (doTypeId == 1)
 {

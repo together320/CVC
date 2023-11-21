@@ -25,6 +25,7 @@ else
     <div id="do_element_@doId" style="padding-top:50px; height:inherit">
     </div>
 }
+
 <div style='' class="mainDO" id='parent_do_element_@doId'>
     <table id='do_element_table_@doId' class='displays table-striped table-bordered dt-responsive nowrap' width='100'
         cellspacing='0'>
@@ -83,12 +84,13 @@ else
         }
     </table>
 </div>
+<div id="component_content"></div>
 
 <script type="text/javascript">
     var newChart;
     var chart_labels = [];
     $(document).ready(function () {
-        let vfList = @Html.Raw(Json.Encode(Model.SelectedVFs)); // ViewFieldList --> MachineParameterId, ViewFieldName, MachineParameterName, ColumName, ViewField, StatusId
+        vfList = @Html.Raw(Json.Encode(Model.SelectedVFs)); // ViewFieldList --> MachineParameterId, ViewFieldName, MachineParameterName, ColumName, ViewField, StatusId
         efDataList = @Html.Raw(Json.Encode(Model.SelectedEFs)); // machineParameterList --> MachineParameterId, ParameterName, ColumnName, PickListId
         var dotype = @doTypeId;
         console.log('vfList: ', vfList);

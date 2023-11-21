@@ -67,3 +67,52 @@ function getHtmlTypeByDBType(columnType) {
     }
     return inputType;
 }
+
+function getEntityGrid(tableName) {
+    var tempGrid = null;
+    switch (tableName) {
+        case 'Users':
+            tempGrid = new CVC.Administration.UserGrid($('#tempGrid'));
+            break;
+        case 'Bottle':
+            tempGrid = new CVC.PackSettings.BottleGrid($('#tempGrid'));
+            break;
+        case 'Roles':
+            tempGrid = new CVC.Administration.RoleGrid($('#tempGrid'));
+            break;
+        case 'Pack':
+            tempGrid = new CVC.PackaSettings.PackGrid($('#tempGrid'));
+            break;
+        case 'Cotton':
+            tempGrid = new CVC.PackaSettings.CottonGrid($('#tempGrid'));
+            break;
+        case 'Desiccant':
+            tempGrid = new CVC.PackaSettings.DesiccantGrid($('#tempGrid'));
+            break;
+        case 'Cap':
+            tempGrid = new CVC.PackaSettings.CapGrid($('#tempGrid'));
+            break;
+        case 'Alarm':
+            tempGrid = new CVC.MachineCustomization.AlarmGrid($('#tempGrid'));
+            break;
+        case 'Batch':
+            tempGrid = new CVC.Batch.BatchGrid($('#tempGrid'));
+            break;
+        case 'Machine':
+            tempGrid = new CVC.MachineCustomization.MachineGrid($('#tempGrid'));
+            break;
+        case 'Company':
+            tempGrid = new CVC.Configuration.CompanyGrid($('#tempGrid'));
+            break;
+        case 'Department':
+            tempGrid = new CVC.Configuration.DepartmentGrid($('#tempGrid'));
+            break;
+        case 'EndOfLine':
+            tempGrid = new CVC.PackSettings.EndOfLineGrid($('#tempGrid'));
+            break;
+        case 'AuditLog':
+            tempGrid = new CVC.Report.AuditLogGrid($('#tempGrid'));
+            break;
+    }
+    return tempGrid;
+}
