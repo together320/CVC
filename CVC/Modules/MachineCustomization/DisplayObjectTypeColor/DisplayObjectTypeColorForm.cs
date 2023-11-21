@@ -16,9 +16,8 @@ namespace CVC.MachineCustomization.Forms
     {
         [ColorPickerEditor]
         public String DotColor { get; set; }
-        [NumberInputEditor]
+
         public Double Min { get; set; }
-        [NumberInputEditor]
         public Double Max { get; set; }
         public Int32 DisplayObjectTypeId { get; set; }
         public Int32 SubTypeId { get; set; }

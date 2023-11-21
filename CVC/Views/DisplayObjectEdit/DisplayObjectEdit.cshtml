@@ -509,9 +509,15 @@
             let h3element = $(this).find('h3');
             let param = $(this).attr('parameterId');
             const desiredValue = Array.isArray(data) ? data.find(item => item.MachineParameterId == param)?.Value || '-' : '-';
-            /*console.log(param);*/
-            // Set the text content of the h3 element
             h3element.text(desiredValue);
+            if (colorRanges.length == 0)
+                return;
+            for (let color of colorRanges) {
+                if (color.Min > parseInt(desiredValue) && color.Max < parseInt(desiredValue)) {
+                    $(this).css('background-color', "'" + color.DOTColor + " !important'");
+                    break;
+                }
+            }
         });
     }
 
@@ -718,7 +724,7 @@
                     mainDoElement.append(`<button type="button" class="btn btn-app btn-light buttonDO" onclick="clickButtonDO(event);" columnIdx="` + i + `"><i class="fa ` + playStr + `" style="display:block; padding:5px; pointer-events:none"></i><span style="display:block; text-wrap:balance; pointer-events:none;">${$(column.header()).text()}</span></button>`);
                     $('.mainDO').append(mainDoElement);
                 } else if (@doTypeId == 4) {// realtimeparameters
-                    mainDoElement.append(`<div parameterId='` + efDataList[i].MachineParameterId + `' class="flex-item-realtime card-box widget-flat text-white bg-blue" style="padding-bottome:10px; background-color:aqua; text-align:center;"><i class="fi-tag"></i><h3>-</h3><span>${$(column.header()).text()}</span></div>`);
+                    mainDoElement.append(`<div parameterId='` + efDataList[i].MachineParameterId + `' class="flex-item-realtime card-box widget-flat text-white" style="padding-bottome:10px; background-color:aqua; text-align:center;"><i class="fi-tag"></i><h3>-</h3><span>${$(column.header()).text()}</span></div>`);
                     $('.mainDO').append(mainDoElement);
                     mainDoElement.addClass('flex-grid-form');
                 } else if (@doTypeId == 5 || @doTypeId == 6) {
@@ -923,7 +929,7 @@
     <style>
         .card-box {
             border: 1px @(subtypedata[0]["BorderStyle"].ToString() == "1" ? "solid" : "double") gray !important;
-            background-color: @subtypedata[0]["BackgroundColor"] !important;
+            background-color: @subtypedata[0]["BackgroundColor"];
             font-family: @subtypedata[0]["Font"] !important;
             text-align: @(subtypedata[0]["Alignment"].ToString() == "1" ? "left" : (subtypedata[0]["Alignment"].ToString() == "3" ? "right" : "center"));
         }
