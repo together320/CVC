@@ -7232,6 +7232,49 @@ var CVC;
         Administration.UserDialog = UserDialog;
     })(Administration = CVC.Administration || (CVC.Administration = {}));
 })(CVC || (CVC = {}));
+var CVC;
+(function (CVC) {
+    var Batch;
+    (function (Batch) {
+        var BatchDialog = /** @class */ (function (_super) {
+            __extends(BatchDialog, _super);
+            function BatchDialog() {
+                var _this = _super.call(this) || this;
+                _this.form = new Batch.BatchForm(_this.idPrefix);
+                return _this;
+            }
+            BatchDialog.prototype.getFormKey = function () { return Batch.BatchForm.formKey; };
+            BatchDialog.prototype.getIdProperty = function () { return Batch.BatchRow.idProperty; };
+            BatchDialog.prototype.getLocalTextPrefix = function () { return Batch.BatchRow.localTextPrefix; };
+            BatchDialog.prototype.getNameProperty = function () { return Batch.BatchRow.nameProperty; };
+            BatchDialog.prototype.getService = function () { return Batch.BatchService.baseUrl; };
+            BatchDialog.prototype.getDeletePermission = function () { return Batch.BatchRow.deletePermission; };
+            BatchDialog.prototype.getInsertPermission = function () { return Batch.BatchRow.insertPermission; };
+            BatchDialog.prototype.getUpdatePermission = function () { return Batch.BatchRow.updatePermission; };
+            BatchDialog.prototype.afterLoadEntity = function () {
+                _super.prototype.afterLoadEntity.call(this);
+                /*
+                 * isNew() function works properly in afterLoadEntity() function
+                 * **/
+                if (!this.isNew()) {
+                    var criteria;
+                    var res = Batch.BatchService.List({
+                        Criteria: Serenity.Criteria.and(criteria, [["BatchId" /* BatchId */], '=', this.entityId])
+                    }, function (_response) { }, { async: false });
+                    // Cannot delete the entity if it is already referenced in Bottle
+                    // if (res.responseJSON.Entities.length) {
+                    //     this.toolbar.findButton("delete-button").remove()
+                    // }
+                }
+            };
+            BatchDialog = __decorate([
+                Serenity.Decorators.registerClass()
+            ], BatchDialog);
+            return BatchDialog;
+        }(Serenity.EntityDialog));
+        Batch.BatchDialog = BatchDialog;
+    })(Batch = CVC.Batch || (CVC.Batch = {}));
+})(CVC || (CVC = {}));
 /*
 * https://github.com/serenity-is/Serenity/issues/447#issuecomment-901943838
 * created by Denis dated 8/20/2021
@@ -8434,6 +8477,49 @@ var CVC;
         return StaticTextBlock;
     }(Serenity.Widget));
     CVC.StaticTextBlock = StaticTextBlock;
+})(CVC || (CVC = {}));
+var CVC;
+(function (CVC) {
+    var Configuration;
+    (function (Configuration) {
+        var CompanyDialog = /** @class */ (function (_super) {
+            __extends(CompanyDialog, _super);
+            function CompanyDialog() {
+                var _this = _super.call(this) || this;
+                _this.form = new Configuration.CompanyForm(_this.idPrefix);
+                return _this;
+            }
+            CompanyDialog.prototype.getFormKey = function () { return Configuration.CompanyForm.formKey; };
+            CompanyDialog.prototype.getIdProperty = function () { return Configuration.CompanyRow.idProperty; };
+            CompanyDialog.prototype.getLocalTextPrefix = function () { return Configuration.CompanyRow.localTextPrefix; };
+            CompanyDialog.prototype.getNameProperty = function () { return Configuration.CompanyRow.nameProperty; };
+            CompanyDialog.prototype.getService = function () { return Configuration.CompanyService.baseUrl; };
+            CompanyDialog.prototype.getDeletePermission = function () { return Configuration.CompanyRow.deletePermission; };
+            CompanyDialog.prototype.getInsertPermission = function () { return Configuration.CompanyRow.insertPermission; };
+            CompanyDialog.prototype.getUpdatePermission = function () { return Configuration.CompanyRow.updatePermission; };
+            CompanyDialog.prototype.afterLoadEntity = function () {
+                _super.prototype.afterLoadEntity.call(this);
+                /*
+                 * isNew() function works properly in afterLoadEntity() function
+                 * **/
+                if (!this.isNew()) {
+                    var criteria;
+                    var res = Configuration.CompanyService.List({
+                        Criteria: Serenity.Criteria.and(criteria, [["CompanyId" /* CompanyId */], '=', this.entityId])
+                    }, function (_response) { }, { async: false });
+                    // Cannot delete the entity if it is already referenced in Bottle
+                    // if (res.responseJSON.Entities.length) {
+                    //     this.toolbar.findButton("delete-button").remove()
+                    // }
+                }
+            };
+            CompanyDialog = __decorate([
+                Serenity.Decorators.registerClass()
+            ], CompanyDialog);
+            return CompanyDialog;
+        }(Serenity.EntityDialog));
+        Configuration.CompanyDialog = CompanyDialog;
+    })(Configuration = CVC.Configuration || (CVC.Configuration = {}));
 })(CVC || (CVC = {}));
 var CVC;
 (function (CVC) {

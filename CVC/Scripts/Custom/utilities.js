@@ -81,16 +81,16 @@ function getEntityGrid(tableName) {
             tempGrid = new CVC.Administration.RoleGrid($('#tempGrid'));
             break;
         case 'Pack':
-            tempGrid = new CVC.PackaSettings.PackGrid($('#tempGrid'));
+            tempGrid = new CVC.PackSettings.PackGrid($('#tempGrid'));
             break;
         case 'Cotton':
-            tempGrid = new CVC.PackaSettings.CottonGrid($('#tempGrid'));
+            tempGrid = new CVC.PackSettings.CottonGrid($('#tempGrid'));
             break;
         case 'Desiccant':
-            tempGrid = new CVC.PackaSettings.DesiccantGrid($('#tempGrid'));
+            tempGrid = new CVC.PackSettings.DesiccantGrid($('#tempGrid'));
             break;
         case 'Cap':
-            tempGrid = new CVC.PackaSettings.CapGrid($('#tempGrid'));
+            tempGrid = new CVC.PackSettings.CapGrid($('#tempGrid'));
             break;
         case 'Alarm':
             tempGrid = new CVC.MachineCustomization.AlarmGrid($('#tempGrid'));
@@ -111,7 +111,7 @@ function getEntityGrid(tableName) {
             tempGrid = new CVC.PackSettings.EndOfLineGrid($('#tempGrid'));
             break;
         case 'AuditLog':
-            tempGrid = new CVC.Report.AuditLogGrid($('#tempGrid'));
+            tempGrid = "This is log table. You cannot add or edit any log.";
             break;
     }
     return tempGrid;

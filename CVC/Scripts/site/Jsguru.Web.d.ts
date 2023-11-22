@@ -15175,6 +15175,21 @@ declare namespace CVC.Administration {
         protected afterLoadEntity(): void;
     }
 }
+declare namespace CVC.Batch {
+    class BatchDialog extends Serenity.EntityDialog<BatchRow, any> {
+        protected getFormKey(): string;
+        protected getIdProperty(): string;
+        protected getLocalTextPrefix(): string;
+        protected getNameProperty(): string;
+        protected getService(): string;
+        protected getDeletePermission(): string;
+        protected getInsertPermission(): string;
+        protected getUpdatePermission(): string;
+        protected form: BatchForm;
+        constructor();
+        protected afterLoadEntity(): void;
+    }
+}
 declare namespace CVC.Common.Bases {
     class GridBase<TItem, TOptions> extends Serenity.EntityGrid<TItem, TOptions> {
         constructor(container: JQuery, options?: TOptions);
@@ -15459,6 +15474,21 @@ declare namespace CVC {
         isHtml: boolean;
         isLocalText: boolean;
         hideLabel: boolean;
+    }
+}
+declare namespace CVC.Configuration {
+    class CompanyDialog extends Serenity.EntityDialog<CompanyRow, any> {
+        protected getFormKey(): string;
+        protected getIdProperty(): string;
+        protected getLocalTextPrefix(): string;
+        protected getNameProperty(): string;
+        protected getService(): string;
+        protected getDeletePermission(): string;
+        protected getInsertPermission(): string;
+        protected getUpdatePermission(): string;
+        protected form: CompanyForm;
+        constructor();
+        protected afterLoadEntity(): void;
     }
 }
 declare namespace CVC.MachineCustomization {
