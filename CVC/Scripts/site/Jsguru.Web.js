@@ -9673,6 +9673,49 @@ var CVC;
 (function (CVC) {
     var MachineCustomization;
     (function (MachineCustomization) {
+        var MachineDialog = /** @class */ (function (_super) {
+            __extends(MachineDialog, _super);
+            function MachineDialog() {
+                var _this = _super.call(this) || this;
+                _this.form = new MachineCustomization.MachineForm(_this.idPrefix);
+                return _this;
+            }
+            MachineDialog.prototype.getFormKey = function () { return MachineCustomization.MachineForm.formKey; };
+            MachineDialog.prototype.getIdProperty = function () { return MachineCustomization.MachineRow.idProperty; };
+            MachineDialog.prototype.getLocalTextPrefix = function () { return MachineCustomization.MachineRow.localTextPrefix; };
+            MachineDialog.prototype.getNameProperty = function () { return MachineCustomization.MachineRow.nameProperty; };
+            MachineDialog.prototype.getService = function () { return MachineCustomization.MachineService.baseUrl; };
+            MachineDialog.prototype.getDeletePermission = function () { return MachineCustomization.MachineRow.deletePermission; };
+            MachineDialog.prototype.getInsertPermission = function () { return MachineCustomization.MachineRow.insertPermission; };
+            MachineDialog.prototype.getUpdatePermission = function () { return MachineCustomization.MachineRow.updatePermission; };
+            MachineDialog.prototype.afterLoadEntity = function () {
+                _super.prototype.afterLoadEntity.call(this);
+                /*
+                 * isNew() function works properly in afterLoadEntity() function
+                 * **/
+                if (!this.isNew()) {
+                    var criteria;
+                    var res = MachineCustomization.MachineService.List({
+                        Criteria: Serenity.Criteria.and(criteria, [["MachineId" /* MachineId */], '=', this.entityId])
+                    }, function (_response) { }, { async: false });
+                    // Cannot delete the entity if it is already referenced in Bottle
+                    // if (res.responseJSON.Entities.length) {
+                    //     this.toolbar.findButton("delete-button").remove()
+                    // }
+                }
+            };
+            MachineDialog = __decorate([
+                Serenity.Decorators.registerClass()
+            ], MachineDialog);
+            return MachineDialog;
+        }(Serenity.EntityDialog));
+        MachineCustomization.MachineDialog = MachineDialog;
+    })(MachineCustomization = CVC.MachineCustomization || (CVC.MachineCustomization = {}));
+})(CVC || (CVC = {}));
+var CVC;
+(function (CVC) {
+    var MachineCustomization;
+    (function (MachineCustomization) {
         var NotificationDisplayDialog = /** @class */ (function (_super) {
             __extends(NotificationDisplayDialog, _super);
             function NotificationDisplayDialog() {
