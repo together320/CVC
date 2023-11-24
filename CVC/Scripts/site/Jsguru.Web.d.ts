@@ -15825,21 +15825,6 @@ declare namespace CVC.MachineCustomization {
     }
 }
 declare namespace CVC.MachineCustomization {
-    class MachineDialog extends Serenity.EntityDialog<MachineRow, any> {
-        protected getFormKey(): string;
-        protected getIdProperty(): string;
-        protected getLocalTextPrefix(): string;
-        protected getNameProperty(): string;
-        protected getService(): string;
-        protected getDeletePermission(): string;
-        protected getInsertPermission(): string;
-        protected getUpdatePermission(): string;
-        protected form: MachineForm;
-        constructor();
-        protected afterLoadEntity(): void;
-    }
-}
-declare namespace CVC.MachineCustomization {
     class NotificationDisplayDialog extends Serenity.EntityDialog<NotificationDisplayRow, any> {
         protected getFormKey(): string;
         protected getIdProperty(): string;
