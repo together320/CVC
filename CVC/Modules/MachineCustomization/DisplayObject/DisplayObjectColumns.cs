@@ -13,6 +13,7 @@ namespace CVC.MachineCustomization.Columns
     [BasedOnRow(typeof(Entities.DisplayObjectRow))]
     public class DisplayObjectColumns
     {
+        [SortOrder(1, descending: true)]
         [EditLink, DisplayName("Db.Shared.RecordId"), AlignRight]
         public Int32 ViewsId { get; set; }
         //public String ModuleModuleName { get; set; }

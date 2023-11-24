@@ -9018,6 +9018,7 @@ var CVC;
                 opt.selectedCellCssClass = "slick-row-selected";
                 opt.enableCellNavigation = true;
                 opt.rowHeight = 40;
+                opt.frozenColumn = 0;
                 return opt;
             };
             DisplayObjectGrid.prototype.createSlickGrid = function () {

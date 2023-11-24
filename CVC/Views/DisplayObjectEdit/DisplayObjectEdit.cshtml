@@ -86,7 +86,7 @@
             <div id="collapseComponent" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar"
                 style="padding:0.5rem; margin:1rem 0rem 1rem 0;">
                 <div class="bg-white py-2 collapse-inner rounded" id="efList"
-                    style="overflow-y:auto;overflow-x:hidden;max-height:800px;">
+                    style="overflow-y:auto;overflow-x:hidden;max-height:45vh;">
                     @foreach (var item in Model.SubDO.SelectedEFs)
                     {
                         <div class='row' style='padding:1px 10px 10px 15px;display:flex;'>
@@ -114,10 +114,12 @@
     </ul>
     <!-- End of Sidebar -->
     <!-- Content Wrapper -->
-    <div id="content-wrapper" style="width : 100%; padding-top : 30px;">
+    <div id="content-wrapper"
+        style="width : 100%; padding-top : 30px; overflow-y: auto; overflow-x: hidden; height: 80vh;">
         <!-- Main Content -->
         <div id="content">
-            <div style="display:flex;justify-content:end;margin-right:20px;gap:10px;  margin-bottom: 80px">
+            <div
+                style="display:flex;justify-content:end;margin-right:20px;gap:10px; margin-bottom: 80px; position: sticky; top: 0; z-index:1051">
                 @* <button type="button" id="idEditColor" class="btn btn-danger">
                 Edit Color
                 </button> *@
@@ -248,6 +250,7 @@
                 isDesign = false;
             });
 
+            callKeyboard();
         });
 
         /* $(document).on("click", ".removeButton", function () {      //when click xremove button
@@ -277,6 +280,8 @@
             }
         });*/
 
+
+
         $(document).on("drop", ".component", function (event) {
             event.stopImmediatePropagation();
             var isClone = event.originalEvent.dataTransfer.getData('dragging');
@@ -305,6 +310,8 @@
             }
             event.preventDefault();
         });
+
+
 
         $(document).on("click", ".tool-button.save-and-close-button", function () {
             if (!isDesign) return;
@@ -766,7 +773,7 @@
         dataTable.api().columns().every(function () {
             var column = this;
             if (column.visible()) {
-                var input = $("<input type='text' style='width:100%;color:black;'>");
+                var input = $("<input type='search' style='width:100%;color:black;'>");
                 input.keyup(function () {
                     if (column.search() !== this.value) {
                         column.search(this.value).draw();
@@ -814,6 +821,30 @@
                 Q.notifyError("Datatable connection error.");
                 hideLoader();
             }
+        });
+    }
+
+    function callKeyboard() {
+        $("input[type='search'], input[type='text']").keyboard({
+            usePreview: false,
+            layout: 'custom',
+            customLayout: {
+                'normal': [
+                    '` 1 2 3 4 5 6 7 8 9 0 - = {bksp}',
+                    '{tab} q w e r t y u i o p [ ] \\',
+                    'a s d f g h j k l ; \' {accept}',
+                    '{shift} z x c v b n m , . / {shift}',
+                    ' {space} {left} {right} {cancel}'
+                ],
+                'shift': [
+                    '~ ! @@ # $ % ^ & * ( ) _ + {bksp}',
+                    '{tab} Q W E R T Y U I O P { } |',
+                    'A S D F G H J K L : " {accept}',
+                    '{shift} Z X C V B N M < > ? {shift}',
+                    ' {space} {left} {right} {cancel}'
+                ]
+            },
+
         });
     }
 
@@ -1009,7 +1040,7 @@
     #modal-design {
         display: flex;
         justify-content: center;
-        margin-top: 100px;
+        padding-top: 90px;
     }
 
     .my-dragging-class {
