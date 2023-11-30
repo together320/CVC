@@ -510,7 +510,7 @@
     }
 
     function updateRealtimeButtons(data) { // repair
-        /*console.log('update realtimebuttons:', data);*/
+        console.log('update realtimebuttons:', data);
         let parent = $('#do_element_@doId');
         parent.children().each(function () {
             let h3element = $(this).find('h3');
@@ -520,7 +520,7 @@
             if (colorRanges.length == 0)
                 return;
             for (let color of colorRanges) {
-                if (color.Min > parseInt(desiredValue) && color.Max < parseInt(desiredValue)) {
+                if (color.Min < parseInt(desiredValue) && color.Max > parseInt(desiredValue)) {
                     $(this).css('background-color', "'" + color.DOTColor + " !important'");
                     break;
                 }
