@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Web.Hosting;
 using System.Web.Mvc;
 using CVC.Data.EDMX;
 using CVC.ViewModels;
@@ -58,7 +58,8 @@ namespace CVC.Controllers
       {
         MachineId = machine.MachineId,
         IsRealTime = machine.IsRealTime,
-        TableName = machine.TableName
+        TableName = machine.TableName,
+        MachineName = machine.MachineName
       };
 
       var sortParameters = machineParameters.OrderBy(p => p.ParameterName).ToList();
@@ -262,6 +263,29 @@ namespace CVC.Controllers
       var subTypeData = await _repo.GetAllData(tableName);
 
       return Json(subTypeData, JsonRequestBehavior.AllowGet);
+    }
+
+    [HttpPost]
+    public JsonResult CreateTextFile(string fileName, string content)
+    {
+      string filePath = HostingEnvironment.MapPath("~/Logs/" + fileName);
+      try
+      {
+        // Create a new text file or overwrite the existing file
+        if (System.IO.File.Exists(filePath))
+        {
+          System.IO.File.AppendAllText(filePath, content + "\n");
+        }
+        else
+        {
+          System.IO.File.WriteAllText(filePath, content + "\n");
+        }
+        return Json(new { success = true, message = "Text file created successfully." });
+      }
+      catch (System.Exception ex)
+      {
+        return Json(new { success = false, message = "Error creating text file: " + ex.Message });
+      }
     }
   }
 }

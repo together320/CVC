@@ -11,12 +11,13 @@ namespace CVC.Models
     public SelectedMachieDataForEditDO SelectedMachine { get; set; }
     public SelectedDisplayObjectData SelectedDisplayObject { get; set; }
     public SubDisplayObject SubDO { get; set; } // ef parameter data List in some parameter table == this table is found by machine parameter whose name is TableName// current name mark is wrong
-    
+
   }
 
   public class SelectedMachieDataForEditDO
   {
     public int? MachineId { get; set; }
+    public string MachineName { get; set; }
     public bool? IsRealTime { get; set; }
     public string TableName { get; set; }
   }

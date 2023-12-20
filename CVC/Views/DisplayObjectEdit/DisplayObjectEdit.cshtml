@@ -192,14 +192,29 @@
     var currentRowIdx = -1; // the index of the row applied to form
 
     var stop_buttonDOs = [];
-
+    var doTypeName = '';
+    var isClickedAddButton = false;
     // init page
     $(function () {
         $(document).ready(function () {
+            tableName = '@Model.SelectedMachine.TableName';
+            let logTime = getStringNow();
+            doTypeName = getDOTypeText(@doTypeId);
+            let logStr = {
+                time: logTime,
+                doName: '@Model.SelectedDisplayObject.ViewName',
+                dotype: doTypeName,
+                logtype: 'main',
+                content: 'open the DO edit modal',
+                entity: '@Model.SelectedMachine.MachineName',
+                visibleColumns: [],
+                tableName: tableName,
+            }
+            logpath = getLogPath();
+            saveLog(logpath, JSON.stringify(logStr));
             undoStack = [];
             // variable initialization
             undoStack.push('');
-            tableName = '@Model.SelectedMachine.TableName';
 
             if (@doTypeId == 1 || @doTypeId == 2) {
                 if (tableName == null || tableName == 'undefined' || tableName == '') {
@@ -253,11 +268,6 @@
             callKeyboard();
         });
 
-        /* $(document).on("click", ".removeButton", function () {      //when click xremove button
-            undoStack.push($('.workSpace').html());
-
-            $(this).parent().parent().remove();
-        }); */
         ///Clear all
         $("#idDeleteMain").on("click", function (event) {  //once click clear button, ...
             Q.confirm("Do you delete all EntityField from Display Object?", () => HideAllColumns());
@@ -267,28 +277,23 @@
             event.preventDefault();
         });
 
-        /*$('.workSpace').on("drop", function (event) {
-            var isClone = event.originalEvent.dataTransfer.getData('dragging');
-            var droppedId = event.originalEvent.dataTransfer.getData('dropped-id');
-            if (droppedId != "" && droppedId.includes("formId") == 0) {
-                var nodeCopy = $("#" + droppedId);
-                var nodeValue = nodeCopy.is('input, select, textarea') ? nodeCopy.val() : nodeCopy.text();
-                undoStack.push($('#component_content').html());
-                console.log("undostack count is", undoStack.length);
-                $(#component_content).append(nodeCopy);
-            } else {
-            }
-        });*/
-
-
-
         $(document).on("drop", ".component", function (event) {
             event.stopImmediatePropagation();
             var isClone = event.originalEvent.dataTransfer.getData('dragging');
             var droppedId = event.originalEvent.dataTransfer.getData('dropped-id');
             if (droppedId.includes('ef')) {
+
                 var pickListId = event.originalEvent.dataTransfer.getData('pickListId');
                 var columnName = event.originalEvent.dataTransfer.getData('columnName').trimStart().trimEnd();
+                let logStr = {
+                    time: getStringNow(),
+                    doName: '@Model.SelectedDisplayObject.ViewName',
+                    dotype: doTypeName,
+                    logtype: 'drag and drop',
+                    content: 'drop a ef on a component',
+                    entity: '@Model.SelectedMachine.MachineName',
+                    ef: columnName
+                }
                 /*console.log('drop component!! pickId: ', pickListId, 'columnName: ', columnName);*/
                 if (pickListId == "-1" || pickListId == 'undefined') {
                     /*console.log("picklist id is -1, so setting value");*/
@@ -307,49 +312,38 @@
                         });
                     });
                 }
+                saveLog(getLogPath(), JSON.stringify(logStr));
             }
             event.preventDefault();
         });
 
 
-
-        $(document).on("click", ".tool-button.save-and-close-button", function () {
-            if (!isDesign) return;
-            showLoader();
-            updateDatatable();
-        });
-        $(document).on("click", ".tool-button.delete-button", function () {
-            if (!isDesign) return;
-            isClickedDeleteButton = true;
-            //console.log('isClickedDeleteButton:', isClickedDeleteButton);
-        });
-
-        $(document).on("click", ".s-ConfirmDialog button", function () {
-            if (!isDesign || !isClickedDeleteButton) return;
-            let buttonstr = $(this).text();
-            if (buttonstr == 'Yes') {
-                //console.log('delete-yes button clicked');
-                showLoader();
-                updateDatatable();
-            }
-            isClickedDeleteButton = false;
-        });
     });
     // end init page
     function initModal() {
-
         $(".workSpace").on("drop", function (event) {
             var droppedId = event.originalEvent.dataTransfer.getData('dropped-id');
             var nodeCopy = $("#" + droppedId);
+            let logStr = {
+                time: getStringNow(),
+                doName: '@Model.SelectedDisplayObject.ViewName',
+                dotype: doTypeName,
+                logtype: 'drag and drop',
+                content: 'drag and drop a component',
+                entity: '@Model.SelectedMachine.MachineName',
+                html: ''
+            }
             if (droppedId.includes('componentId') == 1) {
                 $("#component_content").append(nodeCopy);
-                console.log("initial workspace undostack count is", undoStack.length);
+                //console.log("initial workspace undostack count is", undoStack.length);
                 var commontype = $("#" + droppedId).attr('commonbutton');
                 nodeCopy.css({
                     "position": "absolute",
                     "left": event.clientX - $(".workSpace").offset().left,
                     "top": event.clientY - $(".workSpace").offset().top
                 });
+                logStr.html = $("#component_content").html();
+                saveLog(getLogPath(), JSON.stringify(logStr).replace(/</g, '\\u003c').replace(/>/g, '\\u003e'));
                 undoStack.push($('#component_content').html());
                 if (commontype == '4') { //Add
                     nodeCopy.click(function (e) {
@@ -361,6 +355,16 @@
                                 Q.notifyWarning(grid);
                             else {
                                 grid.addButtonClick();
+                                $(".tool-button.save-and-close-button").click(function () {
+                                    if (!isDesign) return;
+                                    $(".ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.s-Dialog").on('dialogclose', function () {
+                                        updateDatatable(); // hideloader() is in this function
+                                    });
+                                });
+                                $(".ui-button.ui-corner-all.ui-widget.ui-button-icon-only.ui-dialog-titlebar-close").click(function () {
+                                    if (!isDesign) return;
+                                    $(".ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.s-Dialog").off('dialogclose');
+                                });
                             }
                         }
                     });
@@ -380,13 +384,37 @@
                                     Q.notifyWarning(grid);
                                 else {
                                     grid.editItem(row[0]);
+                                    $(".tool-button.save-and-close-button").click(function () {
+                                        if (!isDesign) return;
+                                        $(".ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.s-Dialog").on('dialogclose', function () {
+                                            updateDatatable(); // hideloader() is in this function
+                                        });
+                                    });
+                                    $(".ui-button.ui-corner-all.ui-widget.ui-button-icon-only.ui-dialog-titlebar-close").click(function () {
+                                        if (!isDesign) return;
+                                        $(".ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.s-Dialog").off('dialogclose');
+                                    });
+                                    $(".tool-button.delete-button").click(function () {
+                                        if (!isDesign) return;
+                                        isClickedDeleteButton = true;
+                                        $(".s-ConfirmDialog button").click(function () {
+                                            if (!isDesign || !isClickedDeleteButton) return;
+                                            let buttonstr = $(this).text();
+                                            if (buttonstr == 'Yes') {
+                                                //console.log('delete-yes button clicked');
+                                                console.log('click delete confirm button');
+                                                updateDatatable(); // hideloader() is in this function
+                                            }
+                                            isClickedDeleteButton = false;
+                                        });
+                                    });
                                 }
                             }
                         });
                     } else if (@doTypeId == 2) {
                         nodeCopy.click(function (e) {
                             var pageInfo = dataTable.page.info();
-                            var currentRowIdx = pageInfo.page;
+                            currentRowIdx = pageInfo.page;
                             //console.log('pagenumber:', currentPageNumber);
                             var row = dataTable.row(currentRowIdx).data();
                             //console.log('row data:', row);
@@ -401,6 +429,30 @@
                                     Q.notifyWarning(grid);
                                 else {
                                     grid.editItem(row[0]);
+                                    $(".tool-button.save-and-close-button").click(function () {
+                                        if (!isDesign) return;
+                                        $(".ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.s-Dialog").on('dialogclose', function () {
+                                            updateDatatable(); // hideloader() is in this function
+                                        });
+                                    });
+                                    $(".ui-button.ui-corner-all.ui-widget.ui-button-icon-only.ui-dialog-titlebar-close").click(function () {
+                                        if (!isDesign) return;
+                                        $(".ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.s-Dialog").off('dialogclose');
+                                    });
+                                    $(".tool-button.delete-button").click(function () {
+                                        if (!isDesign) return;
+                                        isClickedDeleteButton = true;
+                                        $(".s-ConfirmDialog button").click(function () {
+                                            if (!isDesign || !isClickedDeleteButton) return;
+                                            let buttonstr = $(this).text();
+                                            if (buttonstr == 'Yes') {
+                                                //console.log('delete-yes button clicked');
+                                                console.log('click delete confirm button');
+                                                updateDatatable(); // hideloader() is in this function
+                                            }
+                                            isClickedDeleteButton = false;
+                                        });
+                                    });
                                 }
                             }
                         });
@@ -415,8 +467,19 @@
             var droppedId = event.originalEvent.dataTransfer.getData('dropped-id');
             if (droppedId == null || droppedId == "")
                 return;
+
             if (droppedId.includes('ef')) {     //if EF is dropped to the grid
+                let logStr = {
+                    time: getStringNow(),
+                    doName: '@Model.SelectedDisplayObject.ViewName',
+                    dotype: doTypeName,
+                    logtype: 'drag and drop',
+                    content: 'drop a ef on a mainDO',
+                    entity: '@Model.SelectedMachine.MachineName',
+                    ef: '',
+                }
                 var columnName = event.originalEvent.dataTransfer.getData('columnName').trimStart().trimEnd();    //get the column name
+                logStr.ef = columnName;
                 console.log('columnName', columnName);
                 let columnIndex = 0;//dataTable.columns().header().map(c => $(c).innerText).indexOf(columnName);   //get column index from the table
                 // Assuming you have a DataTable called "myDataTable"
@@ -432,6 +495,7 @@
                 } else {
                     toggleHeader(columnIndex);
                 }
+                saveLog(getLogPath(), JSON.stringify(logStr));
                 return;
             }
             var nodeCopy = $("#" + droppedId);
@@ -500,7 +564,6 @@
                     StartNumber_HeartBeatSend = response.StartNumber;
                     EndNumber_HeartBeatSend = response.EndNumber;*/
                 }
-
             },
             error: function (x, y, z) {
 
@@ -510,7 +573,6 @@
     }
 
     function updateRealtimeButtons(data) { // repair
-        console.log('update realtimebuttons:', data);
         let parent = $('#do_element_@doId');
         parent.children().each(function () {
             let h3element = $(this).find('h3');
@@ -560,7 +622,17 @@
     function HideAllColumns() { //Hide all columns from datatable
         let numCols = dataTable.columns().nodes().length;
         chart_labels = [];
-
+        let logStr = {
+            time: getStringNow(),
+            doName: '@Model.SelectedDisplayObject.ViewName',
+            dotype: doTypeName,
+            logtype: 'common button',
+            content: 'The clear button is clicked.',
+            entity: '@Model.SelectedMachine.MachineName',
+            visibleColumns: [],
+            tableName: tableName,
+        };
+        saveLog(getLogPath(), JSON.stringify(logStr));
         for (var i = 0; i < numCols; i++) {
             let column = dataTable.column(i);
             if (column.visible()) {
@@ -602,16 +674,31 @@
     // general button functionality ===> undo, clear, save
     function undoDoEdit() {
         Q.confirm("Would you like to revert to the previous component operation?", () => {
+            let logStr = {
+                time: getStringNow(),
+                doName: '@Model.SelectedDisplayObject.ViewName',
+                dotype: doTypeName,
+                logtype: 'common button',
+                content: 'The undo button is clicked.',
+                entity: '@Model.SelectedMachine.MachineName',
+                lastHtml: ''
+            }
             if (undoStack.length > 1) {
                 undoStack.pop();
                 let idx = undoStack.length - 1;
                 console.log('undo idx is', idx);
                 if (idx == 0) {
                     $('#component_content').html('');
+                    logStr.lastHtml = 'empty'
+
                 } else {
                     $('#component_content').html(undoStack[idx]);
+                    logStr.lastHtml = undoStack[idx];;
                 }
+            } else {
+                logStr.lastHtml = 'nothing to do.';
             }
+            saveLog(getLogPath(), JSON.stringify(logStr).replace(/</g, '\\u003c').replace(/>/g, '\\u003e'));
         });
     }
 
@@ -622,21 +709,42 @@
     function saveDO() {
         var data = dataTable.row(dataTable.page.info().page).data();
         let numCols = dataTable.columns().nodes().length;
-        console.log('efdatalist:', efDataList);
         let parameterList = [];
         let vfListTemp = vfList;
+
+        let logStr = {
+            time: getStringNow(),
+            doName: '@Model.SelectedDisplayObject.ViewName',
+            dotype: doTypeName,
+            logtype: 'common button',
+            content: 'The save button is clicked.',
+            entity: '@Model.SelectedMachine.MachineName',
+            visibleColumns: [],
+            tableName: tableName,
+            dbQuery: []
+        };
+        let insertQuery = '';
+        let deleteQuery = '';
+        isDelete = false;
+        isInsert = false;
         for (var i = 0; i < numCols; i++) {
             let column = dataTable.column(i);
             if (column.visible()) {
                 let parameter = {};
                 let columnText = $(column.header()).text().trimStart().trimEnd();
-                console.log('columnText:', columnText);
+                //console.log('columnText:', columnText);
                 for (var j = 0; j < efDataList.length; j++) {
                     if (efDataList[j].ColumnName == columnText || efDataList[j].ParameterName == columnText) {
+                        logStr.visibleColumns.push(efDataList[j].ParameterName);
                         let vf_idx = vfListTemp.findIndex(vf => vf.MachineParameterId == efDataList[j].MachineParameterId);
-                        if (vf_idx < 0)
+                        if (vf_idx < 0) {
                             parameter["StatusId"] = 1; // parameter to add
+                            insertQuery += !isInsert ? 'INSERT INTO ViewField (ViewsId, ViewFieldName, MachineParameterId) VALUES' : '';
+                            insertQuery += ", ('@doId', '" + efDataList[j].ParameterName + "', '" + efDataList[j].MachineParameterId + "')";
+                            isInsert = true;
+                        }
                         else {
+
                             vfListTemp.splice(vf_idx, 1);
                             continue;
                         }
@@ -650,6 +758,7 @@
                 }
             }
         }
+
         if (vfListTemp != null || vfListTemp.length > 0) { // insert list to delete // hint !!! ==== statusId=0 is to delete, else is to add
             for (let vf of vfListTemp) {
                 let parameter = {};
@@ -659,25 +768,38 @@
                 parameter["MachineParameterId"] = vf.MachineParameterId;
                 parameter["StatusId"] = 0;
                 parameterList.push(parameter);
+
+                deleteQuery += !isDelete ? "DELETE FROM ViewField WHERE ViewsId=@doId" : '';
+                deleteQuery += "AND ViewField=" + vfListTemp[vf_idx].ViewField;
+                isDelete = true;
             }
         }
+        if (isInsert)
+            logStr.dbQuery.push(insertQuery);
+        if (isDelete)
+            logStr.dbQuery.push(deleteQuery);
         if (parameterList.length == 0) {
             Q.notifyWarning("Nothing is saved.");
             $('#modal-design').modal('hide');
             return;
         }
+        logpath = getLogPath();
+        saveLog(logpath, JSON.stringify(logStr));
         console.log('parameterlist:', parameterList);
+        showLoader();
         $.ajax({
             url: Q.resolveUrl('./DisplayObjectEdit/AddUpdateDOF'),
             type: 'POST',
             dataType: 'json',
             data: { parameterList: parameterList },
             success: function (data) {
-                console.log('save do result: ', data);
+                //console.log('save do result: ', data);
+                hideLoader();
                 $('#modal-design').modal('hide');
             },
             error: function (error) {
                 console.log('save do error: ', error);
+                hideLoader();
                 $('#modal-design').modal('hide');
             }
         });
@@ -795,6 +917,7 @@
 
     // Use the async/await syntax to introduce a 2-second delay
     async function updateDatatable() {
+        showLoader();
         await delay(2000);
         $.ajax({
             url: Q.resolveUrl('./DisplayObjectEdit/GetTableData'),
@@ -811,6 +934,7 @@
                     }
                     return row;
                 });
+                makeLogToCustomizeDatatable(rowData);
                 dataTable.clear();
                 dataTable.rows.add(rowData);
                 dataTable.draw();
@@ -844,7 +968,6 @@
                     ' {space} {left} {right} {cancel}'
                 ]
             },
-
         });
     }
 
@@ -891,6 +1014,135 @@
             if (stopIdx >= 0)
                 stop_buttonDOs.splice(stopIdx, 1);
         }
+    }
+
+    function makeLogToCustomizeDatatable(fetchData) {
+        let rowCnt = dataTable.data().rows().count();
+        let newCnt = fetchData.length;
+        let logStr = {
+            time: getStringNow(),
+            doName: '@Model.SelectedDisplayObject.ViewName',
+            dotype: doTypeName,
+            logtype: 'Add',
+            content: 'Add the row into some table',
+            entity: '@Model.SelectedMachine.MachineName',
+            visibleColumns: [],
+            tableName: tableName,
+            dbQuery: [],
+            result: ''
+        }
+        if (rowCnt > newCnt) { // delete a row
+            let row = {};
+            if (@doTypeId == 1) {
+                row = dataTable.row('.selected').data();
+            }
+            else if (@doTypeId == 2) {
+                if (currentRowIdx < 0) {
+                    let pageInfo = dataTable.page.info();
+                    currentRowIdx = pageInfo.page;
+                }
+                //console.log('pagenumber:', currentPageNumber);
+                row = dataTable.row(currentRowIdx).data();
+            }
+            logStr.logtype = 'Delete';
+            logStr.content = 'Delete some row from some table';
+            let firstKey = Object.keys(row)[0];
+            let query = 'DELETE FROM ' + tableName + ' WHERE ' + firstKey + '=' + row[firstKey];
+            logStr.dbQuery.push(query);
+            logStr.result = 'success';
+        } else if (rowCnt == newCnt) { // edit a row
+            if (newCnt == 0) {
+                delete logStr.dbQuery;
+                logStr.result = 'failed';
+            } else {
+                delete logStr.result;
+                let row = {};
+                if (@doTypeId == 1) {
+                    row = dataTable.row('.selected').data();
+                }
+                else if (@doTypeId == 2) {
+                    var pageInfo = dataTable.page.info();
+                    currentRowIdx = pageInfo.page;
+                    //console.log('pagenumber:', currentPageNumber);
+                    row = dataTable.row(currentRowIdx).data();
+                }
+                for (var key in fetchData) {
+                    if (row[0] == fetchData[key][0]) {
+                        let query = 'UPDATE ' + tableName + 'SET ';
+                        let i = 0;
+                        for (var item of fetchData[key]) {
+                            if (i == 0) continue;
+                            query += i == 1 ? i + '=' + item : ', ' + i + '=' + item;
+                            i++;
+                        }
+                        query += ' WHERE Id=' + fetchData[key][0] + ';';
+                        logStr.dbQuery.push(query);
+                        logStr.logtype = 'Edit';
+                        logStr.content = 'Edit some row in some table';
+                        break;
+                    }
+                }
+            }
+        } else { // add a row
+            logStr.logtype = 'Add';
+            logStr.content = 'Add a row into some table';
+            let addedData = fetchData[newCnt - 1];
+            let query = 'INSERT INTO ' + tableName + '()';
+            let value = 'VALUES ('
+            let i = 0;
+            for (var key in addedData) {
+                value = i == 0 ? value + addedData[key] : value + ', ' + addedData[key];
+                i++;
+            }
+            value = value + ');';
+            query += value;
+            logStr.dbQuery.push(query);
+        }
+        saveLog(getLogPath(), JSON.stringify(logStr));
+    }
+
+    function saveLog(logpath, logStr) {
+        showLoader();
+        $.ajax({
+            url: Q.resolveUrl('./DisplayObjectEdit/CreateTextFile'),
+            type: 'POST',
+            data: {
+                fileName: logpath,
+                content: logStr
+            },
+            dataType: 'json',
+            success: function (data) {
+                console.log(data);
+                hideLoader();
+            },
+            error: function (error) {
+                //Q.notifyError("Datatable connection error.");
+                hideLoader();
+            }
+        });
+    }
+
+    function getStringNow() {
+        const now = new Date();
+        const logTime = now.toISOString().slice(0, 16);
+        return logTime;
+    }
+
+    function getDOTypeText(lookupId) {
+        var doTypeLookup = CVC.Common.CustomEditors.DOTypeLookup;
+        var dot = Q.tryFirst(doTypeLookup, x => x.id === "@doTypeId");
+        return dot.text;
+    }
+
+    function getLogPath() {
+        var now = new Date();
+
+        var year = now.getFullYear();
+        var month = now.getMonth() + 1; // Months are zero-indexed, so add 1
+        var day = now.getDate();
+
+        var formattedDate = `${day}_${month}_${year}`;
+        return 'DOQuery_' + formattedDate + '.log';
     }
 </script>
 
