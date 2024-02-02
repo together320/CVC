@@ -3,6 +3,11 @@
 @using Newtonsoft.Json.Linq;
 @model CVC.Models.DisplayObjectEditModel
 
+@section Head {
+    @Html.StyleBundle("Base")
+}
+
+
 @{
     var doId = ViewBag.doId = Model.SelectedDisplayObject.ViewsId;
     var doTypeId = ViewBag.doTypeId = Model.SelectedDisplayObject.DisplayObjectTypeId;
@@ -94,7 +99,8 @@
                                 class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='border-bottom:thick;display: flex;'
                                 machineId='@item.MachineParameterId' columnName='@item.ColumnName'
                                 pickListId='@item.PickListId'>
-                                <i class="fa fa-cube"></i>&nbsp;&nbsp;@if (item.ColumnName == null)
+                                <i class="fa fa-cube"></i>&nbsp;&nbsp;
+                                @if (item.ColumnName == null)
                                 {
                                     @item.ParameterName
                                     ;
@@ -194,6 +200,8 @@
     var stop_buttonDOs = [];
     var doTypeName = '';
     var isClickedAddButton = false;
+
+    var dt_visibleColumns = []; // the ids of visible colmuns of datatable
     // init page
     $(function () {
         $(document).ready(function () {
@@ -231,9 +239,9 @@
             initModal();
 
             let isRealtime = @Model.SelectedMachine.IsRealTime.ToString().ToLower();
-            console.log('isrealtime:', isRealtime, 'dotype:', @doTypeId);
+            //console.log('isrealtime:', isRealtime, 'dotype:', @doTypeId);
             if (isRealtime == true && @doTypeId == 4 || @doTypeId == 5 || @doTypeId == 6 || @doTypeId == 9 || @doTypeId == 10) {
-                console.log('ensure the realtilemachine');
+                //    console.log('ensure the realtilemachine');
                 $.ajax({
                     url: Q.resolveUrl('./DisplayObjectEdit/GetRealtimeParametersAsync'),
                     async: true,
@@ -250,7 +258,7 @@
                     },
                     error: function (error) {
                         Q.notifyWarning("No incoming realtime parameter.");
-                        console.log(error);
+                        //            console.log(error);
                     }
                 });
             }
@@ -324,6 +332,7 @@
         $(".workSpace").on("drop", function (event) {
             var droppedId = event.originalEvent.dataTransfer.getData('dropped-id');
             var nodeCopy = $("#" + droppedId);
+            // log string
             let logStr = {
                 time: getStringNow(),
                 doName: '@Model.SelectedDisplayObject.ViewName',
@@ -333,6 +342,7 @@
                 entity: '@Model.SelectedMachine.MachineName',
                 html: ''
             }
+            // end log string
             if (droppedId.includes('componentId') == 1) {
                 $("#component_content").append(nodeCopy);
                 //console.log("initial workspace undostack count is", undoStack.length);
@@ -347,7 +357,7 @@
                 undoStack.push($('#component_content').html());
                 if (commontype == '4') { //Add
                     nodeCopy.click(function (e) {
-                        console.log('table addbutton click');
+                        //    console.log('table addbutton click');
                         if (grid == null)
                             grid = getEntityGrid(tableName);
                         if (grid != null) {
@@ -369,7 +379,7 @@
                         }
                     });
                 } else if (commontype == '5') { //Edit
-                    console.log('table edit button clicked');
+                    //    console.log('table edit button clicked');
                     if (@doTypeId == 1) {
                         nodeCopy.click(function (e) {
                             let row = dataTable.row('.selected').data();
@@ -401,8 +411,6 @@
                                             if (!isDesign || !isClickedDeleteButton) return;
                                             let buttonstr = $(this).text();
                                             if (buttonstr == 'Yes') {
-                                                //console.log('delete-yes button clicked');
-                                                console.log('click delete confirm button');
                                                 updateDatatable(); // hideloader() is in this function
                                             }
                                             isClickedDeleteButton = false;
@@ -447,7 +455,6 @@
                                             let buttonstr = $(this).text();
                                             if (buttonstr == 'Yes') {
                                                 //console.log('delete-yes button clicked');
-                                                console.log('click delete confirm button');
                                                 updateDatatable(); // hideloader() is in this function
                                             }
                                             isClickedDeleteButton = false;
@@ -462,7 +469,7 @@
         });
 
         $(".mainDO").on("drop", function (event) {
-            console.log("dropped onto the parent do element");
+            //console.log("dropped onto the parent do element");
             var isClone = event.originalEvent.dataTransfer.getData('dragging');
             var droppedId = event.originalEvent.dataTransfer.getData('dropped-id');
             if (droppedId == null || droppedId == "")
@@ -480,7 +487,6 @@
                 }
                 var columnName = event.originalEvent.dataTransfer.getData('columnName').trimStart().trimEnd();    //get the column name
                 logStr.ef = columnName;
-                console.log('columnName', columnName);
                 let columnIndex = 0;//dataTable.columns().header().map(c => $(c).innerText).indexOf(columnName);   //get column index from the table
                 // Assuming you have a DataTable called "myDataTable"
                 var columnNames = dataTable.columns().header().toArray();
@@ -514,19 +520,16 @@
         socket.client.addNewMessageToPage = function (data, message) {
 
             var result = JSON.parse(data);
-            /*console.log(data);*/
             switch (result.type) {
                 case 'displaypreview':
                     timers.push(setTimeout(() => {
                         socket.server.send('displaypreview', '');
                     }, 1000));
-                    /*console.log(data);*/
                     if (@doTypeId == 5 || @doTypeId == 6)
                         updateChart(result.data);
                     else if (@doTypeId == 4) {
                         updateRealtimeButtons(result.data);
                     }
-                    //console.log("realtimedata:", result.data);
                     break;
                 default:
                     break;
@@ -592,7 +595,6 @@
 
     // start drag
     function dragEF(event) {                   //when dragging main display object
-        console.log('dragEF start');
         event.dataTransfer.setData('dragging', 'no-clone');
         event.dataTransfer.setData('dropped-id', 'ef');
         event.dataTransfer.setData('columnName', $(event.target).attr('columnname'));
@@ -686,7 +688,7 @@
             if (undoStack.length > 1) {
                 undoStack.pop();
                 let idx = undoStack.length - 1;
-                console.log('undo idx is', idx);
+                //console.log('undo idx is', idx);
                 if (idx == 0) {
                     $('#component_content').html('');
                     logStr.lastHtml = 'empty'
@@ -748,7 +750,7 @@
                             vfListTemp.splice(vf_idx, 1);
                             continue;
                         }
-                        console.log('equal param:', efDataList[j]);
+                        //console.log('equal param:', efDataList[j]);
                         parameter["ViewsId"] = @doId;
                         parameter["ViewFieldName"] = efDataList[j].ParameterName;
                         parameter["MachineParameterId"] = efDataList[j].MachineParameterId;
@@ -785,7 +787,7 @@
         }
         logpath = getLogPath();
         saveLog(logpath, JSON.stringify(logStr));
-        console.log('parameterlist:', parameterList);
+        //console.log('parameterlist:', parameterList);
         showLoader();
         $.ajax({
             url: Q.resolveUrl('./DisplayObjectEdit/AddUpdateDOF'),
@@ -806,23 +808,17 @@
     }
 
     function toggleHeader(index) {
-        console.log('toggleheader is called', index);
         let column = dataTable.column(index);
         column.visible(!column.visible());
 
-    @*if (@doTypeId == 1)
-            return;*@
-
-            //undoStack.push($('.workSpace').html());
-
-            let mainDoElement = $("#do_element_@doId");
-        mainDoElement.empty();
+        let mainDoElement = $("#do_element_@doId");
+        if (@doTypeId != 8)
+            mainDoElement.empty();
 
         var data = dataTable.row(dataTable.page.info().page).data();
         let numCols = dataTable.columns().nodes().length;
         chart_labels = [];
 
-        console.log(numCols);
         for (var i = 0; i < numCols; i++) {
             let column = dataTable.column(i);
             if (column.visible()) {
@@ -835,16 +831,6 @@
                     let input = "[form-do-input=" + i + "]";
                     mainDoElement.insertBefore($("#do_element_table_@doId"));
                     mainDoElement.addClass('flex-grid-form');
-                    /*$(input).keydown(function (event) {
-                        if (event.keyCode == 13) {
-                            let rowData = dataTable.row({ search: 'applied' }).data();
-                            let colindex = $(this).attr("form-do-input");
-                            rowData[parseInt(colindex)] = this.value;
-                            event.preventDefault();
-                            saveFormRow(rowData);
-                        }
-                    });*/
-
                 } else if (@doTypeId == 3) {// button display
                     let stopIdx = stop_buttonDOs.indexOf(i.toString());
                     let playStr = "fa-play";
@@ -861,22 +847,51 @@
                 } else if (@doTypeId == 9) { // alarm display
                     mainDoElement.append(`<li class='' style="padding: 5px 10px;"><div style="color:#f1556c; background-color:#fef0f2; border:#f9b3bd 1px solid; padding:10px; border-radius:4px; font-weight:normal;font-size:16px;">${$(column.header()).text()}</div></li>`);
                     mainDoElement.addClass('flex-grid-alarm');
-                } else if (@doTypeId == 10) // notification display
+                } else if (@doTypeId == 10) { // notification display
                     mainDoElement.append(`<li style="padding: 5px 10px;"><div class="notification" style="color:#169F85; background-color:#b1f3e5; border:#75c7b6 1px solid; padding:10px; border-radius:4px; font-weight:normal;font-size:16px;">${$(column.header()).text()}</div></li>`);
+                }
                 chart_labels.push($(column.header()).text());
             }
         }
-
         if (@doTypeId == 7) { //tree view
-            console.log('chart_labels', chart_labels);
             tree_nodes = [];
             for (var i = 0; i < chart_labels.length; i++) {
                 tree_nodes.push({ text: chart_labels[i] });
             }
-            console.log(tree_nodes);
             $("#do_element_@doId").treeview({ data: [{ text: '@doName', nodes: tree_nodes }], collapsed: true, "expanded": true, });
             $("#do_element_@doId").css('color', 'black');
 
+        } else if (@doTypeId == 8) { // attachment display
+            console.log("first   " + dt_visibleColumns.toString(), "     ", index);
+            if (dt_visibleColumns.includes(index)) {
+                $("#attachment_" + efDataList[index].MachineParameterId.toString()).remove();
+                let removeIdx = dt_visibleColumns.indexOf(index);
+                console.log(index, removeIdx);
+                dt_visibleColumns.splice(removeIdx, 1);
+                dataTable.column(index).visible(false);
+                console.log("last   " + dt_visibleColumns.toString());
+            }
+            else {
+                let column = dataTable.column(index);
+                dt_visibleColumns.push(index);
+                let eleStr =
+                    `<li class="" style="padding: 5px 10px; display:flex" id="attachment_${efDataList[index].MachineParameterId}">
+                                <div class="field UserImage">
+                                    <label class="caption" style="width:auto;">${$(column.header()).text()}</label>
+                                    <div class="editor s-ImageUploadEditor s-FileUploadEditor hide-original-name">
+                                        <input id="file_${efDataList[index].MachineParameterId}" type="file" style="color:#111111;" />
+                                        <img id="fileImg_${efDataList[index].MachineParameterId}" class="file-item file-image" />
+                                    </div>
+                                </div>
+                            </li>`;
+                mainDoElement.append(eleStr);
+                $(".mainDO").append(mainDoElement);
+                $("#fileImg_" + efDataList[index].MachineParameterId).hide();
+                $("#file_" + efDataList[index].MachineParameterId).change(function (event) {
+                    $("#fileImg_" + efDataList[index].MachineParameterId).show();
+                    previewFiles(event.target.files, efDataList[index].MachineParameterId);
+                });
+            }
         }
         addSearchInputInFooter();
     }
@@ -907,7 +922,65 @@
             }
         });
     }
+    // ====================================================== START attachment logic ==========================================
+    function previewFiles(files, machinePID) {
+        console.log("hhh1");
+        var thumbnailsDiv = $('#thumbnails');
+        thumbnailsDiv.empty();
 
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+
+            var previewElement = createPreviewElement(file, machinePID);
+        }
+    }
+
+    // Function to create a preview element for a file
+    function createPreviewElement(file, machinePID) {
+
+        if (file.type.startsWith('image/')) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                console.log("hhh2", e.target.result);
+                $("#fileImg_" + machinePID).addClass('file-preview').attr('src', e.target.result);
+            };
+
+            reader.readAsDataURL(file);
+        } else {
+            // Handle non-image files
+            var fileIcon = getFileIcon(file.name);
+            $("#fileImg_" + machinePID).addClass('file-preview').attr('src', fileIcon);
+        }
+    }
+
+    // Function to get file icon based on file type
+    function getFileIcon(fileType) {
+        console.log(fileType);
+        // Add more file types and corresponding icons as needed
+        if (fileType.endsWith('.pdf')) {
+            return '../fileIcons/pdf.png';
+        } else if (fileType.endsWith('.doc') || fileType.endsWith('.docx')) {
+            return '../fileIcons/doc.png';
+        } else if (fileType.endsWith('.mp3')) {
+            return '../fileIcons/mp3.png';
+        } else if (fileType.endsWith('.avi') || fileType.endsWith('.mp4') || fileType.endsWith('.mpg') || fileType.endsWith('.mov')) {
+            return '../fileIcons/video.png';
+        } else if (fileType.endsWith('.wmv') || fileType.endsWith('.wma') || fileType.endsWith('.aac') || fileType.endsWith('.ogg')) {
+            return '../fileIcons/media.png';
+        } else if (fileType.endsWith('.txt')) {
+            return '../fileIcons/txt.png';
+        } else if (fileType.endsWith('.xls') || fileType.endsWith('.xlsx')) {
+            return '../fileIcons/xls.png';
+        } else if (fileType.endsWith('.ppt') || fileType.endsWith('.pptx')) {
+            return '../fileIcons/ppt.png';
+        } else if (fileType.endsWith('.zip') || fileType.endsWith('.rar') || fileType.endsWith('.7z')) {
+            return '../fileIcons/zip.png';
+        } else {
+            // Default icon for unknown file types
+            return '../fileIcons/generic.png';
+        }
+    }
+    // ====================================================== END attachment logic ==========================================
     var efRowHtml = "<p style='margin:0px; color:black; display:block; '>EFnameToChange  </p> <input id='value-ef' type='text' required value='' style='color:black; display:block; '/>";
 
     // delay function
@@ -925,7 +998,6 @@
             data: { tableName: tableName },
             dataType: 'json',
             success: function (data) {
-                //console.log('all data:', data.Data);
                 data = JSON.parse(data.Data);
                 var rowData = data.map(function (item) {
                     var row = [];
@@ -954,7 +1026,7 @@
             layout: 'custom',
             customLayout: {
                 'normal': [
-                    '` 1 2 3 4 5 6 7 8 9 0 - = {bksp}',
+                    '` 1 2 3 4 5 6 7 8 9 0 - = { bksp } ',
                     '{tab} q w e r t y u i o p [ ] \\',
                     'a s d f g h j k l ; \' {accept}',
                     '{shift} z x c v b n m , . / {shift}',
@@ -979,12 +1051,10 @@
             let numCols = dataTable.columns().nodes().length;
             chart_labels = [];
 
-            console.log(numCols);
             for (var i = 0; i < numCols; i++) {
                 let column = dataTable.column(i);
                 if (column.visible()) {
                     // make the input forms  from datatable
-                    /*console.log('toggleheader log! this type is form display');*/
                     let htmlstr = "<div class='row flex-item-form' style='justify-content:center;'><div class='col-md-4' style='color:black;'>" + $(column.header()).text() + ":&nbsp</div><div class='col-md-8'><input style='color:black;' type='' form-do-input='" + i + "' value='" + data[i] + "' /></div></div>";
                     let columnTypes = @Html.Raw(Model.SubDO.SubDOTypeColumns);
                     htmlstr = htmlstr.replace("type=''", "type='" + getHtmlTypeByDBType(columnTypes[i].DataType) + "'");
@@ -998,7 +1068,7 @@
     }
 
     function clickButtonDO(event) {
-        console.log('clickButtonDO');
+        //console.log('clickButtonDO');
         let columnIdx = $(event.target).attr("columnIdx");
         let icon = $(event.target).find('.fa-play');
         let stopIdx = stop_buttonDOs.indexOf(columnIdx.toString());
@@ -1112,7 +1182,7 @@
             },
             dataType: 'json',
             success: function (data) {
-                console.log(data);
+                //console.log(data);
                 hideLoader();
             },
             error: function (error) {
@@ -1144,6 +1214,21 @@
         var formattedDate = `${day}_${month}_${year}`;
         return 'DOQuery_' + formattedDate + '.log';
     }
+
+    function previewImage() {
+        var input = document.getElementById('fileInput');
+        var preview = document.getElementById('imagePreview');
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    } 
 </script>
 
 @if (doTypeId == 1)
@@ -1238,6 +1323,14 @@
             font-family: @subtypedata[0]["Font"] !important;
             text-align: @(subtypedata[0]["Alignment"].ToString() == "1" ? "left" : (subtypedata[0]["Alignment"].ToString() == "3" ? "right" : "center"));
             color: @subtypedata[0]["FontColor"] !important;
+        }
+    </style>
+}
+@if (doTypeId == 8)
+{
+    <style>
+        .attachment {
+            text-align: @(subtypedata[0]["Alignment"].ToString() == "1" ? "left" : (subtypedata[0]["Alignment"].ToString() == "3" ? "right" : "center"));
         }
     </style>
 }
