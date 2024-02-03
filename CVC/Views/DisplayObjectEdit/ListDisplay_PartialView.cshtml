@@ -26,7 +26,7 @@ else
     </div>
 }
 
-<div class="mainDO s-Form" id='parent_do_element_@doId'>
+<div style='' class="mainDO" id='parent_do_element_@doId'>
     <table id='do_element_table_@doId' class='displays table-striped table-bordered dt-responsive nowrap' width='100'
         cellspacing='0'>
         @if (@Model.SelectedEFs.Count > 0)
@@ -121,12 +121,12 @@ else
                             let column = this;
                             let title = column.footer().textContent;
                             let text = $(column.header()).text();
-                            let matchFound = vfList.some(vf => vf.ColumnName === text || vf.MachineParameterName === text);
-
-                            if (matchFound) {
-                                column.visible(true);
-                                console.log("Match found: ${text}");
-                                dt_visibleColumns.push(column.index());
+                            for (var vf of vfList) {
+                                if (vf.ColumnName == text || vf.MachineParameterName == text) {
+                                    column.visible(true);
+                                    console.log(vf.ColumnName, text);
+                                    break;
+                                }
                             }
                             // Create input element
                             let input = document.createElement('input');
@@ -142,7 +142,6 @@ else
                                 }
                             });
                         });
-                    console.log("visible columns :", dt_visibleColumns);
                 } else {
                     /*this.api()
                         .columns()
@@ -207,7 +206,7 @@ else
                             console.log('this column is visible');
                             mainDoElement.append("<div class='row flex-item-form' style='justify-content : center;'><div class='col-md-4' style='color:black;'>" + $(column.header()).text() + ":&nbsp</div><div class='col-md-8'><input style='color:black;' value='" + data[i] + "' type='" + inputType + "' form-do-input='" + i + "'/></div></div>");
                             var input = "[form-do-input=" + i + "]";
-                            /* $(input).keydown(function (event) {
+                            $(input).keydown(function (event) {
                                 if (event.keyCode == 13) {
                                     var rowData = dataTable.row({ search: 'applied' }).data();
                                     var colindex = $(this).attr("form-do-input");
@@ -215,7 +214,7 @@ else
                                     event.preventDefault();
                                     saveFormRow(rowData);
                                 }
-                            }); */
+                            });
                         }
                     }
                     mainDoElement.insertBefore($("#do_element_table_@doId"));
