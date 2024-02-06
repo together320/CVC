@@ -234,36 +234,39 @@ namespace CVC.Controllers
             int? primarykey = null;
             switch (subTable)
             {
-              case "ListDisplay":
-                primarykey = viewData.ListDisplayId;
-                break;
-              case "FormDisplay":
-                primarykey = viewData.FormDisplayId;
-                break;
-              case "ButtonDisplay":
-                primarykey = viewData.ButtonDisplayId;
-                break;
-              case "RealtimeParameterDisplay":
-                primarykey = viewData.RealtimeParameterDisplayId;
-                break;
-              case "LineChartDisplay":
-                primarykey = viewData.LineChartDisplayId;
-                break;
-              case "PieChartDisplay":
-                primarykey = viewData.PieChartDisplayId;
-                break;
-              case "TreeDisplay":
-                primarykey = viewData.TreeDisplayId;
-                break;
-              case "AttachmentDisplay":
-                primarykey = viewData.AttachmentDisplayId;
-                break;
-              case "AlarmDisplay":
-                primarykey = viewData.AlarmDisplayId;
-                break;
-              case "NotificationDisplay":
-                primarykey = viewData.NotificationDisplayId;
-                break;
+                case "ListDisplay":
+                    primarykey = viewData.ListDisplayId;
+                    break;
+                case "FormDisplay":
+                    primarykey = viewData.FormDisplayId;
+                    break;
+                case "ButtonDisplay":
+                    primarykey = viewData.ButtonDisplayId;
+                    break;
+                case "RealtimeParameterDisplay":
+                    primarykey = viewData.RealtimeParameterDisplayId;
+                    break;
+                case "LineChartDisplay":
+                    primarykey = viewData.LineChartDisplayId;
+                    break;
+                case "PieChartDisplay":
+                    primarykey = viewData.PieChartDisplayId;
+                    break;
+                case "TreeDisplay":
+                    primarykey = viewData.TreeDisplayId;
+                    break;
+                case "AttachmentDisplay":
+                    primarykey = viewData.AttachmentDisplayId;
+                    break;
+                case "AlarmDisplay":
+                    primarykey = viewData.AlarmDisplayId;
+                    break;
+                case "NotificationDisplay":
+                    primarykey = viewData.NotificationDisplayId;
+                    break;
+                case "ContainerDisplay":
+                    primarykey = viewData.ContainerDisplayId;
+                    break;
             }
             return Json(new { tableName = subTable, primaryKey = primarykey }, JsonRequestBehavior.AllowGet);
         }
@@ -304,10 +307,10 @@ namespace CVC.Controllers
                     tableName = "NotificationDisplay";
                     break;
                 case 11:
-                    // connection = SqlConnections.NewFor<DisplayObjectColorRow>();
+                    tableName = "ContainerDisplay";
                     break;
                 default:
-                  break;
+                    break;
 
             }
             return tableName;
