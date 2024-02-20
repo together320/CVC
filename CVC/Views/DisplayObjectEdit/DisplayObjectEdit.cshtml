@@ -902,10 +902,11 @@
                 dt_visibleColumns.push(index);
                 let eleStr =
                     `<li class="" style="padding: 5px 10px; display:block" id="attachment_${efDataList[index].MachineParameterId}">
-                        <H3 id="containerTitle_${efDataList[index].MachineParameterId}" class="webDisplayTitle commonTextColor" style="text-align:center;">Google Translate&nbsp
-                            <input type="checkbox" id="editContainer_${efDataList[index].MachineParameterId}" class="btn btn-primary" />
-                            <label style="font-size:11px !important; color:grey !important;">Edit</label>
-                        </H3>
+                        <div class="webContainerTitle" style="display:flex; text-align:center">
+                            <H3 id="containerTitle_${efDataList[index].MachineParameterId}" class="webDisplayTitle commonTextColor" style="text-align:center;">Google Translate&nbsp</H3>
+                            <input type="checkbox" id="editContainer_${efDataList[index].MachineParameterId}" style="text-align:bottom;"/>
+                            <label style="font-size:12px !important; color:grey !important; text-align:bottom;">Edit</label>
+                        </div>
                         <form id="containerForm_${efDataList[index].MachineParameterId}" hidden>
                             <label class="commonTextColor" for="containerTitleInput_${efDataList[index].MachineParameterId}">Title:</label>&nbsp&nbsp<input id="containerTitleInput_${efDataList[index].MachineParameterId}" type="text" onchange="" placeholder="type the title of web site"/><br>
                             <label class="commonTextColor" for="containerURLInput_${efDataList[index].MachineParameterId}">URL:</label>&nbsp&nbsp<input id="containerURLInput_${efDataList[index].MachineParameterId}" type="text" onchange="" placeholder="type the url of web site"/><br>
@@ -927,10 +928,10 @@
                     $("#editContainer_" + efDataList[index].MachineParameterId).prop("checked", false);
                     let containerTitle = $("#containerTitleInput_" + efDataList[index].MachineParameterId).val();
                     let containerURL = $("#containerURLInput_" + efDataList[index].MachineParameterId).val();
-                    console.log(containerTitle);
-                    console.log(containerURL);
+                    /*console.log(containerTitle);
+                    console.log(containerURL);*/
                     $("#containerTitle_" + efDataList[index].MachineParameterId).text(containerTitle);
-                    $("#containerIframe_" + efDataList[index].MachineParameterId).attr("src", containerTitle);
+                    $("#containerIframe" + efDataList[index].MachineParameterId).attr("src", containerTitle);
                     $("#containerForm_" + efDataList[index].MachineParameterId).hide();
                 });
             }
@@ -1599,5 +1600,11 @@
 
     .commonTextColor {
         color: #333333;
+    }
+
+    .webContainerTitle {
+        display: flex;
+        align-items: baseline;
+        justify-content: center;
     }
 </style>
