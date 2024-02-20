@@ -19,6 +19,7 @@ namespace CVC.Data.EDMX
         {
             this.ViewFields = new HashSet<ViewField>();
             this.ViewsAccesses = new HashSet<ViewsAccess>();
+            this.ListDisplays = new HashSet<ListDisplay>();
         }
     
         public int ViewsId { get; set; }
@@ -40,6 +41,14 @@ namespace CVC.Data.EDMX
         public Nullable<int> ListDisplayId { get; set; }
         public Nullable<int> FormDisplayId { get; set; }
         public Nullable<int> ButtonDisplayId { get; set; }
+        public Nullable<int> RealtimeParameterDisplayId { get; set; }
+        public Nullable<int> LineChartDisplayId { get; set; }
+        public Nullable<int> PieChartDisplayId { get; set; }
+        public Nullable<int> TreeDisplayId { get; set; }
+        public Nullable<int> AttachmentDisplayId { get; set; }
+        public Nullable<int> AlarmDisplayId { get; set; }
+        public Nullable<int> NotificationDisplayId { get; set; }
+        public Nullable<int> ContainerDisplayId { get; set; }
     
         public virtual Module Module { get; set; }
         public virtual Status Status { get; set; }
@@ -53,5 +62,9 @@ namespace CVC.Data.EDMX
         public virtual ListDisplay ListDisplay { get; set; }
         public virtual FormDisplay FormDisplay { get; set; }
         public virtual ButtonDisplay ButtonDisplay { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ListDisplay> ListDisplays { get; set; }
+        public virtual View Views1 { get; set; }
+        public virtual View View1 { get; set; }
     }
 }

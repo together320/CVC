@@ -29,25 +29,23 @@ namespace CVC
         public void Send(string name, string message)
         {
 
-             int? moduleId = 0;
-             int? machineParameterId = 0;
-             int? value = 0;
-             int? incrementalNumber = 0;
-             int? endNumber = 0;
+            int? moduleId = 0;
+            int? machineParameterId = 0;
+            int? value = 0;
+            int? incrementalNumber = 0;
+            int? endNumber = 0;
             CommandPanelPageModel model;
             MachineSummaryPageModel msp;
             AlarmSummaryController asc = new AlarmSummaryController();
-            var mspResponse =string.Empty;
+            var mspResponse = string.Empty;
             var cpResponse = string.Empty;
-            var apResponse = string.Empty;;
+            var apResponse = string.Empty; ;
             var apJsonResult = new JsonResult();
             var record = new string[] { };
             var shbresponse = string.Empty;
             // var heartBeatValue = "";
             try
             {
-             
-
                 if (name.Contains("alarmmachine") || name.Contains("raisealarm"))
                 {
                     record = name.Split('-');
@@ -118,6 +116,36 @@ namespace CVC
                             Clients.All.addNewMessageToPage(apResponse, message);
                         }
                         break;
+                    case "customizePreview":
+                        msp = ReadCustomizePreview();
+                        if (msp != null)
+                        {
+                            mspResponse = "{\"type\":\"customizePreview\", \"data\":" + JsonConvert.SerializeObject(msp.ViewFieldList) + "}";
+
+                            //  mspResponse = "{\"type\":\"machinesummary\", \"data\":" + JsonConvert.SerializeObject(msp.ViewFieldList.Select(s => new { s.ViewFieldId, s.Value, s.BackgroundColor })) + "}";
+                            Clients.All.addNewMessageToPage(mspResponse, message);
+                        }
+                        else
+                        {
+                            mspResponse = "{\"type\":\"customizePreview\", \"data\":null}";
+                            Clients.All.addNewMessageToPage(mspResponse, message);
+                        }
+                        break;
+                    case "displaypreview":
+                        msp = ReadDisplayPreview();
+                        if (msp != null)
+                        {
+                            mspResponse = "{\"type\":\"displaypreview\", \"data\":" + JsonConvert.SerializeObject(msp.ViewFieldList) + "}";
+
+                            //  mspResponse = "{\"type\":\"machinesummary\", \"data\":" + JsonConvert.SerializeObject(msp.ViewFieldList.Select(s => new { s.ViewFieldId, s.Value, s.BackgroundColor })) + "}";
+                            Clients.All.addNewMessageToPage(mspResponse, message);
+                        }
+                        else
+                        {
+                            mspResponse = "{\"type\":\"displaypreview\", \"data\":null}";
+                            Clients.All.addNewMessageToPage(mspResponse, message);
+                        }
+                        break;
                     //case "alarmmachine":
                     //    AlarmPageModel apm = GetAlarm(moduleId);
                     //    if (apm != null)
@@ -174,7 +202,7 @@ namespace CVC
             {
                 name = null;
                 message = null;
-                moduleId = null;        
+                moduleId = null;
                 value = null;
                 incrementalNumber = null;
                 endNumber = null;
@@ -189,11 +217,11 @@ namespace CVC
                 record = null;
                 Clients = null;
                 machineParameterId = null;
-                shbresponse = string.Empty;           
+                shbresponse = string.Empty;
             }
         }
 
-        private  CommandPanelPageModel ReadCommandPanel()
+        private CommandPanelPageModel ReadCommandPanel()
         {
             CommandPanelController cpc = new CommandPanelController();
             var CommandPanel = new CommandPanelPageModel();
@@ -204,7 +232,7 @@ namespace CVC
 
                 CommandPanel = (CommandPanelPageModel)HttpContext.Current.Cache["CommandPanel"];
 
-                if (CommandPanel.ProtocolType.ToUpper() ==ProtocolType.MDB.ToUpper())
+                if (CommandPanel.ProtocolType.ToUpper() == ProtocolType.MDB.ToUpper())
                 {
                     return cpc.CallMDBMachineCommandPanel(CommandPanel);
                 }
@@ -212,9 +240,9 @@ namespace CVC
                 {
                     return cpc.CallPLCMachineCommandPanel(CommandPanel);
                 }
-               else if (CommandPanel.ProtocolType.ToUpper() == ProtocolType.OPCUaClient.ToUpper())
+                else if (CommandPanel.ProtocolType.ToUpper() == ProtocolType.OPCUaClient.ToUpper())
                 {
-                  return clsOpcUaClient.ReadCommandPanel(CommandPanel);
+                    return clsOpcUaClient.ReadCommandPanel(CommandPanel);
                 }
                 else if (CommandPanel.ProtocolType.ToUpper() == ProtocolType.SiemensS7Net.ToUpper())
                 {
@@ -247,15 +275,59 @@ namespace CVC
             {
                 MachineSummaryPanel = (MachineSummaryPageModel)HttpContext.Current.Cache["MachineSummary"];
 
-                if (MachineSummaryPanel.ProtocolType.ToUpper() ==ProtocolType.MDB.ToUpper())
+                if (MachineSummaryPanel.ProtocolType.ToUpper() == ProtocolType.MDB.ToUpper())
                 {
                     return msc.CallMDBMachineSummaryPanel(MachineSummaryPanel);
                 }
-               else if (MachineSummaryPanel.ProtocolType.ToUpper().Contains(ProtocolType.Modbus.ToUpper()))
+                else if (MachineSummaryPanel.ProtocolType.ToUpper().Contains(ProtocolType.Modbus.ToUpper()))
                 {
                     return msc.CallPLCMachineSummaryPanel(MachineSummaryPanel);
                 }
-               else if (MachineSummaryPanel.ProtocolType.ToUpper() == ProtocolType.OPCUaClient.ToUpper())
+                else if (MachineSummaryPanel.ProtocolType.ToUpper() == ProtocolType.OPCUaClient.ToUpper())
+                {
+                    return clsOpcUaClient.ReadMachineSummaryPanel(MachineSummaryPanel);
+                }
+                else if (MachineSummaryPanel.ProtocolType.ToUpper() == ProtocolType.SiemensS7Net.ToUpper())
+                {
+                    return clsSiemensS7Net.ReadMachineSummaryPanel(MachineSummaryPanel);
+                }
+            }
+            catch (Exception ex)
+            {
+                ex = null;
+            }
+            finally
+            {
+                msc = null;
+                MachineSummaryPanel = null;
+
+            }
+            return null;
+
+
+        }
+
+        private MachineSummaryPageModel ReadCustomizePreview()
+        {
+            MachineSummaryController msc = new MachineSummaryController();
+            var MachineSummaryPanel = new MachineSummaryPageModel();
+            ClsOpcUaClient clsOpcUaClient = new ClsOpcUaClient();
+            ClsSiemensS7Net clsSiemensS7Net = new ClsSiemensS7Net();
+
+
+            try
+            {
+                MachineSummaryPanel = (MachineSummaryPageModel)HttpContext.Current.Cache["CustomizePreview"];
+
+                if (MachineSummaryPanel.ProtocolType.ToUpper() == ProtocolType.MDB.ToUpper())
+                {
+                    return msc.CallMDBMachineSummaryPanel(MachineSummaryPanel);
+                }
+                else if (MachineSummaryPanel.ProtocolType.ToUpper().Contains(ProtocolType.Modbus.ToUpper()))
+                {
+                    return msc.CallPLCMachineSummaryPanel(MachineSummaryPanel);
+                }
+                else if (MachineSummaryPanel.ProtocolType.ToUpper() == ProtocolType.OPCUaClient.ToUpper())
                 {
                     return clsOpcUaClient.ReadMachineSummaryPanel(MachineSummaryPanel);
                 }
@@ -278,7 +350,50 @@ namespace CVC
 
         }
 
-     
+        private MachineSummaryPageModel ReadDisplayPreview()
+        {
+            MachineSummaryController msc = new MachineSummaryController();
+            var MachineSummaryPanel = new MachineSummaryPageModel();
+            ClsOpcUaClient clsOpcUaClient = new ClsOpcUaClient();
+            ClsSiemensS7Net clsSiemensS7Net = new ClsSiemensS7Net();
+
+
+            try
+            {
+                MachineSummaryPanel = (MachineSummaryPageModel)HttpContext.Current.Cache["DisplayPreview"];
+
+                if (MachineSummaryPanel.ProtocolType.ToUpper() == ProtocolType.MDB.ToUpper())
+                {
+                    return msc.CallMDBMachineSummaryPanel(MachineSummaryPanel);
+                }
+                else if (MachineSummaryPanel.ProtocolType.ToUpper().Contains(ProtocolType.Modbus.ToUpper()))
+                {
+                    return msc.CallPLCMachineSummaryPanel(MachineSummaryPanel);
+                }
+                else if (MachineSummaryPanel.ProtocolType.ToUpper() == ProtocolType.OPCUaClient.ToUpper())
+                {
+                    return clsOpcUaClient.ReadMachineSummaryPanel(MachineSummaryPanel);
+                }
+                else if (MachineSummaryPanel.ProtocolType.ToUpper() == ProtocolType.SiemensS7Net.ToUpper())
+                {
+                    return clsSiemensS7Net.ReadMachineSummaryPanel(MachineSummaryPanel);
+                }
+            }
+            catch (Exception ex)
+            {
+                ex = null;
+            }
+            finally
+            {
+                msc = null;
+                MachineSummaryPanel = null;
+
+            }
+            return null;
+
+        }
+
+
         //private AlarmPageModel GetAlarm(int moduleId)
         //{
         //    var Model = new AlarmPageModel();

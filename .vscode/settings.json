@@ -1,0 +1,7 @@
+{
+    "dotnet.defaultSolution": "CVC.sln",
+    "dotnet.preferCSharpExtension": true,
+    "genieai.enableConversationHistory": true,
+    "genieai.promptPrefix.customPrompt1": "",
+    "genieai.promptPrefix.customPrompt2-enabled": true
+}

@@ -5,10 +5,20 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web;
 using System.Web.Mvc;
 using CVC.ViewModels;
 using bs = CVC.BusinessServices.Common;
+using System.Web.Helpers;
+using CVC.MachineCustomization.Entities;
+using Serenity.Data;
+using Serenity.Services;
+using System.Data;
+using CVC.MachineCustomization.Repositories;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
 
 namespace CVC.Modules.NModuleManagement
 {
@@ -88,29 +98,33 @@ namespace CVC.Modules.NModuleManagement
 
         public bool AddUpdateViewField(NViewFieldForm ViewFieldFormInfo)
         {
-            ViewField vf = ViewFieldFormInfo.ViewField != 0 ? cvcEntities.ViewFields.First(vvf => vvf.ViewField1 == ViewFieldFormInfo.ViewField) : new ViewField();
+            bool isUpdate = cvcEntities.ViewFields.Any(a => a.ViewFieldName == ViewFieldFormInfo.ViewFieldName
+            && a.ViewsId == ViewFieldFormInfo.ViewsId && a.MachineParameterId == ViewFieldFormInfo.MachineParameterId);
+            ViewField vf = isUpdate ? cvcEntities.ViewFields.First(a => a.ViewFieldName == ViewFieldFormInfo.ViewFieldName
+            && a.ViewsId == ViewFieldFormInfo.ViewsId && a.MachineParameterId == ViewFieldFormInfo.MachineParameterId) : new ViewField();
             vf.ViewFieldName = ViewFieldFormInfo.ViewFieldName;
             vf.ViewsId = ViewFieldFormInfo.ViewsId;
             vf.StatusId = ViewFieldFormInfo.StatusId;
             vf.Sequence = ViewFieldFormInfo.Sequence;
             vf.MachineParameterId = ViewFieldFormInfo.MachineParameterId;
-            vf.ModuleId = ViewFieldFormInfo.ModuleId;
+            vf.ModuleId = null;
+            // vf.ModuleId = ViewFieldFormInfo.ModuleId;
             vf.IsPopUpRequired = ViewFieldFormInfo.IsPopUpRequired;
             vf.IsCommentRequired = ViewFieldFormInfo.IsCommentRequired;
             vf.IsAuthenticationRequired = ViewFieldFormInfo.IsAuthenticationRequired;
-            var loggedUserIdCache = commonServices.GetCacheData(ClsCacheConfig.CacheKeys.LoggedUserId);
+            // var loggedUserIdCache = commonServices.GetCacheData(ClsCacheConfig.CacheKeys.LoggedUserId);
 
-            if (ViewFieldFormInfo.ViewField == 0)
+            if (!isUpdate)
             {
                 vf.CreatedDate = DateTime.Now;
-                vf.CreatedBy = loggedUserIdCache;
+                // vf.CreatedBy = loggedUserIdCache;
                 cvcEntities.ViewFields.Add(vf);
                 cvcEntities.SaveChanges();
             }
             else
             {
                 vf.UpdatedDate = DateTime.Now;
-                vf.UpdatedBy = loggedUserIdCache;
+                // vf.UpdatedBy = loggedUserIdCache;
                 cvcEntities.SaveChanges();
             }
             AddUpdateViewFieldAuthentication(vf.ViewField1, ViewFieldFormInfo.RoleIds);
@@ -179,12 +193,16 @@ namespace CVC.Modules.NModuleManagement
                               select new StatusInfo { StatusId = s.StatusId, StatusName = s.StatusName }).DefaultIfEmpty();
             return statusdata.ToList();
         }
-        public List<NMachineParameterInfo> getMachineParameterDropDown(int id)
+        public string getTableNamefromMachine(int id)
+        {
+            return cvcEntities.Machines.FirstOrDefault(a => a.MachineId == id).TableName;
+        }
+        public List<NMachineParameterInfo> getMachineParameterDropDown(int id) // id: machineId
         {
             var machineParameterdata = (from mp in cvcEntities.MachineParameters
-                                            where mp.MachineId == id && mp.StatusId== (int)ClsConstants.StatusType.Active
-                                            orderby mp.ParameterName
-                                        select new NMachineParameterInfo { MachineParameterId = mp.MachineParameterId, ParameterName = mp.ParameterName }).DefaultIfEmpty();
+                                        where mp.MachineId == id && mp.StatusId == (int)ClsConstants.StatusType.Active
+                                        orderby mp.ParameterName
+                                        select new NMachineParameterInfo { MachineParameterId = mp.MachineParameterId, ParameterName = mp.ParameterName, ColumnName = mp.ColumnName, PickListId = (int)(mp.PickListId == null ? -1 : mp.PickListId) }).DefaultIfEmpty();
             return machineParameterdata.ToList();
         }
         public NModuleForm getSelectedModule(int id)
@@ -331,15 +349,123 @@ namespace CVC.Modules.NModuleManagement
 
         public bool CheckMachineAlreadyMappedToModule(int machineId)
         {
-            using(CVCEntities cVCEntities=new CVCEntities())
+            using (CVCEntities cVCEntities = new CVCEntities())
             {
-             var modules= cVCEntities?.Modules?.FirstOrDefault(m => m.MachineId == machineId);
+                var modules = cVCEntities?.Modules?.FirstOrDefault(m => m.MachineId == machineId);
                 if (modules != null)
                     return true;
                 else
                     return false;
 
             }
+        }
+
+        public List<DisplayObjectColor> GetDOColors(int viewsId)
+        {
+            List<DisplayObjectColor> colors = new List<DisplayObjectColor>();
+
+            using (CVCEntities cVCEntities = new CVCEntities())
+            {
+                // colors = cVCEntities.DisplayObjectColors.Where(a => a.ViewsId == viewsId).ToList();
+            }
+            return colors;
+        }
+
+        public SaveResponse AddDOColor(int viewsId, JObject RowData)
+        {
+            var request = new SaveRequest<DisplayObjectColorRow>();
+            var repo = new DisplayObjectColorRepository();
+            var data = new SaveResponse();
+            IDbConnection connection = SqlConnections.NewFor<DisplayObjectColorRow>();
+            using (var uow = new UnitOfWork(connection))
+            {
+                if (RowData.Value<string>("ColorId") == "new")
+                { // add
+                    request = new SaveRequest<DisplayObjectColorRow>()
+                    {
+                        // EntityId = 100000,
+                        Entity = new DisplayObjectColorRow()
+                        {
+                            //ColorId = 100,
+                            RangeFrom = float.Parse(RowData["RangeFrom"].ToString()),
+                            RangeTo = float.Parse(RowData["RangeTo"].ToString()),
+                            Color = RowData["Color"].ToString(),
+                            ViewsId = int.Parse(RowData["ViewsId"].ToString())
+                        }
+                    };
+                    data = repo.Create(uow, request);
+                    uow.Commit();
+                }
+                else
+                { // update
+
+                    var entityId = int.Parse(RowData["ColorId"].ToString());
+                    var retreviewReqeust = new RetrieveRequest()
+                    {
+                        EntityId = entityId
+                    };
+                    var updateRow = repo.Retrieve(connection, retreviewReqeust);
+                    updateRow.Entity = new DisplayObjectColorRow()
+                    {
+                        //ColorId = 100,
+                        RangeFrom = float.Parse(RowData["RangeFrom"].ToString()),
+                        RangeTo = float.Parse(RowData["RangeTo"].ToString()),
+                        Color = RowData["Color"].ToString(),
+                        ViewsId = int.Parse(RowData["ViewsId"].ToString())
+                    };
+                    request.EntityId = entityId;
+                    request.Entity = updateRow.Entity;
+                    data = repo.Update(uow, request);
+                    uow.Commit();
+                }
+
+            }
+            return data;
+        }
+
+        public DeleteResponse DeleteDOColor(int colorId)
+        {
+            DeleteResponse data = new DeleteResponse();
+            var repo = new DisplayObjectColorRepository();
+            IDbConnection connection = SqlConnections.NewFor<DisplayObjectColorRow>();
+            using (var uow = new UnitOfWork(connection))
+            {
+                var deleteRequest = new DeleteRequest();
+                deleteRequest.EntityId = colorId;
+                data = repo.Delete(uow, deleteRequest);
+                uow.Commit();
+            }
+            return data;
+        }
+
+        public int? GetDisplayObjectTypeIdByViewsId(int viewsId)
+        {
+            var cvcEntities = new CVCEntities();
+            var jdata = cvcEntities.Views.FirstOrDefault(a => a.ViewsId == viewsId);
+            int? dotype = jdata.DisplayObjectTypeId;
+            return dotype;
+        }
+
+        public DeleteResponse DeleteRowFromTable(string tableName, int entityId)
+        {
+            DeleteResponse data = new DeleteResponse();
+            var repo = new DisplayObjectColorRepository();
+            IDbConnection connection = SqlConnections.NewFor<DisplayObjectColorRow>();
+            using (var uow = new UnitOfWork(connection))
+            {
+                var deleteRequest = new DeleteRequest();
+                deleteRequest.EntityId = entityId;
+                data = repo.Delete(uow, deleteRequest);
+                uow.Commit();
+            }
+            return data;
+        }
+
+        public View GetDisplayObjectData(int viewsId)
+        {
+            var viewData = cvcEntities.Views.FirstOrDefault(v => v.ViewsId == viewsId);
+           // var data = JObject.Parse(viewData.ToString());
+            return viewData;
         }
     }
 }

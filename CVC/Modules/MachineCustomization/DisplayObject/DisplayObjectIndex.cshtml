@@ -1,17 +1,106 @@
-﻿@{
+﻿@using CVC.Components
+@{
     ViewData["Title"] = Serenity.LocalText.Get("Db.MachineCustomization.DisplayObject.EntityPlural");
 }
+
 
 <div id="DisplayObject_GridDiv"></div>
 <!-- added by Denis for RS 7.1 and RS 7.2 dated 10/6/2021 -->
 <div id="DisplayObjectField_GridDiv"></div>
+<!-- added by Denis for RS 6.8 dated 09/14/2023 -->
+
+<div class="modal fade" id="modal-design">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content bg-primary">
+            <div class="modal-header" style="background-color:#0cb2bb">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" style="padding-left:10px;">DisplayObject Customization</h4>
+            </div>
+            <div class="modal-body" style="padding : 0px!important;">
+                <!-- Editing DisplayObject Modal -->
+            </div>
+        </div>
+    </div>
+</div>
 
 @Html.Hidden("DisplayObjectId", "", new { @id = "DisplayObjectId" })
+@Html.Hidden("DisplayObjectType", "", new { @id = "DisplayObjectType" })
+@Html.Hidden("DisplayObjectName", "", new { @id = "DisplayObjectName" })
+@* @Html.Partial("~/Views/PartialViews/Design_PartialView.cshtml") *@
+
+<link href="~/Content/css/icons.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.css">
+
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.jqueryui.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.jqueryui.min.css">
+<script src="https://cdn.datatables.net/select/1.7.0/js/dataTables.select.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/select/1.7.0/css/select.dataTables.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    integrity="sha512-************" crossorigin="anonymous" />
+
+
+<script src="~/Scripts/jquery.signalR-2.4.1.min.js"></script>
+<script src="~/signalr/hubs"></script>
+<script src="~/Scripts/Components/formComponent20.js"></script>
+<script src="~/Scripts/Components/rowComponent7.js"></script>
+<script src="~/Scripts/Components/modalComponent8.js"></script>
+<script src="~/Scripts/Components/companyComponent4.js"></script>
+<script src="~/Scripts/Components/displayComponent2.js"></script>
+<script src="~/Scripts/Communication/RequestData6.js"></script>
+<!--<script src="~/Scripts/Custom/designDO.js"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-treeview/1.2.0/bootstrap-treeview.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.js"></script>
+<script src="~/Scripts/Custom/utilities.js"></script>
+
+<script src="~/Content/JS/Chart.bundle.min.js"></script>
+<script src="~/Content/JS/canvasjs.min.js"></script>
+<script src="~/Content/JS/jspdf.min.js"></script>
+
 
 <script type="text/javascript">
+    var efDataList = [];
+    var undoStack = [];
+    var isDesign = false;
+    var efStr = "<div class='row' style='padding:1px;display:flex;padding-left:30px;padding-right:30px;'>" +
+        "<div ondragstart='dragEF(event);' draggable='true' class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='background-color: #50c72d; border-radius: 8px;display: flex;' machineId='xxId' columnName='xxColumn' pickListId='xxPickList'>" +
+        "xxName" +
+        "</div>" +
+        "</div>";  // this machineId is really machineParameterId.
     jQuery(function () {
         new CVC.MachineCustomization.DisplayObjectGrid($('#DisplayObject_GridDiv'), {}).init();
-
         Q.initFullHeightGridPage($('#GridDiv'));
+    });
+
+
+    $(document).on('click', '.design-mode', function () {
+        showLoader();
+        $.ajax({
+            url: './DisplayObjectEdit/DisplayObjectEdit',
+            type: 'GET',
+            async: true,
+            data: {
+                ViewsId: $("#DisplayObjectId").val()
+            },
+            dataType: 'html',
+            success: function (resultHtml) {
+                $('#modal-design .modal-body').off();
+                $('#modal-design .modal-body').html(resultHtml);
+                //$('#modal-design .modal-body').html("");
+                $('#modal-design').modal();
+                isDesign = true;
+                hideLoader();
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching data:", error);
+                hideLoader();
+            }
+        });
     });
 </script>

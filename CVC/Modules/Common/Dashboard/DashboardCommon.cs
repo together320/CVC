@@ -238,7 +238,7 @@ namespace CVC.Modules.Common.Dashboard
                         {
                             isFirstValue = false;
                             isWriteToPLCData = cvcEntities.IPCParameters.Where(i => i.MachineId == getMachineId && i.IsWriteToPLC == true)?.ToList();
-                            
+
                         }
 
                         // var aa=item.MachineParameter.IPCParameters.fi
@@ -297,19 +297,19 @@ namespace CVC.Modules.Common.Dashboard
                             {
                                 foreach (var items in isWriteToPLCData)
                                 {
-                                                                      
-                                     dashBoardField = new DashBoardField
+
+                                    dashBoardField = new DashBoardField
                                     {
                                         IPCAddress = items.IPCAddress,
                                         Value = "1",
-                                        DataTypeName=item?.MachineParameter?.DataType?.DataTypeName
-                                        
+                                        DataTypeName = item?.MachineParameter?.DataType?.DataTypeName
+
                                     };
-                                   
+
                                     lstDashBoardFields.Add(dashBoardField);
                                     objDashBoardViewModel = new bs.CommonServices().GetDashBoardViewModel(items?.Machine.MachineCommunications.FirstOrDefault());
                                     objDashBoardViewModel.ViewFieldList = lstDashBoardFields;
-                                     clsSiemensS7Net.Write(objDashBoardViewModel);
+                                    clsSiemensS7Net.Write(objDashBoardViewModel);
                                 }
                             }
 
@@ -317,7 +317,7 @@ namespace CVC.Modules.Common.Dashboard
                             {
                                 IPCAddress = item.MachineParameter?.Machine?.IPCParameters?.FirstOrDefault().IPCAddress,
                                 Value = item.MachineParameterValue,
-                                DataTypeName=item?.MachineParameter?.DataType?.DataTypeName
+                                DataTypeName = item?.MachineParameter?.DataType?.DataTypeName
                             };
 
                             lstDashBoardFields.Add(dashBoardField);
@@ -991,7 +991,7 @@ namespace CVC.Modules.Common.Dashboard
                         DashBoardViewModel dashBoardViewModel = new bs.CommonServices().GetDashBoardViewModel(machineComunicaation);
                         DashBoardField dashBoardField = new DashBoardField();
                         List<DashBoardField> lstDashBoardFields = new List<DashBoardField>();
-                        
+
 
                         if (batchSettings.BottleCounterParaId != null)
                         {
@@ -1003,7 +1003,7 @@ namespace CVC.Modules.Common.Dashboard
                             };
                             lstDashBoardFields.Add(dashBoardField);
                             dashBoardViewModel.ViewFieldList = lstDashBoardFields;
-                            var value = mdb.Read(batchSettings.BottleCounterParaId.Value,dashBoardViewModel);
+                            var value = mdb.Read(batchSettings.BottleCounterParaId.Value, dashBoardViewModel);
                             //int i;
                             if (int.TryParse(value.Replace(".00", ""), out int i))
                                 entity.BottleCounter = i;
@@ -1848,16 +1848,16 @@ namespace CVC.Modules.Common.Dashboard
                             {
                                 IPCAddress = item?.IPCParameters?.FirstOrDefault()?.IPCAddress,
                                 DataTypeName = item?.DataType?.DataTypeName,
-                                Value="1"
+                                Value = "1"
                             };
                             lstDashBoardFields.Add(dashBoardField);
                             dashBoardViewModel.ViewFieldList = lstDashBoardFields;
                             var machineparaid = item.MachineParameterId;
                             if (item.ReadMachineParameterId != null)
                                 machineparaid = item.ReadMachineParameterId.Value;
-                            if (connect.Read(machineparaid,dashBoardViewModel) == "1") // Check if Conveyor Running
+                            if (connect.Read(machineparaid, dashBoardViewModel) == "1") // Check if Conveyor Running
                             {
-                                connect.Write(item.MachineParameterId, "1",dashBoardViewModel);
+                                connect.Write(item.MachineParameterId, "1", dashBoardViewModel);
                                 System.Threading.Thread.Sleep(500);
                             }
                         }
@@ -1938,7 +1938,7 @@ namespace CVC.Modules.Common.Dashboard
         public async Task<List<DashBoardField>> GetDashBoardFieldAsync(int ModuleId, int ViewId)
         {
             List<DashBoardField> fields = new List<DashBoardField>();
-            
+
             int alarmCounterSequence = 1, readValueSequence = 0;
 
             using (CVCEntities cvcEntities = new CVCEntities())
@@ -2003,7 +2003,7 @@ namespace CVC.Modules.Common.Dashboard
                                 if (protocolName.ToUpper() == ProtocolType.SiemensS7Net.ToUpper())
                                 {
                                     dashBoardViewModel = new bs.CommonServices().GetDashBoardViewModel(item?.MachineParameter?.Machine?.MachineCommunications?.FirstOrDefault());
-                                   
+
                                 }
 
                             }
@@ -2072,7 +2072,7 @@ namespace CVC.Modules.Common.Dashboard
                                 }
 
                                 // else if (item.MachineParameter.Machine.MachineCommunications.Any(a => a.ProtocolTypeId == 1 && a.StatusId == 1))
-                                else if (protocolName.ToString().Contains(ProtocolType.Modbus.ToUpper()))
+                                else if (protocolName.ToUpper().Contains(ProtocolType.Modbus.ToUpper()))
 
                                 {
                                     addItem.Value = connect.Read(machineparaId.Value);
@@ -2091,12 +2091,12 @@ namespace CVC.Modules.Common.Dashboard
                                 else if (protocolName.ToUpper() == ProtocolType.SiemensS7Net.ToUpper())
                                 {
                                     addItem.IPCAddress = item?.MachineParameter?.IPCParameters?.FirstOrDefault()?.IPCAddress;
-                                     
+
                                     dashBoardField.IPCAddress = item?.MachineParameter?.IPCParameters?.FirstOrDefault()?.IPCAddress;
                                     dashBoardField.DataTypeName = item?.MachineParameter?.DataType?.DataTypeName;
                                     lstDashBoardField.Add(dashBoardField);
                                     dashBoardViewModel.ViewFieldList = lstDashBoardField;
-                                    addItem.Value =await clsSiemensS7Net.Read(dashBoardViewModel);
+                                    addItem.Value = await clsSiemensS7Net.Read(dashBoardViewModel);
                                 }
                             }
 
@@ -2262,6 +2262,329 @@ namespace CVC.Modules.Common.Dashboard
             return fields;
         }
 
+        public async Task<List<DashBoardField>> GetDashBoardFieldAsyncForDisplayPreview(int MachineId, int ViewId)
+        {
+            List<DashBoardField> fields = new List<DashBoardField>();
+
+            int alarmCounterSequence = 1, readValueSequence = 0;
+
+            using (CVCEntities cvcEntities = new CVCEntities())
+            {
+
+                UserDefinition userDefinition = (UserDefinition)Authorization.UserDefinition;
+                var runningbatch = GetCurrentRunningBatch();
+                var userDetails = cvcEntities.Users.FirstOrDefault(a => a.UserId == userDefinition.UserId);
+                var ViewsAccess = cvcEntities.ViewsAccesses.FirstOrDefault(a => a.ViewsId == ViewId && a.StatusId == 1 && a.RoleId == userDetails.RoleId);
+                ConnectMachine connect = new ConnectMachine(MachineId);
+                //changed on 4 march 2019 12.46 pm foreach (var item in cvcEntities.ViewFields.Where(a => a.ViewsId == ViewId && a.StatusId == 1 && (Authorization.Username == "admin" || (a.ViewFieldAccesses.Any(f => f.IsView == true && f.StatusId == 1)))).OrderBy(a => a.Sequence))
+                ClsOpcUaClient clsOpcUaClient = new ClsOpcUaClient();
+                OPCUaClientViewModel oPCUaClientViewModel = new OPCUaClientViewModel();
+                ClsSiemensS7Net clsSiemensS7Net = new ClsSiemensS7Net();
+                DashBoardViewModel dashBoardViewModel = new DashBoardViewModel();
+                DashBoardField dashBoardField = new DashBoardField();
+                List<DashBoardField> lstDashBoardField = new List<DashBoardField>();
+
+
+                var IsViewAccess = true;
+
+
+                var ViewFields = new List<CVC.Data.EDMX.ViewField>();
+                if (userDetails.RoleId == 1)
+                {
+                    ViewFields = (List<CVC.Data.EDMX.ViewField>)cvcEntities.ViewFields.Where(a => a.ViewsId == ViewId && a.StatusId == 1).ToList();
+                }
+                else
+                {
+                    ViewFields = (List<CVC.Data.EDMX.ViewField>)cvcEntities.ViewFields.Where(a => a.ViewsId == ViewId && a.StatusId == 1).ToList();
+
+                }
+                var protocolName = string.Empty;
+                //foreach (var item in cvcEntities.ViewFields.Where(a => a.ViewsId == ViewId && a.StatusId == 1 && ( (a.ViewFieldAccesses.Any(f => f.IsView == true && f.StatusId == 1 && f.RoleId== userDetails.RoleId)))).OrderBy(a => a.Sequence))
+                if (IsViewAccess)
+                {
+                    foreach (var item in ViewFields)
+                    {
+                        if (item.MachineParameter != null)
+                        {
+                            if (readValueSequence == 0)
+                            {
+                                protocolName = item?.MachineParameter?.Machine?.MachineCommunications?.FirstOrDefault()?.Protocol?.ProtocolName;
+                                System.Web.HttpContext.Current.Cache.Remove("ProtocolType");
+                                System.Web.HttpContext.Current.Cache["ProtocolType"] = protocolName.ToUpper();
+
+                                if (protocolName.ToUpper() == ProtocolType.OPCUaClient.ToUpper())
+                                {
+                                    oPCUaClientViewModel.ServerAddress = item.MachineParameter.Machine.MachineCommunications.FirstOrDefault().IPAddress;
+                                    oPCUaClientViewModel.ServerPortNumber = Convert.ToString(item.MachineParameter.Machine.MachineCommunications.FirstOrDefault().TCPIPPort);
+                                    oPCUaClientViewModel.UserName = item.MachineParameter.Machine.MachineCommunications.FirstOrDefault().UserName;
+                                    oPCUaClientViewModel.Password = item.MachineParameter.Machine.MachineCommunications.FirstOrDefault().Password;
+
+                                }
+
+                                if (protocolName.ToUpper() == ProtocolType.SiemensS7Net.ToUpper())
+                                {
+                                    dashBoardViewModel = new bs.CommonServices().GetDashBoardViewModel(item?.MachineParameter?.Machine?.MachineCommunications?.FirstOrDefault());
+
+                                }
+
+                            }
+
+                            // If This Fields Does not belongs to This Machine the countinue
+                            if (item.MachineParameter.MachineId != MachineId)
+                                continue;
+
+                            if (userDetails.RoleId != 1)
+                            {
+                                if (item.ViewFieldAccesses?.FirstOrDefault(vfa => vfa.RoleId == userDetails.RoleId && vfa.ViewFieldId == item.ViewField1 && vfa.ViewsId == ViewId)?.IsView == false)
+                                {
+                                    continue;
+                                }
+
+                            }
+
+                            DashBoardField addItem = new DashBoardField();
+                            addItem.MachineParameterId = item.MachineParameterId.Value;
+                            if (item.MachineParameter.Type != null)
+                                addItem.Type = item.MachineParameter.Type.Value;
+                            addItem.ParameterName = item.ViewFieldName;
+                            addItem.DateTypeId = item.MachineParameter.DataTypeId.Value;
+
+
+                            if (item.MachineParameter.PickListValue != null)
+                                addItem.UnitName = item.MachineParameter.PickListValue.PickListValueName;
+                            addItem.IsRangeUnlimited = item.MachineParameter.IsRangeUnlimited.Value;
+                            if (item.MachineParameter.Min != null)
+                                addItem.Min = item.MachineParameter.Min.Value;
+                            if (item.MachineParameter.Max != null)
+                                addItem.Max = item.MachineParameter.Max.Value;
+
+
+                            // If User Dont Have View Modify Access For Role Then 
+                            if (ViewsAccess != null)
+                                if (ViewsAccess.IsModify == false)
+                                    addItem.IsModify = false;
+                                else
+                                {
+                                    addItem.IsModify = item.ViewFieldAccesses?.FirstOrDefault(vfa => vfa.RoleId == userDetails.RoleId && vfa.ViewFieldId == item.ViewField1 && vfa.ViewsId == item.ViewsId)?.IsModify ?? false;
+
+                                    // Check View Field Have Modify Acecess 
+                                    //if (item.ViewFieldAccesses.Any(a => a.IsModify == false && a.StatusId == 1))
+                                    //    addItem.IsModify = false;
+                                    //else
+                                    //    addItem.IsModify = true;
+                                }
+                            // If Is Read is Checked Then Only Read Value
+                            if (item.MachineParameter.IsRead == true)
+                            {
+                                // In Case Of MDB Call MDB   
+                                int? machineparaId = addItem.MachineParameterId;
+                                //if (item.MachineParameter.Machine.MachineCommunications.Any(a => a.ProtocolTypeId == 4 && a.StatusId == 1))
+                                if (protocolName.ToUpper() == ProtocolType.MDB.ToUpper())
+                                {
+                                    // In Case of Button and Read Is Set from Another Field
+                                    if (item.MachineParameter.Type == 49 && item.MachineParameter.ReadMachineParameterId != null)
+                                        machineparaId = item.MachineParameter.ReadMachineParameterId.Value;
+                                    else if (item.MachineParameter.Type == 49 && item.MachineParameter.ReadMachineParameterId == null)
+                                        machineparaId = null; // In Case of Button and No Read send Value as Blank
+                                    if (machineparaId != null)
+                                        addItem.Value = connect.Read(machineparaId.Value);
+
+                                    //addItem.IsConnected = connect.CheckModBusConnection(machineparaId.Value) == true ? true : false;
+                                }
+
+                                // else if (item.MachineParameter.Machine.MachineCommunications.Any(a => a.ProtocolTypeId == 1 && a.StatusId == 1))
+                                else if (protocolName.ToUpper().Contains(ProtocolType.Modbus.ToUpper()))
+
+                                {
+                                    addItem.Value = connect.Read(machineparaId.Value);
+                                    //addItem.IsConnected = connect.CheckModBusConnection(machineparaId.Value) == true ? true : false;
+                                }
+                                else if (protocolName.ToUpper() == ProtocolType.OPCUaClient.ToUpper())
+                                {
+                                    addItem.NodeId = item.MachineParameter.IPCParameters.FirstOrDefault().NodeId;
+                                    addItem.AttributeId = item.MachineParameter.IPCParameters.FirstOrDefault().AttributeId;
+                                    addItem.IPCAddress = ProtocolType.OPCUaClient.ToUpper();
+                                    oPCUaClientViewModel.NodeId = addItem.NodeId;
+                                    oPCUaClientViewModel.AttributeId = Convert.ToUInt32(addItem.AttributeId);
+                                    oPCUaClientViewModel.MachineId = MachineId;
+                                    addItem.Value = clsOpcUaClient.Read(oPCUaClientViewModel);
+                                }
+                                else if (protocolName.ToUpper() == ProtocolType.SiemensS7Net.ToUpper())
+                                {
+                                    addItem.IPCAddress = item?.MachineParameter?.IPCParameters?.FirstOrDefault()?.IPCAddress;
+
+                                    dashBoardField.IPCAddress = item?.MachineParameter?.IPCParameters?.FirstOrDefault()?.IPCAddress;
+                                    dashBoardField.DataTypeName = item?.MachineParameter?.DataType?.DataTypeName;
+                                    lstDashBoardField.Add(dashBoardField);
+                                    dashBoardViewModel.ViewFieldList = lstDashBoardField;
+                                    addItem.Value = await clsSiemensS7Net.Read(dashBoardViewModel);
+                                }
+                            }
+
+
+
+                            // If IsWrite Is false Then Dont allow Field to be modify
+                            if (item.MachineParameter.IsWrite == false)
+                                addItem.IsModify = false;
+                            else if (Authorization.Username.ToLower() == "admin")
+                                addItem.IsModify = true;
+
+                            // If batch not Running then disable control
+                            if (item.MachineParameter.IsBatchStartRequired == true && runningbatch == null)
+                                addItem.IsDisabled = true;
+
+                            //changes added by Vinayak
+
+                            if (item.MachineParameter.IPCParameters.FirstOrDefault().IsBatchStartRequiredIPC == true)
+                            {
+                                addItem.IsDisabled = true;
+                            }
+
+                            //ended by Vinayak
+
+                            // If disabled is set disable field
+                            if (item.MachineParameter.DisableParameterId != null)
+                            {
+                                if (connect.Read(item.MachineParameter.DisableParameterId.Value) == item.MachineParameter.DisableParameterValue)
+                                    addItem.IsDisabled = true;
+                            }
+                            if (item.MachineParameter.AllowDecimalPoint != null)
+                                addItem.AllowDecimalPoint = item.MachineParameter.AllowDecimalPoint.Value;
+
+                            if (protocolName.ToUpper().Contains(ProtocolType.Modbus.ToUpper()))
+                            {
+                                if (item.MachineParameter.IPCParameters.FirstOrDefault().IPCAddress != null)
+                                {
+                                    addItem.IPCAddress = item.MachineParameter.IPCParameters.FirstOrDefault().IPCAddress;
+                                }
+                            }
+
+                            if (item.MachineParameter.IPCParameters.FirstOrDefault().OperationTypeIPC != null)
+                            {
+                                addItem.OperationTypeIPC = item.MachineParameter.IPCParameters.FirstOrDefault()?.OperationTypeIPC ?? 0;
+                                addItem.OperationTypeName = cvcEntities.PickListValues?.FirstOrDefault(pl => pl.PickListValueId == addItem.OperationTypeIPC)?.PickListValueName;
+
+                            }
+                            if (item.MachineParameter.IPCParameters.FirstOrDefault().OperationValueIPC != null)
+                            {
+                                addItem.OperationValueIPC = item.MachineParameter.IPCParameters.FirstOrDefault().OperationValueIPC;
+                                if (addItem.OperationValueIPC != null)
+                                {
+
+                                    addItem.OperationValueIPC = IntegerExtension(addItem.OperationValueIPC);
+                                }
+                            }
+
+                            addItem.DataTypeId = item.MachineParameter.DataTypeId;
+                            addItem.DataTypeName = item?.MachineParameter?.DataType?.DataTypeName?.ToLower();
+                            addItem.IsByteSwap = item.MachineParameter.IPCParameters.FirstOrDefault().IsByteSwap;
+                            addItem.IsWordSwap = item.MachineParameter.IPCParameters.FirstOrDefault().IsWordSwap;
+                            addItem.Is32Bit = item.MachineParameter.IPCParameters.FirstOrDefault().Is32Bit;
+                            addItem.IsBitWise = item.MachineParameter.IPCParameters.FirstOrDefault().IsBitWise;
+                            addItem.Bit32Address = item.MachineParameter.IPCParameters.FirstOrDefault().Bit32Address;
+                            addItem.BitWiseIndex = item.MachineParameter.IPCParameters.FirstOrDefault().BitWiseIndex;
+                            addItem.IsMachineSpeed = item.MachineParameter.IPCParameters.FirstOrDefault().IsMachineSpeed;
+                            addItem.IsLabelRollIPC = item.MachineParameter.IPCParameters.FirstOrDefault().IsLabelRollIPC;
+                            addItem.IsRefreshMachineSettings = item.MachineParameter.IPCParameters.FirstOrDefault().IsRefreshMachineSettings;
+
+                            addItem.IsPopUpRequired = cvcEntities.ViewFields.FirstOrDefault(vf => vf.MachineParameterId == item.MachineParameterId.Value)?.IsPopUpRequired ?? false;
+                            addItem.IsCommentRequired = cvcEntities.ViewFields.FirstOrDefault(vf => vf.MachineParameterId == item.MachineParameterId.Value)?.IsCommentRequired ?? false;
+                            addItem.IsAuthenticationRequired = cvcEntities.ViewFields.FirstOrDefault(vf => vf.MachineParameterId == item.MachineParameterId.Value)?.IsAuthenticationRequired ?? false;
+                            addItem.IsAuthorisedRole = cvcEntities.ViewFieldAuthentications.FirstOrDefault(vfa => vfa.RoleId == userDetails.RoleId && vfa.ViewFieldId == item.ViewField1) == null ? false : true;
+                            addItem.ViewFieldId = item.ViewField1;
+                            var Roles = cvcEntities.ViewFieldAuthentications.Where(vf => vf.ViewFieldId == item.ViewField1).Select(vf => vf.Role.RoleName).ToArray();
+                            addItem.RoleNames = Roles != null ? string.Join(",", Roles.Select(x => x.ToString()).ToArray()) : "NA";
+
+                            addItem.MachineParameterName = cvcEntities.MachineParameters.FirstOrDefault(vf => vf.MachineParameterId == item.MachineParameterId.Value).ParameterName;
+
+                            var IPCParameters = cvcEntities.IPCParameters?.FirstOrDefault(i => i.MachineId == MachineId && i.IsWriteToPLC == true);
+                            if (IPCParameters != null)
+                            {
+                                addItem.WriteToPLCIPCMachineParameterId = IPCParameters.MachineParameterId;
+                            }
+
+                            addItem.IsIndicatorParameter = cvcEntities.IPCParameters.FirstOrDefault(vf => vf.MachineParameterId == item.MachineParameterId.Value)?.IsIndicatorParameter ?? false;
+                            if (addItem.IsIndicatorParameter == true)
+                            {
+                                var IndicatorParameterId = cvcEntities.IPCParameters.FirstOrDefault(vf => vf.MachineParameterId == item.MachineParameterId.Value)?.IndicatorParameterId ?? null;
+                                var GetIPCParameters = cvcEntities.IPCParameters.FirstOrDefault(vf => vf.MachineParameterId == IndicatorParameterId);
+                                if (GetIPCParameters != null)
+                                {
+                                    if (protocolName.ToUpper() == ProtocolType.OPCUaClient.ToUpper())
+                                    {
+                                        addItem.NodeId = GetIPCParameters.NodeId;
+                                        addItem.AttributeId = GetIPCParameters.AttributeId;
+                                        addItem.IPCAddress = ProtocolType.OPCUaClient.ToUpper();
+                                        addItem.DataTypeId = GetIPCParameters.MachineParameter.DataTypeId;
+                                        addItem.Bit32Address = GetIPCParameters.Bit32Address;
+                                        addItem.BitWiseIndex = GetIPCParameters.BitWiseIndex;
+                                        addItem.IsBitWise = GetIPCParameters.IsBitWise;
+
+                                    }
+                                    else
+                                    {
+
+                                        addItem.IPCAddress = GetIPCParameters.IPCAddress;
+                                        addItem.DataTypeId = GetIPCParameters.MachineParameter.DataTypeId;
+                                        addItem.Bit32Address = GetIPCParameters.Bit32Address;
+                                        addItem.BitWiseIndex = GetIPCParameters.BitWiseIndex;
+                                        addItem.IsBitWise = GetIPCParameters.IsBitWise;
+                                    }
+                                }
+                            }
+                            addItem.IsGoodBottles = item.MachineParameter.IPCParameters.FirstOrDefault().IsGoodBottles;
+                            addItem.IsRejectBottles = item.MachineParameter.IPCParameters.FirstOrDefault().IsRejectBottles;
+                            addItem.IsBatchSize = item.MachineParameter.IPCParameters.FirstOrDefault().IsBatchSize;
+                            if (addItem.IsGoodBottles == true)
+                            {
+                                addItem.BatchSizeIPCAddress = cvcEntities.IPCParameters?.FirstOrDefault(i => i.IsBatchSize == true && i.MachineId == MachineId)?.IPCAddress ?? null;
+                            }
+                            addItem.RowId = item.MachineParameter.RowId;
+                            addItem.Bit32RowId = item.MachineParameter.Bit32RowId;
+
+                            if (userDetails.RoleId != 1)
+                            {
+                                if (ViewsAccess != null)
+                                {
+                                    if (ViewsAccess.IsModify == false || ViewsAccess.IsModify == null)
+                                    {
+                                        addItem.IsDisabled = false;
+                                    }
+                                    else
+                                    {
+                                        addItem.IsDisabled = item.ViewFieldAccesses?.FirstOrDefault(vfa => vfa.RoleId == userDetails.RoleId && vfa.ViewFieldId == item.ViewField1 && vfa.ViewsId == ViewId)?.IsModify == false ? true : false;
+                                    }
+
+                                }
+                            }
+
+                            if (item.MachineParameter.IPCParameters.FirstOrDefault().IsConveyer == true)
+                            {
+                                addItem.IsConveyerClass = "IsConveyerClass";
+                            }
+
+                            var machineId = MachineId;
+                            var isWrite = cvcEntities.TerminalMachineMappings.FirstOrDefault(mtm => mtm.MachineId == machineId)?.MasterTerminal.TerminalType.IsWrite ?? false;
+                            addItem.IsWriteTerminalType = isWrite;
+
+                            addItem.IsMissingLabelCounter = item.MachineParameter.IPCParameters.FirstOrDefault().IsMissingLabelCounter;
+                            if (addItem.IsMissingLabelCounter == true)
+                            {
+                                addItem.AlarmId = cvcEntities.Alarms.Where(a => a.MachineParameterId == item.MachineParameterId && a.MachineId == item.MachineParameter.MachineId).FirstOrDefault()?.AlarmId ?? null;
+                                addItem.AlarmCounterSequence = alarmCounterSequence;
+                                alarmCounterSequence++;
+                            }
+
+                            addItem.ReadValueSequence = readValueSequence;
+                            readValueSequence++;
+                            fields.Add(addItem);
+                        }
+                    }
+                }
+            }
+            return fields;
+        }
+
         public string CheckCommuniation()
         {
             ConnectMachine connect = new ConnectMachine();
@@ -2405,6 +2728,57 @@ namespace CVC.Modules.Common.Dashboard
         //    }
         //}
 
+        public int? GetMachineIdFromViewId(int viewId)
+        {
+            var machineId = 0;
+            using (CVCEntities cvcEntities = new CVCEntities())
+            {
+                machineId = cvcEntities?.Views?.FirstOrDefault(a => a.ViewsId == viewId)?.MachineId ?? 0;
+            }
+            if (machineId == 0 || machineId == null)
+            {
+                int? moduleId = 0;
+                using (CVCEntities cvcEntities = new CVCEntities())
+                {
+                    moduleId = cvcEntities?.Views?.FirstOrDefault(a => a.ViewsId == viewId)?.ModuleId;
+                }
+                return GetMachineId(moduleId);
+            }
+            return machineId;
+        }
+
+        public bool? GetMachineRealTimeFromMachineId(int machineId)
+        {
+            bool? isRealTime;
+            using (CVCEntities cvcEntities = new CVCEntities())
+            {
+                isRealTime = cvcEntities?.Machines?.FirstOrDefault(a => a.MachineId == machineId)?.IsRealTime;
+            }
+
+            return isRealTime;
+        }
+
+        public int? GetModuleIdFromMachineId(int machineId)
+        {
+            int? moduleId = null;
+            using (CVCEntities cvcEntities = new CVCEntities())
+            {
+                var module = cvcEntities.Modules.FirstOrDefault(a => a.MachineId == machineId);
+                if (module != null)
+                    moduleId = module.ModuleId;
+            }
+            return moduleId;
+        }
+
+
+        public int? GetMachineId(int? ModuleId)
+        {
+            using (CVCEntities cvcEntities = new CVCEntities())
+            {
+                return cvcEntities?.Modules?.FirstOrDefault(a => a.ModuleId == ModuleId)?.MachineId ?? 0;
+            }
+        }
+
         public int? GetMachineId(string ModuleId)
         {
             using (CVCEntities cvcEntities = new CVCEntities())
@@ -2519,14 +2893,14 @@ namespace CVC.Modules.Common.Dashboard
                                 MachineCommunicationViewModel machineCommunicationViewModel = new MachineCommunicationViewModel
                                 {
                                     ProtocolTypeName = machineCommunication?.Protocol?.ProtocolName,
-                                    IPAddress=machineCommunication.IPAddress,
-                                    TCPIPPort=machineCommunication.TCPIPPort,
-                                    MDBPath=machineCommunication.MDBPath,
-                                    UserName=machineCommunication.UserName,
-                                    Password=machineCommunication.Password,
-                                    Rack=machineCommunication.Rack,
-                                    Slot=machineCommunication.Slot,
-                                    CpuType=machineCommunication?.PickListValue6?.PickList?.PickListName
+                                    IPAddress = machineCommunication.IPAddress,
+                                    TCPIPPort = machineCommunication.TCPIPPort,
+                                    MDBPath = machineCommunication.MDBPath,
+                                    UserName = machineCommunication.UserName,
+                                    Password = machineCommunication.Password,
+                                    Rack = machineCommunication.Rack,
+                                    Slot = machineCommunication.Slot,
+                                    CpuType = machineCommunication?.PickListValue6?.PickList?.PickListName
 
                                 };
 
@@ -2659,7 +3033,7 @@ namespace CVC.Modules.Common.Dashboard
                             // If disabled is set disable field
                             if (item.MachineParameter.DisableParameterId != null)
                             {
-                                if (connect.Read(item.MachineParameter.DisableParameterId.Value,dashBoardViewModel) == item.MachineParameter.DisableParameterValue)
+                                if (connect.Read(item.MachineParameter.DisableParameterId.Value, dashBoardViewModel) == item.MachineParameter.DisableParameterValue)
                                     addItem.IsDisabled = true;
                             }
                             if (item.MachineParameter.AllowDecimalPoint != null)
@@ -2900,7 +3274,7 @@ namespace CVC.Modules.Common.Dashboard
             try
             {
 
-                 return WriteHeartBeat(Value.ToString());
+                return WriteHeartBeat(Value.ToString());
 
             }
             catch
@@ -2980,11 +3354,11 @@ namespace CVC.Modules.Common.Dashboard
                             //   CommandPanel = (CommandPanelPageModel)HttpContext.Current.Cache["CommandPanel"];
                             // CommandPanel = (CommandPanelPageModel)HttpRuntime.Cache["CommandPanel"];
                             bs.CommonServices commonServices = new bs.CommonServices();
-                            machineCommunication =commonServices.GetCacheData(ClsCacheConfig.CacheKeys.MachineCommunication);
+                            machineCommunication = commonServices.GetCacheData(ClsCacheConfig.CacheKeys.MachineCommunication);
 
                             modbusTCP.IPAddress = machineCommunication.IPAddress;
                             modbusTCP.TcpipPort = ushort.Parse(machineCommunication.TCPIPPort.ToString());
-                            modbusTCP.PollRateOverride = machineCommunication?.PollRate??0;
+                            modbusTCP.PollRateOverride = machineCommunication?.PollRate ?? 0;
                             Value = Value == "-1" ? Convert.ToString(sendHeartBeatViewModel.StartNumber) : Value;
                             modbusTCP.Write(address, Value);
                         }
@@ -2997,25 +3371,25 @@ namespace CVC.Modules.Common.Dashboard
 
                     else if (protocolType == ProtocolType.SiemensS7Net.ToUpper())
                     {
-                        var getMachineCommunication =new bs.CommonServices().GetCacheData(ClsCacheConfig.CacheKeys.MachineCommunication);
+                        var getMachineCommunication = new bs.CommonServices().GetCacheData(ClsCacheConfig.CacheKeys.MachineCommunication);
 
                         DashBoardField dashBoardField = new DashBoardField
                         {
-                             IPCAddress=sendHeartBeatViewModel.IPCAddress,
-                             DataTypeName=sendHeartBeatViewModel.DataTypeName,
-                             Value=sendHeartBeatViewModel?.Value?.ToString()
+                            IPCAddress = sendHeartBeatViewModel.IPCAddress,
+                            DataTypeName = sendHeartBeatViewModel.DataTypeName,
+                            Value = sendHeartBeatViewModel?.Value?.ToString()
                         };
                         List<DashBoardField> lstDashBoardFields = new List<DashBoardField>();
                         lstDashBoardFields.Add(dashBoardField);
                         DashBoardViewModel dashBoardViewModel = new DashBoardViewModel
                         {
-                            IPAddress=machineCommunication.IPAddress,
-                            TCPIPPort=machineCommunication.TCPIPPort,
-                            CpuType=machineCommunication.CpuType,
-                            Rack=machineCommunication.Rack,
-                            Slot=machineCommunication.Slot,
-                            ViewFieldList=lstDashBoardFields
-                            
+                            IPAddress = machineCommunication.IPAddress,
+                            TCPIPPort = machineCommunication.TCPIPPort,
+                            CpuType = machineCommunication.CpuType,
+                            Rack = machineCommunication.Rack,
+                            Slot = machineCommunication.Slot,
+                            ViewFieldList = lstDashBoardFields
+
                         };
                         ClsSiemensS7Net clsSiemensS7Net = new ClsSiemensS7Net();
                         clsSiemensS7Net.Write(dashBoardViewModel);

@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'E:\UI-UXDesign\CVC.Data\EDMX\CVCModel.edmx'. 
+﻿// T4 code generation is enabled for model 'E:\cvc_project\CVC_Local\CVC.Data\EDMX\CVCModel.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

@@ -38,8 +38,10 @@ namespace CVC.Data.EDMX
         public Nullable<bool> AutoResize { get; set; }
         public Nullable<bool> Collapsible { get; set; }
         public string ListDisplayName { get; set; }
+        public Nullable<int> ViewId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<View> Views { get; set; }
+        public virtual View View { get; set; }
     }
 }

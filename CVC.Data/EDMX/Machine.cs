@@ -41,6 +41,7 @@ namespace CVC.Data.EDMX
             this.RecipeSettings = new HashSet<RecipeSetting>();
             this.TerminalMachineMappings = new HashSet<TerminalMachineMapping>();
             this.Views = new HashSet<View>();
+            this.UserLogs = new HashSet<UserLog>();
         }
     
         public int MachineId { get; set; }
@@ -126,5 +127,7 @@ namespace CVC.Data.EDMX
         public virtual ICollection<TerminalMachineMapping> TerminalMachineMappings { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<View> Views { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UserLog> UserLogs { get; set; }
     }
 }

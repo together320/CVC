@@ -6265,6 +6265,113 @@ declare namespace CVC.MachineCustomization {
     }
 }
 declare namespace CVC.MachineCustomization {
+    class DisplayObjectColorForm extends Serenity.PrefixedContext {
+        static formKey: string;
+    }
+    interface DisplayObjectColorForm {
+        RangeFrom: Serenity.DecimalEditor;
+        RangeTo: Serenity.DecimalEditor;
+        Color: Serenity.StringEditor;
+        ViewsId: Serenity.IntegerEditor;
+    }
+}
+declare namespace CVC.MachineCustomization {
+    interface DisplayObjectColorRow {
+        ColorId?: number;
+        RangeFrom?: number;
+        RangeTo?: number;
+        Color?: string;
+        ViewsId?: number;
+        ViewsModuleId?: number;
+        ViewsViewName?: string;
+        ViewsIsAccessFieldWise?: boolean;
+        ViewsStatusId?: number;
+        ViewsCreatedBy?: number;
+        ViewsCreatedDate?: string;
+        ViewsUpdatedBy?: number;
+        ViewsUpdatedDate?: string;
+        ViewsIsMachineSettings?: boolean;
+        ViewsIsMachineSummary?: boolean;
+        ViewsIslabelRoll?: boolean;
+        ViewsIsCommandPanel?: boolean;
+        ViewsIsFactorySetting?: boolean;
+        ViewsDisplayObjectTypeId?: number;
+        ViewsMachineId?: number;
+        ViewsListDisplayId?: number;
+        ViewsFormDisplayId?: number;
+        ViewsButtonDisplayId?: number;
+        ViewsRealtimeParameterDisplayId?: number;
+        ViewsLineChartDisplayId?: number;
+        ViewsPieChartDisplayId?: number;
+        ViewsTreeDisplayId?: number;
+        ViewsAttachmentDisplayId?: number;
+        ViewsAlarmDisplayId?: number;
+        ViewsNotificationDisplayId?: number;
+        ViewsContainerDisplayId?: number;
+    }
+    namespace DisplayObjectColorRow {
+        const idProperty = "ColorId";
+        const nameProperty = "Color";
+        const localTextPrefix = "MachineCustomization.DisplayObjectColor";
+        const deletePermission = "Administration:General";
+        const insertPermission = "Administration:General";
+        const readPermission = "Administration:General";
+        const updatePermission = "Administration:General";
+        namespace Fields {
+            const ColorId: any;
+            const RangeFrom: any;
+            const RangeTo: any;
+            const Color: any;
+            const ViewsId: any;
+            const ViewsModuleId: any;
+            const ViewsViewName: any;
+            const ViewsIsAccessFieldWise: any;
+            const ViewsStatusId: any;
+            const ViewsCreatedBy: any;
+            const ViewsCreatedDate: any;
+            const ViewsUpdatedBy: any;
+            const ViewsUpdatedDate: any;
+            const ViewsIsMachineSettings: any;
+            const ViewsIsMachineSummary: any;
+            const ViewsIslabelRoll: any;
+            const ViewsIsCommandPanel: any;
+            const ViewsIsFactorySetting: any;
+            const ViewsDisplayObjectTypeId: any;
+            const ViewsMachineId: any;
+            const ViewsListDisplayId: any;
+            const ViewsFormDisplayId: any;
+            const ViewsButtonDisplayId: any;
+            const ViewsRealtimeParameterDisplayId: any;
+            const ViewsLineChartDisplayId: any;
+            const ViewsPieChartDisplayId: any;
+            const ViewsTreeDisplayId: any;
+            const ViewsAttachmentDisplayId: any;
+            const ViewsAlarmDisplayId: any;
+            const ViewsNotificationDisplayId: any;
+            const ViewsContainerDisplayId: any;
+        }
+    }
+}
+declare namespace CVC.MachineCustomization {
+    namespace DisplayObjectColorService {
+        const baseUrl = "MachineCustomization/DisplayObjectColor";
+        function Create(request: Serenity.SaveRequest<DisplayObjectColorRow>, onSuccess?: (response: Serenity.SaveResponse) => void, opt?: Q.ServiceOptions<any>): JQueryXHR;
+        function Update(request: Serenity.SaveRequest<DisplayObjectColorRow>, onSuccess?: (response: Serenity.SaveResponse) => void, opt?: Q.ServiceOptions<any>): JQueryXHR;
+        function Delete(request: Serenity.DeleteRequest, onSuccess?: (response: Serenity.DeleteResponse) => void, opt?: Q.ServiceOptions<any>): JQueryXHR;
+        function Retrieve(request: Serenity.RetrieveRequest, onSuccess?: (response: Serenity.RetrieveResponse<DisplayObjectColorRow>) => void, opt?: Q.ServiceOptions<any>): JQueryXHR;
+        function List(request: Serenity.ListRequest, onSuccess?: (response: Serenity.ListResponse<DisplayObjectColorRow>) => void, opt?: Q.ServiceOptions<any>): JQueryXHR;
+        function FetchAllColumns(request: ColumnIdsRequest, onSuccess?: (response: Serenity.ListResponse<ColumnIDRow>) => void, opt?: Q.ServiceOptions<any>): JQueryXHR;
+        const enum Methods {
+            Create = "MachineCustomization/DisplayObjectColor/Create",
+            Update = "MachineCustomization/DisplayObjectColor/Update",
+            Delete = "MachineCustomization/DisplayObjectColor/Delete",
+            Retrieve = "MachineCustomization/DisplayObjectColor/Retrieve",
+            List = "MachineCustomization/DisplayObjectColor/List",
+            FetchAllColumns = "MachineCustomization/DisplayObjectColor/FetchAllColumns"
+        }
+    }
+}
+declare namespace CVC.MachineCustomization {
 }
 declare namespace CVC.MachineCustomization {
 }
@@ -6788,6 +6895,62 @@ declare namespace CVC.MachineCustomization {
             Delete = "MachineCustomization/DisplayObject/Delete",
             Retrieve = "MachineCustomization/DisplayObject/Retrieve",
             List = "MachineCustomization/DisplayObject/List"
+        }
+    }
+}
+declare namespace CVC.MachineCustomization {
+    class DisplayObjectTypeColorForm extends Serenity.PrefixedContext {
+        static formKey: string;
+    }
+    interface DisplayObjectTypeColorForm {
+        DotColor: Common.CustomEditors.ColorPickerEditor;
+        Min: Serenity.DecimalEditor;
+        Max: Serenity.DecimalEditor;
+        DisplayObjectTypeId: Serenity.IntegerEditor;
+        SubTypeId: Serenity.IntegerEditor;
+    }
+}
+declare namespace CVC.MachineCustomization {
+    interface DisplayObjectTypeColorRow {
+        DotColorId?: number;
+        DotColor?: string;
+        Min?: number;
+        Max?: number;
+        DisplayObjectTypeId?: number;
+        SubTypeId?: number;
+    }
+    namespace DisplayObjectTypeColorRow {
+        const idProperty = "DotColorId";
+        const nameProperty = "DotColor";
+        const localTextPrefix = "MachineCustomization.DisplayObjectTypeColor";
+        const deletePermission = "Administration:General";
+        const insertPermission = "Administration:General";
+        const readPermission = "Administration:General";
+        const updatePermission = "Administration:General";
+        namespace Fields {
+            const DotColorId: any;
+            const DotColor: any;
+            const Min: any;
+            const Max: any;
+            const DisplayObjectTypeId: any;
+            const SubTypeId: any;
+        }
+    }
+}
+declare namespace CVC.MachineCustomization {
+    namespace DisplayObjectTypeColorService {
+        const baseUrl = "MachineCustomization/DisplayObjectTypeColor";
+        function Create(request: Serenity.SaveRequest<DisplayObjectTypeColorRow>, onSuccess?: (response: Serenity.SaveResponse) => void, opt?: Q.ServiceOptions<any>): JQueryXHR;
+        function Update(request: Serenity.SaveRequest<DisplayObjectTypeColorRow>, onSuccess?: (response: Serenity.SaveResponse) => void, opt?: Q.ServiceOptions<any>): JQueryXHR;
+        function Delete(request: Serenity.DeleteRequest, onSuccess?: (response: Serenity.DeleteResponse) => void, opt?: Q.ServiceOptions<any>): JQueryXHR;
+        function Retrieve(request: Serenity.RetrieveRequest, onSuccess?: (response: Serenity.RetrieveResponse<DisplayObjectTypeColorRow>) => void, opt?: Q.ServiceOptions<any>): JQueryXHR;
+        function List(request: Serenity.ListRequest, onSuccess?: (response: Serenity.ListResponse<DisplayObjectTypeColorRow>) => void, opt?: Q.ServiceOptions<any>): JQueryXHR;
+        namespace Methods {
+            const Create: string;
+            const Update: string;
+            const Delete: string;
+            const Retrieve: string;
+            const List: string;
         }
     }
 }
@@ -14997,6 +15160,36 @@ declare namespace CVC {
 }
 declare namespace CVC.Texts {
 }
+declare namespace CVC.Administration {
+    class UserDialog extends Serenity.EntityDialog<UserRow, any> {
+        protected getFormKey(): string;
+        protected getIdProperty(): string;
+        protected getLocalTextPrefix(): string;
+        protected getNameProperty(): string;
+        protected getService(): string;
+        protected getDeletePermission(): string;
+        protected getInsertPermission(): string;
+        protected getUpdatePermission(): string;
+        protected form: UserForm;
+        constructor();
+        protected afterLoadEntity(): void;
+    }
+}
+declare namespace CVC.Batch {
+    class BatchDialog extends Serenity.EntityDialog<BatchRow, any> {
+        protected getFormKey(): string;
+        protected getIdProperty(): string;
+        protected getLocalTextPrefix(): string;
+        protected getNameProperty(): string;
+        protected getService(): string;
+        protected getDeletePermission(): string;
+        protected getInsertPermission(): string;
+        protected getUpdatePermission(): string;
+        protected form: BatchForm;
+        constructor();
+        protected afterLoadEntity(): void;
+    }
+}
 declare namespace CVC.Common.Bases {
     class GridBase<TItem, TOptions> extends Serenity.EntityGrid<TItem, TOptions> {
         constructor(container: JQuery, options?: TOptions);
@@ -15283,6 +15476,36 @@ declare namespace CVC {
         hideLabel: boolean;
     }
 }
+declare namespace CVC.Configuration {
+    class CompanyDialog extends Serenity.EntityDialog<CompanyRow, any> {
+        protected getFormKey(): string;
+        protected getIdProperty(): string;
+        protected getLocalTextPrefix(): string;
+        protected getNameProperty(): string;
+        protected getService(): string;
+        protected getDeletePermission(): string;
+        protected getInsertPermission(): string;
+        protected getUpdatePermission(): string;
+        protected form: CompanyForm;
+        constructor();
+        protected afterLoadEntity(): void;
+    }
+}
+declare namespace CVC.MachineCustomization {
+    class AlarmDialog extends Serenity.EntityDialog<AlarmRow, any> {
+        protected getFormKey(): string;
+        protected getIdProperty(): string;
+        protected getLocalTextPrefix(): string;
+        protected getNameProperty(): string;
+        protected getService(): string;
+        protected getDeletePermission(): string;
+        protected getInsertPermission(): string;
+        protected getUpdatePermission(): string;
+        protected form: AlarmForm;
+        constructor();
+        protected afterLoadEntity(): void;
+    }
+}
 declare namespace CVC.MachineCustomization {
     class AlarmDisplayDialog extends Serenity.EntityDialog<AlarmDisplayRow, any> {
         protected getFormKey(): string;
@@ -15306,6 +15529,8 @@ declare namespace CVC.MachineCustomization {
         protected getLocalTextPrefix(): string;
         protected getService(): string;
         constructor(container: JQuery);
+        protected getSlickOptions(): Slick.GridOptions;
+        protected createSlickGrid(): Slick.Grid;
     }
 }
 declare namespace CVC.MachineCustomization {
@@ -15412,6 +15637,7 @@ declare namespace CVC.MachineCustomization {
         protected getColumns(): Slick.Column[];
         protected getSlickOptions(): Slick.GridOptions;
         protected createSlickGrid(): Slick.Grid;
+        protected onClick(e: JQueryEventObject, row: number, cell: number): void;
     }
 }
 declare namespace CVC.MachineCustomization {
@@ -15419,6 +15645,30 @@ declare namespace CVC.MachineCustomization {
         constructor(container: JQuery, opt: Serenity.LookupEditorOptions);
         protected getLookupKey(): string;
         protected getItems(lookup: Q.Lookup<any>): any;
+    }
+}
+declare namespace CVC.MachineCustomization {
+    class DisplayObjectColorDialog extends Serenity.EntityDialog<DisplayObjectColorRow, any> {
+        protected getFormKey(): string;
+        protected getIdProperty(): string;
+        protected getLocalTextPrefix(): string;
+        protected getNameProperty(): string;
+        protected getService(): string;
+        protected getDeletePermission(): string;
+        protected getInsertPermission(): string;
+        protected getUpdatePermission(): string;
+        protected form: DisplayObjectColorForm;
+    }
+}
+declare namespace CVC.MachineCustomization {
+    class DisplayObjectColorGrid extends Serenity.EntityGrid<DisplayObjectColorRow, any> {
+        protected getColumnsKey(): string;
+        protected getDialogType(): typeof DisplayObjectColorDialog;
+        protected getIdProperty(): string;
+        protected getInsertPermission(): string;
+        protected getLocalTextPrefix(): string;
+        protected getService(): string;
+        constructor(container: JQuery);
     }
 }
 declare namespace CVC.MachineCustomization {
@@ -15445,6 +15695,32 @@ declare namespace CVC.MachineCustomization {
     class DisplayObjectFieldGrid extends Common.Bases.GridBase<DisplayObjectFieldRow, any> {
         protected getColumnsKey(): string;
         protected getDialogType(): typeof DisplayObjectFieldDialog;
+        protected getIdProperty(): string;
+        protected getInsertPermission(): string;
+        protected getLocalTextPrefix(): string;
+        protected getService(): string;
+        constructor(container: JQuery);
+        protected onViewSubmit(): boolean;
+    }
+}
+declare namespace CVC.MachineCustomization {
+    class DisplayObjectTypeColorDialog extends Serenity.EntityDialog<DisplayObjectTypeColorRow, any> {
+        protected getFormKey(): string;
+        protected getIdProperty(): string;
+        protected getLocalTextPrefix(): string;
+        protected getNameProperty(): string;
+        protected getService(): string;
+        protected getDeletePermission(): string;
+        protected getInsertPermission(): string;
+        protected getUpdatePermission(): string;
+        protected form: DisplayObjectTypeColorForm;
+        protected afterLoadEntity(): void;
+    }
+}
+declare namespace CVC.MachineCustomization {
+    class DisplayObjectTypeColorGrid extends Serenity.EntityGrid<DisplayObjectTypeColorRow, any> {
+        protected getColumnsKey(): string;
+        protected getDialogType(): typeof DisplayObjectTypeColorDialog;
         protected getIdProperty(): string;
         protected getInsertPermission(): string;
         protected getLocalTextPrefix(): string;
@@ -15501,6 +15777,8 @@ declare namespace CVC.MachineCustomization {
         protected getLocalTextPrefix(): string;
         protected getService(): string;
         constructor(container: JQuery);
+        protected getSlickOptions(): Slick.GridOptions;
+        protected createSlickGrid(): Slick.Grid;
     }
 }
 declare namespace CVC.MachineCustomization {
@@ -15569,6 +15847,8 @@ declare namespace CVC.MachineCustomization {
         protected getLocalTextPrefix(): string;
         protected getService(): string;
         constructor(container: JQuery);
+        protected getSlickOptions(): Slick.GridOptions;
+        protected createSlickGrid(): Slick.Grid;
     }
 }
 declare namespace CVC.MachineCustomization {
@@ -15594,6 +15874,8 @@ declare namespace CVC.MachineCustomization {
         protected getLocalTextPrefix(): string;
         protected getService(): string;
         constructor(container: JQuery);
+        protected getSlickOptions(): Slick.GridOptions;
+        protected createSlickGrid(): Slick.Grid;
     }
 }
 declare namespace CVC.MachineCustomization {
@@ -15653,6 +15935,8 @@ declare namespace CVC.MachineCustomization {
         protected getLocalTextPrefix(): string;
         protected getService(): string;
         constructor(container: JQuery);
+        protected getSlickOptions(): Slick.GridOptions;
+        protected createSlickGrid(): Slick.Grid;
     }
 }
 declare namespace CVC.MachineCustomization {
@@ -15751,5 +16035,95 @@ declare namespace CVC.MachineCustomization {
         protected getLocalTextPrefix(): string;
         protected getService(): string;
         constructor(container: JQuery);
+    }
+}
+declare namespace CVC.PackSettings {
+    class BottleDialog extends Serenity.EntityDialog<BottleRow, any> {
+        protected getFormKey(): string;
+        protected getIdProperty(): string;
+        protected getLocalTextPrefix(): string;
+        protected getNameProperty(): string;
+        protected getService(): string;
+        protected getDeletePermission(): string;
+        protected getInsertPermission(): string;
+        protected getUpdatePermission(): string;
+        protected form: BottleForm;
+        constructor();
+        protected afterLoadEntity(): void;
+    }
+}
+declare namespace CVC.PackSettings {
+    class CapDialog extends Serenity.EntityDialog<CapRow, any> {
+        protected getFormKey(): string;
+        protected getIdProperty(): string;
+        protected getLocalTextPrefix(): string;
+        protected getNameProperty(): string;
+        protected getService(): string;
+        protected getDeletePermission(): string;
+        protected getInsertPermission(): string;
+        protected getUpdatePermission(): string;
+        protected form: CapForm;
+        constructor();
+        protected afterLoadEntity(): void;
+    }
+}
+declare namespace CVC.PackSettings {
+    class CottonDialog extends Serenity.EntityDialog<CottonRow, any> {
+        protected getFormKey(): string;
+        protected getIdProperty(): string;
+        protected getLocalTextPrefix(): string;
+        protected getNameProperty(): string;
+        protected getService(): string;
+        protected getDeletePermission(): string;
+        protected getInsertPermission(): string;
+        protected getUpdatePermission(): string;
+        protected form: CottonForm;
+        constructor();
+        protected afterLoadEntity(): void;
+    }
+}
+declare namespace CVC.PackSettings {
+    class DesiccantDialog extends Serenity.EntityDialog<DesiccantRow, any> {
+        protected getFormKey(): string;
+        protected getIdProperty(): string;
+        protected getLocalTextPrefix(): string;
+        protected getNameProperty(): string;
+        protected getService(): string;
+        protected getDeletePermission(): string;
+        protected getInsertPermission(): string;
+        protected getUpdatePermission(): string;
+        protected form: DesiccantForm;
+        constructor();
+        protected afterLoadEntity(): void;
+    }
+}
+declare namespace CVC.PackSettings {
+    class EndOfLineDialog extends Serenity.EntityDialog<EndOfLineRow, any> {
+        protected getFormKey(): string;
+        protected getIdProperty(): string;
+        protected getLocalTextPrefix(): string;
+        protected getNameProperty(): string;
+        protected getService(): string;
+        protected getDeletePermission(): string;
+        protected getInsertPermission(): string;
+        protected getUpdatePermission(): string;
+        protected form: EndOfLineForm;
+        constructor();
+        protected afterLoadEntity(): void;
+    }
+}
+declare namespace CVC.PackSettings {
+    class PackDialog extends Serenity.EntityDialog<PackRow, any> {
+        protected getFormKey(): string;
+        protected getIdProperty(): string;
+        protected getLocalTextPrefix(): string;
+        protected getNameProperty(): string;
+        protected getService(): string;
+        protected getDeletePermission(): string;
+        protected getInsertPermission(): string;
+        protected getUpdatePermission(): string;
+        protected form: PackForm;
+        constructor();
+        protected afterLoadEntity(): void;
     }
 }

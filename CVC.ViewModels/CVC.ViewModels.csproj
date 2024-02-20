@@ -116,6 +116,19 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CVC.Data\CVC.Data.csproj">
+      <Project>{d998632a-b99d-43a2-a2ff-104f6b839fe6}</Project>
+      <Name>CVC.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CVC.MDB\CVC.MDB.csproj">
+      <Project>{c73c4183-1a4f-481e-82e0-f2159b47118c}</Project>
+      <Name>CVC.MDB</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

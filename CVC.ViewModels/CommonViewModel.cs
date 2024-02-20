@@ -92,6 +92,7 @@ namespace CVC.ViewModels
         public int MachineParameterId { get; set; }
 
         public string ParameterName { get; set; }
+        public string MachineParameterName { get; set; }
 
         public int DateTypeId { get; set; }
 

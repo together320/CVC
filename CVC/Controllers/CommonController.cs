@@ -363,6 +363,26 @@ namespace CVC.Controllers
 
         }
 
+        public JsonResult CheckHeartBeatSendByMachineId(int MachineId)
+        {
+            using (CVCEntities cvcEntities = new CVCEntities())
+            {
+                var IPCParameter = cvcEntities.IPCParameters.FirstOrDefault(i => i.MachineId == MachineId && i.IsHeartBeatSend == true);
+                if (IPCParameter != null)
+                {
+                    var result = new { IsHeartBeatSend = IPCParameter.IsHeartBeatSend, MachineParameterId = IPCParameter.MachineParameterId, IPCAddress = IPCParameter.IPCAddress, IncrementalNumber = IPCParameter.IncrementalNumber, StartNumber = IPCParameter.StartNumber, EndNumber = IPCParameter.EndNumber };
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    var result = new { IsHeartBeat = false };
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
+
+            }
+
+        }
+
         public JsonResult SendHeartBeat(int MachineParameterId, int Value, int IncrementalNumber, int EndNumber)
         {
             try

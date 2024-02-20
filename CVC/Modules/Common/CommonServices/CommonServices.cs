@@ -182,6 +182,21 @@ namespace CVC.Modules.Common.CommonServices
             }
         }
 
+        public bool CheckIsLabelRollByMachineId(int? MachineId)
+        {
+            using (CVCEntities cvcEntities = new CVCEntities())
+            {
+                bool IsLabelRoll = false;
+                var result = cvcEntities.Views.Where(v => v.MachineId == MachineId && v.StatusId == 1 && v.IslabelRoll == true).FirstOrDefault();
+
+                if (result != null)
+                {
+                    IsLabelRoll = true;
+                }
+                return IsLabelRoll;
+            }
+        }
+
         public LabelRoll GetLabelRollDetails(int? MachineId)
         {
             //CVCEntities cvcEntities = new CVCEntities();

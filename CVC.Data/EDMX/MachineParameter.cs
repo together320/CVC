@@ -74,6 +74,8 @@ namespace CVC.Data.EDMX
         public string RecordAddedSource { get; set; }
         public string ColumnName { get; set; }
         public Nullable<int> PickListId { get; set; }
+        public Nullable<bool> IsRoundOff { get; set; }
+        public Nullable<int> RoundOffDigits { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Alarm> Alarms { get; set; }
