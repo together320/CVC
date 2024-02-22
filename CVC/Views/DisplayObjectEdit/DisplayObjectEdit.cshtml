@@ -102,17 +102,30 @@
                                 <i class="fa fa-cube"></i>&nbsp;&nbsp;
                                 @if (item.ColumnName == null)
                                 {
-                                    @item.ParameterName
-                                    ;
+                                    if (item.PickListId == null || item.PickListId.Value == -1)
+                                    {
+                                        @item.ParameterName
+                                    }
+                                    else
+                                    {
+                                        @item.ParameterName <text>&nbsp;</text><p>(P)</p>
+                                    }
                                 }
                                 else
                                 {
-                                    @item.ColumnName
-                                    ;
+                                    if (item.PickListId == null || item.PickListId.Value == -1)
+                                    {
+                                        @item.ParameterName
+                                    }
+                                    else
+                                    {
+                                        @item.ParameterName<text>&nbsp;</text><p style="color:red;">(P)</p>
+                                    }
                                 }
                             </div>
                         </div>
                     }
+
                     <!--addDo()-->
                 </div>
             </div>
@@ -302,8 +315,13 @@
                     entity: '@Model.SelectedMachine.MachineName',
                     ef: columnName
                 }
+
+                // which element is the drop element?
+                let componentElement = event.target;
+                let componentTag = componentElement.tagName.toLowerCase();
+
                 /*console.log('drop component!! pickId: ', pickListId, 'columnName: ', columnName);*/
-                if (pickListId == "-1" || pickListId == 'undefined') {
+                if (pickListId == "-1" || pickListId == 'undefined' || componentTag !== 'select') {
                     /*console.log("picklist id is -1, so setting value");*/
                     $(event.target).text(columnName);
                     $(event.target).val(columnName);
@@ -487,6 +505,7 @@
                 }
                 var columnName = event.originalEvent.dataTransfer.getData('columnName').trimStart().trimEnd();    //get the column name
                 logStr.ef = columnName;
+                console.log("Before toggleheader ", columnName);
                 let columnIndex = 0;//dataTable.columns().header().map(c => $(c).innerText).indexOf(columnName);   //get column index from the table
                 // Assuming you have a DataTable called "myDataTable"
                 var columnNames = dataTable.columns().header().toArray();
@@ -597,10 +616,10 @@
     function dragEF(event) {                   //when dragging main display object
         event.dataTransfer.setData('dragging', 'no-clone');
         event.dataTransfer.setData('dropped-id', 'ef');
-        event.dataTransfer.setData('columnName', $(event.target).attr('columnname'));
+        event.dataTransfer.setData('columnName', $(event.target).attr('columnName'));
         event.dataTransfer.setData('pickListId', $(event.target).attr('pickListId'));
         //if button, realtime format, then the columnName does not exist, so parameterName will use
-        if (@doTypeId == 3 || @doTypeId == 4 || @doTypeId == 5 || @doTypeId || @doTypeId == 7 || @doTypeId == 9 || @doTypeId == 10)
+        if (@doTypeId == 3 || @doTypeId == 4 || @doTypeId == 5 || @doTypeId == 7 || @doTypeId == 9 || @doTypeId == 10)
             event.dataTransfer.setData('columnName', $(event.target).text());
     }
 
@@ -1024,6 +1043,7 @@
         }
     }
     // ====================================================== END attachment logic ==========================================
+
     var efRowHtml = "<p style='margin:0px; color:black; display:block; '>EFnameToChange  </p> <input id='value-ef' type='text' required value='' style='color:black; display:block; '/>";
 
     // delay function
